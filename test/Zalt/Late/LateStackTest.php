@@ -14,6 +14,7 @@ namespace Zalt\Late;
 use PHPUnit\Framework\TestCase;
 use Zalt\Late\Late;
 use Zalt\Late\Stack\ArrayStack;
+use Zalt\Late\Stack\LateStackException;
 
 /**
  *
@@ -30,7 +31,7 @@ class LateStackTest extends TestCase
 
         $this->assertEquals('Zalt\\Late\\LateGet', get_class($get));
         
-        $this->expectException('Zalt\\Late\\Stack\\LateStackException');
+        $this->expectException(LateStackException::class);
         Late::raise($get);
         
         $stack = new ArrayStack(['a' => 'A', 'b' => 'B']);

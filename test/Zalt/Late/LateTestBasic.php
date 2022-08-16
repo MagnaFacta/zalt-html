@@ -30,7 +30,7 @@ class LateTestBasic extends TestCase
     {
     } // */
 
-    public function testLazyAlternate()
+    public function testLateAlternate()
     {
         $call = Late::alternate(1, 2, 3);
         
@@ -44,7 +44,7 @@ class LateTestBasic extends TestCase
         $this->assertEquals(1, Late::raise($call));
     }
     
-    public function testLazyCall()
+    public function testLateCall()
     {
         $call = Late::call('max', 0, 1);
         
@@ -52,7 +52,7 @@ class LateTestBasic extends TestCase
         $this->assertEquals(1, Late::raise($call));
     }
 
-    public function lazeCompProvider()
+    public function lateCompProvider()
     {
         return [
             [0, '==', 1, false],
@@ -73,32 +73,50 @@ class LateTestBasic extends TestCase
             [1, '<=', 1, true],
             [0, '>=', 1, false],
             [1, '>=', 1, true],
+            [1, '<=>', 1, 0],
+            [1, '<=>', 2, -1],
+            [2, '<=>', 1, 1],
+            [1, '&', 2, 0],
+            [1, '&', 3, 1],
+            [1, '|', 2, 3],
+            [1, '|', 3, 3],
         ];
     }
     
     /**
-     * @dataProvider lazeCompProvider
+     * @dataProvider lateCompProvider
      * @return void
      */
-    public function testLazyComp($val1, $oper, $val2, $trueExpected)
+    public function testLateComp($val1, $oper, $val2, $expected)
     {
         $call = Late::comp( $val1, $oper, $val2);
         $this->assertEquals(LateCall::class, get_class($call));
-        if ($trueExpected) {
-            $this->assertTrue(Late::raise($call));
-        } else {
-            $this->assertFalse(Late::raise($call));
-        }
-        $call = Late::comp( 1, '==', 1);
+        $this->assertEquals($expected, Late::raise($call));
+    }
+    
+    public function testLateConcat()
+    {
+        $call = Late::concat('max', ' ', 'min');
         $this->assertEquals(LateCall::class, get_class($call));
+        $this->assertEquals('max min', Late::raise($call));
 
-        $call = Late::comp( 0, '<', 1);
+        $call = Late::concat('a', ['b', 'c'], 'd', ['e']);
         $this->assertEquals(LateCall::class, get_class($call));
-        $this->assertTrue(Late::raise($call));
+        $this->assertEquals('abcde', Late::raise($call));
 
-        $call = Late::comp( 0, '>', 1);
+        $object = new \stdClass();
+        $object->a = 'X';
+        $call = Late::concat(Late::property($object, 'a'), ' ', Late::property($object, 'b'));
         $this->assertEquals(LateCall::class, get_class($call));
-        $this->assertFalse(Late::raise($call));
+        $this->assertEquals('X ', Late::raise($call));
+        
+        
+        $object->b = 'Y';
+        $this->assertEquals('X Y', Late::raise($call));
+
+        $object->a = 'B';
+        $object->b = 'B';
+        $this->assertEquals('B B', Late::raise($call));
     }
     
     public function testLazyProperty()

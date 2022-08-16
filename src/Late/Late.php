@@ -141,11 +141,9 @@ class Late
      * @param mixed $arg_array
      * @return LateCall
      */
-    public static function concat($arg_array = null)
+    public static function concat(...$args)
     {
-        $args = func_get_args();
-
-        return new LateCall('implode', array('', new LateCall('\\Zalt\\Ra::flatten', [$args])));
+        return new LateCall('implode', array('', new LateCall([\Zalt\Ra::class, 'flatten'], [$args])));
     }
 
     /**
