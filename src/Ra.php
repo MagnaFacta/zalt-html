@@ -12,7 +12,7 @@
 namespace Zalt;
 
 use Exception;
-use Zalt\Util\ClassList;
+use Zalt\HtmlUtil\ClassList;
 
 /**
  * The Ra class contains static array processing functions that are used to give PHP/Zend some
@@ -54,7 +54,7 @@ class Ra
     /**
      * A class list with function that convert data to an array
      *
-     * @var \Zalt\Util\ClassList
+     * @var \Zalt\HtmlUtil\ClassList
      * /
     private static $_toArrayConverter;
 

@@ -21,7 +21,7 @@ use Zalt\Late\LateCall;
  * @license    New BSD License
  * @since      Class available since version 1.90
  */
-class LateTestBasic extends TestCase
+class LateBasicTest extends TestCase
 {
     /**
      * This method is called before a test is executed.
@@ -119,7 +119,97 @@ class LateTestBasic extends TestCase
         $this->assertEquals('B B', Late::raise($call));
     }
     
-    public function testLazyProperty()
+    public function testLateFirst()
+    {
+        $class = new \stdClass();
+        $class->a = null;
+        $class->b = false;
+        $class->c = 0;
+        $class->d = '';
+        $class->e = 'Yes';
+        
+        $call = Late::first(
+            Late::property($class, 'a'),
+            Late::property($class, 'b'),
+            Late::property($class, 'c'),
+            Late::property($class, 'd'),
+            Late::property($class, 'e')
+        );
+        $this->assertEquals(LateCall::class, get_class($call));
+        $this->assertEquals('Yes', Late::raise($call));
+        
+        $class->d = 'Now this!';
+        $this->assertEquals('Now this!', Late::raise($call));
+        
+        $class->c = true;
+        $this->assertTrue(Late::raise($call));
+    }
+
+    public function testLateObjectWrap()
+    {
+        $class = new \stdClass();
+        $class->a = null;
+        $class->b = false;
+        $class->c = 0;
+        $class->d = '';
+        $class->e = 'Yes';
+        
+        $wrap = Late::L($class);
+        $this->assertEquals(ObjectWrap::class, get_class($wrap));
+
+        $call = Late::first($wrap->a, $wrap->b, $wrap->c, $wrap->d, $wrap->e);
+        $this->assertEquals(LateCall::class, get_class($call));
+        $this->assertEquals('Yes', Late::raise($call));
+
+        $class->d = 'Now this!';
+        $this->assertEquals('Now this!', Late::raise($call));
+
+        $class->c = true;
+        $this->assertTrue(Late::raise($call));
+    }
+
+    public function testLateObjectArrayWrap()
+    {
+        $array = [
+            'a' => null,
+            'b' => false,
+            'c' => 0,
+            'd' => '',
+            'e' => 'Yes',
+            ];
+
+        $wrap = Late::L($array);
+        $this->assertEquals(ArrayWrap::class, get_class($wrap));
+
+        $call = Late::first($wrap['a'], $wrap['b'], $wrap['c'], $wrap['d'], $wrap['e']);
+        $this->assertEquals(LateCall::class, get_class($call));
+        $this->assertEquals('Yes', Late::raise($call));
+
+        $wrap['d'] = 'Now this!';
+        $this->assertEquals('Now this!', Late::raise($call));
+
+        $wrap['b'] = true;
+        $this->assertTrue(Late::raise($call));
+    }
+
+    public function testLateMethod()
+    {
+        $date = new \DateTime('2001-01-31');
+
+        $call1 = Late::method($date, 'format', 'd-m-Y');
+        $call2 = Late::method($date, 'format', 'n/j/Y');
+        $this->assertEquals(LateCall::class, get_class($call1));
+        $this->assertEquals('31-01-2001', Late::raise($call1));
+        
+        $this->assertEquals(LateCall::class, get_class($call2));
+        $this->assertEquals('1/31/2001', Late::raise($call2));
+        
+        $date->add(new \DateInterval('P9D'));
+        $this->assertEquals('09-02-2001', Late::raise($call1));
+        $this->assertEquals('2/9/2001', Late::raise($call2));
+    }
+
+    public function testLateProperty()
     {
         $object = new \stdClass();
         $object->a = 'X';

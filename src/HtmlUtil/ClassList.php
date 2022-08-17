@@ -10,7 +10,7 @@
  * @license    New BSD License
  */
 
-namespace Zalt\Util;
+namespace Zalt\HtmlUtil;
 
 /**
  * Return a value (the kind is up to the user), using either an object

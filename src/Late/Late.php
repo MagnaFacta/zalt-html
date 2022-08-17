@@ -147,18 +147,19 @@ class Late
     }
 
     /**
-     * @param $args_array
+     * Returns the first set value at the time of evaluation
+     * 
+     * @param mixed $args
      * @return null|LateCall
      */
-    public static function first($args_array)
+    public static function first(...$args)
     {
-        $args = func_get_args();
-
-        // Last value first
-        $result = array_shift($args);
-
-        foreach ($args as $arg) {
-            $result = new LateCall(array($result, 'if'), array($result, $arg));
+        // First value is evaluated first
+        // $result = array_shift($args);
+        $result = null;
+        
+        foreach (array_reverse($args) as $arg) {
+            $result = new LateCall([$arg, 'if'], [$arg, $result]);
         }
         return $result;
     }
@@ -197,7 +198,7 @@ class Late
      */
     public static function iff($if, $then, $else = null)
     {
-        return new LateCall(array($if, 'if'), array($then, $else));
+        return new LateCall(array($if, 'if'), [$then, $else]);
     }
 
     /**
@@ -210,7 +211,7 @@ class Late
      */
     public static function iif($if, $then, $else = null)
     {
-        return new LateCall(array($if, 'if'), array($then, $else));
+        return new LateCall(array($if, 'if'), [$then, $else]);
     }
 
     /**

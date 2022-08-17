@@ -10,7 +10,7 @@
  * @license    New BSD License
  */
 
-namespace Zalt\Util;
+namespace Zalt\HtmlUtil;
 
 /**
  * Return a function value using a scalar key.

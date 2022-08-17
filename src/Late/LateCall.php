@@ -69,11 +69,11 @@ class LateCall extends LateAbstract
                     array_unshift($params, $object);
                     $callable = $method;
 
-                } elseif ('if' === strtolower($method)) {
+                } elseif ('if' == strtolower($method)) {
                     if ($object) {
-                        return isset($params[0]) ? $params[0] : null;
+                        return isset($params[0]) ? Late::rise($params[0]) : null;
                     } else {
-                        return isset($params[1]) ? $params[1] : null;
+                        return isset($params[1]) ? Late::rise($params[1]) : null;
                     }
                 }
             }
