@@ -4,24 +4,24 @@
 /**
  *
  *
- * @package    MUtil
+ * @package    Zalt
  * @subpackage Html
  * @author     Matijs de Jong <mjong@magnafacta.nl>
  * @copyright  Copyright (c) 2011 Erasmus MC
  * @license    New BSD License
  */
 
-namespace MUtil\Html;
+namespace Zalt\Html;
 
 /**
  *
- * @package    MUtil
+ * @package    Zalt
  * @subpackage Html
  * @author     Matijs de Jong <mjong@magnafacta.nl>
  * @copyright  Copyright (c) 2011 Erasmus MC
  * @license    New BSD License
  */
-class StyleArrayAttribute extends \MUtil\Html\ArrayAttribute
+class StyleArrayAttribute extends \Zalt\Html\ArrayAttribute
 {
     public function __construct($arg_array = null)
     {

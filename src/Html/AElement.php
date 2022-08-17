@@ -2,27 +2,30 @@
 
 /**
  *
- *
- * @package    MUtil
+ * @package    Zalt
  * @subpackage Html
  * @author     Matijs de Jong <mjong@magnafacta.nl>
  * @copyright  Copyright (c) 2011 Erasmus MC
  * @license    New BSD License
  */
 
-namespace MUtil\Html;
+namespace Zalt\Html;
+
+use Zalt\Late\Late;
+use Zalt\Late\LateInterface;
+use Zalt\HtmlUtil\Ra;
 
 /**
  * Class for A link element. Assumes first passed argument is the href attribute,
  * unless specified otherwise.
  *
- * @package    MUtil
+ * @package    Zalt
  * @subpackage Html
  * @copyright  Copyright (c) 2011 Erasmus MC
  * @license    New BSD License
  * @since      Class available since version 1.0
  */
-class AElement extends \MUtil\Html\HtmlElement
+class AElement extends \Zalt\Html\HtmlElement
 {
     /**
      * Most elements must be rendered even when empty, others should - according to the
@@ -50,14 +53,14 @@ class AElement extends \MUtil\Html\HtmlElement
      * as special types, if defined as such for this element.
      *
      * @param mixed $href We assume the first element contains the href, unless a later element is explicitly specified as such
-     * @param mixed $arg_array \MUtil\Ra::args arguments
+     * @param mixed $argArray Ra::args arguments
      */
-    public function __construct($href, $arg_array = null)
+    public function __construct($href, ...$argArray)
     {
-        $args = \MUtil\Ra::args(func_get_args(), array('href' => '\\MUtil\\Html\\HrefArrayAttribute'));
+        $args = Ra::args(func_get_args(), array('href' => '\\Zalt\\Html\\HrefArrayAttribute'));
 
-        if (isset($args['href']) && (! $args['href'] instanceof \MUtil\Html\AttributeInterface)) {
-            $args['href'] = new \MUtil\Html\HrefArrayAttribute($args['href']);
+        if (isset($args['href']) && (! $args['href'] instanceof AttributeInterface)) {
+            $args['href'] = new HrefArrayAttribute($args['href']);
         }
 
         parent::__construct('a', $args);
@@ -82,14 +85,12 @@ class AElement extends \MUtil\Html\HtmlElement
         }
         $xhtml = '';
         foreach ((array) $attribs as $key => $val) {
-            $key = $this->view->escape($key);
+            $key = Html::escape($key);
 
             if (('on' == substr($key, 0, 2)) || ('constraints' == $key)) {
                 // Don't escape event attributes; _do_ substitute double quotes with singles
                 if (!is_scalar($val)) {
-                    // non-scalar data should be cast to JSON first
-                    require_once 'Zend/Json.php';
-                    $val = \Zend_Json::encode($val);
+                    $val = \json_encode($val);
                 }
                 // Escape single quotes inside event attribute values.
                 // This will create html, where the attribute value has
@@ -100,7 +101,7 @@ class AElement extends \MUtil\Html\HtmlElement
                 if (is_array($val)) {
                     $val = implode(' ', $val);
                 }
-                $val = $this->view->escape($val);
+                $val = Html::escape($val);
             }
 
             if ('id' == $key) {
@@ -124,11 +125,11 @@ class AElement extends \MUtil\Html\HtmlElement
      * as special types, if defined as such for this element.
      *
      * @param mixed $href We assume the first element contains the href, unless a later element is explicitly specified as such
-     * @param mixed $arg_array \MUtil\Ra::args arguments
+     * @param mixed $argArray Ra::args arguments
      */
-    public static function a($href, $arg_array = null)
+    public static function a($href, ...$argArray)
     {
-        $args = \MUtil\Ra::args(func_get_args(), array('href' => '\\MUtil\\Html\\HrefArrayAttribute'));
+        $args = Ra::args(func_get_args(), array('href' => HrefArrayAttribute::class));
 
         if (isset($args['href'])) {
             $href = $args['href'];
@@ -143,12 +144,12 @@ class AElement extends \MUtil\Html\HtmlElement
      * Return a mailto: link object
      *
      * @param mixed $email
-     * @param mixed $arg_array
+     * @param mixed $argArray
      * @return \self
      */
-    public static function email($email, $arg_array = null)
+    public static function email($email, ...$argArray)
     {
-        $args = \MUtil\Ra::args(func_get_args(), 1);
+        $args = Ra::args(func_get_args(), 1);
         if (isset($args['href'])) {
             $href = $args['href'];
             unset($args['href']);
@@ -169,24 +170,24 @@ class AElement extends \MUtil\Html\HtmlElement
     /**
      * Return a link object when $iff is true
      *
-     * @param \MUtil\Lazy $iff The test
+     * @param \Zalt\Late $iff The test
      * @param mixed $aArgs Arguments when the test is true
      * @param mixed $spanArgs Arguments when the test is false
      * @return mixed
      */
     public static function iflink($iff, $aArgs, $spanArgs = null)
     {
-        if ($iff instanceof \MUtil\Lazy\LazyInterface) {
+        if ($iff instanceof LateInterface) {
             if ($spanArgs) {
-                return \MUtil\Lazy::iff($iff, \MUtil\Html::create('a', $aArgs), \MUtil\Html::create('span', $spanArgs, array('renderWithoutContent' => false)));
+                return Late::iff($iff, Html::create('a', $aArgs), Html::create('span', $spanArgs, array('renderWithoutContent' => false)));
             } else {
-                return \MUtil\Lazy::iff($iff, \MUtil\Html::create('a', $aArgs));
+                return late::iff($iff, Html::create('a', $aArgs));
             }
         }
         if ($iff) {
-            return \MUtil\Html::create('a', $aArgs);
+            return Html::create('a', $aArgs);
         } elseif ($spanArgs) {
-            return \MUtil\Html::create('span', $spanArgs, array('renderWithoutContent' => false));
+            return Html::create('span', $spanArgs, array('renderWithoutContent' => false));
         }
     }
 
@@ -200,11 +201,12 @@ class AElement extends \MUtil\Html\HtmlElement
     public static function ifmail($email, $arg_array = null)
     {
         $args = func_get_args();
-        if ($email instanceof \MUtil\Lazy\LazyInterface) {
-            return \MUtil\Lazy::iff($email, call_user_func_array(array(__CLASS__, 'email'), $args));
+        if ($email instanceof LateInterface) {
+            return Late::iff($email, call_user_func_array([self::class, 'email'], $args));
         }
         if ($email) {
             return self::email($args);
         }
+        return null;
     }
 }

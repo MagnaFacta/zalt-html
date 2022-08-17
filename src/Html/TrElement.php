@@ -2,25 +2,25 @@
 
 /**
  *
- * @package    MUtil
+ * @package    Zalt
  * @subpackage Html
  * @author     Matijs de Jong <mjong@magnafacta.nl>
  * @copyright  Copyright (c) 2012 Erasmus MC
  * @license    New BSD License
  */
 
-namespace MUtil\Html;
+namespace Zalt\Html;
 
 /**
  *
  *
- * @package    MUtil
+ * @package    Zalt
  * @subpackage Html
  * @copyright  Copyright (c) 2012 Erasmus MC
  * @license    New BSD License
  * @since      Class available since version 1.0
  */
-class TrElement extends \MUtil\Html\HtmlElement implements \MUtil\Html\ColumnInterface
+class TrElement extends \Zalt\Html\HtmlElement implements \Zalt\Html\ColumnInterface
 {
     /**
      * Most elements must be rendered even when empty, others should - according to the
@@ -73,10 +73,10 @@ class TrElement extends \MUtil\Html\HtmlElement implements \MUtil\Html\ColumnInt
 
 
     /**
-     * Returns the cell or a \MUtil\MultiWrapper containing cells that occupy the column position, taking colspan and other functions into account.
+     * Returns the cell or a \Zalt\MultiWrapper containing cells that occupy the column position, taking colspan and other functions into account.
      *
      * @param int $col The numeric column position, starting at 0;
-     * @return \MUtil\Html\HtmlElement Probably an element of this type, but can also be something else, posing as an element.
+     * @return \Zalt\Html\HtmlElement Probably an element of this type, but can also be something else, posing as an element.
      */
     public function getColumn($col)
     {
@@ -90,7 +90,7 @@ class TrElement extends \MUtil\Html\HtmlElement implements \MUtil\Html\ColumnInt
                 return reset($results);
 
             default:
-                return new \MUtil\MultiWrapper($results);
+                return new \Zalt\MultiWrapper($results);
         }
     }
 
@@ -98,7 +98,7 @@ class TrElement extends \MUtil\Html\HtmlElement implements \MUtil\Html\ColumnInt
      * Returns the cells that occupies the column position, taking colspan and other functions into account, in an array.
      *
      * @param int $col The numeric column position, starting at 0;
-     * @return array Of probably one \MUtil\Html\HtmlElement
+     * @return array Of probably one \Zalt\Html\HtmlElement
      */
     public function getColumnArray($col)
     {
@@ -124,12 +124,12 @@ class TrElement extends \MUtil\Html\HtmlElement implements \MUtil\Html\ColumnInt
     /**
      * Returns the cell's column width. A utility function.
      *
-     * @param mixed $cell \MUtil\Html\ColumnInterface
+     * @param mixed $cell \Zalt\Html\ColumnInterface
      * @return int
      */
     public static function getCellWidth($cell)
     {
-        if ($cell instanceof \MUtil\Html\ColumnInterface) {
+        if ($cell instanceof \Zalt\Html\ColumnInterface) {
             return $cell->getColumnCount();
         }
 
@@ -182,7 +182,7 @@ class TrElement extends \MUtil\Html\HtmlElement implements \MUtil\Html\ColumnInt
      *
      * @see $_repeater
      *
-     * @return \MUtil\Html\HtmlElement (continuation pattern)
+     * @return \Zalt\Html\HtmlElement (continuation pattern)
      */
     public function setOnlyWhenChanged($value)
     {
@@ -191,10 +191,10 @@ class TrElement extends \MUtil\Html\HtmlElement implements \MUtil\Html\ColumnInt
     }
 
     /**
-     * Static helper function for creation, used by @see \MUtil\Html\Creator.
+     * Static helper function for creation, used by @see \Zalt\Html\Creator.
      *
-     * @param mixed $arg_array Optional \MUtil\Ra::args processed settings
-     * @return \MUtil\Html\TrElement
+     * @param mixed $arg_array Optional \Zalt\Ra::args processed settings
+     * @return \Zalt\Html\TrElement
      */
     public static function tr($arg_array = null)
     {

@@ -2,27 +2,26 @@
 
 /**
  *
- *
- * @package    MUtil
+ * @package    Zalt
  * @subpackage Html
  * @author     Matijs de Jong <mjong@magnafacta.nl>
  * @copyright  Copyright (c) 2011 Erasmus MC
  * @license    New BSD License
  */
 
-namespace MUtil\Html;
+namespace Zalt\Html;
 
 /**
  * ListElement just inherits from HtmlElement but sets some
  * variables for automatic (x)html correct behaviour.
  *
- * @package    MUtil
+ * @package    Zalt
  * @subpackage Html
  * @copyright  Copyright (c) 2011 Erasmus MC
  * @license    New BSD License
- * @since      Class available since \MUtil version 1.0
+ * @since      Class available since \Zalt version 1.0
  */
-class ListElement extends \MUtil\Html\HtmlElement
+class ListElement extends \Zalt\Html\HtmlElement
 {
     /**
      * 'li' is the only allowed child for all list elements.
@@ -63,50 +62,46 @@ class ListElement extends \MUtil\Html\HtmlElement
     public $renderWithoutContent = false;
 
     /**
-     * Static helper function for creation, used by @see \MUtil\Html\Creator.
+     * Static helper function for creation, used by @see \Zalt\Html\Creator.
      *
-     * @param mixed $arg_array Optional \MUtil\Ra::args processed settings
-     * @return \MUtil\Html\ListElement (with dir tagName)
+     * @param mixed $args Optional Ra::args processed settings
+     * @return \Zalt\Html\ListElement (with dir tagName)
      */
-    public static function dir($arg_array = null)
+    public static function dir(...$args)
     {
-        $args = func_get_args();
         return new self(__FUNCTION__, $args);
     }
 
     /**
-     * Static helper function for creation, used by @see \MUtil\Html\Creator.
+     * Static helper function for creation, used by @see \Zalt\Html\Creator.
      *
-     * @param mixed $arg_array Optional \MUtil\Ra::args processed settings
-     * @return \MUtil\Html\ListElement (with menu tagName)
+     * @param mixed $args Optional Ra::args processed settings
+     * @return ListElement (with menu tagName)
      */
-    public static function menu($arg_array = null)
+    public static function menu(...$args)
     {
-        $args = func_get_args();
         return new self(__FUNCTION__, $args);
     }
 
     /**
-     * Static helper function for creation, used by @see \MUtil\Html\Creator.
+     * Static helper function for creation, used by @see \Zalt\Html\Creator.
      *
-     * @param mixed $arg_array Optional \MUtil\Ra::args processed settings
-     * @return \MUtil\Html\ListElement (with ol tagName)
+     * @param mixed $args Optional Ra::args processed settings
+     * @return ListElement (with ol tagName)
      */
-    public static function ol($arg_array = null)
+    public static function ol(...$args)
     {
-        $args = func_get_args();
         return new self(__FUNCTION__, $args);
     }
 
     /**
-     * Static helper function for creation, used by @see \MUtil\Html\Creator.
+     * Static helper function for creation, used by @see \Zalt\Html\Creator.
      *
-     * @param mixed $arg_array Optional \MUtil\Ra::args processed settings
-     * @return \MUtil\Html\ListElement (with ul tagName)
+     * @param mixed $args Optional Ra::args processed settings
+     * @return ListElement (with ul tagName)
      */
-    public static function ul($arg_array = null)
+    public static function ul(...$args)
     {
-        $args = func_get_args();
         return new self(__FUNCTION__, $args);
     }
 }

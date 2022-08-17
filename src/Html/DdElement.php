@@ -2,25 +2,24 @@
 
 /**
  *
- *
- * @package    MUtil
+ * @package    Zalt
  * @subpackage Html
  * @author     Matijs de Jong <mjong@magnafacta.nl>
  * @copyright  Copyright (c) 2011 Erasmus MC
  * @license    New BSD License
  */
 
-namespace MUtil\Html;
+namespace Zalt\Html;
 
 /**
  *
- * @package    MUtil
+ * @package    Zalt
  * @subpackage Html
  * @copyright  Copyright (c) 2011 Erasmus MC
  * @license    New BSD License
- * @since      Class available since \MUtil version 1.0
+ * @since      Class available since \Zalt version 1.0
  */
-class DdElement extends \MUtil\Html\HtmlElement
+class DdElement extends HtmlElement
 {
     /**
      * Usually no text is appended after an element, but for certain elements we choose
@@ -51,14 +50,13 @@ class DdElement extends \MUtil\Html\HtmlElement
     public $renderWithoutContent = false;
 
     /**
-     * Static helper function for creation, used by @see \MUtil\Html\Creator.
+     * Static helper function for creation, used by @see \Zalt\Html\Creator.
      *
-     * @param mixed $arg_array Optional \MUtil\Ra::args processed settings
-     * @return \MUtil\Html\TrElement
+     * @param mixed $args Optional Ra::args processed settings
+     * @return \Zalt\Html\TrElement
      */
-    public static function dd($arg_array = null)
+    public static function dd(...$args)
     {
-        $args = func_get_args();
         return new self(__FUNCTION__, $args);
     }
 }

@@ -2,26 +2,28 @@
 
 /**
  *
- *
- * @package    MUtil
+ * @package    Zalt
  * @subpackage Html
  * @author     Matijs de Jong <mjong@magnafacta.nl>
  * @copyright  Copyright (c) 2011 Erasmus MC
  * @license    New BSD License
  */
 
-namespace MUtil\Html;
+namespace Zalt\Html;
+
+use Zalt\Late\Late;
+use Zalt\Late\RepeatableFormElements;
 
 /**
  * Html DL element with functions for applying it to a form.
  *
- * @package    MUtil
+ * @package    Zalt
  * @subpackage Html
  * @copyright  Copyright (c) 2011 Erasmus MC
  * @license    New BSD License
  * @since      Class available since version 1.0
  */
-class DlElement extends \MUtil\Html\HtmlElement implements \MUtil\Html\FormLayout
+class DlElement extends HtmlElement implements FormLayout
 {
     /**
      * Only dt and dd elements are allowed as content.
@@ -60,11 +62,11 @@ class DlElement extends \MUtil\Html\HtmlElement implements \MUtil\Html\FormLayou
      * Any parameters are added as either content, attributes or handled
      * as special types, if defined as such for this element.
      *
-     * @param mixed $arg_array \MUtil\Ra::args arguments
+     * @param mixed $arg_array \Zalt\Ra::args arguments
      */
     public function __construct($arg_array = null)
     {
-        $args = \MUtil\Ra::args(func_get_args());
+        $args = \Zalt\Ra::args(func_get_args());
 
         parent::__construct('dl', $args);
     }
@@ -77,7 +79,7 @@ class DlElement extends \MUtil\Html\HtmlElement implements \MUtil\Html\FormLayou
             // Return all objects in a wrapper object
             // that makes sure they are all treated
             // the same way.
-            return new \MUtil\MultiWrapper($ds);
+            return new \Zalt\MultiWrapper($ds);
         }
 
         // Return first object only
@@ -154,14 +156,13 @@ class DlElement extends \MUtil\Html\HtmlElement implements \MUtil\Html\FormLayou
 
 
     /**
-     * Static helper function for creation, used by @see \MUtil\Html\Creator.
+     * Static helper function for creation, used by @see \Zalt\Html\Creator.
      *
-     * @param mixed $arg_array Optional \MUtil\Ra::args processed settings
-     * @return \MUtil\Html\DlElement
+     * @param mixed $args Optional Ra::args processed settings
+     * @return DlElement
      */
-    public static function dl($arg_array = null)
+    public static function dl(...$args)
     {
-        $args = func_get_args();
         return new self($args);
     }
 
@@ -176,13 +177,13 @@ class DlElement extends \MUtil\Html\HtmlElement implements \MUtil\Html\FormLayou
      * @param \Zend_Form $form
      * @param mixed $width The style.width content for the labels
      * @param array $order The display order of the elements
-     * @return \MUtil\Html\DlElement
+     * @return DlElement
      */
     public function setAsFormLayout(\Zend_Form $form, $width = null,
             array $order = array('element', 'errors', 'description'))
     {
         // Make a Lazy repeater for the form elements and set it as the element repeater
-        $formrep = new \MUtil\Lazy\RepeatableFormElements($form);
+        $formrep = new RepeatableFormElements($form);
         $formrep->setSplitHidden(true); // These are treated separately
         $this->setRepeater($formrep);
 
@@ -197,11 +198,8 @@ class DlElement extends \MUtil\Html\HtmlElement implements \MUtil\Html\FormLayou
             $dd[] = $formrep->$renderer;
         }
 
-        // $this->dd($formrep->element, ' ', $formrep->errors, ' ', $formrep->description);
-        // $this->dd($formrep->element, $formrep->description, $formrep->errors);
-
         // Set this element as the form decorator
-        $decorator = new \MUtil\Html\ElementDecorator();
+        $decorator = new ElementDecorator();
         $decorator->setHtmlElement($this);
         $decorator->setPrologue($formrep);  // Renders hidden elements before this element
         $form->setDecorators(array($decorator, 'AutoFocus', 'Form'));
@@ -216,7 +214,7 @@ class DlElement extends \MUtil\Html\HtmlElement implements \MUtil\Html\FormLayou
      * @param float $factor To multiply the widest nummers of letters in the labels with to calculate the width in
      * em at drawing time
      * @param array $order The display order of the elements
-     * @return \MUtil\Html\DlElement
+     * @return DlElement
      */
     public function setAutoWidthFormLayout(\Zend_Form $form, $factor = 1,
             array $order = array('element', 'errors', 'description'))
@@ -224,7 +222,7 @@ class DlElement extends \MUtil\Html\HtmlElement implements \MUtil\Html\FormLayou
         // Lazy call becase the form might not be completed at this stage.
         return $this->setAsFormLayout(
                 $form,
-                \MUtil\Lazy::call(array(__CLASS__, 'calculateAutoWidthFormLayout'), $form, $factor),
+                Late::call(array(self::class, 'calculateAutoWidthFormLayout'), $form, $factor),
                 $order
                 );
     }

@@ -16,7 +16,7 @@ use Zalt\Late\Stack\BridgeStack;
 use Zalt\Late\Stack\EmptyStack;
 use Zalt\Late\Stack\ObjectStack;
 use Zalt\Late\Stack\RepeatableStack;
-use Zalt\Ra;
+use Zalt\HtmlUtil\Ra;
 
 /**
  * Why get lazy:
@@ -143,7 +143,7 @@ class Late
      */
     public static function concat(...$args)
     {
-        return new LateCall('implode', array('', new LateCall([\Zalt\Ra::class, 'flatten'], [$args])));
+        return new LateCall('implode', array('', new LateCall([Ra::class, 'flatten'], [$args])));
     }
 
     /**
@@ -286,7 +286,7 @@ class Late
      *
      * @param mixed $object Usually an object of type \Zalt\Late\LateInterface
      * @param mixed $stack Optional variable stack for evaluation
-     * @return mixed
+     * @return mixed|LateInterface
      */
     public static function raise($object, $stack = null)
     {

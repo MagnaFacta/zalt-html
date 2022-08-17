@@ -2,26 +2,25 @@
 
 /**
  *
- *
- * @package    MUtil
+ * @package    Zalt
  * @subpackage Html
  * @author     Matijs de Jong <mjong@magnafacta.nl>
  * @copyright  Copyright (c) 2012 Erasmus MC
  * @license    New BSD License
  */
 
-namespace MUtil\Html;
+namespace Zalt\Html;
 
 /**
  *
  *
- * @package    MUtil
+ * @package    Zalt
  * @subpackage Html
  * @copyright  Copyright (c) 2012 Erasmus MC
  * @license    New BSD License
- * @since      Class available since version 1.5.5
+ * @since      Class available since version 1.0
  */
-class HnElement extends \MUtil\Html\HtmlElement
+class HnElement extends HtmlElement
 {
     /**
      * Most elements must be rendered even when empty, others should - according to the
@@ -35,74 +34,68 @@ class HnElement extends \MUtil\Html\HtmlElement
     public $renderWithoutContent = false;
 
     /**
-     * Static helper function for creation, used by @see \MUtil\Html\Creator.
+     * Static helper function for creation, used by @see \Zalt\Html\Creator.
      *
-     * @param mixed $arg_array Optional \MUtil\Ra::args processed settings
-     * @return \MUtil\Html\TrElement
+     * @param mixed $args Optional Ra::args processed settings
+     * @return HnElement
      */
-    public static function h1($arg_array = null)
+    public static function h1(...$args)
     {
-        $args = func_get_args();
         return new self(__FUNCTION__, $args);
     }
 
     /**
-     * Static helper function for creation, used by @see \MUtil\Html\Creator.
+     * Static helper function for creation, used by @see \Zalt\Html\Creator.
      *
-     * @param mixed $arg_array Optional \MUtil\Ra::args processed settings
-     * @return \MUtil\Html\TrElement
+     * @param mixed $args Optional Ra::args processed settings
+     * @return HnElement
      */
-    public static function h2($arg_array = null)
+    public static function h2(...$args)
     {
-        $args = func_get_args();
         return new self(__FUNCTION__, $args);
     }
 
     /**
-     * Static helper function for creation, used by @see \MUtil\Html\Creator.
+     * Static helper function for creation, used by @see \Zalt\Html\Creator.
      *
-     * @param mixed $arg_array Optional \MUtil\Ra::args processed settings
-     * @return \MUtil\Html\TrElement
+     * @param mixed $args Optional Ra::args processed settings
+     * @return HnElement
      */
-    public static function h3($arg_array = null)
+    public static function h3(...$args)
     {
-        $args = func_get_args();
         return new self(__FUNCTION__, $args);
     }
 
     /**
-     * Static helper function for creation, used by @see \MUtil\Html\Creator.
+     * Static helper function for creation, used by @see \Zalt\Html\Creator.
      *
-     * @param mixed $arg_array Optional \MUtil\Ra::args processed settings
-     * @return \MUtil\Html\TrElement
+     * @param mixed $args Optional Ra::args processed settings
+     * @return HnElement
      */
-    public static function h4($arg_array = null)
+    public static function h4(...$args)
     {
-        $args = func_get_args();
         return new self(__FUNCTION__, $args);
     }
 
     /**
-     * Static helper function for creation, used by @see \MUtil\Html\Creator.
+     * Static helper function for creation, used by @see \Zalt\Html\Creator.
      *
-     * @param mixed $arg_array Optional \MUtil\Ra::args processed settings
-     * @return \MUtil\Html\TrElement
+     * @param mixed $args Optional Ra::args processed settings
+     * @return HnElement
      */
-    public static function h5($arg_array = null)
+    public static function h5(...$args)
     {
-        $args = func_get_args();
         return new self(__FUNCTION__, $args);
     }
 
     /**
-     * Static helper function for creation, used by @see \MUtil\Html\Creator.
+     * Static helper function for creation, used by @see \Zalt\Html\Creator.
      *
-     * @param mixed $arg_array Optional \MUtil\Ra::args processed settings
-     * @return \MUtil\Html\TrElement
+     * @param mixed $args Optional Ra::args processed settings
+     * @return HnElement
      */
-    public static function h6($arg_array = null)
+    public static function h6(...$args)
     {
-        $args = func_get_args();
         return new self(__FUNCTION__, $args);
     }
 }

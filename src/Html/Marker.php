@@ -2,20 +2,22 @@
 
 /**
  *
- * 
- * @package    MUtil
+ * @package    Zalt
  * @subpackage Html
  * @author     Matijs de Jong <mjong@magnafacta.nl>
  * @copyright  Copyright (c) 2011 Erasmus MC
  * @license    New BSD License
  */
 
-namespace MUtil\Html;
+namespace Zalt\Html;
+
+use Zalt\Late\Late;
+use Zalt\Late\LateInterface;
 
 /**
  * Class to mark text in HTML content, e.g. to nmark the result of a search statement
  *
- * @package    MUtil
+ * @package    Zalt
  * @subpackage Html
  * @copyright  Copyright (c) 2011 Erasmus MC
  * @license    New BSD License
@@ -33,12 +35,6 @@ class Marker
      * @var string Any other attributes to add to the tag
      */
     private $_attributes = null;
-
-    /**
-     *
-     * @var string The encoding used
-     */
-    private $_encoding = 'UTF-8';
 
     /**
      *
@@ -63,13 +59,10 @@ class Marker
      *
      * @param array $searches The texts parts to mark
      * @param string $tag The element name for the tagged parts
-     * @param string $encoding The encoding used
      * @param string $attributes Any other attributes to add to the tag
      */
-    public function __construct($searches, $tag, $encoding, $attributes = 'class="marked"')
+    public function __construct($searches, $tag, $attributes = 'class="marked"')
     {
-        $this->setEncoding($encoding);
-
         $this->_tag      = $tag;
         $this->_searches = (array) $searches;
 
@@ -105,21 +98,10 @@ class Marker
     }
 
     /**
-     * Generic html output escape function
-     *
-     * @param string $value
-     * @return string
-     */
-    public function escape($value)
-    {
-        return htmlspecialchars($value, ENT_COMPAT, $this->_encoding);
-    }
-
-    /**
      * Mark the searches in $value
      *
-     * @param mixed $value Lazy, Html, Raw or string
-     * @return \MUtil\Html\Raw
+     * @param mixed $value Late, Html, Raw or string
+     * @return HtmlInterface
      */
     public function mark($value)
     {
@@ -134,17 +116,17 @@ class Marker
             $tclose = '</' . self::TAG_MARKER . '>';
 
             foreach ((array) $searches as $search) {
-                $searchHtml = $this->escape($search);
+                $searchHtml = Html::escape($search);
                 $this->_searches[] = $searchHtml;
                 $this->_replaces[] = $topen . $searchHtml . $tclose;
             }
         }
 
-        if ($value instanceof \MUtil\Lazy\LazyInterface) {
-            $value = \MUtil\Lazy::rise($value);
+        if ($value instanceof LateInterface) {
+            $value = Late::rise($value);
         }
 
-        if ($value instanceof \MUtil\Html\Raw) {
+        if ($value instanceof Raw) {
             $values = array();
             // Split into HTML Elements
             foreach ($value->getElements() as $element) {
@@ -161,49 +143,32 @@ class Marker
                     }
                 }
             }
-            // \MUtil\EchoOut\EchoOut::r($values);
+            // \Zalt\EchoOut\EchoOut::r($values);
 
             return $value->setValue($this->_fillTags(implode('', $values)));
 
-        } elseif ($value instanceof \MUtil\Html\HtmlElement) {
+        } elseif ($value instanceof HtmlElement) {
             foreach ($value as $key => $item) {
-                // \MUtil\EchoOut\EchoOut::r($key);
+                // \Zalt\EchoOut\EchoOut::r($key);
                 $value[$key] = $this->mark($item);
             }
             return $value;
 
         } elseif ($value || ($value === 0)) {
-            // \MUtil\EchoOut\EchoOut::r($value);
-            $valueHtml = $this->escape($value);
+            // \Zalt\EchoOut\EchoOut::r($value);
+            $valueHtml = Html::escape($value);
 
             $valueTemp = $this->_findTags($valueHtml);
 
-            return new \MUtil\Html\Raw($this->_fillTags($valueTemp));
+            return new Raw($this->_fillTags($valueTemp));
         }
-    }
-
-    /**
-     * Function to allow later setting of encoding.
-     *
-     * @see htmlspecialchars()
-     *
-     * @param string $encoding Encoding htmlspecialchars
-     * @return \MUtil\Html\Marker (continuation pattern)
-     */
-    public function setEncoding($encoding)
-    {
-        if ($encoding) {
-            $this->_encoding = $encoding;
-        }
-
-        return $this;
     }
 
     /**
      * Function to allow later setting of tag name.
      *
      * @param string $tagName Html element tag name
-     * @return \MUtil\Html\Marker (continuation pattern)
+     * @return Marker (continuation pattern)
      */
     public function setTagName($tagName)
     {

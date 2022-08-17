@@ -3,19 +3,21 @@
 /**
  *
  *
- * @package    MUtil
+ * @package    Zalt
  * @subpackage Html
  * @author     Matijs de Jong <mjong@magnafacta.nl>
  * @copyright  Copyright (c) 2011 Erasmus MC
  * @license    New BSD License
  */
 
-namespace MUtil\Html;
+namespace Zalt\Html;
+
+use Zalt\HtmlUtil\Ra;
 
 /**
- * Zend style form decorator the uses \MUtil\Html
+ * Zend style form decorator the uses \Zalt\Html
  *
- * @package    MUtil
+ * @package    Zalt
  * @subpackage Html
  * @copyright  Copyright (c) 2011 Erasmus MC
  * @license    New BSD License
@@ -25,14 +27,14 @@ class ElementDecorator extends \Zend_Form_Decorator_Abstract
 {
     /**
      *
-     * @var \MUtil\Html\HtmlInterface
+     * @var \Zalt\Html\HtmlInterface
      */
     protected $_html_element;
 
     /**
      * When existing prepends all error messages before the form elements.
      *
-     * When a \MUtil\Html\HtmlElement the errors are appended to the element,
+     * When a \Zalt\Html\HtmlElement the errors are appended to the element,
      * otherwise an UL is created
      *
      * @var mixed
@@ -49,7 +51,7 @@ class ElementDecorator extends \Zend_Form_Decorator_Abstract
     /**
      * The element used to display the (visible) form elements.
      *
-     * @return \MUtil\Html\HtmlInterface
+     * @return \Zalt\Html\HtmlInterface
      */
     public function getHtmlElement()
     {
@@ -59,10 +61,10 @@ class ElementDecorator extends \Zend_Form_Decorator_Abstract
     /**
      * Must the form prepend all error messages before the visible form elements?
      *
-     * When a \MUtil\Html\HtmlElement the errors are appended to the element,
+     * When a \Zalt\Html\HtmlElement the errors are appended to the element,
      * otherwise an UL is created
      *
-     * @return mixed false, true or \MUtil\Html\HtmlElement
+     * @return mixed false, true or \Zalt\Html\HtmlElement
      */
     public function getPrependErrors()
     {
@@ -94,18 +96,18 @@ class ElementDecorator extends \Zend_Form_Decorator_Abstract
         }
 
         if ($prologue = $this->getPrologue()) {
-            if ($prologue instanceof \MUtil\Lazy\RepeatableFormElements) {
+            if ($prologue instanceof \Zalt\Lazy\RepeatableFormElements) {
                 // Not every browser can handle empty divs (e.g. IE 6)
                 if ($hidden = $prologue->getHidden()) {
-                    $prologue = \MUtil\Html::create()->div($hidden);
+                    $prologue = \Zalt\Html::create()->div($hidden);
                 } else {
                     $prologue = null;
                 }
             }
-            if ($prologue instanceof \MUtil\Html\HtmlInterface) {
+            if ($prologue instanceof \Zalt\Html\HtmlInterface) {
                 $prologue = $prologue->render($view);
             } else {
-                $prologue = \MUtil\Html::getRenderer()->renderAny($view, $prologue);
+                $prologue = \Zalt\Html::getRenderer()->renderAny($view, $prologue);
             }
         } else {
             $prologue = '';
@@ -113,13 +115,13 @@ class ElementDecorator extends \Zend_Form_Decorator_Abstract
         if ($prependErrors = $this->getPrependErrors()) {
             $form = $this->getElement();
             if ($errors = $form->getMessages()) {
-                $errors = \MUtil\Ra::flatten($errors);
+                $errors = Ra::flatten($errors);
                 $errors = array_unique($errors);
 
-                if ($prependErrors instanceof \MUtil\Html\ElementInterface) {
+                if ($prependErrors instanceof \Zalt\Html\ElementInterface) {
                     $html = $prependErrors;
                 } else {
-                    $html = \MUtil\Html::create('ul');
+                    $html = \Zalt\Html::create('ul');
                 }
                 foreach ($errors as $error) {
                     $html->append($error);
@@ -148,7 +150,7 @@ class ElementDecorator extends \Zend_Form_Decorator_Abstract
      * @param  string $content Content to decorate
      * @return string
      */
-    public function renderElement(\MUtil\Html\HtmlInterface $htmlElement, \Zend_View $view)
+    public function renderElement(\Zalt\Html\HtmlInterface $htmlElement, \Zend_View $view)
     {
         return $htmlElement->render($view);
     }
@@ -156,10 +158,10 @@ class ElementDecorator extends \Zend_Form_Decorator_Abstract
     /**
      * Set the default
      *
-     * @param \MUtil\Html\HtmlInterface $htmlElement
-     * @return \MUtil\Html\ElementDecorator (continuation pattern)
+     * @param \Zalt\Html\HtmlInterface $htmlElement
+     * @return \Zalt\Html\ElementDecorator (continuation pattern)
      */
-    public function setHtmlElement(\MUtil\Html\HtmlInterface $htmlElement)
+    public function setHtmlElement(\Zalt\Html\HtmlInterface $htmlElement)
     {
         $this->_html_element = $htmlElement;
         return $this;
@@ -168,11 +170,11 @@ class ElementDecorator extends \Zend_Form_Decorator_Abstract
     /**
      * Set the form to prepends all error messages before the visible form elements.
      *
-     * When a \MUtil\Html\HtmlElement the errors are appended to the element,
+     * When a \Zalt\Html\HtmlElement the errors are appended to the element,
      * otherwise an UL is created
      *
-     * @param mixed $prepend false, true or \MUtil\Html\HtmlElement
-     * @return \MUtil\Html\ElementDecorator (continuation pattern)
+     * @param mixed $prepend false, true or \Zalt\Html\HtmlElement
+     * @return \Zalt\Html\ElementDecorator (continuation pattern)
      */
     public function setPrependErrors($prepend = true)
     {
@@ -183,11 +185,11 @@ class ElementDecorator extends \Zend_Form_Decorator_Abstract
     /**
      * Hidden elements should be displayed at the start of the form.
      *
-     * If the prologue is a \MUtil\Lazy\RepeatableFormElements repeater then all the hidden elements are
+     * If the prologue is a \Zalt\Lazy\RepeatableFormElements repeater then all the hidden elements are
      * displayed in a div at the start of the form.
      *
      * @param mixed $prologue E.g. a repeater or a html element
-     * @return \MUtil\Html\ElementDecorator
+     * @return \Zalt\Html\ElementDecorator
      */
     public function setPrologue($prologue)
     {

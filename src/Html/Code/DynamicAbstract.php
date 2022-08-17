@@ -3,30 +3,34 @@
 /**
  *
  *
- * @package    MUtil
+ * @package    Zalt
  * @subpackage Html
  * @author     Matijs de Jong <mjong@magnafacta.nl>
  * @copyright  Copyright (c) 2011 Erasmus MC
  * @license    New BSD License
  */
 
-namespace MUtil\Html\Code;
+namespace Zalt\Html\Code;
+
+use Zalt\Html\Html;
+use Zalt\Html\HtmlInterface;
+use Zalt\HtmlUtil\Ra;
 
 /**
  *
  *
- * @package    MUtil
+ * @package    Zalt
  * @subpackage Html
  * @copyright  Copyright (c) 2011 Erasmus MC
  * @license    New BSD License
- * @since      Class available since version 1.5
+ * @since      Class available since version 1.0
  */
-abstract class DynamicAbstract implements \MUtil\Html\HtmlInterface
+abstract class DynamicAbstract implements HtmlInterface
 {
     /**
      * Contains the content to output. Can be a mix of filenames and string content.
      *
-     * @var array Numeric array of strings or \MUtil\Html\HtmlInterface elements
+     * @var array Numeric array of strings or \Zalt\Html\HtmlInterface elements
      */
     protected $_content = array();
 
@@ -47,12 +51,10 @@ abstract class DynamicAbstract implements \MUtil\Html\HtmlInterface
      * Creates the object storing any values with a name as a field, unless
      * there exists a set{Name} function. Other values are treated as content.
      *
-     * @param mixed $args_array \MUtil\Ra::args() parameters
+     * @param mixed $args parameters
      */
-    public function __construct($args_array = null)
+    public function __construct(...$args)
     {
-        $args = \MUtil\Ra::args(func_get_args());
-
         foreach ($args as $name => $value) {
             if (is_integer($name))  {
                 $this->addContent($value);
@@ -80,10 +82,9 @@ abstract class DynamicAbstract implements \MUtil\Html\HtmlInterface
     /**
      * Renders the content
      *
-     * @param \Zend_View_Abstract $view
      * @return string
      */
-    protected function getContentOutput(\Zend_View_Abstract $view)
+    protected function getContentOutput()
     {
         if (! $this->_content) {
             return null;
@@ -91,10 +92,10 @@ abstract class DynamicAbstract implements \MUtil\Html\HtmlInterface
 
         $output = array();
 
-        $renderer = \MUtil\Html::getRenderer();
+        $renderer = Html::getRenderer();
         foreach ($this->_content as $content) {
             if (! is_string($content)) {
-                $content = $renderer->renderAny($view, $content);
+                $content = $renderer->renderAny($content);
             }
 
             if ((false === strpos($content, "\n")) && file_exists($content)) {
@@ -151,7 +152,7 @@ abstract class DynamicAbstract implements \MUtil\Html\HtmlInterface
      *
      * @param string $name Full name to replace.
      * @param string $value The value placed.
-     * @return \MUtil\Html_Link_LinkAbstract (continuation pattern)
+     * @return \Zalt\Html_Link_LinkAbstract (continuation pattern)
      */
     public function setDefault($name, $value)
     {
@@ -169,7 +170,7 @@ abstract class DynamicAbstract implements \MUtil\Html\HtmlInterface
      *
      * @param string $name Full name to replace.
      * @param string $value The value placed.
-     * @return \MUtil\Html_Link_LinkAbstract (continuation pattern)
+     * @return DynamicAbstract (continuation pattern)
      */
     public function setField($name, $value)
     {
@@ -180,7 +181,7 @@ abstract class DynamicAbstract implements \MUtil\Html\HtmlInterface
     /**
      *
      * @param string $seperator
-     * @return \MUtil\Html_Link_LinkAbstract (continuation pattern)
+     * @return DynamicAbstract (continuation pattern)
      */
     public function setSeperator($seperator)
     {

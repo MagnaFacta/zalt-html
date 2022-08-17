@@ -3,29 +3,29 @@
 /**
  *
  *
- * @package    MUtil
+ * @package    Zalt
  * @subpackage Html
  * @author     Matijs de Jong <mjong@magnafacta.nl>
  * @copyright  Copyright (c) 2011 Erasmus MC
  * @license    New BSD License
  */
 
-namespace MUtil\Html;
+namespace Zalt\Html;
 
 /**
  * Src attribute, i.e the name is fixed.
  *
  * Behaves as parent class otherwise
  *
- * @see \MUtil\Html\UrlArrayAttribute
+ * @see \Zalt\Html\UrlArrayAttribute
  *
- * @package    MUtil
+ * @package    Zalt
  * @subpackage Html
  * @copyright  Copyright (c) 2011 Erasmus MC
  * @license    New BSD License
  * @since      Class available since version 1.0
  */
-class SrcArrayAttribute extends \MUtil\Html\UrlArrayAttribute
+class SrcArrayAttribute extends \Zalt\Html\UrlArrayAttribute
 {
     public function __construct($args_array = null)
     {

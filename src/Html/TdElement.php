@@ -3,25 +3,25 @@
 /**
  *
  *
- * @package    MUtil
+ * @package    Zalt
  * @subpackage Html
  * @author     Matijs de Jong <mjong@magnafacta.nl>
  * @copyright  Copyright (c) 2013 Erasmus MC
  * @license    New BSD License
  */
 
-namespace MUtil\Html;
+namespace Zalt\Html;
 
 /**
  * Td and Th elements should always render a closing tag
  *
- * @package    MUtil
+ * @package    Zalt
  * @subpackage Html
  * @copyright  Copyright (c) 2013 Erasmus MC
  * @license    New BSD License
- * @since      Class available since \MUtil version 1.3
+ * @since      Class available since \Zalt version 1.3
  */
-class TdElement extends \MUtil\Html\HtmlElement
+class TdElement extends HtmlElement
 {
     /**
      * When repeating content using $_repeater you may want to output the content only when it has
@@ -55,26 +55,24 @@ class TdElement extends \MUtil\Html\HtmlElement
     public $renderClosingTag = true;
 
     /**
-     * Static helper function for creation, used by @see \MUtil\Html\Creator.
+     * Static helper function for creation, used by @see \Zalt\Html\Creator.
      *
-     * @param mixed $arg_array Optional \MUtil\Ra::args processed settings
-     * @return \MUtil\Html\TrElement
+     * @param mixed $args Optional Ra::args processed settings
+     * @return TdElement
      */
-    public static function createTh($arg_array = null)
+    public static function createTh(...$args)
     {
-        $args = func_get_args();
         return new self('th', $args);
     }
 
     /**
-     * Static helper function for creation, used by @see \MUtil\Html\Creator.
+     * Static helper function for creation, used by @see \Zalt\Html\Creator.
      *
-     * @param mixed $arg_array Optional \MUtil\Ra::args processed settings
-     * @return \MUtil\Html\TrElement
+     * @param mixed $args Optional Ra::args processed settings
+     * @return TdElement
      */
-    public static function createTd($arg_array = null)
+    public static function createTd(...$args)
     {
-        $args = func_get_args();
         return new self('td', $args);
     }
 
@@ -94,12 +92,11 @@ class TdElement extends \MUtil\Html\HtmlElement
      *
      * The $view is used to correctly encode and escape the output
      *
-     * @param \Zend_View_Abstract $view
      * @return string Correctly encoded and escaped html output
      */
-    protected function renderContent(\Zend_View_Abstract $view)
+    protected function renderContent()
     {
-        $result = parent::renderContent($view);
+        $result = parent::renderContent();
 
         if ($this->_onlyWhenChanged) {
             if ($result == $this->_onlyWhenChangedValueStore) {
@@ -117,7 +114,7 @@ class TdElement extends \MUtil\Html\HtmlElement
      *
      * @see $_repeater
      *
-     * @return \MUtil\Html\HtmlElement (continuation pattern)
+     * @return \Zalt\Html\HtmlElement (continuation pattern)
      */
     public function setOnlyWhenChanged($value)
     {

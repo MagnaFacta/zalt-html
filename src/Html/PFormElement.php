@@ -2,27 +2,30 @@
 
 /**
  *
- *
- * @package    MUtil
+ * @package    Zalt
  * @subpackage Html
  * @author     Matijs de Jong <mjong@magnafacta.nl>
  * @copyright  Copyright (c) 2011 Erasmus MC
  * @license    New BSD License
  */
 
-namespace MUtil\Html;
+namespace Zalt\Html;
+
+use Zalt\HtmlUtil\Ra;
+use Zalt\Late\Late;
+use Zalt\Late\RepeatableFormElements;
 
 /**
  * Interface extensions that allows HtmlElements to define how to display
  * form elements.
  *
- * @package    MUtil
+ * @package    Zalt
  * @subpackage Html
  * @copyright  Copyright (c) 2011 Erasmus MC
  * @license    New BSD License
  * @since      Class available since version 1.5.3
  */
-class PFormElement extends \MUtil\Html\HtmlElement implements \MUtil\Html\FormLayout
+class PFormElement extends HtmlElement implements FormLayout
 {
     /**
      * Can process form elements
@@ -40,22 +43,19 @@ class PFormElement extends \MUtil\Html\HtmlElement implements \MUtil\Html\FormLa
      */
     public $renderWithoutContent = false;
 
-    public function __construct($arg_array = null)
+    public function __construct(...$args)
     {
-        $args = \MUtil\Ra::args(func_get_args());
-
         parent::__construct('p', $args);
     }
 
     /**
-     * Static helper function for creation, used by @see \MUtil\Html\Creator.
+     * Static helper function for creation, used by @see \Zalt\Html\Creator.
      *
-     * @param mixed $arg_array Optional \MUtil\Ra::args processed settings
-     * @return \MUtil\Html\PFormElement
+     * @param mixed $args Optional Ra::args processed settings
+     * @return PFormElement
      */
-    public static function pForm($arg_array = null)
+    public static function pForm(...$args)
     {
-        $args = func_get_args();
         return new self($args);
     }
 
@@ -66,7 +66,7 @@ class PFormElement extends \MUtil\Html\HtmlElement implements \MUtil\Html\FormLa
      * @param mixed $width The style.width content for the labels
      * @param array $order The display order of the elements
      * @param string $errorClass Class name to display all errors in
-     * @return \MUtil\Html\DlElement
+     * @return DlElement
      */
     public function setAsFormLayout(\Zend_Form $form, $width = null,
             $order = array('label', 'element', 'description'), $errorClass = 'errors')
@@ -74,8 +74,8 @@ class PFormElement extends \MUtil\Html\HtmlElement implements \MUtil\Html\FormLa
         $this->_repeatTags = true;
         $prependErrors     = $errorClass;
 
-        // Make a Lazy repeater for the form elements and set it as the element repeater
-        $formrep = new \MUtil\Lazy\RepeatableFormElements($form);
+        // Make a late repeater for the form elements and set it as the element repeater
+        $formrep = new RepeatableFormElements($form);
         $formrep->setSplitHidden(true); // These are treated separately
         $this->setRepeater($formrep);
 
@@ -101,11 +101,11 @@ class PFormElement extends \MUtil\Html\HtmlElement implements \MUtil\Html\FormLa
         }
 
         // Set this element as the form decorator
-        $decorator = new \MUtil\Html\ElementDecorator();
+        $decorator = new ElementDecorator();
         $decorator->setHtmlElement($this);
         $decorator->setPrologue($formrep);  // Renders hidden elements before this element
         if ($prependErrors) {
-            $decorator->setPrependErrors(\MUtil\Html\ListElement::ul(
+            $decorator->setPrependErrors(ListElement::ul(
                     array('class' => $errorClass, 'style' => array('margin-left' => $width))
                     ));
         }
@@ -120,15 +120,15 @@ class PFormElement extends \MUtil\Html\HtmlElement implements \MUtil\Html\FormLa
      * @param \Zend_Form $form
      * @param float $factor To multiply the widest nummers of letters in the labels with to calculate the width in em at drawing time
      * @param array $order The display order of the elements
-     * @return \MUtil\Html\PFormElement
+     * @return PFormElement
      */
     public function setAutoWidthFormLayout(\Zend_Form $form, $factor = 1,
             array $order = array('label', 'element', 'description'))
     {
-        // Lazy call becase the form might not be completed at this stage.
+        // Late call becase the form might not be completed at this stage.
         return $this->setAsFormLayout(
                 $form,
-                \MUtil\Lazy::call(array('\\MUtil\\Html\\DlElement', 'calculateAutoWidthFormLayout'), $form, $factor),
+                Lazy::call([DlElement::class, 'calculateAutoWidthFormLayout'], $form, $factor),
                 $order
                 );
     }

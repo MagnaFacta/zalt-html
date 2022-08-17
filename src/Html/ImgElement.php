@@ -3,14 +3,14 @@
 /**
  *
  *
- * @package    MUtil
+ * @package    Zalt
  * @subpackage Html
  * @author     Matijs de Jong <mjong@magnafacta.nl>
  * @copyright  Copyright (c) 2011 Erasmus MC
  * @license    New BSD License
  */
 
-namespace MUtil\Html;
+namespace Zalt\Html;
 
 /**
  * An image element with added functionality to automatically add with and height
@@ -25,13 +25,13 @@ namespace MUtil\Html;
  * The class assumes the current working directory (getcwd()) is the web root
  * directory. When this is not the case use the setWebRoot() method.
  *
- * @package    MUtil
+ * @package    Zalt
  * @subpackage Html
  * @copyright  Copyright (c) 2011 Erasmus MC
  * @license    New BSD License
  * @since      Class available since version 1.1
  */
-class ImgElement extends \MUtil\Html\HtmlElement
+class ImgElement extends \Zalt\Html\HtmlElement
 {
     /**
      * @var array List of directory names where img looks for images.
@@ -69,7 +69,7 @@ class ImgElement extends \MUtil\Html\HtmlElement
     protected function _htmlAttribs($attribs)
     {
         if (isset($attribs['src'])) {
-            $filename = \MUtil\Lazy::rise($attribs['src']);
+            $filename = \Zalt\Lazy::rise($attribs['src']);
             
             if ($dir = self::getImageDir($filename)) {
                 if (! isset($attribs['width'], $attribs['height'])) {
@@ -83,15 +83,15 @@ class ImgElement extends \MUtil\Html\HtmlElement
                             $attribs['height'] = $info[1];
                         }
                     } catch (\Exception $e) {
-                        if (\MUtil\Html::$verbose) {
-                            \MUtil\EchoOut\EchoOut::r($e, __CLASS__ . '->' .  __FUNCTION__);
+                        if (\Zalt\Html::$verbose) {
+                            \Zalt\EchoOut\EchoOut::r($e, __CLASS__ . '->' .  __FUNCTION__);
                         }
                     }
                 }
 
                 $attribs['src'] = $this->view->baseUrl() . $dir . $filename;
             }
-            // \MUtil\EchoOut\EchoOut::r($attribs['src']);
+            // \Zalt\EchoOut\EchoOut::r($attribs['src']);
         }
 
         return parent::_htmlAttribs($attribs);
@@ -140,8 +140,8 @@ class ImgElement extends \MUtil\Html\HtmlElement
                     return $dir;
                 }
             }
-            if (\MUtil\Html::$verbose) {
-                \MUtil\EchoOut\EchoOut::r("File not found: $filename. \n\nLooked in: \n" . implode(", \n", self::$_imageDirs));
+            if (\Zalt\Html::$verbose) {
+                \Zalt\EchoOut\EchoOut::r("File not found: $filename. \n\nLooked in: \n" . implode(", \n", self::$_imageDirs));
             }
         }
     }
@@ -171,10 +171,10 @@ class ImgElement extends \MUtil\Html\HtmlElement
     }
 
     /**
-     * Static helper function for creation, used by @see \MUtil\Html\Creator.
+     * Static helper function for creation, used by @see \Zalt\Html\Creator.
      *
-     * @param mixed $arg_array Optional \MUtil\Ra::args processed settings
-     * @return \MUtil\Html\ImgElement
+     * @param mixed $arg_array Optional \Zalt\Ra::args processed settings
+     * @return \Zalt\Html\ImgElement
      */
     public static function img($arg_array = null)
     {
@@ -183,15 +183,15 @@ class ImgElement extends \MUtil\Html\HtmlElement
     }
 
     /**
-     * Static helper function for creation, used by @see \MUtil\Html\Creator.
+     * Static helper function for creation, used by @see \Zalt\Html\Creator.
      *
      * @param string $src The source
-     * @param mixed $arg_array Optional \MUtil\Ra::args processed settings
-     * @return \MUtil\Html\ImgElement
+     * @param mixed $arg_array Optional \Zalt\Ra::args processed settings
+     * @return \Zalt\Html\ImgElement
      */
     public static function imgFile($src, $arg_array = null)
     {
-        $args = \MUtil\Ra::args(func_get_args(), 1);
+        $args = \Zalt\Ra::args(func_get_args(), 1);
 
         $args['src'] = $src;
         if (! isset($args['alt'])) {
@@ -238,7 +238,7 @@ class ImgElement extends \MUtil\Html\HtmlElement
             if (is_scalar($this->_attribs['src'])) {
                 $src = $this->_attribs['src'];
             } else {
-                $src = \MUtil\Html::getRenderer()->renderArray($view, array($this->_attribs['src']));
+                $src = \Zalt\Html::getRenderer()->renderArray($view, array($this->_attribs['src']));
             }
         } else {
             $src = false;

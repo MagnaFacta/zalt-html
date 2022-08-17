@@ -2,15 +2,19 @@
 
 /**
  *
- *
- * @package    MUtil
+ * @package    Zalt
  * @subpackage Html
  * @author     Matijs de Jong <mjong@magnafacta.nl>
  * @copyright  Copyright (c) 2011 Erasmus MC
  * @license    New BSD License
  */
 
-namespace MUtil\Html;
+namespace Zalt\Html;
+
+use ArrayAccess;
+use Countable;
+use IteratorAggregate;
+use Traversable;
 
 /**
  * Parent class for all array based attribute classes.
@@ -18,16 +22,15 @@ namespace MUtil\Html;
  * Useable as is, using spaces as value separators by default.
  *
  * Parameter setting checks for the addition of special types,
- * just as \MUtil\Html\HtmlElement.
+ * just as \Zalt\Html\HtmlElement.
  *
- * @package    MUtil
+ * @package    Zalt
  * @subpackage Html
  * @copyright  Copyright (c) 2011 Erasmus MC
  * @license    New BSD License
  * @since      Class available since version 1.0
  */
-class ArrayAttribute extends \MUtil\Html\AttributeAbstract
-    implements \ArrayAccess, \Countable, \IteratorAggregate
+class ArrayAttribute extends AttributeAbstract implements ArrayAccess, Countable, IteratorAggregate
 {
     /**
      * String used to glue array items together
@@ -44,16 +47,6 @@ class ArrayAttribute extends \MUtil\Html\AttributeAbstract
     protected $_specialTypes;
 
     /**
-     * Specially treated types as used for each subclass
-     *
-     * @var array function name => class
-     */
-    private $_specialTypesDefault = array(
-        'setRequest' => 'Zend_Controller_Request_Abstract',
-        'setView'    => 'Zend_View',
-        );
-
-    /**
      * The actual values
      *
      * @var array
@@ -63,19 +56,11 @@ class ArrayAttribute extends \MUtil\Html\AttributeAbstract
     /**
      *
      * @param string $name The name of the attribute
-     * @param mixed $value
+     * @param array $args
      */
-    public function __construct($name, $arg_array = null)
+    public function __construct($name, ...$args)
     {
-        if ($this->_specialTypes) {
-            $this->_specialTypes = $this->_specialTypes + $this->_specialTypesDefault;
-        } else {
-            $this->_specialTypes = $this->_specialTypesDefault;
-        }
-
-        $value = \MUtil\Ra::args(func_get_args(), 1);
-
-        parent::__construct($name, $value);
+        parent::__construct($name, $args);
     }
 
     /**
@@ -85,7 +70,7 @@ class ArrayAttribute extends \MUtil\Html\AttributeAbstract
      */
     protected function _getArrayRendered()
     {
-        return \MUtil\Html::getRenderer()->renderArray($this->getView(), $this->getArray(), false);
+        return Html::getRenderer()->renderArray($this->getArray(), false);
     }
 
     /**
@@ -123,7 +108,7 @@ class ArrayAttribute extends \MUtil\Html\AttributeAbstract
      *
      * @param scalar $key
      * @param mixed $value
-     * @return \MUtil\Html\ArrayAttribute (continuation pattern)
+     * @return ArrayAttribute (continuation pattern)
      */
     protected function _setItem($key, $value)
     {
@@ -143,7 +128,7 @@ class ArrayAttribute extends \MUtil\Html\AttributeAbstract
      *
      * @param mixed $keyOrValue The key if a second parameter is specified, otherwise a value
      * @param mixed $valueIfKey Optional, the value if a key is specified
-     * @return \MUtil\Html\ArrayAttribute (continuation pattern)
+     * @return ArrayAttribute (continuation pattern)
      */
      public function add($keyOrValue, $valueIfKey = null)
     {
@@ -156,7 +141,7 @@ class ArrayAttribute extends \MUtil\Html\AttributeAbstract
             $value  = $valueIfKey;
         }
 
-        if (is_array($value) || (($value instanceof \Traversable) && (! $value instanceof \MUtil\Lazy\LazyInterface))) {
+        if (is_array($value) || (($value instanceof Traversable) && (! $value instanceof LateInterface))) {
             foreach ($value as $key => $item) {
                 $this->_setItem($key, $item);
             }
@@ -296,7 +281,7 @@ class ArrayAttribute extends \MUtil\Html\AttributeAbstract
      *
      * @param mixed $keyOrValue The key if a second parameter is specified, otherwise a value
      * @param mixed $valueIfKey Optional, the value if a key is specified
-     * @return \MUtil\Html\ArrayAttribute (continuation pattern)
+     * @return \Zalt\Html\ArrayAttribute (continuation pattern)
      */
    public function set($keyOrValue, $valueIfKey = null)
     {
@@ -311,7 +296,7 @@ class ArrayAttribute extends \MUtil\Html\AttributeAbstract
      * Set the String used to glue items together
      *
      * @param string $separator
-     * @return \MUtil\Html\ArrayAttribute (continuation pattern)
+     * @return \Zalt\Html\ArrayAttribute (continuation pattern)
      */
     public function setSeparator($separator)
     {

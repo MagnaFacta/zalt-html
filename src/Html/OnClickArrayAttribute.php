@@ -3,33 +3,32 @@
 /**
  *
  *
- * @package    MUtil
+ * @package    Zalt
  * @subpackage Html
  * @author     Matijs de Jong <mjong@magnafacta.nl>
  * @copyright  Copyright (c) 2011 Erasmus MC
  * @license    New BSD License
  */
 
-namespace MUtil\Html;
+namespace Zalt\Html;
 
 /**
  * Default attribute for onclicks with extra functions for common tasks
  *
- * @package    MUtil
+ * @package    Zalt
  * @subpackage Html
  * @copyright  Copyright (c) 2011 Erasmus MC
  * @license    New BSD License
- * @since      Class available since \MUtil version 1.0
+ * @since      Class available since \Zalt version 1.0
  */
-class OnClickArrayAttribute extends \MUtil\Html\JavascriptArrayAttribute
+class OnClickArrayAttribute extends \Zalt\Html\JavascriptArrayAttribute
 {
     /**
      *
-     * @param mixed $arg_array \MUtil\Ra::args
+     * @param mixed $args Ra::args
      */
-    public function __construct($arg_array = null)
+    public function __construct(...$args)
     {
-        $args = func_get_args();
         parent::__construct('onclick', $args);
     }
 

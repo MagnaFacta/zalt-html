@@ -2,15 +2,14 @@
 
 /**
  *
- *
- * @package    MUtil
+ * @package    Zalt
  * @subpackage Html
  * @author     Matijs de Jong <mjong@magnafacta.nl>
  * @copyright  Copyright (c) 2011 Erasmus MC
  * @license    New BSD License
  */
 
-namespace MUtil\Html;
+namespace Zalt\Html;
 
 /**
  * Classes implementing the HtmlInterface are translateable into correctly
@@ -25,12 +24,12 @@ namespace MUtil\Html;
  * it's rendering it is often used for quick implementations in
  * non-library code.
  *
- * @see \MUtil\Html\AttributeInterface
- * @see \MUtil\Html\ElementInterface
- * @see \MUtil\Html\MultiWrapper
- * @see \MUtil\Html\Raw
+ * @see \Zalt\Html\AttributeInterface
+ * @see \Zalt\Html\ElementInterface
+ * @see \Zalt\Html\MultiWrapper
+ * @see \Zalt\Html\Raw
  *
- * @package    MUtil
+ * @package    Zalt
  * @subpackage Html
  * @copyright  Copyright (c) 2011 Erasmus MC
  * @license    New BSD License
@@ -43,8 +42,7 @@ interface HtmlInterface
      *
      * The $view is used to correctly encode and escape the output
      *
-     * @param \Zend_View_Abstract $view
      * @return string Correctly encoded and escaped html output
      */
-    public function render(\Zend_View_Abstract $view);
+    public function render();
 }

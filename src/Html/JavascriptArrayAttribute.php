@@ -3,25 +3,25 @@
 /**
  *
  *
- * @package    MUtil
+ * @package    Zalt
  * @subpackage Html
  * @author     Matijs de Jong <mjong@magnafacta.nl>
  * @copyright  Copyright (c) 2011 Erasmus MC
  * @license    New BSD License
  */
 
-namespace MUtil\Html;
+namespace Zalt\Html;
 
 /**
  * Default attribute for javascript attributes with extra functions for common tasks
  *
- * @package    MUtil
+ * @package    Zalt
  * @subpackage Html
  * @copyright  Copyright (c) 2011 Erasmus MC
  * @license    New BSD License
- * @since      Class available since version \MUtil 1.2
+ * @since      Class available since version \Zalt 1.2
  */
-class JavascriptArrayAttribute extends \MUtil\Html\ArrayAttribute
+class JavascriptArrayAttribute extends \Zalt\Html\ArrayAttribute
 {
     /**
      * String used to glue items together
@@ -38,17 +38,17 @@ class JavascriptArrayAttribute extends \MUtil\Html\ArrayAttribute
      * @var array function name => class
      */
     protected $_specialTypes = array(
-        'addUrl' => '\\MUtil\\Html\\UrlArrayAttribute',
+        'addUrl' => '\\Zalt\\Html\\UrlArrayAttribute',
     );
 
     /**
      *
      * @param string $type
-     * @param mixed $arg_array \MUtil\Ra::args
+     * @param mixed $arg_array \Zalt\Ra::args
      */
     public function __construct($type, $arg_array = null)
     {
-        $args = \MUtil\Ra::args(func_get_args(), 1);
+        $args = \Zalt\Ra::args(func_get_args(), 1);
         parent::__construct($type, 'javascript:', $args);
     }
 
@@ -56,7 +56,7 @@ class JavascriptArrayAttribute extends \MUtil\Html\ArrayAttribute
      * Add a cancel bubble command
      *
      * @param boolean $cancelBubble
-     * @return \MUtil\Html\JavascriptArrayAttribute (continuation pattern)
+     * @return \Zalt\Html\JavascriptArrayAttribute (continuation pattern)
      */
     public function addCancelBubble($cancelBubble = true)
     {
@@ -72,13 +72,13 @@ class JavascriptArrayAttribute extends \MUtil\Html\ArrayAttribute
      * Add a cancel bubble command
      *
      * @param boolean $cancelBubble
-     * @return \MUtil\Html\JavascriptArrayAttribute (continuation pattern)
+     * @return \Zalt\Html\JavascriptArrayAttribute (continuation pattern)
      */
     public function addConfirm($question)
     {
         $this->add(array(
             "if (!confirm('",
-            \MUtil\Lazy::call('addslashes', $question),
+            \Zalt\Lazy::call('addslashes', $question),
             "')) {event.cancelBubble = true; return false;}"
             ));
         return $this;
@@ -88,11 +88,11 @@ class JavascriptArrayAttribute extends \MUtil\Html\ArrayAttribute
      * Add single code line
      *
      * @param mixed $line
-     * @return \MUtil\Html\JavascriptArrayAttribute (continuation pattern)
+     * @return \Zalt\Html\JavascriptArrayAttribute (continuation pattern)
      */
     public function addLine($line_args)
     {
-        $lines = \MUtil\Ra::flatten(func_get_args());
+        $lines = \Zalt\Ra::flatten(func_get_args());
 
         foreach ($lines as $line) {
             $this->add($line);
@@ -107,7 +107,7 @@ class JavascriptArrayAttribute extends \MUtil\Html\ArrayAttribute
     /**
      * Add a print command
      *
-     * @return \MUtil\Html\JavascriptArrayAttribute (continuation pattern)
+     * @return \Zalt\Html\JavascriptArrayAttribute (continuation pattern)
      */
     public function addPrint()
     {
@@ -119,7 +119,7 @@ class JavascriptArrayAttribute extends \MUtil\Html\ArrayAttribute
      * Add a form submit
      *
      * @param string $condition Optional condition for submit
-     * @return \MUtil\Html\JavascriptArrayAttribute
+     * @return \Zalt\Html\JavascriptArrayAttribute
      */
     public function addSubmit($condition = null)
     {
@@ -136,7 +136,7 @@ class JavascriptArrayAttribute extends \MUtil\Html\ArrayAttribute
      * Add a form submit when a value has changed
      *
      * @param string $condition Optional extra condition for submit
-     * @return \MUtil\Html\JavascriptArrayAttribute
+     * @return \Zalt\Html\JavascriptArrayAttribute
      */
     public function addSubmitOnChange($condition = null)
     {
@@ -152,8 +152,8 @@ class JavascriptArrayAttribute extends \MUtil\Html\ArrayAttribute
     /**
      * Add a url open command by specifying only the link
      *
-     * @param mixed $href Anything, e.g. a \MUtil\Html\UrlArrayAttribute that the code will transform to an url
-     * @return \MUtil\Html\JavascriptArrayAttribute (continuation pattern)
+     * @param mixed $href Anything, e.g. a \Zalt\Html\UrlArrayAttribute that the code will transform to an url
+     * @return \Zalt\Html\JavascriptArrayAttribute (continuation pattern)
      */
     public function addUrl($href)
     {

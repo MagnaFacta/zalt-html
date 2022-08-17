@@ -3,14 +3,18 @@
 /**
  *
  *
- * @package    MUtil
+ * @package    Zalt
  * @subpackage Html
  * @author     Matijs de Jong <mjong@magnafacta.nl>
  * @copyright  Copyright (c) 2011 Erasmus MC
  * @license    New BSD License
  */
 
-namespace MUtil\Html;
+namespace Zalt\Html;
+
+use ArrayAccess;
+use Countable;
+use IteratorAggregate;
 
 /**
  * The ElementInterface defines an Html Element as not just implementing
@@ -23,18 +27,18 @@ namespace MUtil\Html;
  * by having a Sequence of elements (i.e. a document fragment) or an
  * object "posing" as a contained element, e.g. the RepeatRenderer class.
  *
- * @see \MUtil\Html\HtmlInterface
- * @see \MUtil\Html\HtmlElement
- * @see \MUtil\Html\RepeatRenderer
- * @see \MUtil\Html\Sequence
+ * @see \Zalt\Html\HtmlInterface
+ * @see \Zalt\Html\HtmlElement
+ * @see \Zalt\Html\RepeatRenderer
+ * @see \Zalt\Html\Sequence
  *
- * @package    MUtil
+ * @package    Zalt
  * @subpackage Html
  * @copyright  Copyright (c) 2011 Erasmus MC
  * @license    New BSD License
- * @since      Class available since \MUtil version 1.0
+ * @since      Class available since \Zalt version 1.0
  */
-interface ElementInterface extends \MUtil\Html\HtmlInterface, \ArrayAccess, \Countable, \IteratorAggregate
+interface ElementInterface extends HtmlInterface, ArrayAccess, Countable, IteratorAggregate
 {
     /**
      * Add a value to the element.
@@ -44,13 +48,13 @@ interface ElementInterface extends \MUtil\Html\HtmlInterface, \ArrayAccess, \Cou
      *
      * Adding to the main content should be the default action.
      *
-     * @param mixe $value
+     * @param mixed $value
      */
     public function append($value);
 
     /**
      * Most Html elements have a tag name, but "document fragments" like
-     * @see \MUtil\Html\Sequence may return null.
+     * @see \Zalt\Html\Sequence may return null.
      *
      * @return string The tag name or null if this element does not have one
      */

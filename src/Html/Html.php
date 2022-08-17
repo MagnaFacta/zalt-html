@@ -2,19 +2,21 @@
 
 /**
  *
- * @package    MUtil
+ * @package    Zalt
  * @subpackage Html
  * @author     Matijs de Jong <mjong@magnafacta.nl>
  * @copyright  Copyright (c) 2011 Erasmus MC
  * @license    New BSD License
  */
 
-namespace MUtil;
+namespace Zalt\Html;
+
+use Zalt\HtmlUtil\Ra;
 
 /**
  * Collections of static function for using the Html subpackage.
  *
- * @package    MUtil
+ * @package    Zalt
  * @subpackage Html
  * @copyright  Copyright (c) 2011 Erasmus MC
  * @license    New BSD License
@@ -24,76 +26,51 @@ class Html
 {
     /**
      *
-     * @var \MUtil\Html\Creator
+     * @var Creator
      */
     private static $_creator;
 
     /**
      *
-     * @var \MUtil\Html\Renderer
+     * @var Renderer
      */
     private static $_renderer;
 
     /**
      *
-     * @var \MUtil\Snippets\SnippetLoader
+     * @var \Zalt\Snippets\SnippetLoader
      */
     private static $_snippetLoader;
 
     /**
      * Static variable for debuggging purposes. Toggles the echoing of e.g. of sql
-     * select statements, using \MUtil\EchoOut\EchoOut.
+     * select statements, using \Zalt\EchoOut\EchoOut.
      *
      * Implemention classes can use this variable to determine whether to display
      * extra debugging information or not. Please be considerate in what you display:
      * be as succint as possible.
      *
      * Use:
-     *     \MUtil\Html::$verbose = true;
+     *     \Zalt\Html::$verbose = true;
      * to enable.
      *
      * @var boolean $verbose If true echo retrieval statements.
      */
     public static $verbose = false;
 
-    /**
-     * @deprecated
-     * @param \Zend_Navigation_Container $menu
-     * @param string $label
-     * @param array $arg_array
-     */
-    public static function addUrl2Page(\Zend_Navigation_Container $menu, $label, $arg_array = null)
+    public static function attrib($attributeName, ...$args)
     {
-        $args = array_slice(func_get_args(), 2);
-        $menu->addPage(self::url($args)->toPage($label));
-    }
-
-    public static function attrib($attributeName, $args_array = null)
-    {
-        $args = \MUtil\Ra::args(func_get_args(), 1);
-
         return self::getCreator()->createAttribute($attributeName, $args);
-    }
-
-    /**
-     * Render a BB string to Html
-     *
-     * @param string $content
-     * @return \MUtil\Html\Raw
-     */
-    public static function bbcode($content)
-    {
-        return self::getCreator()->create('raw', [\MUtil\Lazy::call('\\MUtil\\Markup::render', $content, 'Bbcode', 'Html')]);
     }
 
     /**
      * A br element
      *
-     * @return \MUtil\Html\HtmlElement
+     * @return HtmlElement
      */
     public static function br()
     {
-        return new \MUtil\Html\HtmlElement('br');
+        return new HtmlElement('br');
     }
 
     /**
@@ -111,21 +88,18 @@ class Html
      * Create an element or return an element creator
      *
      * @param string $tagName Optional tag to create
-     * @param mixed $arg_array Optional \MUtil\Ra::args processed settings
-     * @return \MUtil\Html\HtmlElement or \MUtil\Html\Creator
+     * @param mixed $args Optional Ra::args processed settings
+     * @return \Zalt\Html\HtmlElement or Creator
      */
-    public static function create($tagName = null, $arg_array = null)
+    public static function create($tagName = null, ...$args)
     {
         if (null == $tagName) {
             return self::getCreator();
         }
-
-        $args = array_slice(func_get_args(), 1);
-
         return self::getCreator()->create($tagName, $args);
     }
 
-    public static function createAttribute($attributeName, array $args = array())
+    public static function createAttribute($attributeName, array $args = [])
     {
         return self::getCreator()->createAttribute($attributeName, $args);
     }
@@ -135,9 +109,9 @@ class Html
      *
      * @param string $tagName (or a Lazy object)
      * @param array $args
-     * @return \MUtil\Html\ElementInterface
+     * @return ElementInterface
      */
-    public static function createArray($tagName, array $args = array())
+    public static function createArray($tagName, array $args = [])
     {
         return self::getCreator()->create($tagName, $args);
     }
@@ -146,10 +120,10 @@ class Html
      * Create an element bypassing the standard element creation function stored for certain tags.
      *
      * @param string $tagName Optional tag to create
-     * @param mixed $arg_array Optional \MUtil\Ra::args processed settings
-     * @return \MUtil\Html\HtmlElement Always, never another type
+     * @param mixed $args Optional Ra::args processed settings
+     * @return HtmlElement Always, never another type
      */
-    public static function createRaw($tagName, array $args = array())
+    public static function createRaw($tagName, array $args = [])
     {
         return self::getCreator()->createRaw($tagName, $args);
     }
@@ -157,30 +131,39 @@ class Html
     /**
      * Creates a div element
      *
-     * @param mixed $arg_array Optional \MUtil\Ra::args processed settings
-     * @return \MUtil\Html\HtmlElement (with div tagName)
+     * @param mixed $args Optional Ra::args processed settings
+     * @return HtmlElement (with div tagName)
      */
-    public static function div($arg_array = null)
+    public static function div(...$args)
     {
-        $args = func_get_args();
-
         return self::getCreator()->create('div', $args);
     }
 
+    /**
+     * @param \Zend_Form_Element $element
+     * @return string
+     * @deprecated 
+     */
     public static function element2id(\Zend_Form_Element $element)
     {
         return self::name2id($element->getName(), $element->getBelongsTo());
     }
 
+    public static function escape(string $content): string
+    {
+        // The fixed parameters can be made variable if required for a future version
+        return htmlspecialchars($content, ENT_HTML5, 'UTF-8');
+    }    
+    
     /**
      * Helper function to access the core creator.
      *
-     * @return \MUtil\Html\Creator
+     * @return Creator
      */
     public static function getCreator()
     {
         if (! self::$_creator) {
-            self::$_creator = new \MUtil\Html\Creator();
+            self::$_creator = new Creator();
         }
 
         return self::$_creator;
@@ -190,12 +173,12 @@ class Html
      * Returns the class used to perform the actual rendering
      * of objects and items into html.
      *
-     * @return \MUtil\Html\Renderer
+     * @return Renderer
      */
     public static function getRenderer()
     {
         if (! self::$_renderer) {
-            self::$_renderer = new \MUtil\Html\Renderer();
+            self::$_renderer = new Renderer();
         }
 
         return self::$_renderer;
@@ -204,12 +187,12 @@ class Html
     /**
      * Get the snippet loader for use by self::snippet().
      *
-     * @return \MUtil\Snippets\SnippetLoader
+     * @return \Zalt\Snippets\SnippetLoader
      */
     public static function getSnippetLoader()
     {
         if (! self::$_snippetLoader) {
-            self::setSnippetLoader(new \MUtil\Snippets\SnippetLoader());
+            self::setSnippetLoader(new \Zalt\Snippets\SnippetLoader());
         }
         return self::$_snippetLoader;
     }
@@ -222,6 +205,7 @@ class Html
      * @param string $name
      * @param string $belongsTo
      * @return string
+     * @deprecated 
      */
     public static function name2id($name, $belongsTo = null)
     {
@@ -232,7 +216,7 @@ class Html
      * String content that should be rendered without output escaping
      *
      * @param string $content
-     * @return \MUtil\Html\Raw
+     * @return \Zalt\Html\Raw
      */
     public static function raw($content)
     {
@@ -320,19 +304,16 @@ class Html
      * Renders the $content so that it can be used as output for the $view,
      * including output escaping and encoding correction.
      *
-     * @param \Zend_View_Abstract $view
      * @param mixed $content Anything number, string, array, Lazy, HtmlInterface, object with __toString
      * @return string Output to echo to the user
      */
-    public static function renderAny(\Zend_View_Abstract $view, $content)
+    public static function renderAny($content)
     {
-        return self::getRenderer()->renderAny($view, $content);
+        return self::getRenderer()->renderAny($content);
     }
 
-    public static function renderNew(\Zend_View_Abstract $view, $tagName, $arg_array = null)
+    public static function renderNew(\Zend_View_Abstract $view, $tagName, ...$args)
     {
-        $args = array_slice(func_get_args(), 2);
-
         $element = self::getCreator()->create($tagName, $args);
 
         return $element->render($view);
@@ -341,23 +322,21 @@ class Html
     /**
      * Creates a table element
      *
-     * @param mixed $arg_array Optional \MUtil\Ra::args processed settings
-     * @return \MUtil\Html\TableElement
+     * @param mixed $args Optional Ra::args processed settings
+     * @return TableElement
      */
-    public static function table($arg_array = null)
+    public static function table(...$args)
     {
-        $args = func_get_args();
-
         return self::getCreator()->create('table', $args);
     }
 
-    public static function setCreator(\MUtil\Html\Creator $creator)
+    public static function setCreator(\Zalt\Html\Creator $creator)
     {
         self::$_creator = $creator;
         return self::$_creator;
     }
 
-    public static function setRenderer(\MUtil\Html\Renderer $renderer)
+    public static function setRenderer(\Zalt\Html\Renderer $renderer)
     {
         self::$_renderer = $renderer;
         return self::$_renderer;
@@ -366,10 +345,10 @@ class Html
     /**
      * Set the snippet loader for use by self::snippet().
      *
-     * @param \MUtil\Snippets\SnippetLoaderInterface $snippetLoader
-     * @return \MUtil\Snippets\SnippetLoader
+     * @param \Zalt\Snippets\SnippetLoaderInterface $snippetLoader
+     * @return \Zalt\Snippets\SnippetLoader
      */
-    public static function setSnippetLoader(\MUtil\Snippets\SnippetLoaderInterface $snippetLoader)
+    public static function setSnippetLoader(\Zalt\Snippets\SnippetLoaderInterface $snippetLoader)
     {
         self::$_snippetLoader = $snippetLoader;
         return self::$_snippetLoader;
@@ -378,19 +357,19 @@ class Html
     /**
      *
      * @param string $name Snippet name
-     * @param \MUtil\Ra::pairs $parameter_value_pairs Optional extra snippets
-     * @return \MUtil\Snippets\SnippetInterface
+     * @param Ra::pairs $parameter_value_pairs Optional extra snippets
+     * @return \Zalt\Snippets\SnippetInterface
      */
     public static function snippet($name, $parameter_value_pairs = null)
     {
         if (func_num_args() > 1) {
-            $extraSourceParameters = \MUtil\Ra::pairs(func_get_args(), 1);
+            $extraSourceParameters = Ra::pairs(func_get_args(), 1);
         } else {
             $extraSourceParameters = array();
         }
 
         if (is_array($name)) {
-            list($names, $params) = \MUtil\Ra::keySplit($name);
+            list($names, $params) = Ra::keySplit($name);
 
             if ($params) {
                 $extraSourceParameters = $params + $extraSourceParameters;
@@ -398,7 +377,7 @@ class Html
             if (isset($names[0])) {
                 $name = $names[0];
             } else {
-                throw new \MUtil\Html\HtmlException('Missing snippet name in call to create snippet.');
+                throw new HtmlException('Missing snippet name in call to create snippet.');
             }
         }
 
@@ -415,13 +394,12 @@ class Html
      * Returns a href attribute
      *
      * @deprecated
-     * @param mixed $arg_array \MUtil_Args::ra arguements
-     * @return \MUtil\Html\HrefArrayAttribute
+     * @param mixed $args Optional Ra::args processed settings
+     * @return \Zalt\Html\HrefArrayAttribute
      */
-    public static function url($arg_array = null)
+    public static function url(...$args)
     {
-        $args = func_get_args();
-        return new \MUtil\Html\HrefArrayAttribute($args);
+        return new HrefArrayAttribute($args);
     }
 
     /**
@@ -435,9 +413,10 @@ class Html
      * @param \Zend_Controller_Request_Abstract $request
      * @param \Zend_Controller_Router_Route $router
      * @return string
+     * @deprecated 
      */
     public static function urlString(array $options, \Zend_Controller_Request_Abstract $request = null, \Zend_Controller_Router_Route $router = null)
     {
-        return \MUtil\Html\UrlArrayAttribute::toUrlString($options, $request, $router);
+        return UrlArrayAttribute::toUrlString($options, $request, $router);
     }
 }

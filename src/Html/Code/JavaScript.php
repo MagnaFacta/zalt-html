@@ -2,25 +2,25 @@
 
 /**
  *
- * @package    MUtil
+ * @package    Zalt
  * @subpackage Html
  * @author     Matijs de Jong <mjong@magnafacta.nl>
  * @copyright  Copyright (c) 2011 Erasmus MC
  * @license    New BSD License
  */
 
-namespace MUtil\Html\Code;
+namespace Zalt\Html\Code;
 
 /**
  *
  *
- * @package    MUtil
+ * @package    Zalt
  * @subpackage Html
  * @copyright  Copyright (c) 2011 Erasmus MC
  * @license    New BSD License
- * @since      Class available since version 1.5
+ * @since      Class available since version 1
  */
-class JavaScript extends \MUtil\Html\Code\DynamicAbstract
+class JavaScript extends DynamicAbstract
 {
     protected $_inHeader = true;
 
@@ -32,8 +32,8 @@ class JavaScript extends \MUtil\Html\Code\DynamicAbstract
      */
     public function getInHeader()
     {
-        if ($this->_inHeader instanceof \MUtil\Lazy\LazyInterface) {
-            return (boolean) \MUtil\Lazy::raise($this->_inHeader);
+        if ($this->_inHeader instanceof \Zalt\Lazy\LazyInterface) {
+            return (boolean) \Zalt\Lazy::raise($this->_inHeader);
         } else {
             return (boolean) $this->_inHeader;
         }
@@ -48,7 +48,7 @@ class JavaScript extends \MUtil\Html\Code\DynamicAbstract
      */
     public function render(\Zend_View_Abstract $view)
     {
-        $content = $this->getContentOutput($view);
+        $content = $this->getContentOutput();
 
         // Of course this setting makes little difference if you have optimized
         // your JavaScript loading by putting all script tags at the end of
@@ -68,7 +68,7 @@ class JavaScript extends \MUtil\Html\Code\DynamicAbstract
      * otherwise in the BODY.
      *
      * @param boolean $value
-     * @return \MUtil\Html\Code\JavaScript (continuation pattern)
+     * @return \Zalt\Html\Code\JavaScript (continuation pattern)
      */
     public function setInHeader($value = true)
     {

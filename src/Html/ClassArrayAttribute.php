@@ -2,25 +2,24 @@
 
 /**
  *
- *
- * @package    MUtil
+ * @package    Zalt
  * @subpackage Html
  * @author     Matijs de Jong <mjong@magnafacta.nl>
  * @copyright  Copyright (c) 2011 Erasmus MC
  * @license    New BSD License
  */
 
-namespace MUtil\Html;
+namespace Zalt\Html;
 
 /**
  *
- * @package    MUtil
+ * @package    Zalt
  * @subpackage Html
  * @copyright  Copyright (c) 2011 Erasmus MC
  * @license    New BSD License
- * @since      Class available since \MUtil version 1.0
+ * @since      Class available since \Zalt version 1.0
  */
-class ClassArrayAttribute extends \MUtil\Html\ArrayAttribute
+class ClassArrayAttribute extends ArrayAttribute
 {
     /**
      * String used to glue array items together
@@ -29,9 +28,8 @@ class ClassArrayAttribute extends \MUtil\Html\ArrayAttribute
      */
     protected $_separator = ' ';
 
-    public function __construct($arg_array = null)
+    public function __construct(...$args)
     {
-        $args = func_get_args();
         parent::__construct('class', $args);
     }
 

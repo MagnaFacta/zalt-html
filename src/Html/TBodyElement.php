@@ -3,14 +3,14 @@
 /**
  *
  *
- * @package    MUtil
+ * @package    Zalt
  * @subpackage Html
  * @author     Matijs de Jong <mjong@magnafacta.nl>
  * @copyright  Copyright (c) 2011 Erasmus MC
  * @license    New BSD License
  */
 
-namespace MUtil\Html;
+namespace Zalt\Html;
 
 /**
  * A standaard TBODY element, that puts all contents in TR elements, implements the
@@ -18,15 +18,15 @@ namespace MUtil\Html;
  *
  * You can alternate row classes by using a lazy value.
  *
- * @see \MUtil\Html\TableElement
+ * @see \Zalt\Html\TableElement
  *
- * @package    MUtil
+ * @package    Zalt
  * @subpackage Html
  * @copyright  Copyright (c) 2011 Erasmus MC
  * @license    New BSD License
  * @since      Class available since version 1.0
  */
-class TBodyElement extends \MUtil\Html\HtmlElement implements \MUtil\Html\ColumnInterface
+class TBodyElement extends \Zalt\Html\HtmlElement implements \Zalt\Html\ColumnInterface
 {
     public $defaultRowClass;
 
@@ -50,7 +50,7 @@ class TBodyElement extends \MUtil\Html\HtmlElement implements \MUtil\Html\Column
      *
      * @param mixed $value
      * @param string $offset or null
-     * @return \MUtil\Html\HtmlElement
+     * @return \Zalt\Html\HtmlElement
      */
     protected function _createDefaultTag($value, $offset = null)
     {
@@ -78,10 +78,10 @@ class TBodyElement extends \MUtil\Html\HtmlElement implements \MUtil\Html\Column
     }
 
     /**
-     * Returns the cell or a \MUtil\MultiWrapper containing cells that occupy the column position, taking colspan and other functions into account.
+     * Returns the cell or a \Zalt\MultiWrapper containing cells that occupy the column position, taking colspan and other functions into account.
      *
      * @param int $col The numeric column position, starting at 0;
-     * @return \MUtil\Html\HtmlElement Probably an element of this type, but can also be something else, posing as an element.
+     * @return \Zalt\Html\HtmlElement Probably an element of this type, but can also be something else, posing as an element.
      */
     public function getColumn($col)
     {
@@ -95,7 +95,7 @@ class TBodyElement extends \MUtil\Html\HtmlElement implements \MUtil\Html\Column
                 return reset($results);
 
             default:
-                return new \MUtil\MultiWrapper($results);
+                return new \Zalt\MultiWrapper($results);
         }
     }
 
@@ -103,14 +103,14 @@ class TBodyElement extends \MUtil\Html\HtmlElement implements \MUtil\Html\Column
      * Returns the cells that occupies the column position, taking colspan and other functions into account, in an array.
      *
      * @param int $col The numeric column position, starting at 0;
-     * @return array Of probably one \MUtil\Html\HtmlElement
+     * @return array Of probably one \Zalt\Html\HtmlElement
      */
     public function getColumnArray($col)
     {
         $results = array();
 
         foreach ($this->_content as $row) {
-            if ($row instanceof \MUtil\Html\ColumnInterface) {
+            if ($row instanceof \Zalt\Html\ColumnInterface) {
                 $results = array_merge($results, $row->getColumnArray($col));
             }
         }
@@ -128,7 +128,7 @@ class TBodyElement extends \MUtil\Html\HtmlElement implements \MUtil\Html\Column
         $counts[] = 0;
 
         foreach ($this->_content as $row) {
-            if ($row instanceof \MUtil\Html\ColumnInterface) {
+            if ($row instanceof \Zalt\Html\ColumnInterface) {
                 $counts[] = $row->getColumnCount();
             }
         }
@@ -169,7 +169,7 @@ class TBodyElement extends \MUtil\Html\HtmlElement implements \MUtil\Html\Column
 
     public function setOnEmpty($content, $colcount = null)
     {
-        if (($content instanceof \MUtil\Html\ElementInterface) &&
+        if (($content instanceof \Zalt\Html\ElementInterface) &&
             ($content->getTagName() ==  $this->_defaultChildTag)) {
 
             $this->_onEmptyContent = $content;
@@ -181,16 +181,16 @@ class TBodyElement extends \MUtil\Html\HtmlElement implements \MUtil\Html\Column
             }
 
         } else {
-            $this->_onEmptyContent = \MUtil\Html::create($this->_defaultChildTag);
+            $this->_onEmptyContent = \Zalt\Html::create($this->_defaultChildTag);
             $this->_onEmptyLocal   = $this->_onEmptyContent->td($content);
 
         }
 
         // Collcount tells us to span the empty content cell
         if ($colcount) {
-            if ($colcount instanceof \MUtil\Html\ColumnInterface) {
+            if ($colcount instanceof \Zalt\Html\ColumnInterface) {
                 // Lazy calculation of number of columns when this is a ColumnInterface
-                $this->_onEmptyLocal->colspan = \MUtil\Lazy::method($colcount, 'getColumnCount');
+                $this->_onEmptyLocal->colspan = \Zalt\Lazy::method($colcount, 'getColumnCount');
 
             } else {
                 // Passed fixed number of columns, just set
@@ -213,11 +213,11 @@ class TBodyElement extends \MUtil\Html\HtmlElement implements \MUtil\Html\Column
      * not the element tags. When repeatTags is true the both the tags and the
      * content are repeated.
      *
-     * @param mixed $repeater \MUtil\Lazy\RepeatableInterface or something that can be made into one.
+     * @param mixed $repeater \Zalt\Lazy\RepeatableInterface or something that can be made into one.
      * @param mixed $onEmptyContent Optional. When not null the content to display when the repeater does not result in data is set.
      * @param boolean $repeatTags Optional when not null the repeatTags switch is set.
-     * @param mixed $colcount \MUtil\Html\ColumnInterface or intefer. Span the onEmpty content over $colcount cells
-     * @return \MUtil\Html\TBodyElement (continuation pattern)
+     * @param mixed $colcount \Zalt\Html\ColumnInterface or intefer. Span the onEmpty content over $colcount cells
+     * @return \Zalt\Html\TBodyElement (continuation pattern)
      */
     public function setRepeater($repeater, $onEmptyContent = null, $repeatTags = null, $colcount = null)
     {
@@ -232,10 +232,10 @@ class TBodyElement extends \MUtil\Html\HtmlElement implements \MUtil\Html\Column
 
 
     /**
-     * Static helper function for creation, used by @see \MUtil\Html\Creator.
+     * Static helper function for creation, used by @see \Zalt\Html\Creator.
      *
-     * @param mixed $arg_array Optional \MUtil\Ra::args processed settings
-     * @return \MUtil\Html\TBodyElement with tag 'tbody'
+     * @param mixed $arg_array Optional \Zalt\Ra::args processed settings
+     * @return \Zalt\Html\TBodyElement with tag 'tbody'
      */
     public static function tbody($arg_array = null)
     {
@@ -244,10 +244,10 @@ class TBodyElement extends \MUtil\Html\HtmlElement implements \MUtil\Html\Column
     }
 
     /**
-     * Static helper function for creation, used by @see \MUtil\Html\Creator.
+     * Static helper function for creation, used by @see \Zalt\Html\Creator.
      *
-     * @param mixed $arg_array Optional \MUtil\Ra::args processed settings
-     * @return \MUtil\Html\TBodyElement with tag 'tfoot'
+     * @param mixed $arg_array Optional \Zalt\Ra::args processed settings
+     * @return \Zalt\Html\TBodyElement with tag 'tfoot'
      */
     public static function tfoot($arg_array = null)
     {
@@ -256,10 +256,10 @@ class TBodyElement extends \MUtil\Html\HtmlElement implements \MUtil\Html\Column
     }
 
     /**
-     * Static helper function for creation, used by @see \MUtil\Html\Creator.
+     * Static helper function for creation, used by @see \Zalt\Html\Creator.
      *
-     * @param mixed $arg_array Optional \MUtil\Ra::args processed settings
-     * @return \MUtil\Html\TBodyElement with tag 'thead'
+     * @param mixed $arg_array Optional \Zalt\Ra::args processed settings
+     * @return \Zalt\Html\TBodyElement with tag 'thead'
      */
     public static function thead($arg_array = null)
     {
@@ -270,8 +270,8 @@ class TBodyElement extends \MUtil\Html\HtmlElement implements \MUtil\Html\Column
     /**
      * Add a row with a class and the correct type of default child tag to this element
      *
-     * @param mixed $arg_array \MUtil::args() values
-     * @return \MUtil\Html\TrElement
+     * @param mixed $arg_array \Zalt::args() values
+     * @return \Zalt\Html\TrElement
      */
     public function tr($arg_array = null)
     {
@@ -284,7 +284,7 @@ class TBodyElement extends \MUtil\Html\HtmlElement implements \MUtil\Html\Column
             array_unshift($args, array('DefaultChildTag' => $this->getDefaultRowChildTag()));
         }
 
-        $tr = \MUtil\Html::createArray('tr', $args);
+        $tr = \Zalt\Html::createArray('tr', $args);
 
         $this[] = $tr;
 

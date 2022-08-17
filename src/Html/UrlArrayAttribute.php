@@ -2,26 +2,25 @@
 
 /**
  *
- *
- * @package    MUtil
+ * @package    Zalt
  * @subpackage Html
  * @author     Matijs de Jong <mjong@magnafacta.nl>
  * @copyright  Copyright (c) 2011 Erasmus MC
  * @license    New BSD License
  */
 
-namespace MUtil\Html;
+namespace Zalt\Html;
 
 /**
  * An array attribute that forms url's using Zend framework routing
  *
- * @package    MUtil
+ * @package    Zalt
  * @subpackage Html
  * @copyright  Copyright (c) 2011 Erasmus MC
  * @license    New BSD License
- * @since      Class available since \MUtil version 1.0
+ * @since      Class available since \Zalt version 1.0
  */
-class UrlArrayAttribute extends \MUtil\Html\ArrayAttribute
+class UrlArrayAttribute extends ArrayAttribute
 {
     /**
      *
@@ -166,7 +165,7 @@ class UrlArrayAttribute extends \MUtil\Html\ArrayAttribute
     public function getRouter()
     {
         if (! $this->router) {
-            $this->router = \MUtil\Controller\Front::getRouter();
+            $this->router = \Zalt\Controller\Front::getRouter();
         }
 
         return $this->router;
@@ -226,7 +225,7 @@ class UrlArrayAttribute extends \MUtil\Html\ArrayAttribute
     /**
      *
      * @param \Zend_Controller_Router_Route $router
-     * @return \MUtil\Html\UrlArrayAttribute (continuation pattern)
+     * @return \Zalt\Html\UrlArrayAttribute (continuation pattern)
      */
     public function setRouter(\Zend_Controller_Router_Route $router)
     {
@@ -238,7 +237,7 @@ class UrlArrayAttribute extends \MUtil\Html\ArrayAttribute
      * Whether or not to set route defaults with the paramter values
      *
      * @param boolean $routeReset
-     * @return \MUtil\Html\UrlArrayAttribute (continuation pattern)
+     * @return \Zalt\Html\UrlArrayAttribute (continuation pattern)
      */
     public function setRouteReset($routeReset = true)
     {

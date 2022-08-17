@@ -29,7 +29,7 @@ class LateStackTest extends TestCase
     {
         $get = Late::get('a');
 
-        $this->assertEquals('Zalt\\Late\\LateGet', get_class($get));
+        $this->assertInstanceOf(LateGet::class, $get);
         
         $this->expectException(LateStackException::class);
         Late::raise($get);

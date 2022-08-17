@@ -2,24 +2,24 @@
 
 /**
  *
- * @package    MUtil
+ * @package    Zalt
  * @subpackage Html
  * @author     Matijs de Jong <mjong@magnafacta.nl>
  * @copyright  Copyright (c) 2011 Erasmus MC
  * @license    New BSD License
  */
 
-namespace MUtil\Html;
+namespace Zalt\Html;
 
 /**
  *
- * @package    MUtil
+ * @package    Zalt
  * @subpackage Html
  * @copyright  Copyright (c) 2011 Erasmus MC
  * @license    New BSD License
- * @since      Class available since \MUtil version 1.0
+ * @since      Class available since \Zalt version 1.0
  */
-class LabelElement extends \MUtil\Html\HtmlElement
+class LabelElement extends \Zalt\Html\HtmlElement
 {
     /**
      * Declaring $class a public property, ensures the attribute
@@ -95,8 +95,8 @@ class LabelElement extends \MUtil\Html\HtmlElement
         // If the label was assigned an element lazy,
         // now is the time to get it's value.
         foreach ($this->_content as $key => $value) {
-            if ($value instanceof \MUtil\Lazy\LazyInterface) {
-                $value = \MUtil\Lazy::rise($value);
+            if ($value instanceof \Zalt\Lazy\LazyInterface) {
+                $value = \Zalt\Lazy::rise($value);
             }
             if ($value instanceof \Zend_Form_Element) {
                 if ($value instanceof \Zend_Form_Element_Hidden) {
@@ -107,11 +107,11 @@ class LabelElement extends \MUtil\Html\HtmlElement
                 $decorator = $value->getDecorator('Label');
                 if ($decorator) {
                     if (false === $decorator->getOption('escape')) {
-                        $label = \MUtil\Html::raw($value->getLabel());
+                        $label = \Zalt\Html::raw($value->getLabel());
                     } else {
                         $label = $value->getLabel();
                     }
-                    $class = $this->class ? \MUtil\Html::renderAny($view, $this->class) . ' ' : '';
+                    $class = $this->class ? \Zalt\Html::renderAny($view, $this->class) . ' ' : '';
                     if ($value->isRequired()) {
                         $class .= $this->getRequiredClass();
                         $this->_currentContent[$key] = array($this->getRequiredPrefix(), $label, $this->getRequiredPostfix());
@@ -139,11 +139,11 @@ class LabelElement extends \MUtil\Html\HtmlElement
 
     protected function renderContent(\Zend_View_Abstract $view)
     {
-        if ($content = \MUtil\Html::getRenderer()->renderAny($view, $this->_currentContent)) {
+        if ($content = \Zalt\Html::getRenderer()->renderAny($view, $this->_currentContent)) {
             return $content;
 
         } elseif ($this->_onEmptyContent) {
-            return \MUtil\Html::getRenderer()->renderAny($view, $this->_onEmptyContent);
+            return \Zalt\Html::getRenderer()->renderAny($view, $this->_onEmptyContent);
 
         } else {
             return '&nbsp;';

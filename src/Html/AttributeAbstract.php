@@ -2,52 +2,39 @@
 
 /**
  *
- *
- * @package    MUtil
+ * @package    Zalt
  * @subpackage Html
  * @author     Matijs de Jong <mjong@magnafacta.nl>
  * @copyright  Copyright (c) 2011 Erasmus MC
  * @license    New BSD License
  */
 
-namespace MUtil\Html;
+namespace Zalt\Html;
 
 /**
  * Basic class for all attributes, does the rendering and attribute name parts,
  * but no value processing.
  *
- * @package    MUtil
+ * @package    Zalt
  * @subpackage Html
  * @copyright  Copyright (c) 2011 Erasmus MC
  * @license    New BSD License
  * @since      Class available since version 1.0
  */
-abstract class AttributeAbstract implements \MUtil\Html\AttributeInterface
+abstract class AttributeAbstract implements AttributeInterface
 {
     /**
      *
-     * @var type
+     * @var string
      */
     public $name;
-
-    /**
-     *
-     * @var \Zend_Controller_Request_Abstract
-     */
-    public $request;
-
-    /**
-     *
-     * @var \Zend_View_Abstract
-     */
-    public $view;
 
     /**
      *
      * @param string $name The name of the attribute
      * @param mixed $value
      */
-    public function __construct($name, $value = null)
+    public function __construct(string $name, $value = null)
     {
         $this->name = $name;
 
@@ -85,45 +72,14 @@ abstract class AttributeAbstract implements \MUtil\Html\AttributeInterface
     }
 
     /**
-     *
-     * @return \Zend_Controller_Request_Abstract
-     */
-    public function getRequest()
-    {
-        if (! $this->request) {
-            $this->request = \MUtil\Controller\Front::getRequest();
-        }
-
-        return $this->request;
-    }
-
-    /**
-     *
-     * @return \Zend_View_Abstract
-     */
-    public function getView()
-    {
-        if (! $this->view) {
-            require_once 'Zend/Controller/Action/HelperBroker.php';
-            $viewRenderer = \Zend_Controller_Action_HelperBroker::getStaticHelper('viewRenderer');
-            $this->setView($viewRenderer->view);
-        }
-
-        return $this->view;
-    }
-
-    /**
      * Renders the element into a html string
      *
      * The $view is used to correctly encode and escape the output
      *
-     * @param \Zend_View_Abstract $view
      * @return string Correctly encoded and escaped html output
      */
-    public function render(\Zend_View_Abstract $view)
+    public function render()
     {
-        $this->setView($view);
-
         // Output escaping is done in \Zend_View_Helper_HtmlElement->_htmlAttribs()
         //
         // The reason for using render($view) is only in case the attribute needs the view to get the right data.
@@ -132,24 +88,4 @@ abstract class AttributeAbstract implements \MUtil\Html\AttributeInterface
     }
 
     // public function set($value);
-
-    /**
-     *
-     * @param \Zend_Controller_Request_Abstract $request
-     * @return \MUtil\Html\AttributeAbstract  (continuation pattern)
-     */
-    public function setRequest(\Zend_Controller_Request_Abstract $request)
-    {
-        $this->request = $request;
-        return $this;
-    }
-
-    /**
-     *
-     * @param \Zend_View_Abstract $view
-     */
-    public function setView(\Zend_View_Abstract $view)
-    {
-        $this->view = $view;
-    }
 }

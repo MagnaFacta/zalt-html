@@ -3,25 +3,25 @@
 /**
  *
  *
- * @package    MUtil
+ * @package    Zalt
  * @subpackage Html
  * @author     Matijs de Jong <mjong@magnafacta.nl>
  * @copyright  Copyright (c) 2011 Erasmus MC
  * @license    New BSD License
  */
 
-namespace MUtil\Html;
+namespace Zalt\Html;
 
 /**
  * Sprintf class is used to use sprintf with renderable content .
  *
- * @package    MUtil
+ * @package    Zalt
  * @subpackage Html
  * @copyright  Copyright (c) 2011 Erasmus MC
  * @license    New BSD License
- * @since      Class available since \MUtil version 1.2
+ * @since      Class available since \Zalt version 1.2
  */
-class Sprintf extends \ArrayObject implements \MUtil\Html\ElementInterface
+class Sprintf extends \ArrayObject implements \Zalt\Html\ElementInterface
 {
     /**
      * Object classes that should not be added to the core array, but should be set using
@@ -52,15 +52,15 @@ class Sprintf extends \ArrayObject implements \MUtil\Html\ElementInterface
     /**
      * Adds an HtmlElement to this element
      *
-     * @see \MUtil\Html\Creator
+     * @see \Zalt\Html\Creator
      *
-     * @param string $name Function name becomes tagname (unless specified otherwise in \MUtil\Html\Creator)
+     * @param string $name Function name becomes tagname (unless specified otherwise in \Zalt\Html\Creator)
      * @param array $arguments The content and attributes values
-     * @return \MUtil\Html\HtmlElement With '$name' tagName
+     * @return \Zalt\Html\HtmlElement With '$name' tagName
      */
     public function __call($name, array $arguments)
     {
-        $elem = \MUtil\Html::createArray($name, $arguments);
+        $elem = \Zalt\Html::createArray($name, $arguments);
 
         $this[] = $elem;
 
@@ -69,13 +69,13 @@ class Sprintf extends \ArrayObject implements \MUtil\Html\ElementInterface
 
     /**
      *
-     * @param mixed $arg_array \MUtil\Ra::args parameter passing
+     * @param mixed $arg_array \Zalt\Ra::args parameter passing
      */
     public function __construct($arg_array = null)
     {
         parent::__construct();
 
-        $args = \MUtil\Ra::args(func_get_args());
+        $args = \Zalt\Ra::args(func_get_args());
 
         $this->init();
 
@@ -130,7 +130,7 @@ class Sprintf extends \ArrayObject implements \MUtil\Html\ElementInterface
 
         /*
         if (! $this->_specialTypes) {
-            \MUtil\EchoOut\EchoOut::backtrace();
+            \Zalt\EchoOut\EchoOut::backtrace();
         } // */
         foreach ($this->_specialTypes as $class => $method) {
             if ($newval instanceof $class) {
@@ -159,7 +159,7 @@ class Sprintf extends \ArrayObject implements \MUtil\Html\ElementInterface
             $this->setView($view);
         }
 
-        $params = \MUtil\Html::getRenderer()->renderArray($view, $this->getIterator(), false);
+        $params = \Zalt\Html::getRenderer()->renderArray($view, $this->getIterator(), false);
 
         if ($params) {
             return call_user_func_array('sprintf', $params);
@@ -182,11 +182,11 @@ class Sprintf extends \ArrayObject implements \MUtil\Html\ElementInterface
 
     /**
      *
-     * @param mixed $arg_array \MUtil\Ra::args parameter passing
+     * @param mixed $arg_array \Zalt\Ra::args parameter passing
      */
     public static function sprintf($arg_array = null)
     {
-        $args = \MUtil\Ra::args(func_get_args());
+        $args = \Zalt\Ra::args(func_get_args());
 
         return new self($args);
     }

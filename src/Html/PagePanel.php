@@ -3,14 +3,14 @@
 /**
  *
  *
- * @package    MUtil
+ * @package    Zalt
  * @subpackage Html
  * @author     Matijs de Jong <mjong@magnafacta.nl>
  * @copyright  Copyright (c) 2011 Erasmus MC
  * @license    New BSD License
  */
 
-namespace MUtil\Html;
+namespace Zalt\Html;
 
 /**
  * Html Element used to display paginator page links and links to increase or decrease
@@ -18,13 +18,13 @@ namespace MUtil\Html;
  *
  * Includes functions for specirfying your own text and separators.
  *
- * @package    MUtil
+ * @package    Zalt
  * @subpackage Html
  * @copyright  Copyright (c) 2011 Erasmus MC
  * @license    New BSD License
  * @since      Class available since version 1.0
  */
-class PagePanel extends \MUtil\Html\Sequence implements \MUtil\Lazy\Procrastinator
+class PagePanel extends \Zalt\Html\Sequence implements \Zalt\Lazy\Procrastinator
 {
     /**
      * Fixed addition to url's required for links, i.e. htte
@@ -106,7 +106,7 @@ class PagePanel extends \MUtil\Html\Sequence implements \MUtil\Lazy\Procrastinat
     /**
      * Lazy instance of this object
      *
-     * @var \MUtil\Lazy\ObjectWrap
+     * @var \Zalt\Lazy\ObjectWrap
      */
     protected $_lazy;
 
@@ -155,14 +155,14 @@ class PagePanel extends \MUtil\Html\Sequence implements \MUtil\Lazy\Procrastinat
     /**
      * Lazy call to the _pages parameter
      *
-     * @var \MUtil\Lazy\ObjectWrap
+     * @var \Zalt\Lazy\ObjectWrap
      */
     public $pages;
 
     /**
      * Lazy call to the _paginator parameter.
      *
-     * @var \MUtil\Lazy\ObjectWrap
+     * @var \Zalt\Lazy\ObjectWrap
      */
     public $paginator;
 
@@ -173,18 +173,18 @@ class PagePanel extends \MUtil\Html\Sequence implements \MUtil\Lazy\Procrastinat
 
         foreach ($this->_defaultEnabledContent as $key => $content) {
             $other = isset($args[$key]) ? $args[$key] : null;
-            if ($other instanceof \MUtil\Html\AttributeInterface) {
-                $other->add(\MUtil\Lazy::iff($condition, $content));
+            if ($other instanceof \Zalt\Html\AttributeInterface) {
+                $other->add(\Zalt\Lazy::iff($condition, $content));
             } else {
-                $args[$key] = \MUtil\Lazy::iff($condition, $content, $other);
+                $args[$key] = \Zalt\Lazy::iff($condition, $content, $other);
             }
         }
         foreach ($this->_defaultDisabledContent as $key => $content) {
             $other = isset($args[$key]) ? $args[$key] : null;
-            if ($other instanceof \MUtil\Html\AttributeInterface) {
-                $other->add(\MUtil\Lazy::iff($condition, null, $content));
+            if ($other instanceof \Zalt\Html\AttributeInterface) {
+                $other->add(\Zalt\Lazy::iff($condition, null, $content));
             } else {
-                $args[$key] = \MUtil\Lazy::iff($condition, $other, $content);
+                $args[$key] = \Zalt\Lazy::iff($condition, $other, $content);
             }
         }
 
@@ -204,7 +204,7 @@ class PagePanel extends \MUtil\Html\Sequence implements \MUtil\Lazy\Procrastinat
                 // Recently found trick, can save a complicated database query
                 // Fetch the items first and get the count in the same query
                 $adapter = $this->_paginator->getAdapter();
-                if ($adapter instanceof \MUtil\Paginator\Adapter\PrefetchInterface) {
+                if ($adapter instanceof \Zalt\Paginator\Adapter\PrefetchInterface) {
                     $offset = ($this->_currentPage -1) * $this->_itemCount; // Calculate correct offset
                     $adapter->getItems($offset, $this->_itemCount);
                 }
@@ -215,18 +215,18 @@ class PagePanel extends \MUtil\Html\Sequence implements \MUtil\Lazy\Procrastinat
 
     protected function _createHref($param, $page)
     {
-        return new \MUtil\Html\HrefArrayAttribute(array($param => $page) + $this->_baseUrl);
+        return new \Zalt\Html\HrefArrayAttribute(array($param => $page) + $this->_baseUrl);
     }
 
     public function createCountLink($condition, $count, array $args)
     {
         // Use the condition for the $href
-        $element = \MUtil\Html::create()->a(
-            \MUtil\Lazy::iff($condition, $this->_createHref($this->_itemCountParam, $count)),
+        $element = \Zalt\Html::create()->a(
+            \Zalt\Lazy::iff($condition, $this->_createHref($this->_itemCountParam, $count)),
             $this->_applyDefaults($condition, $args));
 
         // and make the tagName an if
-        $element->tagName = \MUtil\Lazy::iff($condition, 'a', 'span');
+        $element->tagName = \Zalt\Lazy::iff($condition, 'a', 'span');
 
         return $element;
     }
@@ -235,16 +235,16 @@ class PagePanel extends \MUtil\Html\Sequence implements \MUtil\Lazy\Procrastinat
      * Returns an element with a conditional tagName: it will become either an A or a SPAN
      * element.
      *
-     * @param \MUtil\Lazy $condition Condition for link display
+     * @param \Zalt\Lazy $condition Condition for link display
      * @param int $page    Page number of this link
      * @param array $args  Content of the page
-     * @return \MUtil\Html\HtmlElement
+     * @return \Zalt\Html\HtmlElement
      */
     public function createPageLink($condition, $page, array $args)
     {
-        $element = new \MUtil\Html\HtmlElement(
-                \MUtil\Lazy::iff($condition, 'a', 'span'),
-                array('href' => \MUtil\Lazy::iff($condition, $this->_createHref($this->_currentPageParam, $page))),
+        $element = new \Zalt\Html\HtmlElement(
+                \Zalt\Lazy::iff($condition, 'a', 'span'),
+                array('href' => \Zalt\Lazy::iff($condition, $this->_createHref($this->_currentPageParam, $page))),
                 $this->_applyDefaults($condition, $args)
                 );
 
@@ -253,7 +253,7 @@ class PagePanel extends \MUtil\Html\Sequence implements \MUtil\Lazy\Procrastinat
 
     public function firstPage($label = '<<', $args_array = null)
     {
-        $args = \MUtil\Ra::args(func_get_args());
+        $args = \Zalt\Ra::args(func_get_args());
 
         // Apply default
         if (! isset($args[0])) {
@@ -471,7 +471,7 @@ class PagePanel extends \MUtil\Html\Sequence implements \MUtil\Lazy\Procrastinat
 
     public function lastPage($label = '>>', $args_array = null)
     {
-        $args = \MUtil\Ra::args(func_get_args());
+        $args = \Zalt\Ra::args(func_get_args());
 
         // Apply default
         if (! isset($args[0])) {
@@ -483,7 +483,7 @@ class PagePanel extends \MUtil\Html\Sequence implements \MUtil\Lazy\Procrastinat
 
     public function nextPage($label = '>', $args_array = null)
     {
-        $args = \MUtil\Ra::args(func_get_args());
+        $args = \Zalt\Ra::args(func_get_args());
 
         // Apply default
         if (! isset($args[0])) {
@@ -507,22 +507,22 @@ class PagePanel extends \MUtil\Html\Sequence implements \MUtil\Lazy\Procrastinat
      * @param string $next Label for goto next page link
      * @param string $last Label for goto last page link
      * @param string $glue In between links glue
-     * @param mixed $args \MUtil\Ra::args extra arguments applied to all links
-     * @return \MUtil\Html\Sequence
+     * @param mixed $args \Zalt\Ra::args extra arguments applied to all links
+     * @return \Zalt\Html\Sequence
      */
     public function pageLinks($first = '<<', $previous = '<', $next = '>', $last = '>>', $glue = ' ', $args = null)
     {
         $argDefaults = array('first' => '<<', 'previous' => '<', 'next' => '>', 'last' => '>>', 'glue' => ' ');
         $argNames    = array_keys($argDefaults);
 
-        $args = \MUtil\Ra::args(func_get_args(), $argNames, $argDefaults);
+        $args = \Zalt\Ra::args(func_get_args(), $argNames, $argDefaults);
 
         foreach ($argNames as $name) {
             $$name = $args[$name];
             unset($args[$name]);
         }
 
-        $div = \MUtil\Html::create()->sequence(array('glue' => $glue));
+        $div = \Zalt\Html::create()->sequence(array('glue' => $glue));
 
         if ($first) { // Can be null or array()
             $div[] = $this->firstPage((array) $first + $args);
@@ -538,13 +538,13 @@ class PagePanel extends \MUtil\Html\Sequence implements \MUtil\Lazy\Procrastinat
             $div[] = $this->lastPage((array) $last + $args);
         }
 
-        return \MUtil\Lazy::iff(\MUtil\Lazy::comp($this->pages->pageCount, '>', 1), $div);
+        return \Zalt\Lazy::iff(\Zalt\Lazy::comp($this->pages->pageCount, '>', 1), $div);
     }
 
     /**
      * Create a page panel
      *
-     * @param mixed $paginator \MUtil\Ra::args() for an \MUtil\Html\Sequence
+     * @param mixed $paginator \Zalt\Ra::args() for an \Zalt\Html\Sequence
      * @param mixed $request
      * @param mixed $args
      * @return self
@@ -563,7 +563,7 @@ class PagePanel extends \MUtil\Html\Sequence implements \MUtil\Lazy\Procrastinat
 
     public function previousPage($label = '<', $args_array = null)
     {
-        $args = \MUtil\Ra::args(func_get_args());
+        $args = \Zalt\Ra::args(func_get_args());
 
         // Apply default
         if (! isset($args[0])) {
@@ -575,9 +575,9 @@ class PagePanel extends \MUtil\Html\Sequence implements \MUtil\Lazy\Procrastinat
 
     public function rangePages($glue = ' ', $args_array = null)
     {
-        $args = \MUtil\Ra::args(func_get_args(), array('glue'), array('glue' => ' '));
+        $args = \Zalt\Ra::args(func_get_args(), array('glue'), array('glue' => ' '));
 
-        return new \MUtil\Html\PageRangeRenderer($this, $args);
+        return new \Zalt\Html\PageRangeRenderer($this, $args);
     }
 
     public function setBaseUrl(array $baseUrl = null)
@@ -629,7 +629,7 @@ class PagePanel extends \MUtil\Html\Sequence implements \MUtil\Lazy\Procrastinat
     /**
      *
      * @param \Zend_Paginator $paginator
-     * @return \MUtil\Html\PagePanel (continuation pattern)
+     * @return \Zalt\Html\PagePanel (continuation pattern)
      */
     public function setPaginator(\Zend_Paginator $paginator)
     {
@@ -647,7 +647,7 @@ class PagePanel extends \MUtil\Html\Sequence implements \MUtil\Lazy\Procrastinat
      * Set the Request object
      *
      * @param \Zend_Controller_Request_Abstract $request
-     * @return \MUtil\Html\PagePanel (continuation pattern)
+     * @return \Zalt\Html\PagePanel (continuation pattern)
      */
     public function setRequest(\Zend_Controller_Request_Abstract $request)
     {
@@ -667,7 +667,7 @@ class PagePanel extends \MUtil\Html\Sequence implements \MUtil\Lazy\Procrastinat
      * Set the View object
      *
      * @param  \Zend_View_Interface $view
-     * @return \MUtil\Html\PagePanel (continuation pattern)
+     * @return \Zalt\Html\PagePanel (continuation pattern)
      */
     public function setView(\Zend_View_Interface $view)
     {
@@ -679,14 +679,14 @@ class PagePanel extends \MUtil\Html\Sequence implements \MUtil\Lazy\Procrastinat
     }
 
     /**
-     * Returns a lazy instance of item. Do NOT use MUtil\Lazy::L() in this function!!!
+     * Returns a lazy instance of item. Do NOT use Zalt\Lazy::L() in this function!!!
      *
-     * @return \MUtil\Lazy\LazyInterface
+     * @return \Zalt\Lazy\LazyInterface
      */
     public function toLazy()
     {
         if (! $this->_lazy) {
-            $this->_lazy = new \MUtil\Lazy\ObjectWrap($this);
+            $this->_lazy = new \Zalt\Lazy\ObjectWrap($this);
         }
 
         return $this->_lazy;
@@ -694,7 +694,7 @@ class PagePanel extends \MUtil\Html\Sequence implements \MUtil\Lazy\Procrastinat
 
     public function uptoOff($upto = '-', $off = '/', $glue = ' ')
     {
-        $seq = new \MUtil\Html\Sequence();
+        $seq = new \Zalt\Html\Sequence();
         $seq->setGlue($glue);
         $seq->if($this->pages->totalItemCount, $this->pages->firstItemNumber, 0);
         $seq[] = $upto;
@@ -710,14 +710,14 @@ class PagePanel extends \MUtil\Html\Sequence implements \MUtil\Lazy\Procrastinat
         $argDefaults = array('upto' => '~', 'off' => '/', 'less' => '-', 'more' => '+', 'all' => null, 'glue' => ' ');
         $argNames    = array_keys($argDefaults);
 
-        $args = \MUtil\Ra::args(func_get_args(), $argNames, $argDefaults);
+        $args = \Zalt\Ra::args(func_get_args(), $argNames, $argDefaults);
 
         foreach ($argNames as $name) {
             $$name = $args[$name];
             unset($args[$name]);
         }
 
-        $seq = new \MUtil\Html\Sequence();
+        $seq = new \Zalt\Html\Sequence();
         $seq->setGlue($glue);
         if (null !== $upto) {
             $seq->if($this->pages->totalItemCount, $this->pages->firstItemNumber, 0);

@@ -2,15 +2,16 @@
 
 /**
  *
- *
- * @package    MUtil
+ * @package    Zalt
  * @subpackage Html
  * @author     Matijs de Jong <mjong@magnafacta.nl>
  * @copyright  Copyright (c) 2011 Erasmus MC
  * @license    New BSD License
  */
 
-namespace MUtil\Html;
+namespace Zalt\Html;
+
+use Zalt\Late\Late;
 
 /**
  * The Raw class is used to output html without character encoding or escaping.
@@ -18,13 +19,13 @@ namespace MUtil\Html;
  * Use this class when you have a string containg html or escaped texts that you
  * want to output without further processing.
  *
- * @package    MUtil
+ * @package    Zalt
  * @subpackage Html
  * @copyright  Copyright (c) 2011 Erasmus MC
  * @license    New BSD License
- * @since      Class available since \MUtil version 1.0
+ * @since      Class available since \Zalt version 1.0
  */
-class Raw implements \MUtil\Html\HtmlInterface
+class Raw implements HtmlInterface
 {
     /**
      * Whatever should be the output
@@ -62,7 +63,7 @@ class Raw implements \MUtil\Html\HtmlInterface
      * This is a utility function that simplifies e.g. search and replace
      * without messing up the markup, e.g. in the Marker class
      *
-     * @see \MUtil\Html\Marker
+     * @see \Zalt\Html\Marker
      *
      * @return array
      */
@@ -159,30 +160,26 @@ class Raw implements \MUtil\Html\HtmlInterface
      */
     public function getValue()
     {
-        return \MUtil\Lazy::raise($this->_value);
+        return Late::rise($this->_value);
     }
 
     /**
-     * Static helper function for creation, used by @see \MUtil\Html\Creator.
+     * Static helper function for creation, used by @see \Zalt\Html\Creator.
      *
      * @param string $value
-     * @return \MUtil\Html\Raw
+     * @return Raw
      */
     public static function raw($value)
     {
-        $args = func_get_args();
         return new self($value);
     }
 
     /**
      * Echo the content.
      *
-     * The $view is not used but required by the interface definition
-     *
-     * @param \Zend_View_Abstract $view
      * @return string Correctly encoded and escaped html output
      */
-    public function render(\Zend_View_Abstract $view)
+    public function render()
     {
         return $this->getValue();
     }
@@ -191,7 +188,7 @@ class Raw implements \MUtil\Html\HtmlInterface
      * Change the content.
      *
      * @param string $value
-     * @return \MUtil\Html\Raw
+     * @return \Zalt\Html\Raw
      */
     public function setValue($value)
     {

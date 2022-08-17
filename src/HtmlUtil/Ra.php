@@ -3,13 +3,13 @@
 /**
  *
  * @package    Zalt
- * @subpackage Ra
+ * @subpackage HtmlUtil
  * @author     Matijs de Jong <mjong@magnafacta.nl>
  * @copyright  Copyright (c) 2011 Erasmus MC
  * @license    New BSD License
  */
 
-namespace Zalt;
+namespace Zalt\HtmlUtil;
 
 use Exception;
 use Zalt\HtmlUtil\ClassList;
@@ -21,12 +21,12 @@ use Zalt\HtmlUtil\ClassList;
  * Ra class: pronouce "array" except on 19 september, then it is "ahrrray".
  *
  * The functions are:<ol>
- * <li>\Zalt\Ra::args    => Python faking</li>
- * <li>\Zalt\Ra::flatten => flatten an array renumbering keys</li>
- * <li>\Zalt\Ra::pairs   => the parameters represent name => value pairs</li></ol>
+ * <li>Ra::args    => Python faking</li>
+ * <li>Ra::flatten => flatten an array renumbering keys</li>
+ * <li>Ra::pairs   => the parameters represent name => value pairs</li></ol>
  *
  * @package    Zalt
- * @subpackage Ra
+ * @subpackage HtmlUtil
  * @copyright  Copyright (c) 2011 Erasmus MC
  * @license    New BSD License
  * @since      Class available since version 1.0
@@ -100,7 +100,7 @@ class Ra
      * The input is usually just the output of func_get_args(). This array is flattened
      * like this:
      * <code>
-     * \Zalt\Ra::args(
+     * Ra::args(
      *  array(0 => array(0 => 'f', 1 => array('o' => '0', 0 => 'b')), 1 => array('a' => array('r' => 'r'))));
      * =>
      *  array(0 => 'f', 'o' => '0', 1 => 'b', 'a' => array('r' => 'r'))
@@ -111,7 +111,7 @@ class Ra
      *
      * If you assign a name twice, the last value is used:
      * <code>
-     * \Zalt\Ra::args(
+     * Ra::args(
      *  array(array('a' => 'b'), array('a' => 'c'));
      * =>
      *  array('a' => 'c');
@@ -122,7 +122,7 @@ class Ra
      * When the first X arguments passed to a function are fixed, you can skip the flattening of the
      * items by specifiying a numeric $skipOrName value.
      * <code>
-     * \Zalt\Ra::args(
+     * Ra::args(
      *  array(0 => array(0 => 'f', 1 => array('o' => '0', 0 => 'b')), 1 => array('a' => array('r' => 'r'))),
      *  1);
      * =>
@@ -135,7 +135,7 @@ class Ra
      * is using named arguments. With array('foo', 'bar') as $skipOrName parameter the previous
      * example output becomes:
      * <code>
-     * \Zalt\Ra::args(
+     * Ra::args(
      *  array(0 => array(0 => 'f', 1 => array('o' => '0', 0 => 'b')), 1 => array('a' => array('r' => 'r'))),
      *  array('foo', 'bar'));
      * =>
@@ -150,7 +150,7 @@ class Ra
      *
      * Using the $skipOrName array('a', 'c', 'o') the same example returns:
      * <code>
-     * \Zalt\Ra::args(
+     * Ra::args(
      *  array(0 => array(0 => 'f', 1 => array('o' => '0', 0 => 'b')), 1 => array('a' => array('r' => 'r'))),
      *  array('a', 'c', 'o'));
      * =>
@@ -168,7 +168,7 @@ class Ra
      * args() also supports class-typed arguments. The $skipOrName parameter then uses the
      * name of the parameter as the array key and the class or interface name as the value:
      * <code>
-     * \Zalt\Ra::args(
+     * Ra::args(
      *  array(new \Zend_DB_Select(), array('a', 'b', new \Zend_Foo()))),
      *  array('foo' => 'Zend_Foo', 'bar', 'foobar' => 'Zend_Db_Select'));
      * =>
@@ -178,10 +178,10 @@ class Ra
      * parameter value.
      *
      * Assignment is depth first. Mind you, assignment is name first, instanceof second as long
-     * as the $mode = \Zalt\Ra::RELAXED. If the name does not correspond to the specified type
+     * as the $mode = Ra::RELAXED. If the name does not correspond to the specified type
      * it is still assigned. Also the assignment order is again depth first:
      * <code>
-     * \Zalt\Ra::args(
+     * Ra::args(
      *  array(new \Zend_Foo(1), array('a', 'b', new \Zend_Foo(2)), array('foobar' => 'x')),
      *  array('foo' => 'Zend_Foo', 'bar' => 'Zend_Foo', 'foobar' => 'Zend_Db_Select'));
      * =>
@@ -210,7 +210,7 @@ class Ra
      *
      * So the example:
      * <code>
-     * $args = \Zalt\Ra::args(func_get_args(), array('class1',  'class2'), array('class1' => 'odd',  'class2' => 'even'));
+     * $args = Ra::args(func_get_args(), array('class1',  'class2'), array('class1' => 'odd',  'class2' => 'even'));
      * </code>
      * Will return this for the inputs:
      * <code>
@@ -226,7 +226,7 @@ class Ra
      * @param array $defaults   An array of argument name => default_value pairs.
      * @param boolean $mode     The $skipOrName types are only used as hints or must be strictly adhered to.
      * @return array Flattened array containing the arguments.
-     * /
+     */
     public static function args(array $args, $skipOrName = 0, $defaults = array(), $mode = self::RELAXED)
     {
         if ($skipOrName) {
@@ -735,7 +735,7 @@ class Ra
      * @param array $args Usually func_get_args() from the calling function.
      * @param int $skip The number of items to skip before stating processing
      * @return array
-     * /
+     */
     public static function pairs(array $args, $skip = 0)
     {
         $count = count($args);
@@ -824,7 +824,7 @@ class Ra
 /*
 function is_ra_array($value)
 {
-    return \Zalt\Ra::is($value);
+    return Ra::is($value);
 }
 
 // */

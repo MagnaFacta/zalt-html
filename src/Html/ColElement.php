@@ -2,30 +2,30 @@
 
 /**
  *
- * @package    MUtil
+ * @package    Zalt
  * @subpackage Html
  * @author     Matijs de Jong <mjong@magnafacta.nl>
  * @copyright  Copyright (c) 2011 Erasmus MC
  * @license    New BSD License
  */
 
-namespace MUtil\Html;
+namespace Zalt\Html;
 
 /**
  *
- * @package    MUtil
+ * @package    Zalt
  * @subpackage Html
  * @copyright  Copyright (c) 2011 Erasmus MC
  * @license    New BSD License
- * @since      Class available since \MUtil version 1.0
+ * @since      Class available since \Zalt version 1.0
  */
-class ColElement extends \MUtil\Html\HtmlElement implements \MUtil\Html\ColumnInterface
+class ColElement extends HtmlElement implements ColumnInterface
 {
     /**
-     * Returns the cell or a \MUtil\MultiWrapper containing cells that occupy the column position, taking colspan and other functions into account.
+     * Returns the cell or a \Zalt\MultiWrapper containing cells that occupy the column position, taking colspan and other functions into account.
      *
      * @param int $col The numeric column position, starting at 0;
-     * @return \MUtil\Html\HtmlElement Probably an element of this type, but can also be something else, posing as an element.
+     * @return \Zalt\Html\HtmlElement Probably an element of this type, but can also be something else, posing as an element.
      */
     public function getColumn($col)
     {
@@ -37,7 +37,7 @@ class ColElement extends \MUtil\Html\HtmlElement implements \MUtil\Html\ColumnIn
      * Returns the cells that occupies the column position, taking colspan and other functions into account, in an array.
      *
      * @param int $col The numeric column position, starting at 0;
-     * @return array Of probably one \MUtil\Html\HtmlElement
+     * @return array Of probably one \Zalt\Html\HtmlElement
      */
     public function getColumnArray($col)
     {
@@ -60,14 +60,13 @@ class ColElement extends \MUtil\Html\HtmlElement implements \MUtil\Html\ColumnIn
     }
 
     /**
-     * Static helper function for creation, used by @see \MUtil\Html\Creator.
+     * Static helper function for creation, used by @see \Zalt\Html\Creator.
      *
-     * @param mixed $arg_array Optional \MUtil\Ra::args processed settings
-     * @return \MUtil\Html\ColElement
+     * @param mixed $args Optional Ra::args processed settings
+     * @return \Zalt\Html\ColElement
      */
-    public static function col($arg_array = null)
+    public static function col(...$args)
     {
-        $args = func_get_args();
         return new self(__FUNCTION__, $args);
     }
 }

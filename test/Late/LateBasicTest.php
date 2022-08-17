@@ -34,7 +34,7 @@ class LateBasicTest extends TestCase
     {
         $call = Late::alternate(1, 2, 3);
         
-        $this->assertEquals(Alternate::class, get_class($call));
+        $this->assertInstanceOf(Alternate::class, $call);
         $this->assertEquals(1, Late::raise($call));
         $this->assertEquals(2, Late::raise($call));
         $this->assertEquals(3, Late::raise($call));
@@ -48,7 +48,7 @@ class LateBasicTest extends TestCase
     {
         $call = Late::call('max', 0, 1);
         
-        $this->assertEquals(LateCall::class, get_class($call));
+        $this->assertInstanceOf(LateCall::class, $call);
         $this->assertEquals(1, Late::raise($call));
     }
 
@@ -90,24 +90,24 @@ class LateBasicTest extends TestCase
     public function testLateComp($val1, $oper, $val2, $expected)
     {
         $call = Late::comp( $val1, $oper, $val2);
-        $this->assertEquals(LateCall::class, get_class($call));
+        $this->assertInstanceOf(LateCall::class, $call);
         $this->assertEquals($expected, Late::raise($call));
     }
     
     public function testLateConcat()
     {
         $call = Late::concat('max', ' ', 'min');
-        $this->assertEquals(LateCall::class, get_class($call));
+        $this->assertInstanceOf(LateCall::class, $call);
         $this->assertEquals('max min', Late::raise($call));
 
         $call = Late::concat('a', ['b', 'c'], 'd', ['e']);
-        $this->assertEquals(LateCall::class, get_class($call));
+        $this->assertInstanceOf(LateCall::class, $call);
         $this->assertEquals('abcde', Late::raise($call));
 
         $object = new \stdClass();
         $object->a = 'X';
         $call = Late::concat(Late::property($object, 'a'), ' ', Late::property($object, 'b'));
-        $this->assertEquals(LateCall::class, get_class($call));
+        $this->assertInstanceOf(LateCall::class, $call);
         $this->assertEquals('X ', Late::raise($call));
         
         
@@ -135,7 +135,7 @@ class LateBasicTest extends TestCase
             Late::property($class, 'd'),
             Late::property($class, 'e')
         );
-        $this->assertEquals(LateCall::class, get_class($call));
+        $this->assertInstanceOf(LateCall::class, $call);
         $this->assertEquals('Yes', Late::raise($call));
         
         $class->d = 'Now this!';
@@ -155,10 +155,10 @@ class LateBasicTest extends TestCase
         $class->e = 'Yes';
         
         $wrap = Late::L($class);
-        $this->assertEquals(ObjectWrap::class, get_class($wrap));
+        $this->assertInstanceOf(ObjectWrap::class, $wrap);
 
         $call = Late::first($wrap->a, $wrap->b, $wrap->c, $wrap->d, $wrap->e);
-        $this->assertEquals(LateCall::class, get_class($call));
+        $this->assertInstanceOf(LateCall::class, $call);
         $this->assertEquals('Yes', Late::raise($call));
 
         $class->d = 'Now this!';
@@ -179,10 +179,10 @@ class LateBasicTest extends TestCase
             ];
 
         $wrap = Late::L($array);
-        $this->assertEquals(ArrayWrap::class, get_class($wrap));
+        $this->assertInstanceOf(ArrayWrap::class, $wrap);
 
         $call = Late::first($wrap['a'], $wrap['b'], $wrap['c'], $wrap['d'], $wrap['e']);
-        $this->assertEquals(LateCall::class, get_class($call));
+        $this->assertInstanceOf(LateCall::class, $call);
         $this->assertEquals('Yes', Late::raise($call));
 
         $wrap['d'] = 'Now this!';
@@ -198,10 +198,10 @@ class LateBasicTest extends TestCase
 
         $call1 = Late::method($date, 'format', 'd-m-Y');
         $call2 = Late::method($date, 'format', 'n/j/Y');
-        $this->assertEquals(LateCall::class, get_class($call1));
+        $this->assertInstanceOf(LateCall::class, $call1);
         $this->assertEquals('31-01-2001', Late::raise($call1));
         
-        $this->assertEquals(LateCall::class, get_class($call2));
+        $this->assertInstanceOf(LateCall::class, $call2);
         $this->assertEquals('1/31/2001', Late::raise($call2));
         
         $date->add(new \DateInterval('P9D'));
@@ -216,7 +216,7 @@ class LateBasicTest extends TestCase
         
         $call = Late::property($object, 'a');
 
-        $this->assertEquals(LateProperty::class, get_class($call));
+        $this->assertInstanceOf(LateProperty::class, $call);
         $this->assertEquals('X', Late::raise($call));
 
         $object->a = 'Y';

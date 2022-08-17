@@ -2,14 +2,21 @@
 
 /**
  *
- * @package    MUtil
+ * @package    Zalt
  * @subpackage Html
  * @author     Matijs de Jong <mjong@magnafacta.nl>
  * @copyright  Copyright (c) 2011 Erasmus MC
  * @license    New BSD License
  */
 
-namespace MUtil\Html;
+namespace Zalt\Html;
+
+use Zalt\HtmlUtil\Ra;
+use Zalt\Late\LateInterface;
+use Zalt\Late\ObjectWrap;
+use Zalt\Late\ParallelRepeater;
+use Zalt\Late\Procrastinator;
+use Zalt\Late\RepeatableInterface;
 
 /**
  * HtmlElement is a simple to use, extensible interface to output HTML.
@@ -28,7 +35,7 @@ namespace MUtil\Html;
  * - the content of the element are the array items of the element,
  * - new child elements can be created with their tagName as function name: e.g. $this->br();
  * - the attributes are treated as properties,
- * - certain types are always used in a fixed manner (e.g. \Zend_View -> setView()).
+ * - certain types are always used in a fixed manner (e.g. \Zalt\Late\RepeatableInterface -> setRepeater()).
  *
  * Evil but usefull functionality includes the possibility of changing the $tagName at
  * a later stage.
@@ -41,23 +48,22 @@ namespace MUtil\Html;
  * - attributes are specified in nested array with the attribute name as key,
  * - content is specified either as top-level parameter or in a nested array
  *   with numerical index,
- * - \MUtil\Html\AttributeInterface objects will always be added as attributes,
- * - \MUtil\Html\ElementInterface objects will always be added as content,
- * - classes like \Zend_View and \Zend_Paginator get special treatment.
+ * - AttributeInterface objects will always be added as attributes,
+ * - ElementInterface objects will always be added as content,
  *
  *
- * Most of the times element are constructed using the \MUtil\Html static helper class.
+ * Most of the time elements are constructed using the Html static helper class.
  * These six examples are all equivalent:
  *
  * <code>
- * 1: $div = new \MUtil\Html\HtmlElement('div', 'some content', array('class' => 'some class'));
- * 2: $div = new \MUtil\Html\HtmlElement('div', array('some content', 'class' => 'some class'));
+ * 1: $div = new HtmlElement('div', 'some content', array('class' => 'some class'));
+ * 2: $div = new HtmlElement('div', array('some content', 'class' => 'some class'));
  *
- * 3: $div = \MUtil\Html::create('div', 'some content', array('class' => 'some class'));
- * 4: $div = \MUtil\Html::create('div', array('some content', 'class' => 'some class'));
+ * 3: $div = Html::create('div', 'some content', array('class' => 'some class'));
+ * 4: $div = Html::create('div', array('some content', 'class' => 'some class'));
  *
- * 5: $div = \MUtil\Html::create()->div('some content', array('class' => 'some class'));
- * 6: $div = \MUtil\Html::create()->div(array('some content', 'class' => 'some class'));
+ * 5: $div = Html::create()->div('some content', array('class' => 'some class'));
+ * 6: $div = Html::create()->div(array('some content', 'class' => 'some class'));
  * </code>
  *
  * As a style guide: use option 5 unless there is a reason to use another method.
@@ -77,14 +83,14 @@ namespace MUtil\Html;
  *
  * These eight examples add the same child element to the previous $div:
  * <code>
- * 1: $div[] = new \MUtil\Html\HtmlElement('b', 'bold text', array('class' => 'bold'));
- * 2: $div[] = new \MUtil\Html\HtmlElement('b', array('bold text', 'class' => 'bold'));
+ * 1: $div[] = new HtmlElement('b', 'bold text', array('class' => 'bold'));
+ * 2: $div[] = new HtmlElement('b', array('bold text', 'class' => 'bold'));
  *
- * 3: $div[] = \MUtil\Html::create('b', 'bold text', array('class' => 'bold'));
- * 4: $div[] = \MUtil\Html::create('b', array('bold text', 'class' => 'bold'));
+ * 3: $div[] = Html::create('b', 'bold text', array('class' => 'bold'));
+ * 4: $div[] = Html::create('b', array('bold text', 'class' => 'bold'));
  *
- * 5: $div[] = \MUtil\Html::create()->b('bold text', array('class' => 'bold'));
- * 6: $div[] = \MUtil\Html::create()->b(array('bold text', 'class' => 'bold'));
+ * 5: $div[] = Html::create()->b('bold text', array('class' => 'bold'));
+ * 6: $div[] = Html::create()->b(array('bold text', 'class' => 'bold'));
  *
  * 7: $div->b('bold text', array('class' => 'bold'));
  * 8: $div->b(array('bold text', 'class' => 'bold'));
@@ -98,7 +104,7 @@ namespace MUtil\Html;
  * <code>
  * $div[] = 'end text';
  * </code>
- * The output of <code>$div->render($view)</code> will be:
+ * The output of <code>$div->render()</code> will be:
  * <code>
  * <div class='some class another class'>some content<b class='bold'>bold text</b>end text</div>
  * </code>
@@ -110,36 +116,30 @@ namespace MUtil\Html;
  * foreach ($div as $key => $content) {
  *      unset($div[$key]);
  * }
- * $div->render($view)
+ * $div->render()
  *  =>
  * <div class='some class another class' />
- * </code>
- * Assuming the $view is an XHTML view. If $view was not an XML but HTML view
- * the output would be:
- * <code>
- * <div class='some class another class'>
  * </code>
  *
  * OUTPUT ESCAPING
  *
- * All string input is escaped using the escape function of the $view passsed
- * to the render() function:
+ * All string input is escaped using the static escape function of the Html class
  * <code>
- * $div = \MUtil\Html::create()->div('<b>content</b>');
+ * $div = Html::create()->div('<b>content</b>');
  * $div[] = ' <br/> ';
  * $div[] = '<i>content</i>';
- * $div->render($view)
+ * $div->render()
  *  =>
  * <div>&lt;b&gt;content&lt;/b&gt; &lt;br/&gt; &lt;i&gt;content&lt;/i&gt;</div>
  * </code>
- * To prevent output escaping and add raw Html contant use the \MUtil\Html\Raw
- * class by creating an instance or invoking \MUtil\Html::raw() or $this->raw().
+ * To prevent output escaping and add raw Html contant use the \Zalt\Html\Raw
+ * class by creating an instance or invoking \Zalt\Html::raw() or $this->raw().
  * This example shows all three approaches in the first three lines:
  * <code>
- * $div = \MUtil\Html::create()->div(new \MUtil\Html\Raw('<b>content</b>'));
- * $div[] = \MUtil\Html::raw(' <br/> ');
+ * $div = Html::create()->div(new Raw('<b>content</b>'));
+ * $div[] = Html::raw(' <br/> ');
  * $div-raw('<i>content</i>');
- * $div->render($view)
+ * $div->render()
  *  =>
  * <div><b>content</b> <br/> <i>content</i></div>
  * </code>
@@ -148,49 +148,36 @@ namespace MUtil\Html;
  *
  * SPECIAL TYPES
  *
- * Certain types of elements are special for an \MUtil\Html\HtmlElement, they have special
- * set() functions. Examples of this are:
+ * Certain types of elements are special for an HtmlElement, they have special
+ * set() functions. The current example of this is:
  * <code>
- *   \Zend_View => setView
- *   \Zend_Paginator => setRepeater
- *   \MUtil\Lazy\RepeatableInterface => setRepeater
+ *   \Zalt\Late\RepeatableInterface => setRepeater
 *  </code>
  * and for some elements:
  * <code>
  *   \Zend_Form  => setAsFormLayout
  * </code>
- * The following 4 examples show how you can create a div and set the view.
+ * The following 4 examples show how you can create a repeatablediv
  * <code>
- * 1: $div = \MUtil\Html::create()->div(array('view' => $view));
- * 2: $div = \MUtil\Html::create()->div($view);
- * 3: $div['view'] = $view;
- * 4: $div[] = $view;
- * 5: $div->view = $view;
- * 6: $div->x = $view;
- * 7: $div->setView($view);
+ * 1: $div = Html::create()->div(array('repeater' => $repeater));
+ * 2: $div = Html::create()->div($repeater);
+ * 3: $div['repeater'] = $repeater;
+ * 4: $div[] = $repeater;
+ * 5: $div->repeater = $repeater;
+ * 6: $div->x = repeater;
+ * 7: $div->setRepeater($repeater);
  * </code>
  * Use option 7 for readablity, unless there is reason to use another method.
  *
- * Options 2, 4 and 6 will only work when $view really is an instance of \Zend_View
+ * Options 2, 4 and 6 will only work when $repeater really is an instance of \Zalt\Late\RepeatableInterface
  *
- * Mind you example 5 works for view as it is a public property of a parent class.
- * But even were this not the case this would still work:
- * <code>
- * 5: $div->repeater = $repeat;
- * 7: $div->setRepeater($repeater);
- * </code>
- * This is good illustration as the repeater is stored in the protected $_repaeter
- * property and $repeat can be an array or \Traversable as well as \Zend_Paginator or
- * \MUtil\Lazy\RepeatableInterface object.
- *
- * @package    MUtil
+ * @package    Zalt
  * @subpackage Html
  * @copyright  Copyright (c) 2011 Erasmus MC
  * @license    New BSD License
  * @since      Class available since version 1.0
  */
-class HtmlElement extends \Zend_View_Helper_HtmlElement
-    implements \MUtil\Html\ElementInterface, \MUtil\Lazy\Procrastinator
+class HtmlElement implements ElementInterface, Procrastinator
 {
     /**
      * For some elements (e.g. table and tbody) the logical thing to do when content
@@ -224,9 +211,9 @@ class HtmlElement extends \Zend_View_Helper_HtmlElement
      * the $_allowedChildTags.
      *
      * When content is added it is checked against the $_allowedChildTags.
-     *  - for \MUtil\Html\ElementInterface items the $tagName is extracted
-     *    (when that tagname is lazy we assume the programmer knows what he is doing)
-     *  - for \MUtil\Html\Raw elements we try to extract the tagname
+     *  - for \Zalt\Html\ElementInterface items the $tagName is extracted
+     *    (when that tagname is late we assume the programmer knows what he is doing)
+     *  - for \Zalt\Html\Raw elements we try to extract the tagname
      *
      * When the tagname of the child is not in the $_allowedChildTags a new
      * $_defaultChildTag element is created, unless $_addtoLastChild is true
@@ -242,8 +229,7 @@ class HtmlElement extends \Zend_View_Helper_HtmlElement
 
     /**
      * Usually no text is appended after an element, but for certain elements we choose
-     * to add a "\n" newline character instead, to keep the output readable in source
-     * view.
+     * to add a "\n" newline character instead, to keep the output readable as source.
      *
      * @var string Content added after the element.
      */
@@ -253,6 +239,13 @@ class HtmlElement extends \Zend_View_Helper_HtmlElement
      * @var array The actual storage of the attributes.
      */
     protected $_attribs = array();
+
+    /**
+     * The tag closing bracket
+     *
+     * @var string
+     */
+    protected $_closingBracket = null;
 
     /**
      * @var array The actual storage of the content.
@@ -291,16 +284,16 @@ class HtmlElement extends \Zend_View_Helper_HtmlElement
      * @see $_allowedChildTags
      * @see $_lastChild
      *
-     * @var mixed Often an instance of \MUtil\Html\HtmlElement but can contain any content that was recently added.
+     * @var mixed Often an instance of \Zalt\Html\HtmlElement but can contain any content that was recently added.
      */
     protected $_lastChild;
 
     /**
-     * Cache for Lazy object version of this element.
+     * Cache for Late object version of this element.
      *
-     * @var \MUtil\Lazy\ObjectWrap
+     * @var \Zalt\Late\ObjectWrap
      */
-    protected $_lazy;
+    protected $_late;
 
     /**
      * The content to display when there is no other data to display when rendering.
@@ -309,17 +302,17 @@ class HtmlElement extends \Zend_View_Helper_HtmlElement
      * no data. But another reason might be that there is simply nothing to display e.g.
      * because of conditional statements.
      * <code>
-     * $div = \MUtil\Html::create()->div();
+     * $div = \Zalt\Html::create()->div();
      * if (isset($data['short_description])) {
      *   $div->p($data['short_description]);
      * }
      * if (isset($data['long_description])) {
      *   $div->p($data['long_description]);
      * }
-     * $div->setOnEmpty(\MUtil\Html::create()->p('We do not yet have a description for this item.'));
+     * $div->setOnEmpty(\Zalt\Html::create()->p('We do not yet have a description for this item.'));
      * </code>
      *
-     * When asking for the content an empty \MUtil\Html\Sequence is returned, so the last line can
+     * When asking for the content an empty \Zalt\Html\Sequence is returned, so the last line can
      * be simplified to:
      * <code>
      * $div->getOnEmpty()->p('We do not yet have a description for this item.');
@@ -334,8 +327,7 @@ class HtmlElement extends \Zend_View_Helper_HtmlElement
 
     /**
      * Usually no text is appended before an element, but for certain elements we choose
-     * to add a "\n" newline character instead, to keep the output readable in source
-     * view.
+     * to add a "\n" newline character instead, to keep the output readable as source output.
      *
      * @var string Content added before the element.
      */
@@ -345,16 +337,16 @@ class HtmlElement extends \Zend_View_Helper_HtmlElement
      * The traditional method of outputting repeated data is added the items to the output
      * element in a loop. E.g.:
      * <code>
-     * $ul = new \MUtil\Html\ListElement('ul');
+     * $ul = new \Zalt\Html\ListElement('ul');
      * foreach ($data as $row) {
      *   $ul->li($row['title'], array('class' => $row['class']));
      * }
      * </code>
      *
-     * The \MUtil Html sub package allows an alternate method of specifying this, eliminating
+     * The \Zalt Html sub package allows an alternate method of specifying this, eliminating
      * the loop:
      * <code>
-     * $ul  = new \MUtil\Html\ListElement('ul');
+     * $ul  = new \Zalt\Html\ListElement('ul');
      * $ul->setRepeater($data);
      *
      * $rep = $ul->getRepeater();
@@ -368,8 +360,8 @@ class HtmlElement extends \Zend_View_Helper_HtmlElement
      * example repeats the 'li' items including their tags instead of the contents of the
      * 'ul' element without their tags.
      * <code>
-     * $ul  = new \MUtil\Html\ListElement('ul');
-     * $rep = new \MUtil\Lazy\Repeatable($data);
+     * $ul  = new \Zalt\Html\ListElement('ul');
+     * $rep = new \Zalt\Late\Repeatable($data);
      * $ul->li($rep->title, array('class' => $rep->class, 'repeater' => $repeater, 'repeatTags' => true));
      * </code>
      * As long as the 'ul' element contains only a single 'li' the resulting output is the same.
@@ -378,20 +370,20 @@ class HtmlElement extends \Zend_View_Helper_HtmlElement
      * an extra if:
      * <code>
      * if ($data) {
-     *   $ul = new \MUtil\Html\ListElement('ul');
+     *   $ul = new \Zalt\Html\ListElement('ul');
      *   foreach ($data as $row) {
      *     $ul->li($row['title'], array('class' => $row['class']));
      *   }
      * }
      * </code>
-     * Using a \MUtil\Html\ListElement there is no need to do anything, as $renderWithoutContent is set to
+     * Using a \Zalt\Html\ListElement there is no need to do anything, as $renderWithoutContent is set to
      * true in that subclass. The result is that there is no output for the element when there is no content
-     * to output. However the default for \MUtil\Html\HtmlElement's is to output the tags even when there is
+     * to output. However the default for \Zalt\Html\HtmlElement's is to output the tags even when there is
      * no content, so when you used the default element you need to set $renderWithoutContent to false to
      * get the correct behaviour.
      * <code>
-     * $ul  = new \MUtil\Html\HtmlElement('ul');
-     * $rep = new \MUtil\Lazy\Repeatable($data)
+     * $ul  = new \Zalt\Html\HtmlElement('ul');
+     * $rep = new \Zalt\Late\Repeatable($data)
      * $ul->setRepeater($rep);
      * $ul->renderWithoutContent = false;
      * $ul->li($rep->title, array('class' => $rep->class));
@@ -399,7 +391,7 @@ class HtmlElement extends \Zend_View_Helper_HtmlElement
      *
      * When outputting an alternative value when the array is empty like this:
      * <code>
-     * $ul = new \MUtil\Html\ListElement('ul');
+     * $ul = new \Zalt\Html\ListElement('ul');
      * if ($data) {
      *   foreach ($data as $row) {
      *     $ul->li($row['title'], array('class' => $row['class']));
@@ -410,8 +402,8 @@ class HtmlElement extends \Zend_View_Helper_HtmlElement
      * </code>
      * You can use setOnEmpty() to achieve the same.
      * <code>
-     * $ul  = new \MUtil\Html\ListElement('ul');
-     * $rep = new \MUtil\Lazy\Repeatable($data)
+     * $ul  = new \Zalt\Html\ListElement('ul');
+     * $rep = new \Zalt\Late\Repeatable($data)
      * $ul->setRepeater($rep);
      * $ul->setOnEmpty('No data');
      * $ul->li($rep->title, array('class' => $rep->class));
@@ -429,9 +421,9 @@ class HtmlElement extends \Zend_View_Helper_HtmlElement
      * @see setOnEmpty()
      * @see setRepeater()
      * @see setRepeatTags()
-     * @see \MUtil\Lazy\RepeatableInterface
+     * @see RepeatableInterface
      *
-     * @var \MUtil\Lazy\RepeatableInterface
+     * @var RepeatableInterface
      */
     protected $_repeater;
 
@@ -464,11 +456,9 @@ class HtmlElement extends \Zend_View_Helper_HtmlElement
      *
      * @var array Of 'class or interfacename' => 'class method'
      */
-    private $_specialTypesDefault = array(
-        '\\MUtil\\Lazy\\RepeatableInterface' => 'setRepeater',
-        'Zend_Paginator'                 => 'setRepeater',
-        'Zend_View'                      => 'setView',
-        );
+    private $_specialTypesDefault = [
+        RepeatableInterface::class => 'setRepeater',
+        ];
 
     /**
      * Some elements, e.g. iframe elements, must always be rendered with a closing
@@ -507,7 +497,7 @@ class HtmlElement extends \Zend_View_Helper_HtmlElement
      * later on.
      *
      * The tagName must be a string value of an object with a __toString
-     * function. (This includes Lazy objects.)
+     * function. (This includes Late objects.)
      *
      * @var string The tagname
      */
@@ -516,15 +506,15 @@ class HtmlElement extends \Zend_View_Helper_HtmlElement
     /**
      * Adds an HtmlElement to this element
      *
-     * @see \MUtil\Html\Creator
+     * @see \Zalt\Html\Creator
      *
-     * @param string $name Function name becomes tagname (unless specified otherwise in \MUtil\Html\Creator)
+     * @param string $name Function name becomes tagname (unless specified otherwise in \Zalt\Html\Creator)
      * @param array $arguments The content and attributes values
-     * @return \MUtil\Html\HtmlElement With '$name' tagName
+     * @return \Zalt\Html\HtmlElement With '$name' tagName
      */
     public function __call($name, array $arguments)
     {
-        $elem = \MUtil\Html::createArray($name, $arguments);
+        $elem = Html::createArray($name, $arguments);
 
         $this[] = $elem;
 
@@ -538,11 +528,11 @@ class HtmlElement extends \Zend_View_Helper_HtmlElement
      * as special types, if defined as such for this element.
      *
      * @param string $tagName
-     * @param mixed $arg_array \MUtil\Ra::args arguments
+     * @param mixed $args Ra::args arguments
      */
-    public function __construct($tagName, $arg_array = null)
+    public function __construct($tagName, ...$args)
     {
-        $args = \MUtil\Ra::args(func_get_args(), 1);
+        $args = Ra::args($args);
 
         $this->tagName = $tagName;
 
@@ -609,7 +599,7 @@ class HtmlElement extends \Zend_View_Helper_HtmlElement
     {
         if ($this->_notSpecialType($value, $name)) {
             if (is_array($value)) {
-                $this->_attribs[$name] = \MUtil\Html::createAttribute($name, $value);
+                $this->_attribs[$name] = Html::createAttribute($name, $value);
             } else {
                 $this->_attribs[$name] = $value;
             }
@@ -617,7 +607,7 @@ class HtmlElement extends \Zend_View_Helper_HtmlElement
     }
 
     /**
-     * Renders the object if the view has been set.
+     * Renders the object 
      *
      * Otherwise a warning is returned as it is not a good idea to throw
      * exceptions in a __toString() function.
@@ -626,12 +616,7 @@ class HtmlElement extends \Zend_View_Helper_HtmlElement
      */
     public function __toString()
     {
-        if ($this->view instanceof \Zend_View_Abstract) {
-            return $this->render($this->view);
-
-        } else {
-            return 'String conversions called on ' . __CLASS__ . ' for ' . $this->tagName . ' element, while view was not set.';
-        }
+        return $this->render();
     }
 
     /**
@@ -652,14 +637,14 @@ class HtmlElement extends \Zend_View_Helper_HtmlElement
      *
      * @param mixed $value
      * @param string $offset or null
-     * @return \MUtil\Html\HtmlElement
+     * @return \Zalt\Html\HtmlElement
      */
     protected function _createDefaultTag($value, $offset = null)
     {
         if (null === $offset) {
-            return \MUtil\Html::create($this->_defaultChildTag, $value);
+            return Html::create($this->_defaultChildTag, $value);
         } else {
-            return \MUtil\Html::create($this->_defaultChildTag, array($offset => $value));
+            return Html::create($this->_defaultChildTag, array($offset => $value));
         }
     }
 
@@ -669,10 +654,76 @@ class HtmlElement extends \Zend_View_Helper_HtmlElement
     protected function _ensureDefaultTag()
     {
         if ($this->_defaultChildTag && (! $this->_content)) {
-            $value = \MUtil\Html::create($this->_defaultChildTag);
+            $value = Html::create($this->_defaultChildTag);
             $this->_lastChild = $value;
             $this->_content[] = $value;
         }
+    }
+
+    /**
+     * Converts an associative array to a string of tag attributes.
+     *
+     * @access public
+     *
+     * @param array $attribs From this array, each key-value pair is
+     * converted to an attribute name and value.
+     *
+     * @return string The XHTML for the attributes.
+     */
+    protected function _htmlAttribs($attribs)
+    {
+        $xhtml = '';
+        foreach ((array) $attribs as $key => $val) {
+            $key = Html::escape($key);
+
+            if (('on' == substr($key, 0, 2)) || ('constraints' == $key)) {
+                // Don't escape event attributes; _do_ substitute double quotes with singles
+                if (!is_scalar($val)) {
+                    $val = \json_encode($val);
+                }
+                // Escape single quotes inside event attribute values.
+                // This will create html, where the attribute value has
+                // single quotes around it, and escaped single quotes or
+                // non-escaped double quotes inside of it
+                $val = str_replace('\'', '&#39;', $val);
+            } else {
+                if (is_array($val)) {
+                    $val = implode(' ', $val);
+                }
+                $val = Html::escape($val);
+            }
+
+            if ('id' == $key) {
+                $val = $this->_normalizeId($val);
+            }
+
+            if (strpos($val, '"') !== false) {
+                $xhtml .= " $key='$val'";
+            } else {
+                $xhtml .= " $key=\"$val\"";
+            }
+
+        }
+        return $xhtml;
+    }
+
+    /**
+     * Normalize an ID
+     *
+     * @param  string $value
+     * @return string
+     */
+    protected function _normalizeId($value)
+    {
+        if (strstr($value, '[')) {
+            if ('[]' == substr($value, -2)) {
+                $value = substr($value, 0, strlen($value) - 2);
+            }
+            $value = trim($value, ']');
+            $value = str_replace('][', '-', $value);
+            $value = str_replace('[', '-', $value);
+        }
+        return $value;
     }
 
     /**
@@ -684,8 +735,8 @@ class HtmlElement extends \Zend_View_Helper_HtmlElement
     private function _notAllowedChild($element)
     {
         if ($this->_allowedChildTags) {
-            if ($element instanceof \MUtil\Lazy\LazyInterface) {
-                // When a lazy object is passed we assume that the programnmer
+            if ($element instanceof LateInterface) {
+                // When a late object is passed we assume that the programnmer
                 // had the sense to pass an object that devolves to an element
                 // with allowed child tag.
                 return false;
@@ -753,10 +804,10 @@ class HtmlElement extends \Zend_View_Helper_HtmlElement
         foreach ($params as $key => $param) {
             if ($this->_notSpecialType($param, $key)) {
 
-                if ($param instanceof \MUtil\Html\ElementInterface) {
+                if ($param instanceof ElementInterface) {
                     $this->offsetSet($key, $param);
 
-                } elseif ($param instanceof \MUtil\Html\AttributeInterface) {
+                } elseif ($param instanceof AttributeInterface) {
                     $key = $param->getAttributeName();
                     $this->$key = $param;
 
@@ -773,12 +824,11 @@ class HtmlElement extends \Zend_View_Helper_HtmlElement
     /**
      * Render the attribute values
      *
-     * @param \Zend_View_Abstract $view
      * @return array With rendered versions of the attributes
      */
-    private function _renderAttributes(\Zend_View_Abstract $view)
+    private function _renderAttributes()
     {
-        return \MUtil\Html::getRenderer()->renderArray($view, $this->_attribs, false);
+        return Html::getRenderer()->renderArray($this->_attribs, false);
     }
 
     /**
@@ -790,17 +840,17 @@ class HtmlElement extends \Zend_View_Helper_HtmlElement
      *
      * @param mixed $repeater
      * @param string $name
-     * @return \MUtil\Lazy\Repeatable
+     * @return Repeatable
      */
     public function addRepeater($repeater, $name = null)
     {
-        if (! $repeater instanceof \MUtil\Lazy\RepeatableInterface) {
-             $repeater = new \MUtil\Lazy\Repeatable($repeater);
+        if (! $repeater instanceof RepeatableInterface) {
+             $repeater = new Repeatable($repeater);
         }
 
         if ($name || $this->_repeater) {
-            if (! $this->_repeater instanceof \MUtil\Lazy\ParallelRepeater) {
-                $this->_repeater = new \MUtil\Lazy\ParallelRepeater($this->_repeater);
+            if (! $this->_repeater instanceof ParallelRepeater) {
+                $this->_repeater = new ParallelRepeater($this->_repeater);
             }
             $this->_repeater->addRepeater($repeater, $name);
         } else {
@@ -831,7 +881,7 @@ class HtmlElement extends \Zend_View_Helper_HtmlElement
      * value is appended to the content.
      *
      * @param mixed $value The value to append
-     * @return \MUtil\Html\HtmlElement
+     * @return \Zalt\Html\HtmlElement
      */
     public function append($value = null)
     {
@@ -849,22 +899,22 @@ class HtmlElement extends \Zend_View_Helper_HtmlElement
      * @param string $name
      * @param mixed $value
      * @param string $offset Optional offset for adding
-     * @return \MUtil\Html\HtmlElement
+     * @return \Zalt\Html\HtmlElement
      */
     public function appendAttrib($name, $value, $offset = null)
     {
         $attrib = $this->$name;
 
-        if ($attrib instanceof \MUtil\Lazy\LazyInterface) {
-            $attrib = new \MUtil\Html\ArrayAttribute($name, $attrib);
+        if ($attrib instanceof LateInterface) {
+            $attrib = new ArrayAttribute($name, $attrib);
 
-        } elseif ($attrib && ($value instanceof \MUtil\Lazy\LazyInterface)) {
-            if (! $attrib instanceof \MUtil\Html\AttributeInterface) {
-                $attrib = new \MUtil\Html\ArrayAttribute($name, $attrib);
+        } elseif ($attrib && ($value instanceof LateInterface)) {
+            if (! $attrib instanceof AttributeInterface) {
+                $attrib = new ArrayAttribute($name, $attrib);
             }
         }
 
-        if ($attrib instanceof \MUtil\Html\AttributeInterface) {
+        if ($attrib instanceof AttributeInterface) {
             $attrib->add($offset, $value);
 
         } elseif (is_array($attrib) || ($attrib instanceof \ArrayAccess)) {
@@ -899,15 +949,15 @@ class HtmlElement extends \Zend_View_Helper_HtmlElement
     }
 
     /**
-     * Returns the tagname from a \MUtil\Html\ElementInterface or a string or raw object
+     * Returns the tagname from a \Zalt\Html\ElementInterface or a string or raw object
      * @param mixed $element
      * @param string $defaultName
      * @return string
      */
     public static function extractTagName($element, $defaultName = null)
     {
-        if ($element instanceof \MUtil\Html\HtmlInterface) {
-            if ($element instanceof \MUtil\Html\ElementInterface) {
+        if ($element instanceof HtmlInterface) {
+            if ($element instanceof ElementInterface) {
                 if ($tagname = $element->getTagName()) {
                     return strtolower($tagname);
                 } else {
@@ -916,7 +966,7 @@ class HtmlElement extends \Zend_View_Helper_HtmlElement
             }
 
         } else {
-            if ($element instanceof \MUtil\Html\Raw) {
+            if ($element instanceof Raw) {
                 $element = $element->getValue();
             }
             if (is_string($element) && (strlen($element) > 2)) {
@@ -966,7 +1016,7 @@ class HtmlElement extends \Zend_View_Helper_HtmlElement
      * Get the first child element.
      *
      * @param boolean $create A default child tag is created if the element does not exist and has a default child tag
-     * @return \MUtil\Html\HtmlElement or another \MUtil\Html\HtmlInterface element
+     * @return \Zalt\Html\HtmlElement or another \Zalt\Html\HtmlInterface element
      */
     public function getFirst($create = false)
     {
@@ -992,7 +1042,7 @@ class HtmlElement extends \Zend_View_Helper_HtmlElement
      * Get the last child element.
      *
      * @param boolean $create A default child tag is created if the element does not exist
-     * @return \MUtil\Html\HtmlElement or another \MUtil\Html\HtmlInterface element
+     * @return \Zalt\Html\HtmlElement or another \Zalt\Html\HtmlInterface element
      */
     public function getLast($create = false)
     {
@@ -1019,7 +1069,7 @@ class HtmlElement extends \Zend_View_Helper_HtmlElement
     {
         if (! $this->_onEmptyContent) {
             // To add to on the usual $x->getOnEmpty()->p('Text') manner
-            $this->setOnEmpty(new \MUtil\Html\Sequence());
+            $this->setOnEmpty(new Sequence());
         }
 
         return $this->_onEmptyContent;
@@ -1027,7 +1077,7 @@ class HtmlElement extends \Zend_View_Helper_HtmlElement
 
     /**
      *
-     * @return \MUtil\Lazy\RepeatableInterface
+     * @return RepeatableInterface
      */
     public function getRepeater()
     {
@@ -1143,55 +1193,47 @@ class HtmlElement extends \Zend_View_Helper_HtmlElement
     /**
      * Renders the element into a html string
      *
-     * The $view is used to correctly encode and escape the output
-     *
-     * @param \Zend_View_Abstract $view
      * @return string Correctly encoded and escaped html output
      */
-    public function render(\Zend_View_Abstract $view)
+    public function render()
     {
-        $this->setView($view);
-
         if ($this->_repeater &&
                 $this->_repeatTags &&
                 $this->_repeater->__start()) {
 
             $html = null;
             while ($this->_repeater->__next()) {
-                $html .= $this->renderElement($view);
+                $html .= $this->renderElement();
             }
 
             return $html;
 
         } else {
-            return $this->renderElement($view);
+            return $this->renderElement();
         }
     }
 
     /**
      * Function to allow overloading of content rendering only
      *
-     * The $view is used to correctly encode and escape the output
-     *
-     * @param \Zend_View_Abstract $view
      * @return string Correctly encoded and escaped html output
      */
-    protected function renderContent(\Zend_View_Abstract $view)
+    protected function renderContent()
     {
-        $renderer = \MUtil\Html::getRenderer();
+        $renderer = Html::getRenderer();
         if ($this->_content) {
             if ($this->_repeater && (! $this->_repeatTags)) {
                 if ($this->_repeater->__start()) {
                     $html = '';
                     while ($this->_repeater->__next()) {
-                        $html .= $renderer->renderArray($view, $this->_content);
+                        $html .= $renderer->renderArray($this->_content);
                     }
 
                     return $html;
                 }
 
             } else {
-                $content = $renderer->renderArray($view, $this->_content);
+                $content = $renderer->renderArray($this->_content);
                 if (strlen($content)) {
                     return $content;
                 }
@@ -1199,7 +1241,7 @@ class HtmlElement extends \Zend_View_Helper_HtmlElement
         }
 
         if ($this->_onEmptyContent) {
-            return $renderer->renderArray($view, $this->_onEmptyContent);
+            return $renderer->renderArray($this->_onEmptyContent);
         }
 
         return null;
@@ -1210,14 +1252,11 @@ class HtmlElement extends \Zend_View_Helper_HtmlElement
      *
      * Renders the element tag with it's content into a html string
      *
-     * The $view is used to correctly encode and escape the output
-     *
-     * @param \Zend_View_Abstract $view
      * @return string Correctly encoded and escaped html output
      */
-    protected function renderElement(\Zend_View_Abstract $view)
+    protected function renderElement()
     {
-        $content     = $this->renderContent($view);
+        $content     = $this->renderContent();
         $has_content = (null !== $content);
 
         if ($has_content || $this->renderWithoutContent || $this->renderClosingTag) {
@@ -1225,7 +1264,7 @@ class HtmlElement extends \Zend_View_Helper_HtmlElement
             $html = '<' . $this->tagName;
 
             if ($this->_attribs) {
-                $html .= $this->_htmlAttribs($this->_renderAttributes($view));
+                $html .= $this->_htmlAttribs($this->_renderAttributes());
             }
 
             if ($has_content || $this->renderClosingTag) {
@@ -1236,7 +1275,7 @@ class HtmlElement extends \Zend_View_Helper_HtmlElement
                 $html .= '</' . $this->tagName . '>';
 
             } else {
-                $html .= $this->getClosingBracket();
+                $html .= ' />';
             }
 
             return $this->_prependString . $html . $this->_appendString;
@@ -1248,7 +1287,7 @@ class HtmlElement extends \Zend_View_Helper_HtmlElement
      *
      * @param string $name
      * @param mixed $value
-     * @return \MUtil\Html\HtmlElement  (continuation pattern)
+     * @return \Zalt\Html\HtmlElement  (continuation pattern)
      */
     public function setAttrib($name, $value)
     {
@@ -1263,7 +1302,7 @@ class HtmlElement extends \Zend_View_Helper_HtmlElement
      * @see $_defaultChildTag
      *
      * @param string $tag Tagname
-     * @return \MUtil\Html\HtmlElement (continuation pattern)
+     * @return \Zalt\Html\HtmlElement (continuation pattern)
      */
     public function setDefaultChildTag($tag)
     {
@@ -1278,14 +1317,14 @@ class HtmlElement extends \Zend_View_Helper_HtmlElement
      * no data. But another reason might be that there is simply nothing to display e.g.
      * because of conditional statements.
      * <code>
-     * $div = \MUtil\Html::create()->div();
+     * $div = \Zalt\Html::create()->div();
      * if (isset($data['short_description])) {
      *   $div->p($data['short_description]);
      * }
      * if (isset($data['long_description])) {
      *   $div->p($data['long_description]);
      * }
-     * $div->setOnEmpty(\MUtil\Html::create()->p('We do not yet have a description for this item.'));
+     * $div->setOnEmpty(\Zalt\Html::create()->p('We do not yet have a description for this item.'));
      * </code>
      *
      * Some subclasses require their content to be a HtmlElement of a certain type. If the content
@@ -1298,12 +1337,12 @@ class HtmlElement extends \Zend_View_Helper_HtmlElement
      * @see getOnEmpty()
      *
      * @param mixed $content Content that can be rendered.
-     * @return \MUtil\Html\HtmlElement (continuation pattern)
+     * @return \Zalt\Html\HtmlElement (continuation pattern)
      */
     public function setOnEmpty($content)
     {
         if ($this->_defaultChildTag && $this->_notAllowedChild($content)) {
-            $content = \MUtil\Html::create($this->_defaultChildTag, $content);
+            $content = Html::create($this->_defaultChildTag, $content);
         }
 
         $this->_onEmptyContent = $content;
@@ -1317,17 +1356,17 @@ class HtmlElement extends \Zend_View_Helper_HtmlElement
      * not the element tags. When repeatTags is true the both the tags and the
      * content are repeated.
      *
-     * @param mixed $repeater \MUtil\Lazy\RepeatableInterface or something that can be made into one.
+     * @param mixed $repeater RepeatableInterface or something that can be made into one.
      * @param mixed $onEmptyContent Optional. When not null the content to display when the repeater does not result in data is set.
      * @param boolean $repeatTags Optional when not null the repeatTags switch is set.
-     * @return \MUtil\Html\HtmlElement (continuation pattern)
+     * @return \Zalt\Html\HtmlElement (continuation pattern)
      */
     public function setRepeater($repeater, $onEmptyContent = null, $repeatTags = null)
     {
-        if ($repeater instanceof \MUtil\Lazy\RepeatableInterface) {
+        if ($repeater instanceof RepeatableInterface) {
             $this->_repeater = $repeater;
         } else {
-            $this->_repeater = new \MUtil\Lazy\Repeatable($repeater);
+            $this->_repeater = new Repeatable($repeater);
         }
 
         if (null !== $onEmptyContent) {
@@ -1347,7 +1386,7 @@ class HtmlElement extends \Zend_View_Helper_HtmlElement
      * content are repeated.
      *
      * @param boolean $repeatTags Set the repeatTags switch.
-     * @return \MUtil\Html\HtmlElement (continuation pattern)
+     * @return \Zalt\Html\HtmlElement (continuation pattern)
      */
     public function setRepeatTags($repeatTags)
     {
@@ -1356,16 +1395,16 @@ class HtmlElement extends \Zend_View_Helper_HtmlElement
     }
 
     /**
-     * Returns a lazy instance of item. Do NOT use MUtil\Lazy::L() in this function!!!
+     * Returns a late instance of item. Do NOT use \Zalt\Late\Late::L() in this function as that will turn on array object!
      *
-     * @return \MUtil\Lazy\ObjectWrap
+     * @return ObjectWrap
      */
-    public function toLazy()
+    public function toLate()
     {
-        if (! $this->_lazy) {
-            $this->_lazy = new \MUtil\Lazy\ObjectWrap($this);
+        if (! $this->_late) {
+            $this->_late = new ObjectWrap($this);
         }
 
-        return $this->_lazy;
+        return $this->_late;
     }
 }

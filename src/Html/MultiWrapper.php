@@ -3,25 +3,25 @@
 /**
  *
  *
- * @package    MUtil
+ * @package    Zalt
  * @subpackage Html
  * @author     Matijs de Jong <mjong@magnafacta.nl>
  * @copyright  Copyright (c) 2011 Erasmus MC
  * @license    New BSD License
  */
 
-namespace MUtil\Html;
+namespace Zalt\Html;
 
 /**
- * Extends the \MUtil\MultiWrapper with a render function so the result can be output as Html.
+ * Extends the \Zalt\MultiWrapper with a render function so the result can be output as Html.
  *
- * @package    MUtil
+ * @package    Zalt
  * @subpackage Html
  * @copyright  Copyright (c) 2011 Erasmus MC
  * @license    New BSD License
- * @since      Class available since \MUtil version 1.0
+ * @since      Class available since \Zalt version 1.0
  */
-class MultiWrapper extends \MUtil\MultiWrapper implements \MUtil\Html\HtmlInterface
+class MultiWrapper extends \Zalt\MultiWrapper implements \Zalt\Html\HtmlInterface
 {
     /**
      * The class name used to create new class instances for function call results
@@ -44,7 +44,7 @@ class MultiWrapper extends \MUtil\MultiWrapper implements \MUtil\Html\HtmlInterf
     {
         $results = array();
 
-        $renderer = \MUtil\Html::getRenderer();
+        $renderer = \Zalt\Html::getRenderer();
         foreach ($this->_array as $item) {
             $result = $renderer->renderAny($view, $item);
 

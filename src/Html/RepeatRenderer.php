@@ -3,14 +3,14 @@
 /**
  *
  *
- * @package    MUtil
+ * @package    Zalt
  * @subpackage Html
  * @author     Matijs de Jong <mjong@magnafacta.nl>
  * @copyright  Copyright (c) 2011 Erasmus MC
  * @license    New BSD License
  */
 
-namespace MUtil\Html;
+namespace Zalt\Html;
 
 /**
  * RepeatRenderer wraps itself around some content and returns at rendering
@@ -22,15 +22,15 @@ namespace MUtil\Html;
  * throw errors if you try to use them in ways that the actual $_content does
  * not allow.
  *
- * @see \MUtil\Lazy\Repeatable
+ * @see \Zalt\Lazy\Repeatable
  *
- * @package    MUtil
+ * @package    Zalt
  * @subpackage Html
  * @copyright  Copyright (c) 2011 Erasmus MC
  * @license    New BSD License
  * @since      Class available since version 1.0
  */
-class RepeatRenderer implements \MUtil\Html\ElementInterface
+class RepeatRenderer implements \Zalt\Html\ElementInterface
 {
     /**
      * The content to be repeated.
@@ -56,16 +56,16 @@ class RepeatRenderer implements \MUtil\Html\ElementInterface
     /**
      * The repeater containing a dataset
      *
-     * @var \MUtil\Lazy\RepeatableInterface
+     * @var \Zalt\Lazy\RepeatableInterface
      */
     protected $_repeater;
 
     /**
      *
-     * @param \MUtil\Lazy\RepeatableInterface $repeater
+     * @param \Zalt\Lazy\RepeatableInterface $repeater
      * @param string $glue Optional, content to display between repeated instances
      */
-    public function __construct(\MUtil\Lazy\RepeatableInterface $repeater, $glue = null)
+    public function __construct(\Zalt\Lazy\RepeatableInterface $repeater, $glue = null)
     {
         $this->setRepeater($repeater);
         $this->setGlue($glue);
@@ -100,7 +100,7 @@ class RepeatRenderer implements \MUtil\Html\ElementInterface
 
     public function getTagName()
     {
-        if ($this->_content instanceof \MUtil\Html\ElementInterface) {
+        if ($this->_content instanceof \Zalt\Html\ElementInterface) {
             return $this->_content->getTagName();
         }
         return null;
@@ -146,7 +146,7 @@ class RepeatRenderer implements \MUtil\Html\ElementInterface
      */
     public function render(\Zend_View_Abstract $view)
     {
-        $renderer = \MUtil\Html::getRenderer();
+        $renderer = \Zalt\Html::getRenderer();
         if ($this->hasRepeater() && $this->_content) {
             $data = $this->getRepeater();
             if ($data->__start()) {
@@ -173,7 +173,7 @@ class RepeatRenderer implements \MUtil\Html\ElementInterface
         return $this;
     }
 
-    private function setRepeater(\MUtil\Lazy\RepeatableInterface $data)
+    private function setRepeater(\Zalt\Lazy\RepeatableInterface $data)
     {
         $this->_repeater = $data;
         return $this;

@@ -2,27 +2,28 @@
 
 /**
  *
- *
- * @package    MUtil
+ * @package    Zalt
  * @subpackage Html
  * @author     Matijs de Jong <mjong@magnafacta.nl>
  * @copyright  Copyright (c) 2011 Erasmus MC
  * @license    New BSD License
  */
 
-namespace MUtil\Html;
+namespace Zalt\Html;
+
+use Zalt\HtmlUtil\Ra;
 
 /**
  * Class for IFRAME element. Assumes first passed argument is the src attribute,
  * unless specified otherwise. Always specifies closing tag.
  *
- * @package    MUtil
+ * @package    Zalt
  * @subpackage Html
  * @copyright  Copyright (c) 2011 Erasmus MC
  * @license    New BSD License
  * @since      Class available since version 1.5.2
  */
-class IFrame extends \MUtil\Html\HtmlElement
+class IFrame extends HtmlElement
 {
     /**
      * Some elements, e.g. iframe elements, must always be rendered with a closing
@@ -44,14 +45,14 @@ class IFrame extends \MUtil\Html\HtmlElement
      * as special types, if defined as such for this element.
      *
      * @param mixed $src We assume the first element is src, unless a later element is explicitly specified as such
-     * @param mixed $arg_array \MUtil\Ra::args arguments
+     * @param mixed $argArray Ra::args arguments
      */
-    public function __construct($src, $arg_array = null)
+    public function __construct($src, ...$argArray)
     {
-        $args = \MUtil\Ra::args(func_get_args(), array('src' => '\\MUtil\\Html\\SrcArrayAttribute'));
+        $args = Ra::args(func_get_args(), array('src' => '\\Zalt\\Html\\SrcArrayAttribute'));
 
-        if (isset($args['src']) && (! $args['src'] instanceof \MUtil\Html\AttributeInterface)) {
-            $args['src'] = new \MUtil\Html\SrcArrayAttribute($args['src']);
+        if (isset($args['src']) && (! $args['src'] instanceof \Zalt\Html\AttributeInterface)) {
+            $args['src'] = new \Zalt\Html\SrcArrayAttribute($args['src']);
         }
 
         parent::__construct('iframe', $args);
@@ -64,11 +65,11 @@ class IFrame extends \MUtil\Html\HtmlElement
      * as special types, if defined as such for this element.
      *
      * @param mixed $src We assume the first element is src, unless a later element is explicitly specified as such
-     * @param mixed $arg_array \MUtil\Ra::args arguments
+     * @param mixed $argArray Ra::args arguments
      */
-    public static function iFrame($src, $arg_array = null)
+    public static function iFrame($src, ...$argArray)
     {
-        $args = \MUtil\Ra::args(func_get_args(), array('src' => '\\MUtil\\Html\\SrcArrayAttribute'));
+        $args = Ra::args(func_get_args(), array('src' => '\\Zalt\\Html\\SrcArrayAttribute'));
         return new self($args);
     }
 }

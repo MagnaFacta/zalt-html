@@ -2,14 +2,19 @@
 
 /**
  *
- * @package    MUtil
+ * @package    Zalt
  * @subpackage Html
  * @author     Matijs de Jong <mjong@magnafacta.nl>
  * @copyright  Copyright (c) 2011 Erasmus MC
  * @license    New BSD License
  */
 
-namespace MUtil\Html;
+namespace Zalt\Html;
+
+use Zalt\HtmlUtil\FunctionList;
+use Zalt\HtmlUtil\LookupList;
+use Zalt\Late\Late;
+use Zalt\HtmlUtil\Ra;
 
 /**
  * Class for storing references for creating html attributes, elements and other objects.
@@ -17,7 +22,7 @@ namespace MUtil\Html;
  * Basically this class stores list of element and attributes names that should be treated
  * in different from just creating the most basic of element types.
  *
- * @package    MUtil
+ * @package    Zalt
  * @subpackage Html
  * @copyright  Copyright (c) 2011 Erasmus MC
  * @license    New BSD License
@@ -28,13 +33,13 @@ class Creator
 {
     /**
      *
-     * @var \MUtil\Util\LookupList
+     * @var LookupList
      */
     protected $_attributeFunctionList;
 
     /**
      *
-     * @var \MUtil\Util\LookupList
+     * @var LookupList
      */
     protected $_elementFunctionList;
 
@@ -43,10 +48,10 @@ class Creator
      * @var array
      */
     protected $_initialAttributeFunctions = array(
-        'href'    => '\\MUtil\\Html\\HrefArrayAttribute::hrefAttribute',
-        'onclick' => '\\MUtil\\Html\\OnClickArrayAttribute::onclickAttribute',
-        'src'     => '\\MUtil\\Html\\SrcArrayAttribute::srcAttribute',
-        'style'   => '\\MUtil\\Html\\StyleArrayAttribute::styleAttribute',
+        'href'    => [HrefArrayAttribute::class, 'hrefAttribute'],
+        'onclick' => [OnClickArrayAttribute::class, 'onclickAttribute'],
+        'src'     => [SrcArrayAttribute::class, 'srcAttribute'],
+        'style'   => [StyleArrayAttribute::class, 'styleAttribute'],
     );
 
     /**
@@ -54,64 +59,63 @@ class Creator
      * @var array
      */
     protected $_initalElementFunctions = array(
-        'a'                 => '\\MUtil\\Html\\AElement::a',
-        'array'             => '\\MUtil\\Html\\Sequence::createSequence',
-        'bbcode'            => '\\MUtil\\Html::bbcode',
-        'call'              => '\\MUtil\\Lazy::call',
-        'col'               => '\\MUtil\\Html\\ColElement::col',
-        'colgroup'          => '\\MUtil\\Html\\ColGroupElement::colgroup',
-        'dir'               => '\\MUtil\\Html\\ListElement::dir',
-        'dd'                => '\\MUtil\\Html\\DdElement::dd',
-        'dl'                => '\\MUtil\\Html\\DlElement::dl',
-        'dt'                => '\\MUtil\\Html\\DtElement::dt',
-        'echo'              => '\\MUtil\\Html\\TableElement::createVar',
-        'email'             => '\\MUtil\\Html\\AElement::email',
-        'h1'                => '\\MUtil\\Html\\HnElement::h1',
-        'h2'                => '\\MUtil\\Html\\HnElement::h2',
-        'h3'                => '\\MUtil\\Html\\HnElement::h3',
-        'h4'                => '\\MUtil\\Html\\HnElement::h4',
-        'h5'                => '\\MUtil\\Html\\HnElement::h5',
-        'h6'                => '\\MUtil\\Html\\HnElement::h6',
-        'if'                => '\\MUtil\\Lazy::iff',
-        'iflink'            => '\\MUtil\\Html\\AElement::iflink',
-        'ifmail'            => '\\MUtil\\Html\\AElement::ifmail',
-        'iframe'            => '\\MUtil\\Html\\IFrame::iFrame',
-        'img'               => '\\MUtil\\Html\\ImgElement::img',
-        'image'             => '\\MUtil\\Html\\ImgElement::img',
-        'input'             => '\\MUtil\\Html\\InputRenderer::input',
-        'inputComplete'     => '\\MUtil\\Html\\InputRenderer::inputComplete',
-        'inputDescription'  => '\\MUtil\\Html\\InputRenderer::inputDescription',
-        'inputDisplayGroup' => '\\MUtil\\Html\\InputRenderer::inputDisplayGroup',
-        'inputElement'      => '\\MUtil\\Html\\InputRenderer::inputElement',
-        'inputErrors'       => '\\MUtil\\Html\\InputRenderer::inputErrors',
-        'inputExcept'       => '\\MUtil\\Html\\InputRenderer::inputExcept',
-        'inputForm'         => '\\MUtil\\Html\\InputRenderer::inputForm',
-        'inputLabel'        => '\\MUtil\\Html\\LabelElement::label',
-        'inputOnly'         => '\\MUtil\\Html\\InputRenderer::inputOnly',
-        'inputOnlyArray'    => '\\MUtil\\Html\\InputRenderer::inputOnlyArray',
-        'inputUntil'        => '\\MUtil\\Html\\InputRenderer::inputUntil',
-        'inputUpto'         => '\\MUtil\\Html\\InputRenderer::inputUpto',
-        'label'             => '\\MUtil\\Html\\LabelElement::label',
-        'menu'              => '\\MUtil\\Html\\ListElement::menu',
-        'ol'                => '\\MUtil\\Html\\ListElement::ol',
-        'pagePanel'         => '\\MUtil\\Html\\PagePanel::pagePanel',
-        'pForm'             => '\\MUtil\\Html\\PFormElement::pForm',
-        'progress'          => '\\MUtil\\Html\\ProgressPanel::progress',
-        'progressPanel'     => '\\MUtil\\Html\\ProgressPanel::progress',
-        'raw'               => '\\MUtil\\Html\\Raw::raw',
-        'seq'               => '\\MUtil\\Html\\Sequence::createSequence',
-        'sequence'          => '\\MUtil\\Html\\Sequence::createSequence',   // A sequence can contain another sequence, so other function name used
-        'snippet'           => '\\MUtil\\Html::snippet',
-        'sprintf'           => '\\MUtil\\Html\\Sprintf::sprintf',
-        'spaced'            => '\\MUtil\\Html\\Sequence::createSpaced',     // A sequence can contain another sequence, so other function name used
-        'table'             => '\\MUtil\\Html\\TableElement::table',
-        'tbody'             => '\\MUtil\\Html\\TBodyElement::tbody',
-        'td'                => '\\MUtil\\Html\\TdElement::createTd',
-        'tfoot'             => '\\MUtil\\Html\\TBodyElement::tfoot',
-        'th'                => '\\MUtil\\Html\\TdElement::createTh',
-        'thead'             => '\\MUtil\\Html\\TBodyElement::thead',
-        'tr'                => '\\MUtil\\Html\\TrElement::tr',
-        'ul'                => '\\MUtil\\Html\\ListElement::ul',
+        'a'                 => [AElement::class, 'a'],
+        'array'             => [Sequence::class, 'createSequence'],
+        'call'              => [Late::class, 'call'],
+        'col'               => [ColElement::class, 'col'],
+        'colgroup'          => [ColGroupElement::class, 'colgroup'],
+        'dir'               => [ListElement::class, 'dir'],
+        'dd'                => [DdElement::class, 'dd'],
+        'dl'                => [DlElement::class, 'dl'],
+        'dt'                => [DtElement::class, 'dt'],
+        'echo'              => [TableElement::class, 'createVar'],
+        'email'             => [AElement::class, 'email'],
+        'h1'                => [HnElement::class, 'h1'],
+        'h2'                => [HnElement::class, 'h2'],
+        'h3'                => [HnElement::class, 'h3'],
+        'h4'                => [HnElement::class, 'h4'],
+        'h5'                => [HnElement::class, 'h5'],
+        'h6'                => [HnElement::class, 'h6'],
+        'if'                => [Late::class, 'iff'],
+        'iflink'            => [AElement::class, 'iflink'],
+        'ifmail'            => [AElement::class, 'ifmail'],
+        'iframe'            => [IFrame::class, 'iFrame'],
+        'img'               => [ImgElement::class, 'img'],
+        'image'             => [ImgElement::class, 'img'],
+        'input'             => [InputRenderer::class, 'input'],
+        'inputComplete'     => [InputRenderer::class, 'inputComplete'],
+        'inputDescription'  => [InputRenderer::class, 'inputDescription'],
+        'inputDisplayGroup' => [InputRenderer::class, 'inputDisplayGroup'],
+        'inputElement'      => [InputRenderer::class, 'inputElement'],
+        'inputErrors'       => [InputRenderer::class, 'inputErrors'],
+        'inputExcept'       => [InputRenderer::class, 'inputExcept'],
+        'inputForm'         => [InputRenderer::class, 'inputForm'],
+        'inputLabel'        => [LabelElement::class, 'label'],
+        'inputOnly'         => [InputRenderer::class, 'inputOnly'],
+        'inputOnlyArray'    => [InputRenderer::class, 'inputOnlyArray'],
+        'inputUntil'        => [InputRenderer::class, 'inputUntil'],
+        'inputUpto'         => [InputRenderer::class, 'inputUpto'],
+        'label'             => [LabelElement::class, 'label'],
+        'menu'              => [ListElement::class, 'menu'],
+        'ol'                => [ListElement::class, 'ol'],
+        'pagePanel'         => [PagePanel::class, 'pagePanel'],
+        'pForm'             => [PFormElement::class, 'pForm'],
+        'progress'          => [ProgressPanel::class, 'progress'],
+        'progressPanel'     => [ProgressPanel::class, 'progress'],
+        'raw'               => [Raw::class, 'raw'],
+        'seq'               => [Sequence::class, 'createSequence'],   // A sequence can contain another sequence, so other function name used
+        'sequence'          => [Sequence::class, 'createSequence'],   // A sequence can contain another sequence, so other function name used
+        'snippet'           => [Html::class, 'snippet'],
+        'sprintf'           => [Sprintf::class, 'sprintf'],
+        'spaced'            => [Sequence::class, 'createSpaced'],     // A sequence can contain another sequence, so other function name used
+        'table'             => [TableElement::class, 'table'],
+        'tbody'             => [TBodyElement::class, 'tbody'],
+        'td'                => [TdElement::class, 'createTd'],
+        'tfoot'             => [TBodyElement::class, 'tfoot'],
+        'th'                => [TdElement::class, 'createTh'],
+        'thead'             => [TBodyElement::class, 'thead'],
+        'tr'                => [TrElement::class, 'tr'],
+        'ul'                => [ListElement::class, 'ul'],
     );
 
     public function __call($name, array $arguments)
@@ -125,16 +129,16 @@ class Creator
         $this->setAttributeFunctionList($attributeFunctions, $append);
     }
 
-    public function addAttributeFunction($name_1, $function_1, $name_n = null, $function_n = null)
+    public function addAttributeFunction($name1, $function1, $nameN = null, $functionN = null)
     {
-        $args = \MUtil\Ra::pairs(func_get_args());
+        $args = Ra::pairs(func_get_args());
 
         return $this->setAttributeFunctionList($args, true);
     }
 
-    public function addElementFunction($name_1, $function_1, $name_n = null, $function_n = null)
+    public function addElementFunction($name1, $function1, $nameN = null, $functionN = null)
     {
-        $args = \MUtil\Ra::pairs(func_get_args());
+        $args = Ra::pairs(func_get_args());
 
         $this->setElementFunctionList($args, true);
 
@@ -147,24 +151,23 @@ class Creator
             return call_user_func_array($function, $args);
 
         } else {
-            return new \MUtil\Html\HtmlElement($tagName, $args);
+            return new HtmlElement($tagName, $args);
         }
     }
 
-    public function createAttribute($attributeName, array $args = array())
+    public function createAttribute($attributeName, array $args = [])
     {
         if ($function = $this->_attributeFunctionList->get($attributeName)) {
             return call_user_func($function, $args);
 
         } else {
-            return new \MUtil\Html\ArrayAttribute($attributeName, $args);
-
+            return new ArrayAttribute($attributeName, $args);
         }
     }
 
     public function createRaw($tagName, array $args = array())
     {
-        return new \MUtil\Html\HtmlElement($tagName, $args);
+        return new HtmlElement($tagName, $args);
     }
 
     public function getAttributeFunctionList()
@@ -179,10 +182,10 @@ class Creator
 
     public function setAttributeFunctionList($attributeFunctions, $append = false)
     {
-        if ($attributeFunctions instanceof \MUtil\Util\LookupList) {
+        if ($attributeFunctions instanceof LookupList) {
             $this->_attributeFunctionList = $attributeFunctions;
         } else {
-            $this->_attributeFunctionList = new \MUtil\Util\FunctionList($this->_initialAttributeFunctions);
+            $this->_attributeFunctionList = new FunctionList($this->_initialAttributeFunctions);
 
             if ($attributeFunctions) {
                 if ($append) {
@@ -197,11 +200,11 @@ class Creator
 
     public function setElementFunctionList($elementFunctions, $append = false)
     {
-        if ($elementFunctions instanceof \MUtil\Util\LookupList) {
+        if ($elementFunctions instanceof LookupList) {
             $this->_elementFunctionList = $elementFunctions;
         } else {
-            if (! $this->_elementFunctionList instanceof \MUtil\Util\FunctionList) {
-                $this->_elementFunctionList = new \MUtil\Util\FunctionList($this->_initalElementFunctions);
+            if (! $this->_elementFunctionList instanceof FunctionList) {
+                $this->_elementFunctionList = new FunctionList($this->_initalElementFunctions);
             }
 
             if ($elementFunctions) {

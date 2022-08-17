@@ -2,26 +2,26 @@
 
 /**
  *
- * @package    MUtil
+ * @package    Zalt
  * @subpackage Html
  * @author     Matijs de Jong <mjong@magnafacta.nl>
  * @copyright  Copyright (c) 2011 Erasmus MC
  * @license    New BSD License
  */
 
-namespace MUtil\Html;
+namespace Zalt\Html;
 
 /**
  * A simple, basic one value attribute
  *
- * @package    MUtil
+ * @package    Zalt
  * @subpackage Html
  * @copyright  Copyright (c) 2011 Erasmus MC
  * @license    New BSD License
  * @since      Class available since version 1.0
  */
 
-class Attribute extends \MUtil\Html\AttributeAbstract
+class Attribute extends \Zalt\Html\AttributeAbstract
 {
     private $_value;
 
@@ -52,7 +52,7 @@ class Attribute extends \MUtil\Html\AttributeAbstract
             $this->_value = $value;
 
         } else {
-            throw new \MUtil\Html\HtmlException('Invalid argument of type ' . get_class($value) . ' for attribute value. Was expecting a string or number.');
+            throw new \Zalt\Html\HtmlException('Invalid argument of type ' . get_class($value) . ' for attribute value. Was expecting a string or number.');
 
         }
 

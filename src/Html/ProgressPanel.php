@@ -3,25 +3,25 @@
 /**
  *
  *
- * @package    MUtil
+ * @package    Zalt
  * @subpackage Html
  * @author     Matijs de Jong <mjong@magnafacta.nl>
  * @copyright  Copyright (c) 2011 Erasmus MC
  * @license    New BSD License
  */
 
-namespace MUtil\Html;
+namespace Zalt\Html;
 
 /**
  *
  *
- * @package    MUtil
+ * @package    Zalt
  * @subpackage Html
  * @copyright  Copyright (c) 2011 Erasmus MC
  * @license    New BSD License
  * @since      Class available since version 1.5
  */
-class ProgressPanel extends \MUtil\Html\HtmlElement
+class ProgressPanel extends \Zalt\Html\HtmlElement
 {
     /**
      * For some elements (e.g. table and tbody) the logical thing to do when content
@@ -90,11 +90,11 @@ class ProgressPanel extends \MUtil\Html\HtmlElement
     /**
      * Creates a 'div' progress panel
      *
-     * @param mixed $arg_array A \MUtil\Ra::args data collection.
+     * @param mixed $arg_array A \Zalt\Ra::args data collection.
      */
     public function __construct($arg_array = null)
     {
-        $args = \MUtil\Ra::args(func_get_args());
+        $args = \Zalt\Ra::args(func_get_args());
 
         parent::__construct('div', $args);
     }
@@ -104,7 +104,7 @@ class ProgressPanel extends \MUtil\Html\HtmlElement
      *
      * Exposed as needed by some classes using this class.
      *
-     * @see \MUtil\Batch\BatchAbstract
+     * @see \Zalt\Batch\BatchAbstract
      *
      * @return string
      */
@@ -116,7 +116,7 @@ class ProgressPanel extends \MUtil\Html\HtmlElement
     /**
      * Creates a 'div' progress panel
      *
-     * @param mixed $arg_array A \MUtil\Ra::args data collection.
+     * @param mixed $arg_array A \Zalt\Ra::args data collection.
      * @return self
      */
     public static function progress($arg_array = null)

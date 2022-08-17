@@ -11,6 +11,8 @@
 
 namespace Zalt\Late;
 
+use Zalt\HtmlUtil\Ra;
+
 /**
  *
  * @package    Zalt
@@ -23,9 +25,9 @@ class ParallelRepeater implements RepeatableInterface
 {
     protected $repeatables = array();
 
-    public function __construct($repeatable_args = null)
+    public function __construct(...$args)
     {
-        $args = \Zalt\Ra::args(func_get_args());
+        $args = Ra::args($args);
         foreach ($args as $id => $repeatable) {
             if (null != $repeatable) {
                 $this->addRepeater($repeatable, $id);
