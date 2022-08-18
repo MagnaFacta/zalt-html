@@ -60,7 +60,7 @@ class ColGroupElement extends HtmlElement implements ColumnInterface
 
         $count = 0;
         foreach ($this->_content as $col) {
-            if ($col instanceof \Zalt\Html\ColumnInterface) {
+            if ($col instanceof ColumnInterface) {
                 $count += $col->getColumnCount();
             } else {
                 $count++;

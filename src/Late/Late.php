@@ -244,12 +244,11 @@ class Late
      *
      * @param Object $object
      * @param string $method Method of the object
-     * @param mixed $arg_array1 Optional, first of any arguments to the call
+     * @param mixed $args Optional, first of any arguments to the call
      * @return \Zalt\Late\LateCall
      */
-    public static function method($object, $method, $arg_array1 = null)
+    public static function method(object $object, string $method, ...$args)
     {
-        $args = array_slice(func_get_args(), 2);
         return new LateCall(array($object, $method), $args);
     }
 

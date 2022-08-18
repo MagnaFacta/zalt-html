@@ -11,6 +11,8 @@
 
 namespace Zalt\Html;
 
+use Zalt\HtmlUtil\MultiWrapper;
+
 /**
  *
  *
@@ -20,7 +22,7 @@ namespace Zalt\Html;
  * @license    New BSD License
  * @since      Class available since version 1.0
  */
-class TrElement extends \Zalt\Html\HtmlElement implements \Zalt\Html\ColumnInterface
+class TrElement extends HtmlElement implements ColumnInterface
 {
     /**
      * Most elements must be rendered even when empty, others should - according to the
@@ -59,39 +61,34 @@ class TrElement extends \Zalt\Html\HtmlElement implements \Zalt\Html\ColumnInter
      *
      * @see $_repeater
      *
-     * @var boolean Do not output if the output is identical to the last time the element was rendered.
+     * @var bool Do not output if the output is identical to the last time the element was rendered.
      */
-    protected $_onlyWhenChanged = false;
+    protected bool $_onlyWhenChanged = false;
 
 
     /**
      * @see $_onlyWhenChanged
      *
-     * @var string Cache for last output for comparison
+     * @var ?string Cache for last output for comparison
      */
-    protected $_onlyWhenChangedValueStore = null;
+    protected ?string $_onlyWhenChangedValueStore = null;
 
 
     /**
      * Returns the cell or a \Zalt\MultiWrapper containing cells that occupy the column position, taking colspan and other functions into account.
      *
      * @param int $col The numeric column position, starting at 0;
-     * @return \Zalt\Html\HtmlElement Probably an element of this type, but can also be something else, posing as an element.
+     * @return HtmlElement|MultiWrapper Probably an element of this type, but can also be something else, posing as an element.
      */
     public function getColumn($col)
     {
         $results = $this->getColumnArray($col);
 
-        switch (count($results)) {
-            case 0:
-                return null;
-
-            case 1:
-                return reset($results);
-
-            default:
-                return new \Zalt\MultiWrapper($results);
-        }
+        return match (count($results)) {
+            0 => null,
+            1 => reset($results),
+            default => new MultiWrapper($results),
+        };
     }
 
     /**
@@ -102,7 +99,7 @@ class TrElement extends \Zalt\Html\HtmlElement implements \Zalt\Html\ColumnInter
      */
     public function getColumnArray($col)
     {
-        return array($this->getColumn($col));
+        return [$this->getColumn($col)];
     }
 
     /**
@@ -159,12 +156,11 @@ class TrElement extends \Zalt\Html\HtmlElement implements \Zalt\Html\ColumnInter
      *
      * The $view is used to correctly encode and escape the output
      *
-     * @param \Zend_View_Abstract $view
      * @return string Correctly encoded and escaped html output
      */
-    protected function renderElement(\Zend_View_Abstract $view)
+    protected function renderElement()
     {
-        $result = parent::renderElement($view);
+        $result = parent::renderElement();
 
         if ($this->_onlyWhenChanged) {
             if ($result == $this->_onlyWhenChangedValueStore) {
@@ -193,12 +189,11 @@ class TrElement extends \Zalt\Html\HtmlElement implements \Zalt\Html\ColumnInter
     /**
      * Static helper function for creation, used by @see \Zalt\Html\Creator.
      *
-     * @param mixed $arg_array Optional \Zalt\Ra::args processed settings
+     * @param array $args Optional Ra::args processed settings
      * @return \Zalt\Html\TrElement
      */
-    public static function tr($arg_array = null)
+    public static function tr(...$args)
     {
-        $args = func_get_args();
         return new self(__FUNCTION__, $args);
     }
 }

@@ -12,6 +12,18 @@
 
 namespace Zalt\Html;
 
+use Iterator;
+use Traversable;
+
+use Zalt\HtmlUtil\MultiWrapper; 
+use Zalt\HtmlUtil\Ra;
+use Zalt\Late\Alternate;
+use Zalt\Late\Late;
+use Zalt\Late\LateInterface;
+use Zalt\Late\RepeatableByKeyValue;
+use Zalt\Late\RepeatableFormElements;
+use Zalt\Late\RepeatableObjectProperties;
+
 /**
  * TableElement is an extension of HtmlElement that add's a lot of table specific extra functionality
  *
@@ -21,8 +33,8 @@ namespace Zalt\Html;
  * @license    New BSD License
  * @since      Class available since version 1.0
  */
-class TableElement extends \Zalt\Html\HtmlElement
-        implements \Zalt\Html\ColumnInterface, \Zalt\Html\FormLayout
+class TableElement extends HtmlElement
+        implements ColumnInterface, FormLayout
 {
     /**
      * Content position constant for caption
@@ -175,11 +187,11 @@ class TableElement extends \Zalt\Html\HtmlElement
     /**
      * Create a table (no tag to specify)
      *
-     * @param mixed $arg_array \Zalt\Ra::args
+     * @param mixed $args Ra::args
      */
-    public function __construct($arg_array = null)
+    public function __construct(...$args)
     {
-        $args = \Zalt\Ra::args(func_get_args());
+        $args = Ra::args($args);
 
         // Create positions for all (potential) elements
         //
@@ -189,7 +201,7 @@ class TableElement extends \Zalt\Html\HtmlElement
         $this->_content[self::COLGROUPS] = null;
         $this->_content[self::THEAD] = null;
         $this->_content[self::TFOOT] = null;
-        $this->_content[self::TBODY] = \Zalt\Html::create('tbody');
+        $this->_content[self::TBODY] = Html::create('tbody');
 
         parent::__construct('table', $args);
 
@@ -216,7 +228,7 @@ class TableElement extends \Zalt\Html\HtmlElement
 
     private function _pivotBody($name)
     {
-        $newBody = \Zalt\Html::create($name);
+        $newBody = Html::create($name);
 
         if ($this->_content[$name] instanceof \Zalt\Html\TBodyElement) {
             $newBody->_attribs = $this->_content[$name]->_attribs;
@@ -247,7 +259,7 @@ class TableElement extends \Zalt\Html\HtmlElement
                     $i = 0;
                     foreach ($row as $cell) {
                         if (! isset($newRows[$i])) {
-                            $newRows[$i] = \Zalt\Html::create('tr');
+                            $newRows[$i] = Html::create('tr');
                         }
                         $newCell = clone $cell;
 
@@ -305,7 +317,7 @@ class TableElement extends \Zalt\Html\HtmlElement
             // Return all objects in a wrapper object
             // that makes sure they are all treated
             // the same way.
-            return new \Zalt\MultiWrapper($tds);
+            return new MultiWrapper($tds);
         }
 
         // Return first object only
@@ -341,27 +353,27 @@ class TableElement extends \Zalt\Html\HtmlElement
         return $this->_content[self::TBODY]->addRepeater($repeater, $name);
     }
 
-    public function addRow($arg_array)
+    public function addRow(...$args)
     {
-        return $this->tr(func_get_args());
+        return $this->tr($args);
     }
 
-    public function caption($arg_array = null)
+    public function caption(...$args)
     {
-        $args = \Zalt\Ra::args(func_get_args());
+        $args = Ra::args($args);
 
         if ($this->_content[self::CAPTION]) {
             $this->_content[self::CAPTION]->_processParameters($args);
         } else {
-            $this->_content[self::CAPTION] = \Zalt\Html::createArray('caption', $args);
+            $this->_content[self::CAPTION] = Html::createArray('caption', $args);
         }
 
         return $this->_content[self::CAPTION];
     }
 
-    public function col($arg_array = null)
+    public function col(...$args)
     {
-        $args = \Zalt\Ra::args(func_get_args());
+        $args = Ra::args($args);
 
         if (is_array($this->_content[self::COLGROUPS])) {
             $colgroup = end($this->_content[self::COLGROUPS]);
@@ -376,11 +388,11 @@ class TableElement extends \Zalt\Html\HtmlElement
         return $colgroup->col($args);
     }
 
-    public function colgroup($arg_array = null)
+    public function colgroup(...$args)
     {
-        $args = \Zalt\Ra::args(func_get_args());
+        $args = Ra::args($args);
 
-        $colgroup = \Zalt\Html::create()->colgroup($args);
+        $colgroup = Html::create()->colgroup($args);
 
         $this->_content[self::COLGROUPS][] = $colgroup;
 
@@ -400,7 +412,7 @@ class TableElement extends \Zalt\Html\HtmlElement
             $args[] = $class2;
         }
 
-        return new \Zalt\Lazy\Alternate($args);
+        return new Alternate($args);
     }
 
     /**
@@ -409,10 +421,10 @@ class TableElement extends \Zalt\Html\HtmlElement
      * print_r but then resulting in html tables.
      *
      * @param array $data An array or an array of arrays
-     * @param $caption Optional caption
-     * @param true|false|null $nested Optional, looks at first element of $data when null or not specified
+     * @param mixed $caption Optional caption
+     * @param bool|null $nested Optional, looks at first element of $data when null or not specified
      * @param array $objects_not_expanded Objects whose content should not be displayed. Used for preventing resursion.
-     * @return self
+     * @return self|\Zalt\Html\Raw
      */
     public static function createArray($data, $caption = null, $nested = null, $objects_not_expanded = array())
     {
@@ -427,30 +439,35 @@ class TableElement extends \Zalt\Html\HtmlElement
         }
 
         if (count($data) === 0) {
-            return new \Zalt\Html\Raw(self::RENDER_OPEN . self::RENDER_EMPTY_ARRAY . self::RENDER_CLOSE);
+            return new Raw(self::RENDER_OPEN . self::RENDER_EMPTY_ARRAY . self::RENDER_CLOSE);
         }
 
         if (null === $nested) {
-            if ((count($data) > 1) && is_array(reset($data))) {
-                $nested = true;
-                $count = count(reset($data));
+            $nested = false;
+            if (count($data) > 1) {
+                foreach ($data as $first) {
+                    // Trick to get first element whatever the circumstance
+                    break;
+                }
+                if (is_array($first)) {
+                    $nested = true;
+                    $count = count($first);
 
-                // Check all items
-                foreach ($data as $row) {
-                    if (is_array($row) || (count($row) !== $count)) {
-                        $nested = false;
-                        break;
+                    // Check all items
+                    foreach ($data as $row) {
+                        if (is_array($row) || (count($row) !== $count)) {
+                            $nested = false;
+                            break;
+                        }
                     }
                 }
-            } else {
-                $nested = false;
             }
         }
 
         if ($nested) {
-            $repeater_data = \Zalt\Lazy::repeat($data);
+            $repeater_data = Late::repeat($data);
         } else {
-            $repeater_data = new \Zalt\Lazy\RepeatableByKeyValue($data);
+            $repeater_data = new RepeatableByKeyValue($data);
         }
 
         $table = new self($repeater_data);
@@ -459,11 +476,14 @@ class TableElement extends \Zalt\Html\HtmlElement
         }
 
         if ($nested) {
-            $row = reset($data);
+            foreach ($data as $row) {
+                // Trick to get first element whatever the circumstance
+                break;
+            }
             if ($row) {
                 foreach ($row as $key => $data) {
                     $table->addColumn(
-                        \Zalt\Lazy::call(array(__CLASS__, 'createVar'), $repeater_data[$key], null, $objects_not_expanded),
+                        Late::call([self::class, 'createVar'], $repeater_data[$key], null, $objects_not_expanded),
                         $key);
                 }
             } else {
@@ -474,7 +494,7 @@ class TableElement extends \Zalt\Html\HtmlElement
                 $repeater_data['key'],
                 'Key');
             $table->addColumn(
-                \Zalt\Lazy::call(array(__CLASS__, 'createVar'), $repeater_data['value'], null, $objects_not_expanded),
+                Late::call([self::class, 'createVar'], $repeater_data['value'], null, $objects_not_expanded),
                 'Value');
         }
 
@@ -487,12 +507,12 @@ class TableElement extends \Zalt\Html\HtmlElement
      * @param object $data The object whose public properties should be displayed
      * @param mixed $caption Caption to display above the object
      * @param array $objects_not_expanded Objects whose content should not be displayed. Used for preventing resursion.
-     * @return self
+     * @return self|LateInterface
      */
     public static function createObject($data, $caption = null, $objects_not_expanded = array())
     {
-        if ($data instanceof \Zalt\Lazy\LazyInterface) {
-            return \Zalt\Lazy::call(array(__CLASS__, 'createVar'), \Zalt\Lazy::method('\\Zalt\\Lazy::rise', $data), $caption, $objects_not_expanded);
+        if ($data instanceof LateInterface) {
+            return Late::call([self::class, 'createVar'], Late::call([Late::class, 'rise'], $data), $caption, $objects_not_expanded);
         }
 
         // Add the object to the not expand list if this is the first call.
@@ -501,7 +521,7 @@ class TableElement extends \Zalt\Html\HtmlElement
             $objects_not_expanded[] = $data;
         }
 
-        $repeater_data = new \Zalt\Lazy\RepeatableObjectProperties($data);
+        $repeater_data = new RepeatableObjectProperties($data);
 
         if (null === $caption) {
             $classcaption = 'Class: ' . get_class($data);
@@ -517,7 +537,7 @@ class TableElement extends \Zalt\Html\HtmlElement
             $table->setRepeater($repeater_data);
 
             $table->addColumn($repeater_data->name, 'Name');
-            $table->addColumn(\Zalt\Lazy::call(array(__CLASS__, 'createVar'), \Zalt\Lazy::call('\\Zalt\\Lazy::rise', $repeater_data->value), null, $objects_not_expanded), 'Value');
+            $table->addColumn(Late::call([self::class, 'createVar'], Late::call([Late::class, 'rise'], $repeater_data->value), null, $objects_not_expanded), 'Value');
             $table->addColumn($repeater_data->from_code->if('in code', 'in program'), 'Defined');
             // $table->addColumn(\Zalt\Lazy::iff($repeater_data->from_code, 'in code', 'in program'), 'Defined');
 
@@ -540,16 +560,16 @@ class TableElement extends \Zalt\Html\HtmlElement
     /**
      * print_r but then resulting in html tables.
      *
-     * @param $data Any data to display
-     * @param $caption Optional caption
+     * @param mixed $data Any data to display
+     * @param string $caption Optional caption
      * @param array $objects_not_expanded Objects whose content should not be displayed. Used for preventing resursion.
-     * @return self
+     * @return \Zalt\Html\HtmlInterface
      */
     public static function createVar($data, $caption = null, $objects_not_expanded = array())
     {
         foreach ($objects_not_expanded as $item) {
             if ($item === $data) {
-                return new \Zalt\Html\Raw(self::RENDER_OPEN . self::RENDER_CIRCULAR . self::RENDER_CLOSE);
+                return new Raw(self::RENDER_OPEN . self::RENDER_CIRCULAR . self::RENDER_CLOSE);
             }
         }
 
@@ -584,18 +604,19 @@ class TableElement extends \Zalt\Html\HtmlElement
      * Returns the cell or a \Zalt\MultiWrapper containing cells that occupy the column position, taking colspan and other functions into account.
      *
      * @param int $col The numeric column position, starting at 0;
-     * @return \Zalt\Html\HtmlElement Probably an element of this type, but can also be something else, posing as an element.
+     * @return ?\Zalt\Html\HtmlElement Probably an element of this type, but can also be something else, posing as an element.
      */
     public function getColumn($col)
     {
         $count = -1;
         foreach ($this->_content as $cell) {
-            $count += self::getCellWidth($cell);
+            $count += TrElement::getCellWidth($cell);
 
             if ($count >= $col) {
                 return $cell;
             }
         }
+        return null;
     }
 
     /**
@@ -660,10 +681,9 @@ class TableElement extends \Zalt\Html\HtmlElement
      *
      * The $view is used to correctly encode and escape the output
      *
-     * @param \Zend_View_Abstract $view
      * @return string Correctly encoded and escaped html output
      */
-    public function render(\Zend_View_Abstract $view)
+    public function render()
     {
         if ($this->_pivot) {
             $oldContent = $this->_content;
@@ -671,7 +691,7 @@ class TableElement extends \Zalt\Html\HtmlElement
             $this->_repeater = $this->getRepeater(); // Cache for bridge
             $this->_content  = $this->_pivotContent($this->_pivot[self::THEAD], $this->_pivot[self::TFOOT]);
 
-            $html = parent::render($view);
+            $html = parent::render();
 
             $this->_repeater = null;
             $this->_content  = $oldContent;
@@ -679,7 +699,7 @@ class TableElement extends \Zalt\Html\HtmlElement
             return $html;
 
         } else {
-            return parent::render($view);
+            return parent::render();
         }
     }
 
@@ -688,41 +708,38 @@ class TableElement extends \Zalt\Html\HtmlElement
      *
      * print_r but then resulting in html tables.
      *
-     * @param \Zend_View_Abstract $view
      * @param array $data An array or an array of arrays
-     * @param $caption Optional caption
+     * @param string $caption Optional caption
      * @param true|false|null $nested Optional, looks at first element of $data when null or not specified
      * @return string
      */
-    public static function renderArray(\Zend_View_Abstract $view, array $data, $caption = null, $nested = null)
+    public static function renderArray(array $data, $caption = null, $nested = null)
     {
-        return self::createArray($data, $caption, $nested)->render($view);
+        return self::createArray($data, $caption, $nested)->render();
     }
 
     /**
      * print_r but then resulting in html tables.
      *
-     * @param \Zend_View_Abstract $view
      * @param object $data The object whose public properties should be displayed
      * @param mixed $caption Caption to display above the object
      * @return string
      */
-    public static function renderObject(\Zend_View_Abstract $view, $data, $caption = null)
+    public static function renderObject($data, $caption = null)
     {
-        return self::createObject($data, $caption)->render($view);
+        return self::createObject($data, $caption)->render();
     }
 
     /**
      * print_r but then resulting in html tables.
      *
-     * @param \Zend_View_Abstract $view
-     * @param $data Any data to display
-     * @param $caption Optional caption
+     * @param mixed $data Any data to display
+     * @param string $caption Optional caption
      * @return string
      */
-    public static function renderVar(\Zend_View_Abstract $view, $data, $caption = null)
+    public static function renderVar($data, $caption = null)
     {
-        return self::createVar($data, $caption)->render($view);
+        return self::createVar($data, $caption)->render();
     }
 
     /**
@@ -745,7 +762,7 @@ class TableElement extends \Zalt\Html\HtmlElement
             $args[] = $class2;
         }
 
-        $this->_content[self::TBODY]->setDefaultRowClass(new \Zalt\Lazy\Alternate($args));
+        $this->_content[self::TBODY]->setDefaultRowClass(new Alternate($args));
         return $this;
     }
 
@@ -760,7 +777,7 @@ class TableElement extends \Zalt\Html\HtmlElement
     public function setAsFormLayout(\Zend_Form $form, $add_description = false, $include_description = false)
     {
         // Make a Lazy repeater for the form elements and set it as the element repeater
-        $formrep = new \Zalt\Lazy\RepeatableFormElements($form);
+        $formrep = new RepeatableFormElements($form);
         $formrep->setSplitHidden(true); // These are treated separately
         $this->setRepeater($formrep);
 
@@ -870,12 +887,11 @@ class TableElement extends \Zalt\Html\HtmlElement
     /**
      * Static helper function for creation, used by @see \Zalt\Html\Creator.
      *
-     * @param mixed $arg_array Optional \Zalt\Ra::args processed settings
+     * @param array $args Optional Ra::args processed settings
      * @return \Zalt\Html\TableElement
      */
-    public static function table($arg_array = null)
+    public static function table(...$args)
     {
-        $args = func_get_args();
         return new self($args);
     }
 
@@ -884,12 +900,12 @@ class TableElement extends \Zalt\Html\HtmlElement
      *
      * Addition of multiple bodies is not possible.
      *
-     * @param mixed $arg_array Optional \Zalt\Ra::args processed settings
+     * @param array $args Optional \Zalt\Ra::args processed settings
      * @return \Zalt\Html\TBodyElement With 'tbody' tagName
      */
-    public function tbody($arg_array = null)
+    public function tbody(...$args)
     {
-        $args = \Zalt\Ra::args(func_get_args());
+        $args = Ra::args($args);
 
         if ($args) {
             $this->_content[self::TBODY]->_processParameters($args);
@@ -901,36 +917,33 @@ class TableElement extends \Zalt\Html\HtmlElement
     /**
      * Returns a 'td' cell in the current row in the tbody
      *
-     * @param mixed $arg_array Optional \Zalt\Ra::args processed settings
+     * @param array $args Optional \Zalt\Ra::args processed settings
      * @return \Zalt\Html\HtmlElement With 'td' tagName
      */
-    public function td($arg_array = null)
+    public function td(...$args)
     {
-        $args = func_get_args();
         return $this->_content[self::TBODY]->td($args);
     }
 
     /**
      * Returns a 'th' cell in the current row in the tbody
      *
-     * @param mixed $arg_array Optional \Zalt\Ra::args processed settings
+     * @param array $args Optional \Zalt\Ra::args processed settings
      * @return \Zalt\Html\HtmlElement With 'th' tagName
      */
-    public function tdh($arg_array = null)
+    public function tdh(...$args)
     {
-        $args = func_get_args();
         return $this->_content[self::TBODY]->th($args);
     }
 
     /**
      * Returns a 'td' cell in a new row in the body with a colspan equal to the number of columns in the table.
      *
-     * @param mixed $arg_array Optional \Zalt\Ra::args processed settings
+     * @param array $args Optional \Zalt\Ra::args processed settings
      * @return \Zalt\Html\HtmlElement With 'td' tagName
      */
-    public function tdrow($arg_array = null)
+    public function tdrow(...$args)
     {
-        $args = func_get_args();
         $cell = $this->tr()->td($args, array('colspan' => $this->toLazy()->getColumnCount()));
 
         // Make sure the next item is not added to this row.
@@ -942,24 +955,22 @@ class TableElement extends \Zalt\Html\HtmlElement
     /**
      * Returns a 'td' cell in the current row in the footer
      *
-     * @param mixed $arg_array Optional \Zalt\Ra::args processed settings
+     * @param array $args Optional \Zalt\Ra::args processed settings
      * @return \Zalt\Html\HtmlElement With 'td' tagName
      */
-    public function tf($arg_array = null)
+    public function tf(...$args)
     {
-        $args = func_get_args();
         return $this->tfoot()->td($args);
     }
 
     /**
      * Returns a 'th' cell in the current row in the footer
      *
-     * @param mixed $arg_array Optional \Zalt\Ra::args processed settings
+     * @param array $args Optional \Zalt\Ra::args processed settings
      * @return \Zalt\Html\HtmlElement With 'th' tagName
      */
-    public function tfh($arg_array = null)
+    public function tfh(...$args)
     {
-        $args = func_get_args();
         return $this->tfoot()->th($args);
     }
 
@@ -968,15 +979,15 @@ class TableElement extends \Zalt\Html\HtmlElement
      *
      * Addition of multiple bodies is not possible.
      *
-     * @param mixed $arg_array Optional \Zalt\Ra::args processed settings
+     * @param array $args Optional \Zalt\Ra::args processed settings
      * @return \Zalt\Html\TBodyElement With 'tfoot' tagName
      */
-    public function tfoot($arg_array = null)
+    public function tfoot(...$args)
     {
-        $args = \Zalt\Ra::args(func_get_args());
+        $args = Ra::args($args);
 
         if (! $this->_content[self::TFOOT]) {
-            $this->_content[self::TFOOT] = \Zalt\Html::create('tfoot');
+            $this->_content[self::TFOOT] = Html::create('tfoot');
         }
         if ($args) {
             $this->_content[self::TFOOT]->_processParameters($args);
@@ -988,12 +999,11 @@ class TableElement extends \Zalt\Html\HtmlElement
     /**
      * Returns a 'td' cell in a new row in the footer with a colspan equal to the number of columns in the table.
      *
-     * @param mixed $arg_array Optional \Zalt\Ra::args processed settings
+     * @param array $args Optional \Zalt\Ra::args processed settings
      * @return \Zalt\Html\HtmlElement With 'td' tagName
      */
-    public function tfrow($arg_array = null)
+    public function tfrow(...$args)
     {
-        $args = func_get_args();
         $cell = $this->tfoot()->tr()->td($args, array('colspan' => $this->toLazy()->getColumnCount()));
 
         // Make sure the next item is not added to this row.
@@ -1005,12 +1015,11 @@ class TableElement extends \Zalt\Html\HtmlElement
     /**
      * Returns a 'th' cell in the current row in the header
      *
-     * @param mixed $arg_array Optional \Zalt\Ra::args processed settings
+     * @param array $args Optional \Zalt\Ra::args processed settings
      * @return \Zalt\Html\HtmlElement With 'th' tagName
      */
-    public function th($arg_array = null)
+    public function th(...$args)
     {
-        $args = func_get_args();
         return $this->thead()->th($args);
     }
 
@@ -1019,15 +1028,15 @@ class TableElement extends \Zalt\Html\HtmlElement
      *
      * Addition of multiple bodies is not possible.
      *
-     * @param mixed $arg_array Optional \Zalt\Ra::args processed settings
+     * @param array $args Optional \Zalt\Ra::args processed settings
      * @return \Zalt\Html\TBodyElement With 'thead' tagName
      */
-    public function thead($arg_array = null)
+    public function thead(...$args)
     {
-        $args = \Zalt\Ra::args(func_get_args());
+        $args = Ra::args($args);
 
         if (! $this->_content[self::THEAD]) {
-            $this->_content[self::THEAD] = \Zalt\Html::create('thead');
+            $this->_content[self::THEAD] = Html::create('thead');
         }
         if ($args) {
             $this->_content[self::THEAD]->_processParameters($args);
@@ -1039,24 +1048,22 @@ class TableElement extends \Zalt\Html\HtmlElement
     /**
      * Returns a 'td' cell in the current row in the header
      *
-     * @param mixed $arg_array Optional \Zalt\Ra::args processed settings
+     * @param array $args Optional \Zalt\Ra::args processed settings
      * @return \Zalt\Html\HtmlElement With 'td' tagName
      */
-    public function thd($arg_array = null)
+    public function thd(...$args)
     {
-        $args = func_get_args();
         return $this->thead()->td($args);
     }
 
     /**
      * Returns a 'td' cell in a new row in the header with a colspan equal to the number of columns in the table.
      *
-     * @param mixed $arg_array Optional \Zalt\Ra::args processed settings
+     * @param array $args Optional Ra::args processed settings
      * @return \Zalt\Html\HtmlElement With 'td' tagName
      */
-    public function thdrow($arg_array = null)
+    public function thdrow(...$args)
     {
-        $args = func_get_args();
         return $this->thead()->td($args, array('colspan' => $this->toLazy()->getColumnCount()));
     }
 
@@ -1067,14 +1074,12 @@ class TableElement extends \Zalt\Html\HtmlElement
      *
      * @see __call
      *
-     * @param mixed $arg_array Optional \Zalt\Ra::args processed settings
+     * @param array $args Optional Ra::args processed settings
      * @return \Zalt\Html\HtmlElement With 'th' tagName
      */
-    public function thhrow($arg_array = null)
+    public function thhrow(...$args)
     {
         // throw is not an allowed function name. Implemented in __call
-
-        $args = func_get_args();
         $cell = $this->thead()->tr()->th($args, array('colspan' => $this->toLazy()->getColumnCount()));
 
         // Make sure the next item is not added to this row.
@@ -1091,12 +1096,12 @@ class TableElement extends \Zalt\Html\HtmlElement
      * @see addColumn
      * @see addColumnArray
      *
-     * @param mixed $arg_array Optional \Zalt\Ra::args processed settings
+     * @param array $args Optional Ra::args processed settings
      * @return \Zalt\Html\TrElement
      */
-    public function tr($arg_array = null)
+    public function tr(...$args)
     {
-        $args = \Zalt\Ra::args(func_get_args());
+        $args = Ra::args($args);
 
         if ($this->_content[self::THEAD]) {
             $this->_content[self::THEAD]->_lastChild = null;

@@ -12,6 +12,8 @@
 
 namespace Zalt\Html;
 
+use Zalt\HtmlUtil\MultiWrapper;
+
 /**
  *
  * @package    Zalt
@@ -26,7 +28,7 @@ interface ColumnInterface
      * Returns the cell or a \Zalt\MultiWrapper containing cells that occupy the column position, taking colspan and other functions into account.
      *
      * @param int $col The numeric column position, starting at 0;
-     * @return HtmlElement Probably an element of this type, but can also be something else, posing as an element.
+     * @return HtmlElement|MultiWrapper Probably an element of this type, but can also be something else, posing as an element.
      */
     public function getColumn($col);
 

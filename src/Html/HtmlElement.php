@@ -1128,7 +1128,7 @@ class HtmlElement implements ElementInterface, Procrastinator
         if (array_key_exists($offset, $this->_content)) {
             return $this->_content[$offset];
         }
-        error_log(sprintf("Non existing HtmlElement ofhset %s requested for tag %s using url %s.", $offset, $this->tagName, $_SERVER['REQUEST_URI']));
+        error_log(sprintf("Non existing HtmlElement ofhset %s requested for tag %s using url %s.", $offset, $this->tagName, (isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : 'cli')));
     }
 
     /**

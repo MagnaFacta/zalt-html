@@ -11,6 +11,8 @@
 
 namespace Zalt\Html;
 
+use Zalt\HtmlUtil\MultiWrapper;
+use Zalt\HtmlUtil\Ra;
 use Zalt\Late\Late;
 use Zalt\Late\RepeatableFormElements;
 
@@ -62,11 +64,11 @@ class DlElement extends HtmlElement implements FormLayout
      * Any parameters are added as either content, attributes or handled
      * as special types, if defined as such for this element.
      *
-     * @param mixed $arg_array \Zalt\Ra::args arguments
+     * @param mixed $args Ra::args arguments
      */
-    public function __construct($arg_array = null)
+    public function __construct(...$args)
     {
-        $args = \Zalt\Ra::args(func_get_args());
+        $args = Ra::args($args);
 
         parent::__construct('dl', $args);
     }
@@ -79,7 +81,7 @@ class DlElement extends HtmlElement implements FormLayout
             // Return all objects in a wrapper object
             // that makes sure they are all treated
             // the same way.
-            return new \Zalt\MultiWrapper($ds);
+            return new MultiWrapper($ds);
         }
 
         // Return first object only
