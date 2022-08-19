@@ -2,14 +2,14 @@
 
 /**
  *
- * @package    MUtil
+ * @package    Zalt
  * @subpackage Snippets
  * @author     Matijs de Jong <mjong@magnafacta.nl>
  * @copyright  Copyright (c) 2012 Erasmus MC
  * @license    New BSD License
  */
 
-namespace MUtil\Snippets\Standard;
+namespace Zalt\Snippets\Standard;
 
 /**
  * Generic import wizard.
@@ -17,13 +17,13 @@ namespace MUtil\Snippets\Standard;
  * Set the targetModel (directly or through $this->model) and the
  * importTranslators and it should work.
  *
- * @package    MUtil
+ * @package    Zalt
  * @subpackage Snippets
  * @copyright  Copyright (c) 2012 Erasmus MC
  * @license    New BSD License
- * @since      Class available since \MUtil version 1.3
+ * @since      Class available since \Zalt version 1.3
  */
-class ModelImportSnippet extends \MUtil\Snippets\WizardFormSnippetAbstract
+class ModelImportSnippet extends \Zalt\Snippets\WizardFormSnippetAbstract
 {
     /**
      * Contains the errors generated so far
@@ -85,20 +85,20 @@ class ModelImportSnippet extends \MUtil\Snippets\WizardFormSnippetAbstract
 
     /**
      *
-     * @var \MUtil\Model\Importer
+     * @var \Zalt\Model\Importer
      */
     protected $importer;
 
     /**
      *
-     * @var \MUtil\Model\ModelAbstract
+     * @var \Zalt\Model\ModelAbstract
      */
     protected $importModel;
 
     /**
      * Required, an array of one or more translators
      *
-     * @var array of \MUtil\Model\ModelTranslatorInterface objects
+     * @var array of \Zalt\Model\ModelTranslatorInterface objects
      */
     protected $importTranslators;
 
@@ -115,14 +115,14 @@ class ModelImportSnippet extends \MUtil\Snippets\WizardFormSnippetAbstract
 
     /**
      *
-     * @var \MUtil\Model\ModelAbstract
+     * @var \Zalt\Model\ModelAbstract
      */
     protected $model;
 
     /**
      * Model to read import
      *
-     * @var \MUtil\Model\ModelAbstract
+     * @var \Zalt\Model\ModelAbstract
      */
     protected $sourceModel;
 
@@ -142,7 +142,7 @@ class ModelImportSnippet extends \MUtil\Snippets\WizardFormSnippetAbstract
      *
      * Required, can be set by passing a model to $this->model
      *
-     * @var \MUtil\Model\ModelAbstract
+     * @var \Zalt\Model\ModelAbstract
      */
     protected $targetModel;
 
@@ -190,10 +190,10 @@ class ModelImportSnippet extends \MUtil\Snippets\WizardFormSnippetAbstract
     /**
      * Add the elements from the model to the bridge for the current step
      *
-     * @param \MUtil\Model\Bridge\FormBridgeInterface $bridge
-     * @param \MUtil\Model\ModelAbstract $model
+     * @param \Zalt\Model\Bridge\FormBridgeInterface $bridge
+     * @param \Zalt\Model\ModelAbstract $model
      */
-    protected function addStep1(\MUtil\Model\Bridge\FormBridgeInterface $bridge, \MUtil\Model\ModelAbstract $model)
+    protected function addStep1(\Zalt\Model\Bridge\FormBridgeInterface $bridge, \Zalt\Model\ModelAbstract $model)
     {
         $this->addItems($bridge, 'trans', 'mode');
     }
@@ -201,13 +201,13 @@ class ModelImportSnippet extends \MUtil\Snippets\WizardFormSnippetAbstract
     /**
      * Add the elements from the model to the bridge for the current step
      *
-     * @param \MUtil\Model\Bridge\FormBridgeInterface $bridge
-     * @param \MUtil\Model\ModelAbstract $model
+     * @param \Zalt\Model\Bridge\FormBridgeInterface $bridge
+     * @param \Zalt\Model\ModelAbstract $model
      */
-    protected function addStep2(\MUtil\Model\Bridge\FormBridgeInterface $bridge, \MUtil\Model\ModelAbstract $model)
+    protected function addStep2(\Zalt\Model\Bridge\FormBridgeInterface $bridge, \Zalt\Model\ModelAbstract $model)
     {
         $translator = $this->getImportTranslator();
-        if ($translator instanceof \MUtil\Model\ModelTranslatorInterface) {
+        if ($translator instanceof \Zalt\Model\ModelTranslatorInterface) {
             $element = $bridge->getForm()->createElement('html', 'trans_header');
             $element->span($this->_('Choosen import definition: '));
             $element->strong($translator->getDescription());
@@ -231,9 +231,9 @@ class ModelImportSnippet extends \MUtil\Snippets\WizardFormSnippetAbstract
                 if ($element->isValid(null) && $element->getFileName()) {
                     // Now the filename is still set to the upload filename.
                     $this->_session->extension = pathinfo($element->getFileName(), PATHINFO_EXTENSION);
-                    // \MUtil\EchoOut\EchoOut::track($element->getFileName(), $element->getFileSize());
+                    // \Zalt\EchoOut\EchoOut::track($element->getFileName(), $element->getFileSize());
                     if (!$element->receive()) {
-                        throw new \MUtil\Model\ModelException(sprintf(
+                        throw new \Zalt\Model\ModelException(sprintf(
                             $this->_("Error retrieving file '%s'."),
                             $element->getFileName()
                             ));
@@ -269,28 +269,28 @@ class ModelImportSnippet extends \MUtil\Snippets\WizardFormSnippetAbstract
     /**
      * Add the elements from the model to the bridge for the current step
      *
-     * @param \MUtil\Model\Bridge\FormBridgeInterface $bridge
-     * @param \MUtil\Model\ModelAbstract $model
+     * @param \Zalt\Model\Bridge\FormBridgeInterface $bridge
+     * @param \Zalt\Model\ModelAbstract $model
      */
-    protected function addStep3(\MUtil\Model\Bridge\FormBridgeInterface $bridge, \MUtil\Model\ModelAbstract $model)
+    protected function addStep3(\Zalt\Model\Bridge\FormBridgeInterface $bridge, \Zalt\Model\ModelAbstract $model)
     {
         if ($this->loadSourceModel()) {
             $this->displayHeader($bridge, $this->_('Upload successful!'));
             $this->displayErrors($bridge, $this->_('Check the input visually.'));
 
-            // \MUtil\EchoOut\EchoOut::track($this->sourceModel->load());
+            // \Zalt\EchoOut\EchoOut::track($this->sourceModel->load());
 
             $element = $bridge->getForm()->createElement('html', 'importdisplay');
 
-            $repeater = \MUtil\Lazy::repeat(new \LimitIterator($this->sourceModel->loadIterator(), 0, 20));
-            $table    = new \MUtil\Html\TableElement($repeater, array('class' => $this->formatBoxClass));
+            $repeater = \Zalt\Lazy::repeat(new \LimitIterator($this->sourceModel->loadIterator(), 0, 20));
+            $table    = new \Zalt\Html\TableElement($repeater, array('class' => $this->formatBoxClass));
 
             foreach ($this->sourceModel->getItemsOrdered() as $name) {
                 $table->addColumn($repeater->$name, $name);
             }
 
             // Extra div for CSS settings
-            $element->setValue(new \MUtil\Html\HtmlElement('div', $table, array('class' => $this->formatBoxClass)));
+            $element->setValue(new \Zalt\Html\HtmlElement('div', $table, array('class' => $this->formatBoxClass)));
             $bridge->addElement($element);
         } else {
             $this->displayHeader($bridge, $this->_('Upload error!'));
@@ -303,10 +303,10 @@ class ModelImportSnippet extends \MUtil\Snippets\WizardFormSnippetAbstract
     /**
      * Add the elements from the model to the bridge for the current step
      *
-     * @param \MUtil\Model\Bridge\FormBridgeInterface $bridge
-     * @param \MUtil\Model\ModelAbstract $model
+     * @param \Zalt\Model\Bridge\FormBridgeInterface $bridge
+     * @param \Zalt\Model\ModelAbstract $model
      */
-    protected function addStep4(\MUtil\Model\Bridge\FormBridgeInterface $bridge, \MUtil\Model\ModelAbstract $model)
+    protected function addStep4(\Zalt\Model\Bridge\FormBridgeInterface $bridge, \Zalt\Model\ModelAbstract $model)
     {
         $this->nextDisabled = true;
 
@@ -317,7 +317,7 @@ class ModelImportSnippet extends \MUtil\Snippets\WizardFormSnippetAbstract
             $batch->setFormId($form->getId());
             $batch->autoStart = true;
 
-            // \MUtil\Registry\Source::$verbose = true;
+            // \Zalt\Registry\Source::$verbose = true;
             if ($batch->run($this->getRequestQueryParams())) {
                 exit;
             }
@@ -357,10 +357,10 @@ class ModelImportSnippet extends \MUtil\Snippets\WizardFormSnippetAbstract
     /**
      * Add the elements from the model to the bridge for the current step
      *
-     * @param \MUtil\Model\Bridge\FormBridgeInterface $bridge
-     * @param \MUtil\Model\ModelAbstract $model
+     * @param \Zalt\Model\Bridge\FormBridgeInterface $bridge
+     * @param \Zalt\Model\ModelAbstract $model
      */
-    protected function addStep5(\MUtil\Model\Bridge\FormBridgeInterface $bridge, \MUtil\Model\ModelAbstract $model)
+    protected function addStep5(\Zalt\Model\Bridge\FormBridgeInterface $bridge, \Zalt\Model\ModelAbstract $model)
     {
         $this->nextDisabled = true;
 
@@ -408,11 +408,11 @@ class ModelImportSnippet extends \MUtil\Snippets\WizardFormSnippetAbstract
     /**
      * Add the elements from the model to the bridge for the current step
      *
-     * @param \MUtil\Model\Bridge\FormBridgeInterface $bridge
-     * @param \MUtil\Model\ModelAbstract $model
+     * @param \Zalt\Model\Bridge\FormBridgeInterface $bridge
+     * @param \Zalt\Model\ModelAbstract $model
      * @param int $step The current step
      */
-    protected function addStepElementsFor(\MUtil\Model\Bridge\FormBridgeInterface $bridge, \MUtil\Model\ModelAbstract $model, $step)
+    protected function addStepElementsFor(\Zalt\Model\Bridge\FormBridgeInterface $bridge, \Zalt\Model\ModelAbstract $model, $step)
     {
         $this->displayHeader(
                 $bridge,
@@ -447,11 +447,11 @@ class ModelImportSnippet extends \MUtil\Snippets\WizardFormSnippetAbstract
     /**
      * Hook for after save
      *
-     * @param \MUtil\Task\TaskBatch $batch that was just executed
-     * @param \MUtil\Form\Element\Html $element Tetx element for display of messages
+     * @param \Zalt\Task\TaskBatch $batch that was just executed
+     * @param \Zalt\Form\Element\Html $element Tetx element for display of messages
      * @return string a message about what has changed (and used in the form)
      */
-    public function afterImport(\MUtil\Task\TaskBatch $batch, \MUtil\Form\Element\Html $element)
+    public function afterImport(\Zalt\Task\TaskBatch $batch, \Zalt\Form\Element\Html $element)
     {
         $imported = $batch->getCounter('imported');
         $changed  = $batch->getCounter('changed');
@@ -477,22 +477,22 @@ class ModelImportSnippet extends \MUtil\Snippets\WizardFormSnippetAbstract
     {
         parent::afterRegistry();
 
-        if (! $this->importer instanceof \MUtil\Model\Importer) {
-            $this->importer = new \MUtil\Model\Importer();
+        if (! $this->importer instanceof \Zalt\Model\Importer) {
+            $this->importer = new \Zalt\Model\Importer();
 
-            $source = new \MUtil\Registry\Source(get_object_vars($this));
+            $source = new \Zalt\Registry\Source(get_object_vars($this));
             $source->applySource($this->importer);
             $this->importer->setRegistrySource($source);
         }
-        if (! $this->targetModel instanceof \MUtil\Model\ModelAbstract) {
-            if ($this->model instanceof \MUtil\Model\ModelAbstract) {
+        if (! $this->targetModel instanceof \Zalt\Model\ModelAbstract) {
+            if ($this->model instanceof \Zalt\Model\ModelAbstract) {
                 $this->targetModel = $this->model;
             }
         }
-        if ($this->targetModel instanceof \MUtil\Model\ModelAbstract) {
+        if ($this->targetModel instanceof \Zalt\Model\ModelAbstract) {
             $this->importer->setTargetModel($this->targetModel);
         }
-        if ($this->sourceModel instanceof \MUtil\Model\ModelAbstract) {
+        if ($this->sourceModel instanceof \Zalt\Model\ModelAbstract) {
             $this->importer->setSourceModel($this->sourceModel);
         }
 
@@ -532,14 +532,14 @@ class ModelImportSnippet extends \MUtil\Snippets\WizardFormSnippetAbstract
 
         if ($fieldInfo) {
             // Slow
-            //$table1 = \MUtil\Html\TableElement::createArray($fieldInfo, $this->_('Import field definitions'), true);
+            //$table1 = \Zalt\Html\TableElement::createArray($fieldInfo, $this->_('Import field definitions'), true);
             //$table1->appendAttrib('class', $this->formatBoxClass);
 
             // Fast
-            $table = \MUtil\Html\TableElement::table();
+            $table = \Zalt\Html\TableElement::table();
             $table->caption($this->_('Import field definitions'));
             $table->appendAttrib('class', $this->formatBoxClass);
-            $repeater = new \MUtil\Lazy\Repeatable($fieldInfo);
+            $repeater = new \Zalt\Lazy\Repeatable($fieldInfo);
             $table->setRepeater($repeater);
             foreach (reset($fieldInfo) as $title => $element)
             {
@@ -556,13 +556,13 @@ class ModelImportSnippet extends \MUtil\Snippets\WizardFormSnippetAbstract
     /**
      * Creates the model
      *
-     * @return \MUtil\Model\ModelAbstract
+     * @return \Zalt\Model\ModelAbstract
      */
     protected function createModel()
     {
-        if (! $this->importModel instanceof \MUtil\Model\ModelAbstract) {
-            // $model = new \MUtil\Model\TableModel
-            $model = new \MUtil\Model\SessionModel('import_for_' . $this->getCurrentController());
+        if (! $this->importModel instanceof \Zalt\Model\ModelAbstract) {
+            // $model = new \Zalt\Model\TableModel
+            $model = new \Zalt\Model\SessionModel('import_for_' . $this->getCurrentController());
 
             $model->set('trans', 'label', $this->_('Import definition'),
                     'default', $this->defaultImportTranslator,
@@ -589,7 +589,7 @@ class ModelImportSnippet extends \MUtil\Snippets\WizardFormSnippetAbstract
                     'required',     true);
 
             if ($this->tempDirectory) {
-                \MUtil\File::ensureDir($this->tempDirectory);
+                \Zalt\File::ensureDir($this->tempDirectory);
                 $model->set('file', 'destination',  $this->tempDirectory);
             }
 
@@ -610,10 +610,10 @@ class ModelImportSnippet extends \MUtil\Snippets\WizardFormSnippetAbstract
     /**
      * Display the errors
      *
-     * @param \MUtil\Model\Bridge\FormBridgeInterface $bridge
+     * @param \Zalt\Model\Bridge\FormBridgeInterface $bridge
      * @param array Errors to display
      */
-    protected function displayErrors(\MUtil\Model\Bridge\FormBridgeInterface $bridge, $errors = null)
+    protected function displayErrors(\Zalt\Model\Bridge\FormBridgeInterface $bridge, $errors = null)
     {
         if (null === $errors) {
             $errors = $this->_errors;
@@ -631,11 +631,11 @@ class ModelImportSnippet extends \MUtil\Snippets\WizardFormSnippetAbstract
     /**
      * Display a header
      *
-     * @param \MUtil\Model\Bridge\FormBridgeInterface $bridge
+     * @param \Zalt\Model\Bridge\FormBridgeInterface $bridge
      * @param mixed $header Header content
      * @param string $tagName
      */
-    protected function displayHeader(\MUtil\Model\Bridge\FormBridgeInterface $bridge, $header, $tagName = 'h2')
+    protected function displayHeader(\Zalt\Model\Bridge\FormBridgeInterface $bridge, $header, $tagName = 'h2')
     {
         $element = $bridge->getForm()->createElement('html', 'step_header');
         $element->$tagName($header);
@@ -646,7 +646,7 @@ class ModelImportSnippet extends \MUtil\Snippets\WizardFormSnippetAbstract
     /**
      * Try to get the current translator
      *
-     * @return \MUtil\Model\ModelTranslatorInterface or false if none is current
+     * @return \Zalt\Model\ModelTranslatorInterface or false if none is current
      */
     protected function getImportTranslator()
     {
@@ -661,18 +661,18 @@ class ModelImportSnippet extends \MUtil\Snippets\WizardFormSnippetAbstract
         }
 
         $translator = $this->importTranslators[$this->formData['trans']];
-        if (! $translator instanceof \MUtil\Model\ModelTranslatorInterface) {
+        if (! $translator instanceof \Zalt\Model\ModelTranslatorInterface) {
             $this->_errors[] = sprintf($this->_('%s is not a valid import definition.'), $this->formData['trans']);
             return false;
         }
 
         // Store/set relevant variables
-        if ($this->importer instanceof \MUtil\Model\Importer) {
+        if ($this->importer instanceof \Zalt\Model\Importer) {
             $this->importer->setImportTranslator($translator);
         }
-        if ($this->targetModel instanceof \MUtil\Model\ModelAbstract) {
+        if ($this->targetModel instanceof \Zalt\Model\ModelAbstract) {
             $translator->setTargetModel($this->targetModel);
-            if ($this->importer instanceof \MUtil\Model\Importer) {
+            if ($this->importer instanceof \Zalt\Model\Importer) {
                 $this->importer->setTargetModel($this->targetModel);
             }
         }
@@ -700,7 +700,7 @@ class ModelImportSnippet extends \MUtil\Snippets\WizardFormSnippetAbstract
         if (! $this->_translatorDescriptions) {
             $results = array();
             foreach ($this->importTranslators as $key => $translator) {
-                if ($translator instanceof \MUtil\Model\ModelTranslatorInterface) {
+                if ($translator instanceof \Zalt\Model\ModelTranslatorInterface) {
                     $results[$key] = $translator->getDescription();
                 }
             }
@@ -746,7 +746,7 @@ class ModelImportSnippet extends \MUtil\Snippets\WizardFormSnippetAbstract
             }
             $translator = $this->importTranslators[$transKey];
 
-            if ($translator instanceof \MUtil\Model\ModelTranslatorInterface) {
+            if ($translator instanceof \Zalt\Model\ModelTranslatorInterface) {
 
                 $translator->setTargetModel($this->targetModel);
                 $translations = $translator->getFieldsTranslations();
@@ -763,7 +763,7 @@ class ModelImportSnippet extends \MUtil\Snippets\WizardFormSnippetAbstract
                         $results[$target][$requiredKey][$transName] = $required;
 
                         if (trim($required)) {
-                            $results[$target][$transName] = new \MUtil\Html\HtmlElement('strong', $source);
+                            $results[$target][$transName] = new \Zalt\Html\HtmlElement('strong', $source);
                         } else {
                             $results[$target][$transName] = $source;
                         }
@@ -787,11 +787,11 @@ class ModelImportSnippet extends \MUtil\Snippets\WizardFormSnippetAbstract
 
                 // $field = $this->_targetModel->get($name, 'type', 'maxlength', 'label', 'required');
                 switch ($this->targetModel->get($name, 'type')) {
-                    case \MUtil\Model::TYPE_NOVALUE:
+                    case \Zalt\Model::TYPE_NOVALUE:
                         unset($results[$name]);
                         continue 2;
 
-                    case \MUtil\Model::TYPE_NUMERIC:
+                    case \Zalt\Model::TYPE_NUMERIC:
                         $maxlength = $this->targetModel->get($name, 'maxlength');
                         if ($maxlength) {
                             $decimals = $this->targetModel->get($name, 'decimals');
@@ -805,15 +805,15 @@ class ModelImportSnippet extends \MUtil\Snippets\WizardFormSnippetAbstract
                         }
                         break;
 
-                    case \MUtil\Model::TYPE_DATE:
+                    case \Zalt\Model::TYPE_DATE:
                         $type = $this->_('Date value using ISO 8601: yyyy-mm-dd');
                         break;
 
-                    case \MUtil\Model::TYPE_DATETIME:
+                    case \Zalt\Model::TYPE_DATETIME:
                         $type = $this->_('Datetime value using ISO 8601: yyyy-mm-ddThh:mm:ss[+-hh:mm]');
                         break;
 
-                    case \MUtil\Model::TYPE_TIME:
+                    case \Zalt\Model::TYPE_TIME:
                         $type = $this->_('Time value using ISO 8601: hh:mm:ss[+-hh:mm]');
                         break;
 
@@ -898,7 +898,7 @@ class ModelImportSnippet extends \MUtil\Snippets\WizardFormSnippetAbstract
      * When invalid data should result in an error, you can throw it
      * here but you can also perform the check in the
      * checkRegistryRequestsAnswers() function from the
-     * {@see \MUtil\Registry\TargetInterface}.
+     * {@see \Zalt\Registry\TargetInterface}.
      *
      * @return boolean
      */
@@ -945,7 +945,7 @@ class ModelImportSnippet extends \MUtil\Snippets\WizardFormSnippetAbstract
         if (isset($this->formData[$this->stepFieldName]) &&
                 $this->formData[$this->stepFieldName] > 1 &&
                 (!(isset($this->_session->localfile) && $this->_session->localfile))) {
-            $this->_session->localfile = \MUtil\File::createTemporaryIn(
+            $this->_session->localfile = \Zalt\File::createTemporaryIn(
                     $this->tempDirectory,
                     $this->getCurrentController() . '_'
                     );
@@ -956,11 +956,11 @@ class ModelImportSnippet extends \MUtil\Snippets\WizardFormSnippetAbstract
 
         // Set the translator
         $translator = $this->getImportTranslator();
-        if ($translator instanceof \MUtil\Model\ModelTranslatorInterface) {
+        if ($translator instanceof \Zalt\Model\ModelTranslatorInterface) {
             $this->importer->setImportTranslator($translator);
         }
 
-        // \MUtil\EchoOut\EchoOut::track($_POST, $_FILES, $this->formData);
+        // \Zalt\EchoOut\EchoOut::track($_POST, $_FILES, $this->formData);
     }
 
     /**
@@ -982,7 +982,7 @@ class ModelImportSnippet extends \MUtil\Snippets\WizardFormSnippetAbstract
             $this->_errors[] = $e->getMessage();
         }
 
-        return $this->sourceModel instanceof \MUtil\Model\ModelAbstract;
+        return $this->sourceModel instanceof \Zalt\Model\ModelAbstract;
     }
 
     /**
@@ -1000,7 +1000,7 @@ class ModelImportSnippet extends \MUtil\Snippets\WizardFormSnippetAbstract
                 $transName = $queryParams['trans'];
             }
             if (! isset($this->importTranslators[$transName])) {
-                throw new \MUtil\Model\ModelTranslateException(sprintf(
+                throw new \Zalt\Model\ModelTranslateException(sprintf(
                         $this->_("Unknown translator '%s'. Should be one of: %s"),
                         $transName,
                         implode($this->_(', '), array_keys($this->importTranslators))
@@ -1021,7 +1021,7 @@ class ModelImportSnippet extends \MUtil\Snippets\WizardFormSnippetAbstract
                 $check = $queryParams['check'];
             }
 
-            // \MUtil\Registry\Source::$verbose = true;
+            // \Zalt\Registry\Source::$verbose = true;
             $batch = $this->importer->getCheckAndImportBatch();
             $batch->setVariable('addImport', !$check);
             $batch->runContinuous();
@@ -1072,7 +1072,7 @@ class ModelImportSnippet extends \MUtil\Snippets\WizardFormSnippetAbstract
     /**
      * Set what to do when the form is 'finished' or 'cancelled'.
      *
-     * @return \MUtil\Snippets\Standard\ModelImportSnippet
+     * @return \Zalt\Snippets\Standard\ModelImportSnippet
      */
     protected function setAfterSaveRoute()
     {

@@ -2,14 +2,14 @@
 
 /**
  *
- * @package    MUtil
+ * @package    Zalt
  * @subpackage Snippets
  * @author     Matijs de Jong <mjong@magnafacta.nl>
  * @copyright  Copyright (c) 2011 Erasmus MC
  * @license    New BSD License
  */
 
-namespace MUtil\Snippets;
+namespace Zalt\Snippets;
 
 /**
  * Displays each fields of a single item in a model in a row in a Html table.
@@ -18,13 +18,13 @@ namespace MUtil\Snippets;
  *
  * @see ModelVerticalTableSnippet.
  *
- * @package    MUtil
+ * @package    Zalt
  * @subpackage Snippets
  * @copyright  Copyright (c) 2011 Erasmus MC
  * @license    New BSD License
  * @since      Class available since version 1.4
  */
-abstract class ModelVerticalTableSnippetAbstract extends \MUtil\Snippets\ModelSnippetAbstract
+abstract class ModelVerticalTableSnippetAbstract extends \Zalt\Snippets\ModelSnippetAbstract
 {
     /**
      *
@@ -33,11 +33,11 @@ abstract class ModelVerticalTableSnippetAbstract extends \MUtil\Snippets\ModelSn
     protected $bridgeColumns = 1;
 
     /**
-     * One of the \MUtil\Model\Bridge\BridgeAbstract MODE constants
+     * One of the \Zalt\Model\Bridge\BridgeAbstract MODE constants
      *
      * @var int
      */
-    protected $bridgeMode = \MUtil\Model\Bridge\BridgeAbstract::MODE_LAZY;
+    protected $bridgeMode = \Zalt\Model\Bridge\BridgeAbstract::MODE_LAZY;
 
     /**
      * Shortfix to add class attribute
@@ -58,11 +58,11 @@ abstract class ModelVerticalTableSnippetAbstract extends \MUtil\Snippets\ModelSn
      * Overrule this function to add different columns to the browse table, without
      * having to recode the core table building code.
      *
-     * @param \MUtil\Model\Bridge\VerticalTableBridge $bridge
-     * @param \MUtil\Model\ModelAbstract $model
+     * @param \Zalt\Model\Bridge\VerticalTableBridge $bridge
+     * @param \Zalt\Model\ModelAbstract $model
      * @return void
      */
-    protected function addShowTableRows(\MUtil\Model\Bridge\VerticalTableBridge $bridge, \MUtil\Model\ModelAbstract $model)
+    protected function addShowTableRows(\Zalt\Model\Bridge\VerticalTableBridge $bridge, \Zalt\Model\ModelAbstract $model)
     {
         foreach($model->getItemsOrdered() as $name) {
             if ($label = $model->get($name, 'label')) {
@@ -88,7 +88,7 @@ abstract class ModelVerticalTableSnippetAbstract extends \MUtil\Snippets\ModelSn
      * This is a stub function either override getHtmlOutput() or override render()
      *
      * @param \Zend_View_Abstract $view Just in case it is needed here
-     * @return \MUtil\Html\HtmlInterface Something that can be rendered
+     * @return \Zalt\Html\HtmlInterface Something that can be rendered
      */
     public function getHtmlOutput(\Zend_View_Abstract $view)
     {
@@ -99,7 +99,7 @@ abstract class ModelVerticalTableSnippetAbstract extends \MUtil\Snippets\ModelSn
 
         $table = $this->getShowTable($model);
 
-        $container = \MUtil\Html::create()->div(array('class' => 'table-container', 'renderWithoutContent' => false));
+        $container = \Zalt\Html::create()->div(array('class' => 'table-container', 'renderWithoutContent' => false));
         $container[] = $table;
         return $container;
     }
@@ -107,32 +107,32 @@ abstract class ModelVerticalTableSnippetAbstract extends \MUtil\Snippets\ModelSn
     /**
      * Function that allows for overruling the repeater loading.
      *
-     * @param \MUtil\Model\ModelAbstract $model
-     * @return \MUtil\Lazy\RepeatableInterface
+     * @param \Zalt\Model\ModelAbstract $model
+     * @return \Zalt\Lazy\RepeatableInterface
      */
-    public function getRepeater(\MUtil\Model\ModelAbstract $model)
+    public function getRepeater(\Zalt\Model\ModelAbstract $model)
     {
         return $model->loadRepeatable();
     }
 
     /**
-     * Creates from the model a \MUtil\Html\TableElement that can display multiple items.
+     * Creates from the model a \Zalt\Html\TableElement that can display multiple items.
      *
      * Allows overruling
      *
-     * @param \MUtil\Model\ModelAbstract $model
-     * @return \MUtil\Html\TableElement
+     * @param \Zalt\Model\ModelAbstract $model
+     * @return \Zalt\Html\TableElement
      */
-    public function getShowTable(\MUtil\Model\ModelAbstract $model)
+    public function getShowTable(\Zalt\Model\ModelAbstract $model)
     {
         $bridge = $model->getBridgeFor('itemTable', array('class' => $this->class));
         $bridge->setColumnCount($this->bridgeColumns)
                 ->setMode($this->bridgeMode);
 
         if ($model->hasDependencies()) {
-            $this->bridgeMode = \MUtil\Model\Bridge\BridgeAbstract::MODE_SINGLE_ROW;
+            $this->bridgeMode = \Zalt\Model\Bridge\BridgeAbstract::MODE_SINGLE_ROW;
         }
-        if (\MUtil\Model\Bridge\BridgeAbstract::MODE_SINGLE_ROW == $this->bridgeMode) {
+        if (\Zalt\Model\Bridge\BridgeAbstract::MODE_SINGLE_ROW == $this->bridgeMode) {
             // Trigger the dependencies
             $bridge->getRow();
         }
@@ -154,11 +154,11 @@ abstract class ModelVerticalTableSnippetAbstract extends \MUtil\Snippets\ModelSn
      * Overrule this function to set the header differently, without
      * having to recode the core table building code.
      *
-     * @param \MUtil\Model\Bridge\VerticalTableBridge $bridge
-     * @param \MUtil\Model\ModelAbstract $model
+     * @param \Zalt\Model\Bridge\VerticalTableBridge $bridge
+     * @param \Zalt\Model\ModelAbstract $model
      * @return void
      */
-    protected function setShowTableFooter(\MUtil\Model\Bridge\VerticalTableBridge $bridge, \MUtil\Model\ModelAbstract $model)
+    protected function setShowTableFooter(\Zalt\Model\Bridge\VerticalTableBridge $bridge, \Zalt\Model\ModelAbstract $model)
     { }
 
     /**
@@ -167,10 +167,10 @@ abstract class ModelVerticalTableSnippetAbstract extends \MUtil\Snippets\ModelSn
      * Overrule this function to set the header differently, without
      * having to recode the core table building code.
      *
-     * @param \MUtil\Model\Bridge\VerticalTableBridge $bridge
-     * @param \MUtil\Model\ModelAbstract $model
+     * @param \Zalt\Model\Bridge\VerticalTableBridge $bridge
+     * @param \Zalt\Model\ModelAbstract $model
      * @return void
      */
-    protected function setShowTableHeader(\MUtil\Model\Bridge\VerticalTableBridge $bridge, \MUtil\Model\ModelAbstract $model)
+    protected function setShowTableHeader(\Zalt\Model\Bridge\VerticalTableBridge $bridge, \Zalt\Model\ModelAbstract $model)
     { }
 }

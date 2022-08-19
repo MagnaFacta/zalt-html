@@ -9,7 +9,7 @@
  * @license    New BSD License
  */
 
-namespace MUtil\Snippets;
+namespace Zalt\Snippets;
 
 use Psr\Cache\CacheItemPoolInterface;
 
@@ -22,7 +22,7 @@ use Psr\Cache\CacheItemPoolInterface;
  * @license    New BSD License
  * @since      Class available since 1.7.2
  */
-abstract class FormSnippetAbstract extends \MUtil\Snippets\SnippetAbstract
+abstract class FormSnippetAbstract extends \Zalt\Snippets\SnippetAbstract
 {
     /**
      * Optional csrf element
@@ -92,10 +92,10 @@ abstract class FormSnippetAbstract extends \MUtil\Snippets\SnippetAbstract
 
     /**
      * As it is better for translation utilities to set the labels etc. translated,
-     * the \MUtil default is to disable translation.
+     * the \Zalt default is to disable translation.
      *
      * However, this also disables the translation of validation messages, which we
-     * cannot set translated. The \MUtil form is extended so it can make this switch.
+     * cannot set translated. The \Zalt form is extended so it can make this switch.
      *
      * @var boolean True
      */
@@ -128,9 +128,9 @@ abstract class FormSnippetAbstract extends \MUtil\Snippets\SnippetAbstract
     protected $layoutFixedWidth;
 
     /**
-     * @var \MUtil\Request\RequestInfo
+     * @var \Zalt\Request\RequestInfo
      */
-    protected ?\MUtil\Request\RequestInfo $requestInfo = null;
+    protected ?\Zalt\Request\RequestInfo $requestInfo = null;
 
     /**
      * The name of the action to forward to after form completion
@@ -263,7 +263,7 @@ abstract class FormSnippetAbstract extends \MUtil\Snippets\SnippetAbstract
         }
 
         if ($this->layoutAutoWidthFactor || $this->layoutFixedWidth) {
-            $div = new \MUtil\Html\DivFormElement();
+            $div = new \Zalt\Html\DivFormElement();
 
             if ($this->layoutFixedWidth) {
                 $div->setAsFormLayout($this->_form, $this->layoutFixedWidth);
@@ -291,7 +291,7 @@ abstract class FormSnippetAbstract extends \MUtil\Snippets\SnippetAbstract
      */
     protected function createForm($options = null)
     {
-        $form = new \MUtil\Form($options);
+        $form = new \Zalt\Form($options);
 
         return $form;
     }
@@ -312,7 +312,7 @@ abstract class FormSnippetAbstract extends \MUtil\Snippets\SnippetAbstract
      * This is a stub function either override getHtmlOutput() or override render()
      *
      * @param \Zend_View_Abstract $view Just in case it is needed here
-     * @return \MUtil\Html\HtmlInterface Something that can be rendered
+     * @return \Zalt\Html\HtmlInterface Something that can be rendered
      */
     public function getHtmlOutput(\Zend_View_Abstract $view)
     {
@@ -357,7 +357,7 @@ abstract class FormSnippetAbstract extends \MUtil\Snippets\SnippetAbstract
      * When invalid data should result in an error, you can throw it
      * here but you can also perform the check in the
      * checkRegistryRequestsAnswers() function from the
-     * {@see MUtil\Registry\TargetInterface}.
+     * {@see Zalt\Registry\TargetInterface}.
      *
      * @return boolean
      */
@@ -531,7 +531,7 @@ abstract class FormSnippetAbstract extends \MUtil\Snippets\SnippetAbstract
      */
     protected function validateForm()
     {
-        // Note we use an \MUtil\Form
+        // Note we use an \Zalt\Form
         return $this->_form->isValid($this->formData, $this->disableValidatorTranslation);
     }
 }

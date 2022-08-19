@@ -4,8 +4,56 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "62166b43e27a8ffe50e61feaf548a5e8",
+    "content-hash": "583d53c62d76f615d61b695fb79da5a9",
     "packages": [
+        {
+            "name": "magnafacta/zalt-loader",
+            "version": "dev-psr-11",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/MagnaFacta/zalt-loader.git",
+                "reference": "fe31b9948b271112ccbc4ba4890810d9b97daccd"
+            },
+            "require": {
+                "php": ">=5.6.0",
+                "psr/container": "^1.0 || ^2.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "4.*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Zalt\\Loader\\": "src"
+                }
+            },
+            "autoload-dev": {
+                "psr-0": {
+                    "Zalt_Loader_": "test",
+                    "Test1_": "test",
+                    "Test2_": "test",
+                    "Test3_": "test"
+                },
+                "psr-4": {
+                    "Zalt\\Loader\\": "test\\Zalt\\Loader",
+                    "Test1\\": "test\\Test1",
+                    "Test2\\": "test\\Test2",
+                    "Test3\\": "test\\Test3"
+                }
+            },
+            "authors": [
+                {
+                    "name": "Matijs de Jong",
+                    "email": "mjong@magnafacta.nl"
+                },
+                {
+                    "name": "Menno Dekker",
+                    "email": "menno.dekker@erasmusmc.nl"
+                }
+            ],
+            "description": "Zend Alternative Loader",
+            "time": "2022-07-26T13:58:12+00:00"
+        },
         {
             "name": "psr/container",
             "version": "dev-master",
@@ -608,12 +656,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/php-code-coverage.git",
-                "reference": "c450db218429fa4ff4af01f034c3fb54ea5b2600"
+                "reference": "676669da0e80f4ea8359bcc9b83a401d3e08b16c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/c450db218429fa4ff4af01f034c3fb54ea5b2600",
-                "reference": "c450db218429fa4ff4af01f034c3fb54ea5b2600",
+                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/676669da0e80f4ea8359bcc9b83a401d3e08b16c",
+                "reference": "676669da0e80f4ea8359bcc9b83a401d3e08b16c",
                 "shasum": ""
             },
             "require": {
@@ -677,7 +725,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2022-08-03T06:19:15+00:00"
+            "time": "2022-08-17T01:25:39+00:00"
         },
         {
             "name": "phpunit/php-file-iterator",
@@ -926,12 +974,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "83627ed9682037aa34a0d38a3307071393c85c1e"
+                "reference": "eb2e10e339d8149b6ec2665fd36e4e25aaa80828"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/83627ed9682037aa34a0d38a3307071393c85c1e",
-                "reference": "83627ed9682037aa34a0d38a3307071393c85c1e",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/eb2e10e339d8149b6ec2665fd36e4e25aaa80828",
+                "reference": "eb2e10e339d8149b6ec2665fd36e4e25aaa80828",
                 "shasum": ""
             },
             "require": {
@@ -1020,7 +1068,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2022-08-13T08:08:46+00:00"
+            "time": "2022-08-17T01:25:06+00:00"
         },
         {
             "name": "sebastian/cli-parser",
@@ -2097,7 +2145,9 @@
     ],
     "aliases": [],
     "minimum-stability": "dev",
-    "stability-flags": [],
+    "stability-flags": {
+        "magnafacta/zalt-loader": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {

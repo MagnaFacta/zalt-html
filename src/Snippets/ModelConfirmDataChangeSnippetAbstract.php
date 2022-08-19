@@ -3,27 +3,27 @@
 /**
  *
  *
- * @package    MUtil
+ * @package    Zalt
  * @subpackage Snippets
  * @author     Matijs de Jong <mjong@magnafacta.nl>
  * @copyright  Copyright (c) 2015 Erasmus MC
  * @license    New BSD License
  */
 
-namespace MUtil\Snippets;
+namespace Zalt\Snippets;
 
 use Psr\Cache\CacheItemPoolInterface;
 
 /**
  * A snippet asking for confirmation before performing a save of predertemined data
  *
- * @package    MUtil
+ * @package    Zalt
  * @subpackage Snippets
  * @copyright  Copyright (c) 2015 Erasmus MC
  * @license    New BSD License
- * @since      Class available since \MUtil version 1.7.2 30-sep-2015 18:49:24
+ * @since      Class available since \Zalt version 1.7.2 30-sep-2015 18:49:24
  */
-abstract class ModelConfirmDataChangeSnippetAbstract extends \MUtil\Snippets\ModelVerticalTableSnippetAbstract
+abstract class ModelConfirmDataChangeSnippetAbstract extends \Zalt\Snippets\ModelVerticalTableSnippetAbstract
 {
     /**
      * The action to go to when the user clicks 'No'.
@@ -140,7 +140,7 @@ abstract class ModelConfirmDataChangeSnippetAbstract extends \MUtil\Snippets\Mod
     /**
      * Creates the model
      *
-     * @return \MUtil\Model\ModelAbstract
+     * @return \Zalt\Model\ModelAbstract
      */
     // protected function createModel()
 
@@ -180,7 +180,7 @@ abstract class ModelConfirmDataChangeSnippetAbstract extends \MUtil\Snippets\Mod
      * When invalid data should result in an error, you can throw it
      * here but you can also perform the check in the
      * checkRegistryRequestsAnswers() function from the
-     * {@see \MUtil\Registry\TargetInterface}.
+     * {@see \Zalt\Registry\TargetInterface}.
      *
      * @return boolean
      */
@@ -218,7 +218,7 @@ abstract class ModelConfirmDataChangeSnippetAbstract extends \MUtil\Snippets\Mod
     /**
      * Set what to do when the form is 'finished'.
      *
-     * @return \MUtil\Snippets\ModelYesNoDeleteSnippetAbstract
+     * @return \Zalt\Snippets\ModelYesNoDeleteSnippetAbstract
      */
     protected function setAfterDeleteRoute()
     {
@@ -238,11 +238,11 @@ abstract class ModelConfirmDataChangeSnippetAbstract extends \MUtil\Snippets\Mod
      * Overrule this function to set the header differently, without
      * having to recode the core table building code.
      *
-     * @param \MUtil\Model\Bridge\VerticalTableBridge $bridge
-     * @param \MUtil\Model\ModelAbstract $model
+     * @param \Zalt\Model\Bridge\VerticalTableBridge $bridge
+     * @param \Zalt\Model\ModelAbstract $model
      * @return void
      */
-    protected function setShowTableFooter(\MUtil\Model\Bridge\VerticalTableBridge $bridge, \MUtil\Model\ModelAbstract $model)
+    protected function setShowTableFooter(\Zalt\Model\Bridge\VerticalTableBridge $bridge, \Zalt\Model\ModelAbstract $model)
     {
         $footer = $bridge->tfrow();
 

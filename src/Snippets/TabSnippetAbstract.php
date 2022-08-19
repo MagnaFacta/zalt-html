@@ -2,26 +2,26 @@
 
 /**
  *
- * @package    MUtil
+ * @package    Zalt
  * @subpackage Snippets
  * @author     Menoo Dekker <menno.dekker@erasmusmc.nl>
  * @copyright  Copyright (c) 2011 Erasmus MC
  * @license    New BSD License
  */
 
-namespace MUtil\Snippets;
+namespace Zalt\Snippets;
 
 /**
  * Abstract class for quickly creating a tabbed bar, or rather a div that contains a number
  * of links, adding specific classes for display.
  *
- * @package    MUtil
+ * @package    Zalt
  * @subpackage Snippets
  * @copyright  Copyright (c) 2011 Erasmus MC
  * @license    New BSD License
  * @since      Class available since version 1.1
  */
-abstract class TabSnippetAbstract extends \MUtil\Snippets\SnippetAbstract
+abstract class TabSnippetAbstract extends \Zalt\Snippets\SnippetAbstract
 {
     /**
      * Optional standard url parts
@@ -64,9 +64,9 @@ abstract class TabSnippetAbstract extends \MUtil\Snippets\SnippetAbstract
     protected $href = array();
 
     /**
-     * @var \MUtil\Request\RequestInfo
+     * @var \Zalt\Request\RequestInfo
      */
-    protected ?\MUtil\Request\RequestInfo $requestInfo = null;
+    protected ?\Zalt\Request\RequestInfo $requestInfo = null;
 
     /**
      *
@@ -116,7 +116,7 @@ abstract class TabSnippetAbstract extends \MUtil\Snippets\SnippetAbstract
      * This is a stub function either override getHtmlOutput() or override render()
      *
      * @param \Zend_View_Abstract $view Just in case it is needed here
-     * @return \MUtil\Html\HtmlInterface Something that can be rendered
+     * @return \Zalt\Html\HtmlInterface Something that can be rendered
      */
     public function getHtmlOutput(\Zend_View_Abstract $view)
     {
@@ -131,7 +131,7 @@ abstract class TabSnippetAbstract extends \MUtil\Snippets\SnippetAbstract
                 $this->href = $this->href + $this->baseUrl;
             }
 
-            $tabRow = \MUtil\Html::create()->ul();
+            $tabRow = \Zalt\Html::create()->ul();
 
             foreach ($tabs as $tabId => $content) {
 

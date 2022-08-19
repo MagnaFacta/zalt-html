@@ -3,37 +3,37 @@
 /**
  *
  *
- * @package    MUtil
+ * @package    Zalt
  * @subpackage Snippets
  * @author     Matijs de Jong <mjong@magnafacta.nl>
  * @copyright  Copyright (c) 2011 Erasmus MC
  * @license    New BSD License
  */
 
-namespace MUtil\Snippets\Standard;
+namespace Zalt\Snippets\Standard;
 
 /**
  * Displays multiple items from a model in a tabel by row using
  * the model set through the $model snippet parameter.
  *
- * @package    MUtil
+ * @package    Zalt
  * @subpackage Snippets
  * @copyright  Copyright (c) 2011 Erasmus MC
  * @license    New BSD License
  * @since      Class available since version 1.2
  */
-class ModelTableSnippet extends \MUtil\Snippets\ModelTableSnippetAbstract
+class ModelTableSnippet extends \Zalt\Snippets\ModelTableSnippetAbstract
 {
     /**
      *
-     * @var \MUtil\Model\ModelAbstract
+     * @var \Zalt\Model\ModelAbstract
      */
     protected $model;
 
     /**
      * Creates the model
      *
-     * @return \MUtil\Model\ModelAbstract
+     * @return \Zalt\Model\ModelAbstract
      */
     protected function createModel()
     {

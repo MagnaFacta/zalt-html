@@ -3,25 +3,25 @@
 /**
  *
  *
- * @package    MUtil
+ * @package    Zalt
  * @subpackage Snippets
  * @author     Matijs de Jong <mjong@magnafacta.nl>
  * @copyright  Copyright (c) 201e Erasmus MC
  * @license    New BSD License
  */
 
-namespace MUtil\Snippets\Standard;
+namespace Zalt\Snippets\Standard;
 
 /**
  *
  *
- * @package    MUtil
+ * @package    Zalt
  * @subpackage Snippets
  * @copyright  Copyright (c) 2013 Erasmus MC
  * @license    New BSD License
- * @since      Class available since \MUtil version 1.3
+ * @since      Class available since \Zalt version 1.3
  */
-class TabSnippetGeneric extends \MUtil\Snippets\TabSnippetAbstract
+class TabSnippetGeneric extends \Zalt\Snippets\TabSnippetAbstract
 {
     /**
      *

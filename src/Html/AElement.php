@@ -147,9 +147,9 @@ class AElement extends \Zalt\Html\HtmlElement
      * @param mixed $argArray
      * @return \self
      */
-    public static function email($email, ...$argArray)
+    public static function email($email, ...$args)
     {
-        $args = Ra::args(func_get_args(), 1);
+        $args = Ra::args($args);
         if (isset($args['href'])) {
             $href = $args['href'];
             unset($args['href']);
@@ -170,18 +170,18 @@ class AElement extends \Zalt\Html\HtmlElement
     /**
      * Return a link object when $iff is true
      *
-     * @param \Zalt\Late $iff The test
-     * @param mixed $aArgs Arguments when the test is true
-     * @param mixed $spanArgs Arguments when the test is false
+     * @param \Zalt\Late\LateCall $iff The test
+     * @param array $aArgs Arguments when the test is true
+     * @param array $spanArgs Arguments when the test is false
      * @return mixed
      */
-    public static function iflink($iff, $aArgs, $spanArgs = null)
+    public static function iflink($iff, array $aArgs, array $spanArgs = [])
     {
         if ($iff instanceof LateInterface) {
             if ($spanArgs) {
                 return Late::iff($iff, Html::create('a', $aArgs), Html::create('span', $spanArgs, array('renderWithoutContent' => false)));
             } else {
-                return late::iff($iff, Html::create('a', $aArgs));
+                return Late::iff($iff, Html::create('a', $aArgs));
             }
         }
         if ($iff) {
@@ -195,17 +195,16 @@ class AElement extends \Zalt\Html\HtmlElement
      * Return a mailto link if $email exists and other wise return nothing.
      *
      * @param mixed $email
-     * @param mixed $arg_array
+     * @param array $args
      * @return mixed
      */
-    public static function ifmail($email, $arg_array = null)
+    public static function ifmail($email, ...$args)
     {
-        $args = func_get_args();
         if ($email instanceof LateInterface) {
             return Late::iff($email, call_user_func_array([self::class, 'email'], $args));
         }
         if ($email) {
-            return self::email($args);
+            return self::email($email, ...$args);
         }
         return null;
     }

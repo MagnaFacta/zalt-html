@@ -2,25 +2,25 @@
 
 /**
  *
- * @package    MUtil
+ * @package    Zalt
  * @subpackage YesNoDeleteSnippet
  * @author     Matijs de Jong <mjong@magnafacta.nl>
  * @copyright  Copyright (c) 2016 Erasmus MC
  * @license    New BSD License
  */
 
-namespace MUtil\Snippets;
+namespace Zalt\Snippets;
 
 /**
  *
  *
- * @package    MUtil
+ * @package    Zalt
  * @subpackage YesNoDeleteSnippet
  * @copyright  Copyright (c) 2016 Erasmus MC
  * @license    New BSD License
- * @since      Class available since \MUtil version 1.8.2 Sep 7, 2016 5:39:53 PM
+ * @since      Class available since \Zalt version 1.8.2 Sep 7, 2016 5:39:53 PM
  */
-abstract class YesNoDeleteSnippetAbstract extends \MUtil\Snippets\SnippetAbstract
+abstract class YesNoDeleteSnippetAbstract extends \Zalt\Snippets\SnippetAbstract
 {
     /**
      * The controller to go to when the user clicks 'No'.
@@ -83,9 +83,9 @@ abstract class YesNoDeleteSnippetAbstract extends \MUtil\Snippets\SnippetAbstrac
     protected $deleteQuestion;
 
     /**
-     * @var \MUtil\Request\RequestInfo
+     * @var \Zalt\Request\RequestInfo
      */
-    protected ?\MUtil\Request\RequestInfo $requestInfo = null;
+    protected ?\Zalt\Request\RequestInfo $requestInfo = null;
 
     /**
      * Called after the check that all required registry values
@@ -113,7 +113,7 @@ abstract class YesNoDeleteSnippetAbstract extends \MUtil\Snippets\SnippetAbstrac
      * This is a stub function either override getHtmlOutput() or override render()
      *
      * @param \Zend_View_Abstract $view Just in case it is needed here
-     * @return \MUtil\Html\HtmlInterface Something that can be rendered
+     * @return \Zalt\Html\HtmlInterface Something that can be rendered
      */
     public function getHtmlOutput(\Zend_View_Abstract $view)
     {
@@ -175,7 +175,7 @@ abstract class YesNoDeleteSnippetAbstract extends \MUtil\Snippets\SnippetAbstrac
      * When invalid data should result in an error, you can throw it
      * here but you can also perform the check in the
      * checkRegistryRequestsAnswers() function from the
-     * {@see \MUtil\Registry\TargetInterface}.
+     * {@see \Zalt\Registry\TargetInterface}.
      *
      * @return boolean
      */

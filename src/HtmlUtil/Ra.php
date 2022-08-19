@@ -55,14 +55,14 @@ class Ra
      * A class list with function that convert data to an array
      *
      * @var \Zalt\HtmlUtil\ClassList
-     * /
+     */
     private static $_toArrayConverter;
 
     /**
      * Maximum number of steps to convert to an array (because of loops)
      *
      * @var int
-     * /
+     */
     public static $toArrayConverterLoopLimit = 10;
 
     /**

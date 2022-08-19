@@ -2,26 +2,26 @@
 
 /**
  *
- * @package    MUtil
+ * @package    Zalt
  * @subpackage Snippets
  * @author     Matijs de Jong <mjong@magnafacta.nl>
  * @copyright  Copyright (c) 2011 Erasmus MC
  * @license    New BSD License
  */
 
-namespace MUtil\Snippets;
+namespace Zalt\Snippets;
 
 /**
  * Outputs the data supplied through the $data or $repeater parameter
  * in a simple standard Html table.
  *
- * @package    MUtil
+ * @package    Zalt
  * @subpackage Snippets
  * @copyright  Copyright (c) 2011 Erasmus MC
  * @license    New BSD License
  * @since      Class available since version 1.1
  */
-class TableSnippetAbstract extends \MUtil\Snippets\SnippetAbstract
+class TableSnippetAbstract extends \Zalt\Snippets\SnippetAbstract
 {
     /**
      * Optional, instead of repeater array containing the data to show
@@ -38,7 +38,7 @@ class TableSnippetAbstract extends \MUtil\Snippets\SnippetAbstract
     /**
      * REQUIRED, but can be derived from $this->data
      *
-     * @var \MUtil\Lazy\RepeatableInterface
+     * @var \Zalt\Lazy\RepeatableInterface
      */
     protected $repeater;
 
@@ -47,9 +47,9 @@ class TableSnippetAbstract extends \MUtil\Snippets\SnippetAbstract
      *
      * This is a default implementation, overrule at will
      *
-     * @param \MUtil\Html\TableElement $table
+     * @param \Zalt\Html\TableElement $table
      */
-    protected function addColumns(\MUtil\Html\TableElement $table)
+    protected function addColumns(\Zalt\Html\TableElement $table)
     {
         if ($this->data) {
             $row = reset($this->data);
@@ -69,11 +69,11 @@ class TableSnippetAbstract extends \MUtil\Snippets\SnippetAbstract
      * This is a stub function either override getHtmlOutput() or override render()
      *
      * @param \Zend_View_Abstract $view Just in case it is needed here
-     * @return \MUtil\Html\HtmlInterface Something that can be rendered
+     * @return \Zalt\Html\HtmlInterface Something that can be rendered
      */
     public function getHtmlOutput(\Zend_View_Abstract $view)
     {
-        $table = new \MUtil\Html\TableElement($this->repeater);
+        $table = new \Zalt\Html\TableElement($this->repeater);
 
         if ($this->onEmpty) {
             $table->setOnEmpty($this->onEmpty);
@@ -86,7 +86,7 @@ class TableSnippetAbstract extends \MUtil\Snippets\SnippetAbstract
             $table->appendAttrib('class', $this->class);
         }
 
-        $container = \MUtil\Html::create()->div(array('class' => 'table-container'));
+        $container = \Zalt\Html::create()->div(array('class' => 'table-container'));
         $container[] = $table;
 
         return $container;
@@ -99,14 +99,14 @@ class TableSnippetAbstract extends \MUtil\Snippets\SnippetAbstract
      * When invalid data should result in an error, you can throw it
      * here but you can also perform the check in the
      * checkRegistryRequestsAnswers() function from the
-     * {@see \MUtil\Registry\TargetInterface}.
+     * {@see \Zalt\Registry\TargetInterface}.
      *
      * @return boolean
      */
     public function hasHtmlOutput()
     {
         if (! $this->repeater) {
-            $this->repeater = \MUtil\Lazy::repeat($this->data);
+            $this->repeater = \Zalt\Lazy::repeat($this->data);
         } else {
             // We do not know whether there is any link between
             // the data and the repeater, so do not use the data

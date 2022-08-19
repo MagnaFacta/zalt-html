@@ -13,6 +13,7 @@ namespace Zalt\Html;
 
 use PHPUnit\Framework\TestCase;
 use Zalt\HtmlUtil\MultiWrapper;
+use Zalt\Late\Late;
 use Zalt\Late\LateCall;
 
 /**
@@ -36,13 +37,25 @@ class HtmlCreatorTest extends TestCase
             ['dl', DlElement::class, ['content', 'class' => 'dl']],
             ['dt', DtElement::class, ['content', 'class' => 'dt']],
             ['echo', TableElement::class, [new \DateTime()], 'table'],
+            ['email', AElement::class, ['me@mo.ma', 'bla'], 'a'],
             ['h1', HnElement::class],
             ['h2', HnElement::class],
             ['h3', HnElement::class],
             ['h4', HnElement::class],
             ['h5', HnElement::class],
             ['h6', HnElement::class],
+            ['iflink', AElement::class, [true, ['href' => 'https://go.url', 'link'], ['nolink']], 'a'],
+            ['iflink', HtmlElement::class, [false, ['href' => 'https://go.url', 'link'], ['nolink']], 'span'],
+            ['ifmail', AElement::class, ['me@mo.ma', 'mail'], 'a'],
+            ['iframe', IFrame::class, ['src'=> 'https://go.url']],
+            ['img', ImgElement::class, ['delete.png']],
+            ['img', ImgElement::class, ['blank.png']],
+            ['img', ImgElement::class, ['nope.png']],
+            ['img', ImgElement::class, [null]],
+            ['menu', ListElement::class, [['class' => 'menu', 'item1']]],
+            ['ol', ListElement::class, [['class' => 'num-list', 'item1']]],
             ['p', HtmlElement::class],
+            ['ul', ListElement::class, [['class' => 'bullet-list', 'item1']]],
         ]; 
     }
 
@@ -51,7 +64,17 @@ class HtmlCreatorTest extends TestCase
         return [
             ['array', Sequence::class, ['a', 'b']],
             ['call', LateCall::class, ['time']],
+            ['if', LateCall::class, ['time', 'a', 'b']],
+            ['iflink', LateCall::class, [Late::call('time'), ['href' => 'https://go.url', 'link'], ['nolink']]],
+            ['ifmail', LateCall::class, [Late::call('sprintf', '%s', 'me@mo.ma'), 'mail']],
+            ['ifmail', null, [null, 'mail']],
+            ['raw', Raw::class, ['test']],
         ];
+    }
+
+    public function setUp(): void
+    {
+        ImgElement::addImageDir('icons');
     }
 
     public function testColGroups()
@@ -154,13 +177,28 @@ class HtmlCreatorTest extends TestCase
         $this->assertEquals($tagName, $html->tagName);
     }
 
+    public function testImageDirs()
+    {
+        $imagesDirs = ImgElement::getImageDirs();
+        $this->assertCount(3, $imagesDirs);
+
+        $this->assertEquals('/images/', ImgElement::getImageDir('delete.png'));
+        $this->assertEquals('/images/', ImgElement::getImageDir('info.png'));
+        $this->assertEquals('/icons/', ImgElement::getImageDir('blank.png'));
+        $this->assertEquals('/icons/', ImgElement::getImageDir('empty.png'));
+    }
+    
     /**
      * @dataProvider otherCreationProvider
      */
     public function testOtherCreation($tagName, $className, array $params = [])
     {
         $html = Html::create($tagName, ...$params);
-        $this->assertInstanceOf($className, $html);
+        if (null === $className) {
+            $this->assertNull($html);   
+        } else {
+            $this->assertInstanceOf($className, $html);
+        }
     }
     
     /**

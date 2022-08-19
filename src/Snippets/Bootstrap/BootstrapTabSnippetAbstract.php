@@ -3,24 +3,24 @@
 /**
  *
  *
- * @package    MUtil
+ * @package    Zalt
  * @subpackage Snippets_Bootstrap
  * @author     Matijs de Jong <mjong@magnafacta.nl>
  * @copyright  Copyright (c) 2014 Erasmus MC
  * @license    New BSD License
  */
 
-namespace MUtil\Snippets\Bootstrap;
+namespace Zalt\Snippets\Bootstrap;
 
 /**
  *
- * @package    MUtil
+ * @package    Zalt
  * @subpackage Snippets_Bootstrap
  * @copyright  Copyright (c) 2014 Erasmus MC
  * @license    New BSD License
  * @since      Class available since version 1.5
  */
-abstract class BootstrapTabSnippetAbstract extends \MUtil\Snippets\TabSnippetAbstract
+abstract class BootstrapTabSnippetAbstract extends \Zalt\Snippets\TabSnippetAbstract
 {
     /**
      *
@@ -34,7 +34,7 @@ abstract class BootstrapTabSnippetAbstract extends \MUtil\Snippets\TabSnippetAbs
      * This is a stub function either override getHtmlOutput() or override render()
      *
      * @param \Zend_View_Abstract $view Just in case it is needed here
-     * @return \MUtil\Html\HtmlInterface Something that can be rendered
+     * @return \Zalt\Html\HtmlInterface Something that can be rendered
      */
     public function getHtmlOutput(\Zend_View_Abstract $view)
     {
@@ -49,7 +49,7 @@ abstract class BootstrapTabSnippetAbstract extends \MUtil\Snippets\TabSnippetAbs
                 $this->href = $this->href + $this->baseUrl;
             }
 
-            $tabRow = \MUtil\Html::create()->ul();
+            $tabRow = \Zalt\Html::create()->ul();
             $tabRow->class = $this->tabClass;
 
             foreach ($tabs as $tabId => $content) {

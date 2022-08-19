@@ -2,14 +2,14 @@
 
 /**
  *
- * @package    MUtil
+ * @package    Zalt
  * @subpackage Snippets
  * @author     Michiel Rooks <info@touchdownconsulting.nl>
  * @copyright  Copyright (c) 2011 Erasmus MC
  * @license    New BSD License
  */
 
-namespace MUtil\Snippets\Standard;
+namespace Zalt\Snippets\Standard;
 
 /**
  * Extends the TableSnippet so we can select which fields from the data we want to show
@@ -21,13 +21,13 @@ namespace MUtil\Snippets\Standard;
  *
  * Or set the $columns snippet parameter.
  *
- * @package    MUtil
+ * @package    Zalt
  * @subpackage Snippets
  * @copyright  Copyright (c) 2011 Erasmus MC
  * @license    New BSD License
  * @since      Class available since version 1.3
  */
-class SelectiveTableSnippet extends \MUtil\Snippets\TableSnippetAbstract
+class SelectiveTableSnippet extends \Zalt\Snippets\TableSnippetAbstract
 {
     /**
      *
@@ -38,9 +38,9 @@ class SelectiveTableSnippet extends \MUtil\Snippets\TableSnippetAbstract
     /**
      * Add the columns to the table
      *
-     * @param \MUtil\Html\TableElement $table
+     * @param \Zalt\Html\TableElement $table
      */
-    protected function addColumns(\MUtil\Html\TableElement $table)
+    protected function addColumns(\Zalt\Html\TableElement $table)
     {
         foreach ($this->columns as $name => $label) {
             $table->addColumn($this->repeater->$name, $label);
@@ -54,7 +54,7 @@ class SelectiveTableSnippet extends \MUtil\Snippets\TableSnippetAbstract
      * When invalid data should result in an error, you can throw it
      * here but you can also perform the check in the
      * checkRegistryRequestsAnswers() function from the
-     * {@see \MUtil\Registry\TargetInterface}.
+     * {@see \Zalt\Registry\TargetInterface}.
      *
      * @return boolean
      */

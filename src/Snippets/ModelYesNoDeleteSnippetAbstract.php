@@ -3,27 +3,27 @@
 /**
  *
  *
- * @package    MUtil
+ * @package    Zalt
  * @subpackage Snippets
  * @author     Matijs de Jong <mjong@magnafacta.nl>
  * @copyright  Copyright (c) 2011 Erasmus MC
  * @license    New BSD License
  */
 
-namespace MUtil\Snippets;
+namespace Zalt\Snippets;
 
 /**
  * Ask Yes/No conformation for deletion and deletes item when confirmed.
  *
  * Can be used for other uses than delete by overriding performAction().
  *
- * @package    MUtil
+ * @package    Zalt
  * @subpackage Snippets
  * @copyright  Copyright (c) 2011 Erasmus MC
  * @license    New BSD License
  * @since      Class available since version 1.4.4
  */
-abstract class ModelYesNoDeleteSnippetAbstract extends \MUtil\Snippets\ModelVerticalTableSnippetAbstract
+abstract class ModelYesNoDeleteSnippetAbstract extends \Zalt\Snippets\ModelVerticalTableSnippetAbstract
 {
     /**
      * The action to go to when the user clicks 'No'.
@@ -162,7 +162,7 @@ abstract class ModelYesNoDeleteSnippetAbstract extends \MUtil\Snippets\ModelVert
      * When invalid data should result in an error, you can throw it
      * here but you can also perform the check in the
      * checkRegistryRequestsAnswers() function from the
-     * {@see \MUtil\Registry\TargetInterface}.
+     * {@see \Zalt\Registry\TargetInterface}.
      *
      * @return boolean
      */
@@ -187,7 +187,7 @@ abstract class ModelYesNoDeleteSnippetAbstract extends \MUtil\Snippets\ModelVert
     protected function performAction()
     {
         $model = $this->getModel();
-        // \MUtil\EchoOut\EchoOut::track($model->getFilter());
+        // \Zalt\EchoOut\EchoOut::track($model->getFilter());
         $model->delete();
 
         $this->setAfterDeleteRoute();
@@ -200,7 +200,7 @@ abstract class ModelYesNoDeleteSnippetAbstract extends \MUtil\Snippets\ModelVert
     /**
      * Set what to do when the form is 'finished'.
      *
-     * @return \MUtil\Snippets\ModelYesNoDeleteSnippetAbstract
+     * @return \Zalt\Snippets\ModelYesNoDeleteSnippetAbstract
      */
     protected function setAfterDeleteRoute()
     {
@@ -219,11 +219,11 @@ abstract class ModelYesNoDeleteSnippetAbstract extends \MUtil\Snippets\ModelVert
      * Overrule this function to set the header differently, without
      * having to recode the core table building code.
      *
-     * @param \MUtil\Model\Bridge\VerticalTableBridge $bridge
-     * @param \MUtil\Model\ModelAbstract $model
+     * @param \Zalt\Model\Bridge\VerticalTableBridge $bridge
+     * @param \Zalt\Model\ModelAbstract $model
      * @return void
      */
-    protected function setShowTableFooter(\MUtil\Model\Bridge\VerticalTableBridge $bridge, \MUtil\Model\ModelAbstract $model)
+    protected function setShowTableFooter(\Zalt\Model\Bridge\VerticalTableBridge $bridge, \Zalt\Model\ModelAbstract $model)
     {
         $footer = $bridge->tfrow();
 

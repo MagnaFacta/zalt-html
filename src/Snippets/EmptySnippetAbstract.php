@@ -4,30 +4,30 @@
  *
  * Minimal implementation of Snippet interface.
  *
- * @package    MUtil
+ * @package    Zalt
  * @subpackage Snippets
  * @author     Matijs de Jong <mjong@magnafacta.nl>
  * @copyright  Copyright (c) 2011 Erasmus MC
  * @license    New BSD License
  */
 
-namespace MUtil\Snippets;
+namespace Zalt\Snippets;
 
 /**
  * Minimal implementation of Snippet interface.
  *
  * Use this class for a quick implementation when SnippetAbstract feels to heavvy
  *
- * @see \MUtil\Snippets\SnippetAbstract
+ * @see \Zalt\Snippets\SnippetAbstract
  *
- * @package    MUtil
+ * @package    Zalt
  * @subpackage Snippets
  * @copyright  Copyright (c) 2011 Erasmus MC
  * @license    New BSD License
  * @since      Class available since version 1.4.2
  */
-abstract class EmptySnippetAbstract extends \MUtil\Registry\TargetAbstract
-    implements \MUtil\Snippets\SnippetInterface
+abstract class EmptySnippetAbstract extends \Zalt\Registry\TargetAbstract
+    implements \Zalt\Snippets\SnippetInterface
 {
     /**
      * When hasHtmlOutput() is false a snippet code user should check
@@ -54,7 +54,7 @@ abstract class EmptySnippetAbstract extends \MUtil\Registry\TargetAbstract
      * When invalid data should result in an error, you can throw it
      * here but you can also perform the check in the
      * checkRegistryRequestsAnswers() function from the
-     * {@see \MUtil\Registry\TargetInterface}.
+     * {@see \Zalt\Registry\TargetInterface}.
      *
      * @return boolean
      */

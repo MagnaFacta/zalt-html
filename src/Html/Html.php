@@ -12,6 +12,8 @@
 namespace Zalt\Html;
 
 use Zalt\HtmlUtil\Ra;
+use Zalt\Snippets\SnippetInterface;
+use Zalt\SnippetsLoader\SnippetLoaderInterface;
 
 /**
  * Collections of static function for using the Html subpackage.
@@ -187,12 +189,12 @@ class Html
     /**
      * Get the snippet loader for use by self::snippet().
      *
-     * @return \Zalt\Snippets\SnippetLoader
+     * @return SnippetLoader
      */
     public static function getSnippetLoader()
     {
         if (! self::$_snippetLoader) {
-            self::setSnippetLoader(new \Zalt\Snippets\SnippetLoader());
+            self::setSnippetLoader(new SnippetLoader());
         }
         return self::$_snippetLoader;
     }
@@ -345,10 +347,10 @@ class Html
     /**
      * Set the snippet loader for use by self::snippet().
      *
-     * @param \Zalt\Snippets\SnippetLoaderInterface $snippetLoader
-     * @return \Zalt\Snippets\SnippetLoader
+     * @param \Zalt\SnippetsLoader\SnippetLoaderInterface $snippetLoader
+     * @return \Zalt\SnippetsLoader\SnippetLoader
      */
-    public static function setSnippetLoader(\Zalt\Snippets\SnippetLoaderInterface $snippetLoader)
+    public static function setSnippetLoader(SnippetLoaderInterface $snippetLoader): SnippetLoader
     {
         self::$_snippetLoader = $snippetLoader;
         return self::$_snippetLoader;
@@ -360,13 +362,9 @@ class Html
      * @param Ra::pairs $parameter_value_pairs Optional extra snippets
      * @return \Zalt\Snippets\SnippetInterface
      */
-    public static function snippet($name, $parameter_value_pairs = null)
+    public static function snippet($name, ...$args): ?SnippetInterface
     {
-        if (func_num_args() > 1) {
-            $extraSourceParameters = Ra::pairs(func_get_args(), 1);
-        } else {
-            $extraSourceParameters = array();
-        }
+        $extraSourceParameters = Ra::pairs($args);
 
         if (is_array($name)) {
             list($names, $params) = Ra::keySplit($name);
@@ -388,6 +386,7 @@ class Html
         if ($snippet->hasHtmlOutput()) {
             return $snippet;
         }
+        return null;
     }
 
     /**

@@ -2,28 +2,28 @@
 
 /**
  *
- * @package    MUtil
+ * @package    Zalt
  * @subpackage Snippets
  * @author     Matijs de Jong <mjong@magnafacta.nl>
  * @copyright  Copyright (c) 2016, Erasmus MC and MagnaFacta B.V.
  * @license    New BSD License
  */
 
-namespace MUtil\Snippets;
+namespace Zalt\Snippets;
 
 /**
  *
- * @package    MUtil
+ * @package    Zalt
  * @subpackage Snippets
  * @copyright  Copyright (c) 2016, Erasmus MC and MagnaFacta B.V.
  * @license    New BSD License
  * @since      Class available since version 1.8.2 Jan 12, 2017 10:59:54 AM
  */
-abstract class MultiRowModelFormAbstract extends \MUtil\Snippets\ModelFormSnippetAbstract
+abstract class MultiRowModelFormAbstract extends \Zalt\Snippets\ModelFormSnippetAbstract
 {
     /**
      *
-     * @var \MUtil\Form\Element\Table
+     * @var \Zalt\Form\Element\Table
      */
     protected $formTableElement;
 
@@ -47,7 +47,7 @@ abstract class MultiRowModelFormAbstract extends \MUtil\Snippets\ModelFormSnippe
         $bridge    = $model->getBridgeFor('form', new \Gems\Form\SubForm());
         $newData   = $this->addFormElements($bridge, $model);
 
-        $this->formTableElement = new \MUtil\Form\Element\Table(
+        $this->formTableElement = new \Zalt\Form\Element\Table(
                 $bridge->getForm(),
                 $model->getName(),
                 array('class' => $this->editTableClass)
@@ -69,7 +69,7 @@ abstract class MultiRowModelFormAbstract extends \MUtil\Snippets\ModelFormSnippe
         $model = $this->getModel();
         $mname = $model->getName();
 
-        // \MUtil\EchoOut\EchoOut::track($model->getFilter());
+        // \Zalt\EchoOut\EchoOut::track($model->getFilter());
 
         if ($this->requestInfo->isPost()) {
             $formData = $this->requestInfo->getRequestPostParams();
@@ -98,7 +98,7 @@ abstract class MultiRowModelFormAbstract extends \MUtil\Snippets\ModelFormSnippe
             }
         }
 
-        // \MUtil\EchoOut\EchoOut::track($this->formData);
+        // \Zalt\EchoOut\EchoOut::track($this->formData);
     }
 
     /**
@@ -120,7 +120,7 @@ abstract class MultiRowModelFormAbstract extends \MUtil\Snippets\ModelFormSnippe
         $model = $this->getModel();
         $mname = $model->getName();
 
-        // \MUtil\EchoOut\EchoOut::track($this->formData[$mname]);
+        // \Zalt\EchoOut\EchoOut::track($this->formData[$mname]);
         $this->formData[$mname] = $model->saveAll($this->formData[$mname]);
 
         $changed = $model->getChanged();

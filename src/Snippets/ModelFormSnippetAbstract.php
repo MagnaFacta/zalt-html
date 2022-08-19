@@ -2,14 +2,14 @@
 
 /**
  *
- * @package    MUtil
+ * @package    Zalt
  * @subpackage Snippets
  * @author     Matijs de Jong <mjong@magnafacta.nl>
  * @copyright  Copyright (c) 2011 Erasmus MC
  * @license    New BSD License
  */
 
-namespace MUtil\Snippets;
+namespace Zalt\Snippets;
 
 use Mezzio\Csrf\CsrfGuardInterface;
 
@@ -23,13 +23,13 @@ use Mezzio\Csrf\CsrfGuardInterface;
  *
  * @see ModelFormSnippet
  *
- * @package    MUtil
+ * @package    Zalt
  * @subpackage Snippets
  * @copyright  Copyright (c) 2011 Erasmus MC
  * @license    New BSD License
  * @since      Class available since version 1.4
  */
-abstract class ModelFormSnippetAbstract extends \MUtil\Snippets\ModelSnippetAbstract
+abstract class ModelFormSnippetAbstract extends \Zalt\Snippets\ModelSnippetAbstract
 {
     /**
      * Optional csrf element
@@ -117,10 +117,10 @@ abstract class ModelFormSnippetAbstract extends \MUtil\Snippets\ModelSnippetAbst
 
     /**
      * As it is better for translation utilities to set the labels etc. translated,
-     * the \MUtil default is to disable translation.
+     * the \Zalt default is to disable translation.
      *
      * However, this also disables the translation of validation messages, which we
-     * cannot set translated. The \MUtil form is extended so it can make this switch.
+     * cannot set translated. The \Zalt form is extended so it can make this switch.
      *
      * @var boolean True
      */
@@ -205,10 +205,10 @@ abstract class ModelFormSnippetAbstract extends \MUtil\Snippets\ModelSnippetAbst
      * Overrule this function to add different elements to the browse table, without
      * having to recode the core table building code.
      *
-     * @param \MUtil\Model\Bridge\FormBridgeInterface $bridge
-     * @param \MUtil\Model\ModelAbstract $model
+     * @param \Zalt\Model\Bridge\FormBridgeInterface $bridge
+     * @param \Zalt\Model\ModelAbstract $model
      */
-    protected function addFormElements(\MUtil\Model\Bridge\FormBridgeInterface $bridge, \MUtil\Model\ModelAbstract $model)
+    protected function addFormElements(\Zalt\Model\Bridge\FormBridgeInterface $bridge, \Zalt\Model\ModelAbstract $model)
     {
         //Get all elements in the model if not already done
         $this->initItems();
@@ -220,12 +220,12 @@ abstract class ModelFormSnippetAbstract extends \MUtil\Snippets\ModelSnippetAbst
     /**
      * Add items to the bridge, and remove them from the items array
      *
-     * @param \MUtil\Model\Bridge\FormBridgeInterface $bridge
+     * @param \Zalt\Model\Bridge\FormBridgeInterface $bridge
      * @param string $element1
      *
      * @return void
      */
-    protected function addItems(\MUtil\Model\Bridge\FormBridgeInterface $bridge, $element1)
+    protected function addItems(\Zalt\Model\Bridge\FormBridgeInterface $bridge, $element1)
     {
         $args = func_get_args();
         if (count($args)<2) {
@@ -233,7 +233,7 @@ abstract class ModelFormSnippetAbstract extends \MUtil\Snippets\ModelSnippetAbst
         }
 
         array_shift($args); // Remove bridge
-        $elements = \MUtil\Ra::flatten($args);
+        $elements = \Zalt\Ra::flatten($args);
         $model    = $this->getModel();
 
         //Remove the elements from the _items variable
@@ -338,7 +338,7 @@ abstract class ModelFormSnippetAbstract extends \MUtil\Snippets\ModelSnippetAbst
      */
     protected function createForm($options = null)
     {
-        $form = new \MUtil\Form($options);
+        $form = new \Zalt\Form($options);
         $form->activateBootstrap();
         return $form;
     }
@@ -358,7 +358,7 @@ abstract class ModelFormSnippetAbstract extends \MUtil\Snippets\ModelSnippetAbst
      * This is a stub function either override getHtmlOutput() or override render()
      *
      * @param \Zend_View_Abstract $view Just in case it is needed here
-     * @return \MUtil\Html\HtmlInterface Something that can be rendered
+     * @return \Zalt\Html\HtmlInterface Something that can be rendered
      */
     public function getHtmlOutput(\Zend_View_Abstract $view)
     {
@@ -421,7 +421,7 @@ abstract class ModelFormSnippetAbstract extends \MUtil\Snippets\ModelSnippetAbst
      * When invalid data should result in an error, you can throw it
      * here but you can also perform the check in the
      * checkRegistryRequestsAnswers() function from the
-     * {@see \MUtil\Registry\TargetInterface}.
+     * {@see \Zalt\Registry\TargetInterface}.
      *
      * @return boolean
      */
@@ -599,7 +599,7 @@ abstract class ModelFormSnippetAbstract extends \MUtil\Snippets\ModelSnippetAbst
     /**
      * Set what to do when the form is 'finished'.
      *
-     * @return \MUtil\Snippets\ModelFormSnippetAbstract (continuation pattern)
+     * @return \Zalt\Snippets\ModelFormSnippetAbstract (continuation pattern)
      */
     protected function setAfterSaveRoute()
     {
@@ -630,7 +630,7 @@ abstract class ModelFormSnippetAbstract extends \MUtil\Snippets\ModelSnippetAbst
      */
     protected function validateForm()
     {
-        // Note we use an \MUtil\Form
+        // Note we use an \Zalt\Form
         return $this->_form->isValid($this->formData, $this->disableValidatorTranslation);
     }
 }

@@ -2,30 +2,30 @@
 
 /**
  *
- * @package    MUtil
+ * @package    Zalt
  * @subpackage Snippets
  * @author     Matijs de Jong <mjong@magnafacta.nl>
  * @copyright  Copyright (c) 2011 Erasmus MC
  * @license    New BSD License
  */
 
-namespace MUtil\Snippets;
+namespace Zalt\Snippets;
 
 /**
  * Contains base functionality to use a model in a snippet.
  *
  * A snippet is a piece of html output that is reused on multiple places in the code.
  *
- * Variables are intialized using the {@see \MUtil\Registry\TargetInterface} mechanism.
+ * Variables are intialized using the {@see \Zalt\Registry\TargetInterface} mechanism.
  * Description of ModelSnippet
  *
- * @package    MUtil
+ * @package    Zalt
  * @subpackage Snippets
  * @copyright  Copyright (c) 2011 Erasmus MC
  * @license    New BSD License
  * @since      Class available since version 1.1
  */
-abstract class ModelSnippetAbstract extends \MUtil\Snippets\SnippetAbstract
+abstract class ModelSnippetAbstract extends \Zalt\Snippets\SnippetAbstract
 {
     /**
      * Set a fixed model filter.
@@ -48,7 +48,7 @@ abstract class ModelSnippetAbstract extends \MUtil\Snippets\SnippetAbstract
     /**
      * The model, use $this->getModel() to fill
      *
-     * @var \MUtil\Model\ModelAbstract
+     * @var \Zalt\Model\ModelAbstract
      */
     private $_model;
 
@@ -79,7 +79,7 @@ abstract class ModelSnippetAbstract extends \MUtil\Snippets\SnippetAbstract
      */
     public $removePost = true;
 
-    protected ?\MUtil\Request\RequestInfo $requestInfo = null;
+    protected ?\Zalt\Request\RequestInfo $requestInfo = null;
 
     /**
      * Searchfilter to use including model sorts, etcc..
@@ -108,14 +108,14 @@ abstract class ModelSnippetAbstract extends \MUtil\Snippets\SnippetAbstract
     /**
      * Creates the model
      *
-     * @return \MUtil\Model\ModelAbstract
+     * @return \Zalt\Model\ModelAbstract
      */
     abstract protected function createModel();
 
     /**
      * Returns the model, always use this function
      *
-     * @return \MUtil\Model\ModelAbstract
+     * @return \Zalt\Model\ModelAbstract
      */
     protected function getModel()
     {
@@ -135,7 +135,7 @@ abstract class ModelSnippetAbstract extends \MUtil\Snippets\SnippetAbstract
      * When invalid data should result in an error, you can throw it
      * here but you can also perform the check in the
      * checkRegistryRequestsAnswers() function from the
-     * {@see \MUtil\Registry\TargetInterface}.
+     * {@see \Zalt\Registry\TargetInterface}.
      *
      * @return boolean
      */
@@ -147,9 +147,9 @@ abstract class ModelSnippetAbstract extends \MUtil\Snippets\SnippetAbstract
     /**
      * Default processing of $model from standard settings
      *
-     * @param \MUtil\Model\ModelAbstract $model
+     * @param \Zalt\Model\ModelAbstract $model
      */
-    protected final function prepareModel(\MUtil\Model\ModelAbstract $model)
+    protected final function prepareModel(\Zalt\Model\ModelAbstract $model)
     {
         if ($this->sortParamAsc) {
             $model->setSortParamAsc($this->sortParamAsc);
@@ -177,9 +177,9 @@ abstract class ModelSnippetAbstract extends \MUtil\Snippets\SnippetAbstract
     /**
      * Overrule to implement snippet specific filtering and sorting.
      *
-     * @param \MUtil\Model\ModelAbstract $model
+     * @param \Zalt\Model\ModelAbstract $model
      */
-    protected function processFilterAndSort(\MUtil\Model\ModelAbstract $model)
+    protected function processFilterAndSort(\Zalt\Model\ModelAbstract $model)
     {
         if (false !== $this->searchFilter) {
             if (isset($this->searchFilter['limit'])) {
@@ -208,9 +208,9 @@ abstract class ModelSnippetAbstract extends \MUtil\Snippets\SnippetAbstract
      *
      * Overrule to implement snippet specific filtering and sorting.
      *
-     * @param \MUtil\Model\ModelAbstract $model
+     * @param \Zalt\Model\ModelAbstract $model
      */
-    protected function processSortOnly(\MUtil\Model\ModelAbstract $model)
+    protected function processSortOnly(\Zalt\Model\ModelAbstract $model)
     {
         if (count($this->requestInfo->getRequestQueryParams())) {
             $queryParams = $this->requestInfo->getRequestQueryParams();

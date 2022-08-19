@@ -2,7 +2,6 @@
 
 /**
  *
- *
  * @package    Zalt
  * @subpackage Html
  * @author     Matijs de Jong <mjong@magnafacta.nl>
@@ -11,6 +10,8 @@
  */
 
 namespace Zalt\Html;
+
+use Zalt\Late\Late;
 
 /**
  * An image element with added functionality to automatically add with and height
@@ -31,12 +32,12 @@ namespace Zalt\Html;
  * @license    New BSD License
  * @since      Class available since version 1.1
  */
-class ImgElement extends \Zalt\Html\HtmlElement
+class ImgElement extends HtmlElement
 {
     /**
      * @var array List of directory names where img looks for images.
      */
-    private static $_imageDirs = array('/', '/images/');
+    private static $_imageDirs = ['/', '/images/'];
 
     /**
      *
@@ -69,7 +70,7 @@ class ImgElement extends \Zalt\Html\HtmlElement
     protected function _htmlAttribs($attribs)
     {
         if (isset($attribs['src'])) {
-            $filename = \Zalt\Lazy::rise($attribs['src']);
+            $filename = Late::rise($attribs['src']);
             
             if ($dir = self::getImageDir($filename)) {
                 if (! isset($attribs['width'], $attribs['height'])) {
@@ -83,13 +84,13 @@ class ImgElement extends \Zalt\Html\HtmlElement
                             $attribs['height'] = $info[1];
                         }
                     } catch (\Exception $e) {
-                        if (\Zalt\Html::$verbose) {
-                            \Zalt\EchoOut\EchoOut::r($e, __CLASS__ . '->' .  __FUNCTION__);
+                        if (Html::$verbose) {
+                            // \Zalt\EchoOut\EchoOut::r($e, __CLASS__ . '->' .  __FUNCTION__);
                         }
                     }
                 }
 
-                $attribs['src'] = $this->view->baseUrl() . $dir . $filename;
+                $attribs['src'] = Html::getRenderer()->getBaseUrlString() . $dir . $filename;
             }
             // \Zalt\EchoOut\EchoOut::r($attribs['src']);
         }
@@ -123,7 +124,7 @@ class ImgElement extends \Zalt\Html\HtmlElement
      *
      * $filenames starting with a '/' or with http or https are skipped.
      *
-     * @param type $filename The src attribute as filename
+     * @param string $filename The src attribute as filename
      * @return string When a directory matches
      */
     public static function getImageDir($filename)
@@ -140,8 +141,8 @@ class ImgElement extends \Zalt\Html\HtmlElement
                     return $dir;
                 }
             }
-            if (\Zalt\Html::$verbose) {
-                \Zalt\EchoOut\EchoOut::r("File not found: $filename. \n\nLooked in: \n" . implode(", \n", self::$_imageDirs));
+            if (Html::$verbose) {
+                // \Zalt\EchoOut\EchoOut::r("File not found: $filename. \n\nLooked in: \n" . implode(", \n", self::$_imageDirs));
             }
         }
     }
@@ -173,12 +174,11 @@ class ImgElement extends \Zalt\Html\HtmlElement
     /**
      * Static helper function for creation, used by @see \Zalt\Html\Creator.
      *
-     * @param mixed $arg_array Optional \Zalt\Ra::args processed settings
+     * @param array $args Optional Ra::args processed settings
      * @return \Zalt\Html\ImgElement
      */
-    public static function img($arg_array = null)
+    public static function img(...$args)
     {
-        $args = func_get_args();
         return new self(__FUNCTION__, $args);
     }
 
@@ -186,12 +186,12 @@ class ImgElement extends \Zalt\Html\HtmlElement
      * Static helper function for creation, used by @see \Zalt\Html\Creator.
      *
      * @param string $src The source
-     * @param mixed $arg_array Optional \Zalt\Ra::args processed settings
+     * @param array $args Optional \Zalt\Ra::args processed settings
      * @return \Zalt\Html\ImgElement
      */
-    public static function imgFile($src, $arg_array = null)
+    public static function imgFile($src, ...$args)
     {
-        $args = \Zalt\Ra::args(func_get_args(), 1);
+        $args = Ra::args($args);
 
         $args['src'] = $src;
         if (! isset($args['alt'])) {
@@ -227,25 +227,22 @@ class ImgElement extends \Zalt\Html\HtmlElement
      *
      * Renders the element tag with it's content into a html string
      *
-     * The $view is used to correctly encode and escape the output
-     *
-     * @param \Zend_View_Abstract $view
      * @return string Correctly encoded and escaped html output
      */
-    protected function renderElement(\Zend_View_Abstract $view)
+    protected function renderElement()
     {
         if (isset($this->_attribs['src'])) {
             if (is_scalar($this->_attribs['src'])) {
                 $src = $this->_attribs['src'];
             } else {
-                $src = \Zalt\Html::getRenderer()->renderArray($view, array($this->_attribs['src']));
+                $src = Html::getRenderer()->renderArray(array($this->_attribs['src']));
             }
         } else {
             $src = false;
         }
 
         if ($src || $this->renderWithoutSrc) {
-            return parent::renderElement($view);
+            return parent::renderElement();
         }
     }
 

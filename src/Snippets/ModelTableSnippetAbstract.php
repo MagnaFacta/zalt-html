@@ -2,14 +2,14 @@
 
 /**
  *
- * @package    MUtil
+ * @package    Zalt
  * @subpackage Snippets
  * @author     Matijs de Jong <mjong@magnafacta.nl>
  * @copyright  Copyright (c) 2011 Erasmus MC
  * @license    New BSD License
  */
 
-namespace MUtil\Snippets;
+namespace Zalt\Snippets;
 
 /**
  * Displays multiple items in a model below each other in an Html table.
@@ -18,17 +18,17 @@ namespace MUtil\Snippets;
  *
  * @see ModelTableSnippet
  *
- * @package    MUtil
+ * @package    Zalt
  * @subpackage Snippets
  * @copyright  Copyright (c) 2011 Erasmus MC
  * @license    New BSD License
  * @since      Class available since version 1.3
  */
-abstract class ModelTableSnippetAbstract extends \MUtil\Snippets\ModelSnippetAbstract
+abstract class ModelTableSnippetAbstract extends \Zalt\Snippets\ModelSnippetAbstract
 {
     /**
      *
-     * @var \MUtil\Html\Marker Class for marking text in the output
+     * @var \Zalt\Html\Marker Class for marking text in the output
      */
     protected $_marker;
 
@@ -40,11 +40,11 @@ abstract class ModelTableSnippetAbstract extends \MUtil\Snippets\ModelSnippetAbs
     public $baseUrl;
 
     /**
-     * One of the \MUtil\Model\Bridge\BridgeAbstract MODE constants
+     * One of the \Zalt\Model\Bridge\BridgeAbstract MODE constants
      *
      * @var int
      */
-    protected $bridgeMode = \MUtil\Model\Bridge\BridgeAbstract::MODE_LAZY;
+    protected $bridgeMode = \Zalt\Model\Bridge\BridgeAbstract::MODE_LAZY;
 
     /**
      * Sets pagination on or off.
@@ -103,11 +103,11 @@ abstract class ModelTableSnippetAbstract extends \MUtil\Snippets\ModelSnippetAbs
      * Overrule this function to add different columns to the browse table, without
      * having to recode the core table building code.
      *
-     * @param \MUtil\Model\Bridge\TableBridge $bridge
-     * @param \MUtil\Model\ModelAbstract $model
+     * @param \Zalt\Model\Bridge\TableBridge $bridge
+     * @param \Zalt\Model\ModelAbstract $model
      * @return void
      */
-    protected function addBrowseTableColumns(\MUtil\Model\Bridge\TableBridge $bridge, \MUtil\Model\ModelAbstract $model)
+    protected function addBrowseTableColumns(\Zalt\Model\Bridge\TableBridge $bridge, \Zalt\Model\ModelAbstract $model)
     {
         if ($this->columns) {
             foreach ($this->columns as $column) {
@@ -136,23 +136,23 @@ abstract class ModelTableSnippetAbstract extends \MUtil\Snippets\ModelSnippetAbs
      * Only called when $this->browse is true. Overrule this function
      * to define your own method.
      *
-     * @param \MUtil\Html\TableElement $table
+     * @param \Zalt\Html\TableElement $table
      * $param \Zend_Paginator $paginator
      */
-    protected function addPaginator(\MUtil\Html\TableElement $table, \Zend_Paginator $paginator)
+    protected function addPaginator(\Zalt\Html\TableElement $table, \Zend_Paginator $paginator)
     {
         //$table->tfrow()->pagePanel($paginator, null, array('baseUrl' => $this->baseUrl));
     }
 
     /**
-     * Creates from the model a \MUtil\Html\TableElement that can display multiple items.
+     * Creates from the model a \Zalt\Html\TableElement that can display multiple items.
      *
      * Allows overruling
      *
-     * @param \MUtil\Model\ModelAbstract $model
-     * @return \MUtil\Html\TableElement
+     * @param \Zalt\Model\ModelAbstract $model
+     * @return \Zalt\Html\TableElement
      */
-    public function getBrowseTable(\MUtil\Model\ModelAbstract $model)
+    public function getBrowseTable(\Zalt\Model\ModelAbstract $model)
     {
         $bridge = $model->getBridgeFor('table');
 
@@ -179,7 +179,7 @@ abstract class ModelTableSnippetAbstract extends \MUtil\Snippets\ModelSnippetAbs
      * This is a stub function either override getHtmlOutput() or override render()
      *
      * @param \Zend_View_Abstract $view Just in case it is needed here
-     * @return \MUtil\Html\HtmlInterface Something that can be rendered
+     * @return \Zalt\Html\HtmlInterface Something that can be rendered
      */
     public function getHtmlOutput(\Zend_View_Abstract $view)
     {
@@ -195,9 +195,9 @@ abstract class ModelTableSnippetAbstract extends \MUtil\Snippets\ModelSnippetAbs
                 $paginator = $model->loadPaginator();
                 $table->setRepeater($paginator);
                 $this->addPaginator($table, $paginator);
-            } elseif ($this->bridgeMode === \MUtil\Model\Bridge\BridgeAbstract::MODE_LAZY) {
+            } elseif ($this->bridgeMode === \Zalt\Model\Bridge\BridgeAbstract::MODE_LAZY) {
                 $table->setRepeater($model->loadRepeatable());
-            } elseif ($this->bridgeMode === \MUtil\Model\Bridge\BridgeAbstract::MODE_SINGLE_ROW) {
+            } elseif ($this->bridgeMode === \Zalt\Model\Bridge\BridgeAbstract::MODE_SINGLE_ROW) {
                 $table->setRepeater(array($model->loadFirst()));
             } else {
                 $table->setRepeater($model->load());
@@ -210,9 +210,9 @@ abstract class ModelTableSnippetAbstract extends \MUtil\Snippets\ModelSnippetAbs
     /**
      * Overrule to implement snippet specific filtering and sorting.
      *
-     * @param \MUtil\Model\ModelAbstract $model
+     * @param \Zalt\Model\ModelAbstract $model
      */
-    protected function processFilterAndSort(\MUtil\Model\ModelAbstract $model)
+    protected function processFilterAndSort(\Zalt\Model\ModelAbstract $model)
     {
         parent::processFilterAndSort($model);
 
@@ -221,8 +221,8 @@ abstract class ModelTableSnippetAbstract extends \MUtil\Snippets\ModelSnippetAbs
         $queryParams = $this->requestInfo->getRequestQueryParams();
         if (isset($queryParams[$textKey])) {
             $searchText = $queryParams[$textKey];
-            // \MUtil\EchoOut\EchoOut::r($textKey . '[' . $searchText . ']');
-            $this->_marker = new \MUtil\Html\Marker($model->getTextSearches($searchText), 'strong', 'UTF-8');
+            // \Zalt\EchoOut\EchoOut::r($textKey . '[' . $searchText . ']');
+            $this->_marker = new \Zalt\Html\Marker($model->getTextSearches($searchText), 'strong', 'UTF-8');
 
             foreach ($model->getItemNames() as $name) {
                 if ($model->get($name, 'label') && (!$model->is($name, 'no_text_search', true))) {
