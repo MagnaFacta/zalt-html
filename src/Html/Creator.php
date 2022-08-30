@@ -11,10 +11,10 @@
 
 namespace Zalt\Html;
 
-use Zalt\HtmlUtil\FunctionList;
-use Zalt\HtmlUtil\LookupList;
+use Zalt\Lists\FunctionList;
+use Zalt\Lists\LookupList;
 use Zalt\Late\Late;
-use Zalt\HtmlUtil\Ra;
+use Zalt\Ra\Ra;
 
 /**
  * Class for storing references for creating html attributes, elements and other objects.

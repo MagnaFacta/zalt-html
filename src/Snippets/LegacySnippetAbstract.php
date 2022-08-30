@@ -11,16 +11,8 @@
 
 namespace Zalt\Snippets;
 
-use Mezzio\Flash\FlashMessagesInterface;
+use Zalt\Controller\Action;
 use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\ServerRequestInterface;
-use Symfony\Contracts\Translation\TranslatorInterface;
-use Zalt\Html\Html;
-use Zalt\Html\HtmlElement;
-use Zalt\Html\HtmlInterface;
-use Zalt\Html\Sequence;
-use Zalt\Base\MessageTrait;
-use Zalt\Base\TranslateableTrait;
 
 /**
  * An abstract class for building snippets. Sub classes should override at least
@@ -39,11 +31,15 @@ use Zalt\Base\TranslateableTrait;
  * @license    New BSD License
  * @since      Class available since version 1.1
  */
-abstract class SnippetAbstract
+abstract class LegacySnippetAbstract extends \Zalt\Translate\TranslateableAbstract
+    implements SnippetInterface
 {
-    use MessageTrait;
-    use TranslateableTrait;
-    
+    /**
+     *
+     * @var \Mezzio\Flash\FlashMessagesInterface
+     */
+    private $messenger;
+
     /**
      * Attributes (e.g. class) for the main html element
      *
@@ -58,28 +54,43 @@ abstract class SnippetAbstract
      */
     protected $class;
 
-    public function __construct(array $config, TranslatorInterface $translate, ServerRequestInterface $request)
+    /**
+     * @var \Zalt\Controller\Action\Helper\Redirector
+     */
+    protected $redirector;
+
+    /**
+     * Variable to either keep or throw away the request data
+     * not specified in the route.
+     *
+     * @var boolean True then the route is reset
+     */
+    public $resetRoute = false;
+
+    /**
+     * Adds one or more messages to the session based message store.
+     *
+     * @param mixed $message_args Can be an array or multiple argemuents. Each sub element is a single message string
+     * @return self (continuation pattern)
+     */
+    public function addMessage(mixed $message, string $status = 'warning')
     {
-        // We're setting trait variables so no constructor promotion
-        $this->translate = $translate;
-        $this->request   = $request;
-        $this->messenger = $request->getAttribute('flash');
-        
-        // Set variables from config
-        foreach (get_object_vars($this) as $property) {
-            if (isset($config[$property]) && ('_' != substr($property, 0, 1))) {
-                $this->$property = $config[$property]; 
-            }
-        } 
+        if ($this->messenger) {
+            $messages = $this->messenger->getFlash(Action::$messengerKey, []);
+            $messages[] = [$message, $status];
+            $this->messenger->flash(Action::$messengerKey, $messages);
+        }
+
+        return $this;
     }
-    
+
     /**
      * Applies the $this=>attributes and $this->class snippet parameters to the
      * $html element.
      *
      * @param \Zalt\Html\HtmlElement $html Element to apply the snippet parameters to.
      */
-    protected function applyHtmlAttributes(HtmlElement $html)
+    protected function applyHtmlAttributes(\Zalt\Html\HtmlElement $html)
     {
         if ($this->attributes) {
             foreach ($this->attributes as $name => $value) {
@@ -98,9 +109,10 @@ abstract class SnippetAbstract
      *
      * This is a stub function either override getHtmlOutput() or override render()
      *
-     * @return mixed Something that can be rendered
+     * @param \Zend_View_Abstract $view Just in case it is needed here
+     * @return \Zalt\Html\HtmlInterface Something that can be rendered
      */
-    public function getHtmlOutput()
+    public function getHtmlOutput(\Zend_View_Abstract $view)
     {
         return null;
     }
@@ -112,7 +124,18 @@ abstract class SnippetAbstract
      */
     protected function getHtmlSequence()
     {
-        return new Sequence();
+        return new \Zalt\Html\Sequence();
+    }
+
+    /**
+     * @return \Zalt\Controller\Action\Helper\Redirector
+     */
+    protected function getRedirector()
+    {
+        if (!$this->redirector) {
+            $this->redirector = new Zalt\Controller\Action\Helper\Redirector();
+        }
+        return $this->redirector;
     }
 
     /**
@@ -125,6 +148,8 @@ abstract class SnippetAbstract
      *
      * Also when hasHtmlOutput() is true this function should not be
      * called.
+     *
+     * @see \Zend_Controller_Action_Helper_Redirector
      *
      * @return mixed Nothing or either an array or a string that is acceptable for Redector->gotoRoute()
      */
@@ -143,6 +168,7 @@ abstract class SnippetAbstract
      * When invalid data should result in an error, you can throw it
      * here but you can also perform the check in the
      * checkRegistryRequestsAnswers() function from the
+     * {@see \Zalt\Registry\TargetInterface}.
      *
      * @return boolean
      */
@@ -155,6 +181,8 @@ abstract class SnippetAbstract
      * When there is a redirectRoute this function will execute it.
      *
      * When hasHtmlOutput() is true this functions should not be called.
+     *
+     * @see \Zend_Controller_Action_Helper_Redirector
      */
     public function redirectRoute()
     {
@@ -172,24 +200,34 @@ abstract class SnippetAbstract
      *
      * You should override either getHtmlOutput() or this function to generate output
      *
+     * @param \Zend_View_Abstract $view
      * @return string Html output
      */
-    public function render()
+    public function render(\Zend_View_Abstract $view)
     {
+        // \Zalt\EchoOut\EchoOut::r(sprintf('Rendering snippet %s.', get_class($this)));
+        //
+        // TODO: Change snippet workings.
+        // All forms are processed twice if hasHtmlOutput() is called here. This is
+        // a problem when downloading files.
+        // However: not being able to call hasHtmlOutput() twice is not part of the original plan
+        // so I gotta rework the forms. :(
+        //
+        // if ((!$this->hasHtmlOutput()) && $this->getRedirectRoute()) {
         if ($this->getRedirectRoute()) {
             $this->redirectRoute();
 
         } else {
-            $html = $this->getHtmlOutput();
+            $html = $this->getHtmlOutput($view);
 
             if ($html) {
-                if ($html instanceof HtmlInterface) {
-                    if ($html instanceof HtmlElement) {
+                if ($html instanceof \Zalt\Html\HtmlInterface) {
+                    if ($html instanceof \Zalt\Html\HtmlElement) {
                         $this->applyHtmlAttributes($html);
                     }
-                    return $html->render();
+                    return $html->render($view);
                 } else {
-                    return Html::renderAny($html);
+                    return \Zalt\Html::renderAny($view, $html);
                 }
             }
         }

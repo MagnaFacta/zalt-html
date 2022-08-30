@@ -15,8 +15,8 @@ namespace Zalt\Html;
 use Iterator;
 use Traversable;
 
-use Zalt\HtmlUtil\MultiWrapper; 
-use Zalt\HtmlUtil\Ra;
+use Zalt\Ra\MultiWrapper; 
+use Zalt\Ra\Ra;
 use Zalt\Late\Alternate;
 use Zalt\Late\Late;
 use Zalt\Late\LateInterface;

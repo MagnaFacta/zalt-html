@@ -12,7 +12,7 @@
 
 namespace Zalt\Html;
 
-use Zalt\HtmlUtil\Ra;
+use Zalt\Ra\Ra;
 
 /**
  * Zend style form decorator the uses \Zalt\Html

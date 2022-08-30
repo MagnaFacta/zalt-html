@@ -16,7 +16,7 @@ use Zalt\Late\Stack\BridgeStack;
 use Zalt\Late\Stack\EmptyStack;
 use Zalt\Late\Stack\ObjectStack;
 use Zalt\Late\Stack\RepeatableStack;
-use Zalt\HtmlUtil\Ra;
+use Zalt\Ra\Ra;
 
 /**
  * Why get lazy:
@@ -41,9 +41,9 @@ class Late
     /**
      * The default stack to use
      *
-     * @var StackInterface
+     * @var ?StackInterface
      */
-    private static $_stack;
+    private static ?StackInterface $_stack;
 
     /**
      * Static variable for debugging purposes. Toggles the echoing of e.g. raised results.
@@ -75,6 +75,11 @@ class Late
     public static function call($callable, ...$args)
     {
         return new LateCall($callable, $args);
+    }
+    
+    public static function clearStack()
+    {
+        self::$_stack = null;
     }
 
     /**
@@ -181,7 +186,7 @@ class Late
      */
     public static function getStack()
     {
-        if (! self::$_stack instanceof StackInterface) {
+        if (! isset(self::$_stack)) {
             self::$_stack = new EmptyStack(__CLASS__);
         }
 

@@ -25,6 +25,13 @@ use Zalt\Late\Stack\LateStackException;
  */
 class LateStackTest extends TestCase
 {
+    public function setUp() : void
+    {
+        parent::setUp();
+        
+        Late::clearStack();
+    }
+
     public function testArrayStack()
     {
         $get = Late::get('a');

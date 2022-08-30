@@ -11,7 +11,7 @@
 
 namespace Zalt\Html;
 
-use Zalt\HtmlUtil\MultiWrapper;
+use Zalt\Ra\MultiWrapper;
 
 /**
  *

@@ -11,8 +11,8 @@
 
 namespace Zalt\Html;
 
-use Zalt\HtmlUtil\ArrayString;
-use Zalt\HtmlUtil\Ra;
+use Zalt\Ra\ArrayString;
+use Zalt\Ra\Ra;
 
 /**
  * The Sequence class is for sequentional Html content, kind of like a DOM document fragment.

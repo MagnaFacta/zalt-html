@@ -11,8 +11,8 @@
 
 namespace Zalt\Html;
 
-use Zalt\HtmlUtil\BaseUrl;
-use Zalt\HtmlUtil\ClassList;
+use Zalt\Base\BaseUrl;
+use Zalt\Lists\ClassList;
 use Zalt\Late\Late;
 use Zalt\Late\LateInterface;
 
