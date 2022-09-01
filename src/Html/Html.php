@@ -13,7 +13,9 @@ namespace Zalt\Html;
 
 use Zalt\Ra\Ra;
 use Zalt\Snippets\SnippetInterface;
+use Zalt\SnippetsLoader\SnippetLoader;
 use Zalt\SnippetsLoader\SnippetLoaderInterface;
+use Zalt\SnippetsLoader\SnippetLoaderMissingException;
 
 /**
  * Collections of static function for using the Html subpackage.
@@ -40,7 +42,7 @@ class Html
 
     /**
      *
-     * @var \Zalt\Snippets\SnippetLoader
+     * @var \Zalt\SnippetsLoader\SnippetLoader
      */
     private static $_snippetLoader;
 
@@ -193,8 +195,8 @@ class Html
      */
     public static function getSnippetLoader()
     {
-        if (! self::$_snippetLoader) {
-            self::setSnippetLoader(new SnippetLoader());
+        if (! isset(self::$_snippetLoader)) {
+            throw new SnippetLoaderMissingException("Html::getSnippetLoader called before the snippet loader was set.");
         }
         return self::$_snippetLoader;
     }

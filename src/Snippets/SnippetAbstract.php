@@ -39,7 +39,7 @@ use Zalt\Base\TranslateableTrait;
  * @license    New BSD License
  * @since      Class available since version 1.1
  */
-abstract class SnippetAbstract
+abstract class SnippetAbstract implements SnippetInterface
 {
     use MessageTrait;
     use TranslateableTrait;
@@ -58,7 +58,7 @@ abstract class SnippetAbstract
      */
     protected $class;
 
-    public function __construct(array $config, TranslatorInterface $translate, ServerRequestInterface $request)
+    public function __construct(array $config, ServerRequestInterface $request, TranslatorInterface $translate)
     {
         // We're setting trait variables so no constructor promotion
         $this->translate = $translate;
@@ -66,7 +66,7 @@ abstract class SnippetAbstract
         $this->messenger = $request->getAttribute('flash');
         
         // Set variables from config
-        foreach (get_object_vars($this) as $property) {
+        foreach (get_object_vars($this) as $property => $object) {
             if (isset($config[$property]) && ('_' != substr($property, 0, 1))) {
                 $this->$property = $config[$property]; 
             }
@@ -128,7 +128,7 @@ abstract class SnippetAbstract
      *
      * @return mixed Nothing or either an array or a string that is acceptable for Redector->gotoRoute()
      */
-    public function getRedirectRoute()
+    public function getRedirectRoute(): string
     { }
 
     public function getResponse(): ?ResponseInterface
@@ -144,9 +144,9 @@ abstract class SnippetAbstract
      * here but you can also perform the check in the
      * checkRegistryRequestsAnswers() function from the
      *
-     * @return boolean
+     * @return bool
      */
-    public function hasHtmlOutput()
+    public function hasHtmlOutput(): bool
     {
         return true;
     }

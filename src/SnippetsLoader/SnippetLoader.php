@@ -12,6 +12,8 @@
 namespace Zalt\SnippetsLoader;
 
 use Psr\Container\ContainerInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 use Zalt\Snippets\SnippetInterface;
 use Zalt\Loader\ProjectOverloader;
 
@@ -51,16 +53,16 @@ class SnippetLoader implements SnippetLoaderInterface
     /**
      * Sets the source of variables and the first directory for snippets
      *
-     * @param mixed $source Something that is or can be made into ContainerInterface, otheriwse \Zend_Registry is used.
-     * @param array $dirs prefix => pathname The inital paths to load from
+     * @param ContainerInterface $source Something that is or can be made into ContainerInterface, otheriwse \Zend_Registry is used.
+     * @param array $overloaders New overloaders, first overloader is tried first, \Snippets is added automatically
      */
-    public function __construct($source = null, array $dirs = [])
+    public function __construct(ContainerInterface $source, array $overloaders = [])
     {
-        if (! $source instanceof ContainerInterface) {
-            // $source = new \Zalt\Registry\Source($source);
+        foreach ($overloaders as &$overloader) {
+            $overloader .= '\\Snippets';
         }
         $this->setSource($source);
-        $this->loader = new ProjectOverloader($source, $dirs, true);
+        $this->loader = new ProjectOverloader($source, $overloaders, false);
     }
 
     /**
@@ -85,15 +87,17 @@ class SnippetLoader implements SnippetLoaderInterface
      */
     public function getSnippet(string $className, array $extraSourceParameters = []): SnippetInterface
     {
-        $className = $this->loader->create($className);
+        $sm = $this->loader->getContainer();
 
-        $snippet = new $className();
+        $snippet = $this->loader->create($className, $extraSourceParameters, $sm->get(ServerRequestInterface::class), $sm->get(TranslatorInterface::class));
+
+        // $snippet = new $className($extraSourceParameters, $sm->get(ServerRequestInterface::class), $sm->get(TranslatorInterface::class));
 
         if ($snippet instanceof SnippetInterface) {
             // Add extra parameters when specified
-            if ($extraSourceParameters) {
+            // if ($extraSourceParameters) {
                 // $this->snippetsSource->addRegistryContainer($extraSourceParameters, 'tmpContainer');
-            }
+            // }
 
 //            if ($this->snippetsSource->applySource($snippet)) {
 //                if ($extraSourceParameters) {
@@ -104,7 +108,7 @@ class SnippetLoader implements SnippetLoaderInterface
 //                return $snippet;
 //
 //            }
-            return $$snippet;
+            return $snippet;
             // throw new \Exception("Not all parameters set for html snippet: '$className'. \n\nRequested variables were: " . implode(", ", $snippet->getRegistryRequests()));
         }
         
