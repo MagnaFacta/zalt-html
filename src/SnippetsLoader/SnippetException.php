@@ -17,5 +17,5 @@ namespace Zalt\SnippetsLoader;
  * @subpackage SnippetsLoader
  * @since      Class available since version 1.0
  */
-class SnippetLoaderMissingException extends SnippetException
+class SnippetException extends \Exception
 { }

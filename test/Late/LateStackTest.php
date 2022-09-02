@@ -21,7 +21,7 @@ use Zalt\Late\Stack\LateStackException;
  * @package    Zalt
  * @subpackage Late
  * @license    New BSD License
- * @since      Class available since version 1.9.2
+ * @since      Class available since version 1.0
  */
 class LateStackTest extends TestCase
 {

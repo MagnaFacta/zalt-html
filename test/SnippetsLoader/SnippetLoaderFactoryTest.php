@@ -15,7 +15,6 @@ use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ServerRequestInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Zalt\Html\Html;
-use Zalt\Loader\Exception\LoadException;
 use Zalt\Mock\PotemkinTranslator;
 use Zalt\Mock\SimpleFlashRequestFactory;
 use Zalt\Mock\SimpleServiceManager;
@@ -28,54 +27,44 @@ use Zalt\Snippets\SnippetInterface;
  * @subpackage SnippetsLoader
  * @since      Class available since version 1.0
  */
-class SnippetLoaderTest extends TestCase
+class SnippetLoaderFactoryTest extends TestCase
 {
-    protected $sm;
-    
-    public function setUp() : void
+    public function testMinimalFactory()
     {
-        parent::setUp();
-
+        $sm    = new SimpleServiceManager(['config' => []]);
+        $class = new SnippetLoaderFactory();
+        $sl    = $class($sm);
+        
+        $this->assertInstanceOf(SnippetLoader::class, $sl);
+    }
+    
+    public function testWorkingFactory()
+    {
         $config  = ['x' => 'y'];
         $classes = [
             ServerRequestInterface::class => SimpleFlashRequestFactory::createWithoutServiceManager('http://localhost/index.php'),
             TranslatorInterface::class => new PotemkinTranslator(),
             'config' => $config,
         ];
+
+        $this->assertFalse(Html::hasSnippetLoader());
         
-        $this->sm = new SimpleServiceManager($classes);
+        $sm    = new SimpleServiceManager($classes);
+        $class = new SnippetLoaderFactory();
+        $sl    = $class($sm);
+
+        $this->assertInstanceOf(SnippetLoader::class, $sl);
+
+        // Should be set by factory
+        $this->assertTrue(Html::hasSnippetLoader());
         
-        Html::setSnippetLoader(new SnippetLoader($this->sm, ['Zalt']));
-    }
-    
-    public function testLoaderLoading()
-    {
-        $loader = Html::getSnippetLoader();
-        
-        $this->assertInstanceOf(SnippetLoaderInterface::class, $loader);
-    }
-    
-    public function testLoaderLoadingSnippets()
-    {
         $snippet1 = Html::snippet('NullSnippet', ['param1' => 'param2']);
         $snippet2 = Html::snippet(NullSnippet::class, ['param1' => 'param2']);
-        
+
         $this->assertInstanceOf(SnippetInterface::class, $snippet1);
         $this->assertInstanceOf(NullSnippet::class, $snippet1);
         $this->assertInstanceOf(SnippetInterface::class, $snippet2);
         $this->assertInstanceOf(NullSnippet::class, $snippet2);
         $this->assertEquals($snippet1, $snippet2);
-    }
-
-    public function testLoaderNotExistingFile()
-    {
-        $this->expectException(LoadException::class);
-        $snippet = Html::snippet('NotExistingSnippet');
-    }
-
-    public function testLoaderNotSnippet()
-    {
-        $this->expectException(SnippetNotSnippetException::class);
-        $snippet = Html::snippet('NotAnySnippet');
     }
 }

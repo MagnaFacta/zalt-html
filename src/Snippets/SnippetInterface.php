@@ -46,7 +46,7 @@ interface SnippetInterface extends HtmlInterface
      *
      * @return string Nothing or a string that can be used for redirection
      */
-    public function getRedirectRoute(): string;
+    public function getRedirectRoute(): ?string;
 
     /**
      * The place to check if the data set in the snippet is valid

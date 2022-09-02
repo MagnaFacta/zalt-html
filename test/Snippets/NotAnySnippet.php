@@ -5,17 +5,19 @@ declare(strict_types=1);
 /**
  *
  * @package    Zalt
- * @subpackage SnippetsLoader
+ * @subpackage Snippets
  * @author     Matijs de Jong <mjong@magnafacta.nl>
  */
 
-namespace Zalt\SnippetsLoader;
+namespace Zalt\Snippets;
 
 /**
  *
  * @package    Zalt
- * @subpackage SnippetsLoader
+ * @subpackage Snippets
  * @since      Class available since version 1.0
  */
-class SnippetLoaderMissingException extends SnippetException
-{ }
+class NotAnySnippet
+{
+
+}

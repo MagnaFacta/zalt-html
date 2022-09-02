@@ -202,6 +202,16 @@ class Html
     }
 
     /**
+     * Is there a snippet loader?
+     *
+     * @return bool
+     */
+    public static function hasSnippetLoader(): bool
+    {
+        return isset(self::$_snippetLoader);
+    }
+
+    /**
      * Replaces the non html name characters in the name.
      *
      * Helper function for working with \Zend_Form_Element's

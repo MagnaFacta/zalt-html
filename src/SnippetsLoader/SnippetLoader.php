@@ -54,12 +54,14 @@ class SnippetLoader implements SnippetLoaderInterface
      * Sets the source of variables and the first directory for snippets
      *
      * @param ContainerInterface $source Something that is or can be made into ContainerInterface, otheriwse \Zend_Registry is used.
-     * @param array $overloaders New overloaders, first overloader is tried first, \Snippets is added automatically
+     * @param array $overloaders New overloaders, first overloader is tried first, \Snippets is added automatically if not in the overloader directory name
      */
     public function __construct(ContainerInterface $source, array $overloaders = [])
     {
         foreach ($overloaders as &$overloader) {
-            $overloader .= '\\Snippets';
+            if (! str_contains($overloader, 'Snippets')) {
+                $overloader .= '\\Snippets';
+            }
         }
         $this->setSource($source);
         $this->loader = new ProjectOverloader($source, $overloaders, false);
@@ -112,7 +114,8 @@ class SnippetLoader implements SnippetLoaderInterface
             // throw new \Exception("Not all parameters set for html snippet: '$className'. \n\nRequested variables were: " . implode(", ", $snippet->getRegistryRequests()));
         }
         
-        throw new \Exception("The snippet: '$className' does not implement the \Zalt\Snippets\SnippetInterface interface.");
+        $interface = SnippetInterface::class; 
+        throw new SnippetNotSnippetException("The snippet: '$className' does not implement the $interface interface.");
     }
 
     /**

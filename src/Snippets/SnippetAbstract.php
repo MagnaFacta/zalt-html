@@ -126,10 +126,12 @@ abstract class SnippetAbstract implements SnippetInterface
      * Also when hasHtmlOutput() is true this function should not be
      * called.
      *
-     * @return mixed Nothing or either an array or a string that is acceptable for Redector->gotoRoute()
+     * @return ?string Nothing or either an array or a string that is acceptable for Redector->gotoRoute()
      */
-    public function getRedirectRoute(): string
-    { }
+    public function getRedirectRoute(): ?string
+    { 
+        return null;
+    }
 
     public function getResponse(): ?ResponseInterface
     {
