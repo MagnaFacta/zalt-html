@@ -15,6 +15,7 @@ use Mezzio\Flash\FlashMessagesInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Zalt\Base\RedirectorInterface;
 use Zalt\Html\Html;
 use Zalt\Html\HtmlElement;
 use Zalt\Html\HtmlInterface;
@@ -58,7 +59,7 @@ abstract class SnippetAbstract implements SnippetInterface
      */
     protected $class;
 
-    public function __construct(array $config, ServerRequestInterface $request, TranslatorInterface $translate)
+    public function __construct(array $config, ServerRequestInterface $request, TranslatorInterface $translate, protected RedirectorInterface $redirector)
     {
         // We're setting trait variables so no constructor promotion
         $this->translate = $translate;
@@ -158,14 +159,11 @@ abstract class SnippetAbstract implements SnippetInterface
      *
      * When hasHtmlOutput() is true this functions should not be called.
      */
-    public function redirectRoute()
+    public function redirectRoute(): void
     {
-        if ($url = $this->getRedirectRoute()) {
-            //\Zalt\EchoOut\EchoOut::track($url);
-
-            $router = $this->getRedirector();
-            $router->setExit($router->getExit() && ! (\Zalt\Console::isConsole() || \Zend_Session::$_unitTestEnabled));
-            $router->gotoRoute($url, null, $this->resetRoute);
+        $url = $this->getRedirectRoute();
+        if ($url) {
+            $this->redirector->redirect($url);
         }
     }
 

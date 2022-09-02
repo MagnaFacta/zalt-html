@@ -65,5 +65,5 @@ interface SnippetInterface extends HtmlInterface
      *
      * When hasHtmlOutput() is true this functions should not be called.
      */
-    public function redirectRoute();
+    public function redirectRoute(): void;
 }

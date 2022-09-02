@@ -91,27 +91,10 @@ class SnippetLoader implements SnippetLoaderInterface
     {
         $sm = $this->loader->getContainer();
 
-        $snippet = $this->loader->create($className, $extraSourceParameters, $sm->get(ServerRequestInterface::class), $sm->get(TranslatorInterface::class));
-
-        // $snippet = new $className($extraSourceParameters, $sm->get(ServerRequestInterface::class), $sm->get(TranslatorInterface::class));
+        $snippet = $this->loader->create($className, $extraSourceParameters);
 
         if ($snippet instanceof SnippetInterface) {
-            // Add extra parameters when specified
-            // if ($extraSourceParameters) {
-                // $this->snippetsSource->addRegistryContainer($extraSourceParameters, 'tmpContainer');
-            // }
-
-//            if ($this->snippetsSource->applySource($snippet)) {
-//                if ($extraSourceParameters) {
-//                    // Can remove now, it was applied
-//                    // $this->snippetsSource->removeRegistryContainer('tmpContainer');
-//                }
-//
-//                return $snippet;
-//
-//            }
             return $snippet;
-            // throw new \Exception("Not all parameters set for html snippet: '$className'. \n\nRequested variables were: " . implode(", ", $snippet->getRegistryRequests()));
         }
         
         $interface = SnippetInterface::class; 

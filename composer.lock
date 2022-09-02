@@ -195,14 +195,15 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/MagnaFacta/zalt-loader.git",
-                "reference": "fe31b9948b271112ccbc4ba4890810d9b97daccd"
+                "reference": "ed9cd405f54b7b7d074c4dfc3ed5660ba8c1a7e8"
             },
             "require": {
+                "magnafacta/zalt-util": "dev-main",
                 "php": ">=5.6.0",
                 "psr/container": "^1.0 || ^2.0"
             },
             "require-dev": {
-                "phpunit/phpunit": "4.*"
+                "phpunit/phpunit": "9.5.*"
             },
             "type": "library",
             "autoload": {
@@ -235,7 +236,7 @@
                 }
             ],
             "description": "Zend Alternative Loader",
-            "time": "2022-07-26T13:58:12+00:00"
+            "time": "2022-09-02T16:59:24+00:00"
         },
         {
             "name": "magnafacta/zalt-util",
@@ -243,7 +244,7 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/MagnaFacta/zalt-util.git",
-                "reference": "b1d4bafce847988db8f25e67189ac8b8ff665a99"
+                "reference": "3973558e9fad92b715a3a07d25033bbea2d8aab3"
             },
             "require": {
                 "guzzlehttp/psr7": "2.*",
@@ -255,7 +256,7 @@
                 "symfony/translation": "^6.1"
             },
             "require-dev": {
-                "phpunit/phpunit": "9.*"
+                "phpunit/phpunit": "9.5.*"
             },
             "default-branch": true,
             "type": "library",
@@ -276,7 +277,7 @@
                 }
             ],
             "description": "Alternative Utilities",
-            "time": "2022-09-01T15:54:37+00:00"
+            "time": "2022-09-02T17:12:45+00:00"
         },
         {
             "name": "mezzio/mezzio-flash",
@@ -932,12 +933,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/cache.git",
-                "reference": "66c4521c7430faa103a1eccef5b3bfa624afa335"
+                "reference": "4e9009cbf638a9ca0bade40633353b02e90f2fcb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/cache/zipball/66c4521c7430faa103a1eccef5b3bfa624afa335",
-                "reference": "66c4521c7430faa103a1eccef5b3bfa624afa335",
+                "url": "https://api.github.com/repos/symfony/cache/zipball/4e9009cbf638a9ca0bade40633353b02e90f2fcb",
+                "reference": "4e9009cbf638a9ca0bade40633353b02e90f2fcb",
                 "shasum": ""
             },
             "require": {
@@ -1020,7 +1021,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-09-01T02:03:22+00:00"
+            "time": "2022-09-02T15:04:41+00:00"
         },
         {
             "name": "symfony/cache-contracts",
@@ -1278,12 +1279,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/translation.git",
-                "reference": "ce1fa4321a99a777f36c4561df8f8dbe66f908a4"
+                "reference": "dee863694f76b2f867cfebb96ecc5f8701f4af0b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/translation/zipball/ce1fa4321a99a777f36c4561df8f8dbe66f908a4",
-                "reference": "ce1fa4321a99a777f36c4561df8f8dbe66f908a4",
+                "url": "https://api.github.com/repos/symfony/translation/zipball/dee863694f76b2f867cfebb96ecc5f8701f4af0b",
+                "reference": "dee863694f76b2f867cfebb96ecc5f8701f4af0b",
                 "shasum": ""
             },
             "require": {
@@ -1366,7 +1367,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-08-26T15:23:18+00:00"
+            "time": "2022-09-02T15:04:41+00:00"
         },
         {
             "name": "symfony/translation-contracts",
@@ -1835,12 +1836,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/php-code-coverage.git",
-                "reference": "aa94dc41e8661fe90c7316849907cba3007b10d8"
+                "reference": "0ba23aa48d89c1b64f3aeadd01e24b15e4d78fad"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/aa94dc41e8661fe90c7316849907cba3007b10d8",
-                "reference": "aa94dc41e8661fe90c7316849907cba3007b10d8",
+                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/0ba23aa48d89c1b64f3aeadd01e24b15e4d78fad",
+                "reference": "0ba23aa48d89c1b64f3aeadd01e24b15e4d78fad",
                 "shasum": ""
             },
             "require": {
@@ -1896,7 +1897,7 @@
             ],
             "support": {
                 "issues": "https://github.com/sebastianbergmann/php-code-coverage/issues",
-                "source": "https://github.com/sebastianbergmann/php-code-coverage/tree/9.2.17"
+                "source": "https://github.com/sebastianbergmann/php-code-coverage/tree/9.2"
             },
             "funding": [
                 {
@@ -1904,7 +1905,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2022-08-30T12:24:04+00:00"
+            "time": "2022-09-02T05:42:13+00:00"
         },
         {
             "name": "phpunit/php-file-iterator",
@@ -2153,12 +2154,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "a9665c86ed857524838c99f91c94e2e91dc28199"
+                "reference": "efcb2ae8f18a9a7f2b7b590a95c4e9501113e4e9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/a9665c86ed857524838c99f91c94e2e91dc28199",
-                "reference": "a9665c86ed857524838c99f91c94e2e91dc28199",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/efcb2ae8f18a9a7f2b7b590a95c4e9501113e4e9",
+                "reference": "efcb2ae8f18a9a7f2b7b590a95c4e9501113e4e9",
                 "shasum": ""
             },
             "require": {
@@ -2243,7 +2244,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2022-08-31T15:11:39+00:00"
+            "time": "2022-09-02T06:34:40+00:00"
         },
         {
             "name": "sebastian/cli-parser",
@@ -3106,12 +3107,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/type.git",
-                "reference": "fb44e1cc6e557418387ad815780360057e40753e"
+                "reference": "fcd2ed0d7605cbbfddc74c994160b834ba67c072"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/type/zipball/fb44e1cc6e557418387ad815780360057e40753e",
-                "reference": "fb44e1cc6e557418387ad815780360057e40753e",
+                "url": "https://api.github.com/repos/sebastianbergmann/type/zipball/fcd2ed0d7605cbbfddc74c994160b834ba67c072",
+                "reference": "fcd2ed0d7605cbbfddc74c994160b834ba67c072",
                 "shasum": ""
             },
             "require": {
@@ -3146,7 +3147,7 @@
             "homepage": "https://github.com/sebastianbergmann/type",
             "support": {
                 "issues": "https://github.com/sebastianbergmann/type/issues",
-                "source": "https://github.com/sebastianbergmann/type/tree/3.1.0"
+                "source": "https://github.com/sebastianbergmann/type/tree/3.1"
             },
             "funding": [
                 {
@@ -3154,7 +3155,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2022-08-29T06:55:37+00:00"
+            "time": "2022-09-02T05:40:00+00:00"
         },
         {
             "name": "sebastian/version",

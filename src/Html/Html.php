@@ -343,6 +343,15 @@ class Html
     {
         return self::getCreator()->create('table', $args);
     }
+    
+    public static function testReset()
+    {
+        self::$_creator = null;
+        self::$_renderer = null;
+        self::$_snippetLoader = null;
+        
+        ImgElement::setImageDirs(['/', '/images/']);
+    }
 
     public static function setCreator(\Zalt\Html\Creator $creator)
     {

@@ -25,8 +25,8 @@ class SnippetLoaderFactory
     public function __invoke(ContainerInterface $container): SnippetLoader
     {
         $config = $container->get('config');
-        if (isset($config['snippetLoader']['directories'])) {
-            $dirs = (array) $config['snippetLoader']['directories'];
+        if (isset($config['overLoaderPaths'])) {
+            $dirs = (array) $config['overLoaderPaths'];
         } else {
             $dirs = ['Zalt'];
         }
