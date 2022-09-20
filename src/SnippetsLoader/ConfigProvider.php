@@ -36,7 +36,7 @@ class ConfigProvider
             'aliases'    => [
                 \MUtil\Snippets\SnippetLoaderInterface::class => SnippetLoader::class,
             ],
-            'invokables' => [
+            'factories' => [
                 SnippetLoader::class => SnippetLoaderFactory::class,
             ],
         ];
