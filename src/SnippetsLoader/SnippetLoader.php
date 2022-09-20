@@ -35,15 +35,6 @@ class SnippetLoader implements SnippetLoaderInterface
     protected $loader;
 
     /**
-     * The file locations where to look for snippets.
-     *
-     * Can be overruled in descendants
-     *
-     * @var array
-     */
-    protected $snippetsDirectories;
-
-    /**
      * The information source for snippets.
      *
      * @var ContainerInterface
@@ -53,18 +44,12 @@ class SnippetLoader implements SnippetLoaderInterface
     /**
      * Sets the source of variables and the first directory for snippets
      *
-     * @param ContainerInterface $source Something that is or can be made into ContainerInterface, otheriwse \Zend_Registry is used.
-     * @param array $overloaders New overloaders, first overloader is tried first, \Snippets is added automatically if not in the overloader directory name
+     * @param ProjectOverloader $overloader
      */
-    public function __construct(ContainerInterface $source, array $overloaders = [])
+    public function __construct(ProjectOverloader $overLoader)
     {
-        foreach ($overloaders as &$overloader) {
-            if (! str_contains($overloader, 'Snippets')) {
-                $overloader .= '\\Snippets';
-            }
-        }
-        $this->setSource($source);
-        $this->loader = new ProjectOverloader($source, $overloaders, false);
+        $this->setSource($overLoader->getContainer());
+        $this->loader = $overLoader->createSubFolderOverloader('Snippets');
     }
 
     /**
