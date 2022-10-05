@@ -5,8 +5,6 @@
  * @package    Zalt
  * @subpackage Snippets
  * @author     Matijs de Jong <mjong@magnafacta.nl>
- * @copyright  Copyright (c) 2011 Erasmus MC
- * @license    New BSD License
  */
 
 namespace Zalt\Snippets;
@@ -15,13 +13,14 @@ use Mezzio\Flash\FlashMessagesInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Zalt\Base\MessageTrait;
 use Zalt\Base\RedirectorInterface;
+use Zalt\Base\TranslateableTrait;
 use Zalt\Html\Html;
 use Zalt\Html\HtmlElement;
 use Zalt\Html\HtmlInterface;
 use Zalt\Html\Sequence;
-use Zalt\Base\MessageTrait;
-use Zalt\Base\TranslateableTrait;
+use Zalt\SnippetsLoader\SnippetOptions;
 
 /**
  * An abstract class for building snippets. Sub classes should override at least
@@ -36,8 +35,6 @@ use Zalt\Base\TranslateableTrait;
  *
  * @package    Zalt
  * @subpackage Snippets
- * @copyright  Copyright (c) 2011 Erasmus MC
- * @license    New BSD License
  * @since      Class available since version 1.1
  */
 abstract class SnippetAbstract implements SnippetInterface
@@ -59,19 +56,14 @@ abstract class SnippetAbstract implements SnippetInterface
      */
     protected $class;
 
-    public function __construct(array $config, ServerRequestInterface $request, TranslatorInterface $translate, protected RedirectorInterface $redirector)
+    public function __construct(SnippetOptions $snippetOptions, ServerRequestInterface $request, TranslatorInterface $translate, protected RedirectorInterface $redirector)
     {
         // We're setting trait variables so no constructor promotion
         $this->translate = $translate;
         $this->request   = $request;
         $this->messenger = $request->getAttribute('flash');
         
-        // Set variables from config
-        foreach (get_object_vars($this) as $property => $object) {
-            if (isset($config[$property]) && ('_' != substr($property, 0, 1))) {
-                $this->$property = $config[$property]; 
-            }
-        } 
+        $this->setSnippetOptions($snippetOptions);
     }
     
     /**
@@ -193,5 +185,21 @@ abstract class SnippetAbstract implements SnippetInterface
                 }
             }
         }
+    }
+
+    public function setSnippetOption($id, $value)
+    {
+        $this->$id = $value;
+    }
+    
+    public function setSnippetOptions(SnippetOptions $snippetOptions)
+    {
+        // Set variables from config
+        foreach (get_object_vars($this) as $property => $object) {
+            if ($snippetOptions->has($property) && ('_' != substr($property, 0, 1))) {
+                $this->setSnippetOption($property, $snippetOptions->get($property));
+            }
+        }
+        return $this;
     }
 }

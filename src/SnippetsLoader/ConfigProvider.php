@@ -38,6 +38,7 @@ class ConfigProvider
             ],
             'invokables' => [
                 SnippetLoader::class => SnippetLoaderFactory::class,
+                SnippetMiddleware::class => SnippetMiddleware::class,
             ],
         ];
     }

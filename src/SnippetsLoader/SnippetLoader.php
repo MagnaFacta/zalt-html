@@ -16,6 +16,7 @@ use Psr\Http\Message\ServerRequestInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Zalt\Snippets\SnippetInterface;
 use Zalt\Loader\ProjectOverloader;
+use Zalt\Ra\Ra;
 
 /**
  * This class handles the loading and processing of snippets.
@@ -84,14 +85,21 @@ class SnippetLoader implements SnippetLoaderInterface
      * Searches and loads a .php snippet file.
      *
      * @param string $className The name of the snippet
-     * @param array $extraSourceParameters name/value pairs to add to the source for this snippet
+     * @param mixed $snippetOptions name/value pairs options for this snippet
      * @return \Zalt\Snippets\SnippetInterface The snippet
      */
-    public function getSnippet(string $className, array $extraSourceParameters = []): SnippetInterface
+    public function getSnippet(string $className, mixed $snippetOptions = []): SnippetInterface
     {
         $sm = $this->loader->getContainer();
 
-        $snippet = $this->loader->create($className, $extraSourceParameters);
+        if (! $snippetOptions instanceof SnippetOptions) {
+            if (! is_array($snippetOptions)) {
+                $snippetOptions = Ra::to($snippetOptions);
+            }
+            $snippetOptions = new SnippetOptions($snippetOptions);
+        }
+        
+        $snippet = $this->loader->create($className, $snippetOptions);
 
         if ($snippet instanceof SnippetInterface) {
             return $snippet;

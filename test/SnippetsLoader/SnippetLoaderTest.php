@@ -14,6 +14,8 @@ namespace Zalt\SnippetsLoader;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ServerRequestInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Zalt\Base\BasicRedirector;
+use Zalt\Base\RedirectorInterface;
 use Zalt\Html\Html;
 use Zalt\Loader\Exception\LoadException;
 use Zalt\Mock\PotemkinTranslator;
@@ -38,9 +40,10 @@ class SnippetLoaderTest extends TestCase
 
         $config  = ['x' => 'y'];
         $classes = [
+            RedirectorInterface::class    => new BasicRedirector(),
             ServerRequestInterface::class => SimpleFlashRequestFactory::createWithoutServiceManager('http://localhost/index.php'),
-            TranslatorInterface::class => new PotemkinTranslator(),
-            'config' => $config,
+            TranslatorInterface::class    => new PotemkinTranslator(),
+            SnippetOptions::class         => new SnippetOptions($config),
         ];
         
         $this->sm = new SimpleServiceManager($classes);

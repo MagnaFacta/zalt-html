@@ -14,6 +14,8 @@ namespace Zalt\SnippetsLoader;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ServerRequestInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Zalt\Base\BasicRedirector;
+use Zalt\Base\RedirectorInterface;
 use Zalt\Loader\Exception\LoadException;
 use Zalt\Mock\PotemkinTranslator;
 use Zalt\Mock\SimpleFlashRequestFactory;
@@ -34,9 +36,10 @@ class SnippetLoaderDirTest extends TestCase
     {
         $config  = ['x' => 'y'];
         $classes = [
+            RedirectorInterface::class    => new BasicRedirector(),
             ServerRequestInterface::class => SimpleFlashRequestFactory::createWithoutServiceManager('http://localhost/index.php'),
-            TranslatorInterface::class => new PotemkinTranslator(),
-            'config' => $config,
+            TranslatorInterface::class    => new PotemkinTranslator(),
+            SnippetOptions::class         => new SnippetOptions($config),
         ];
 
         $sm = new SimpleServiceManager($classes);
@@ -54,18 +57,18 @@ class SnippetLoaderDirTest extends TestCase
     {
         $config  = ['x' => 'y'];
         $classes = [
+            RedirectorInterface::class    => new BasicRedirector(),
             ServerRequestInterface::class => SimpleFlashRequestFactory::createWithoutServiceManager('http://localhost/index.php'),
             TranslatorInterface::class => new PotemkinTranslator(),
-            'config' => $config,
         ];
 
         $sm = new SimpleServiceManager($classes);
         $sl = new SnippetLoader($sm, ['Zalt\\Snippets\\Sub']);
 
-        $snippet1 = $sl->getSnippet('Null2Snippet', []);
+        $snippet1 = $sl->getSnippet('Null2Snippet', $config);
         $this->assertInstanceOf(SnippetInterface::class, $snippet1);
         $this->assertInstanceOf(Null2Snippet::class, $snippet1);
-        $snippet2 = $sl->getSnippet(NullSnippet::class, []);
+        $snippet2 = $sl->getSnippet(NullSnippet::class, $config);
         $this->assertInstanceOf(SnippetInterface::class, $snippet2);
         $this->assertInstanceOf(NullSnippet::class, $snippet2);
 
