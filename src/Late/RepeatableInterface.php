@@ -39,7 +39,7 @@ interface RepeatableInterface extends ArrayAccess
     public function __current();
 
     /**
-     * Return a lazy version of the property retrieval
+     * Return a late version of the property retrieval
      *
      * @return LateInterface
      */

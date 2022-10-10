@@ -60,5 +60,5 @@ interface ElementInterface extends HtmlInterface, ArrayAccess, Countable, Iterat
      */
     public function getTagName();
 
-    // inherited: public function render(\Zend_View_Abstract $view);
+    // inherited: public function render();
 }

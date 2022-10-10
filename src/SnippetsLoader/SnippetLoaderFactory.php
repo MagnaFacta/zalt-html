@@ -24,7 +24,7 @@ class SnippetLoaderFactory
 {
     public function __invoke(ContainerInterface $container): SnippetLoader
     {
-        $config = $container->get('config');
+        $config = $container->has('config') ? $container->get('config') : [];
         if (isset($config['overLoaderPaths'])) {
             $dirs = (array) $config['overLoaderPaths'];
         } else {
@@ -33,8 +33,14 @@ class SnippetLoaderFactory
         
         $output = new SnippetLoader($container, $dirs);
         
+        // Preparing the other parts
         if (! Html::hasSnippetLoader()) {
             Html::setSnippetLoader($output);
+        }
+        
+        $renderer = Html::getRenderer();
+        if ($container->has('Zend_View') && ! $renderer->hasView()) {
+            $renderer->setView($container->get('Zend_View'));
         }
         
         return $output;

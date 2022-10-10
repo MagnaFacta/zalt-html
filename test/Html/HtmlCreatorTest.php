@@ -74,6 +74,7 @@ class HtmlCreatorTest extends TestCase
 
     public function setUp(): void
     {
+        ImgElement::setWebRoot(dirname(__DIR__));
         ImgElement::addImageDir('icons');
     }
 

@@ -128,7 +128,7 @@ class PFormElement extends HtmlElement implements FormLayout
         // Late call becase the form might not be completed at this stage.
         return $this->setAsFormLayout(
                 $form,
-                Lazy::call([DlElement::class, 'calculateAutoWidthFormLayout'], $form, $factor),
+                Late::call([DlElement::class, 'calculateAutoWidthFormLayout'], $form, $factor),
                 $order
                 );
     }

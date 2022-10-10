@@ -12,6 +12,7 @@
 namespace Zalt\Snippets;
 
 use Mezzio\Csrf\CsrfGuardInterface;
+use Zalt\Ra\Ra;
 
 /**
  * Abstract class for creating & processing a form based on a model. To use this
@@ -233,7 +234,7 @@ abstract class ModelFormSnippetAbstract extends \Zalt\Snippets\ModelSnippetAbstr
         }
 
         array_shift($args); // Remove bridge
-        $elements = \Zalt\Ra::flatten($args);
+        $elements = Ra::flatten($args);
         $model    = $this->getModel();
 
         //Remove the elements from the _items variable

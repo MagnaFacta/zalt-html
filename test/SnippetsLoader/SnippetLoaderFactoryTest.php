@@ -14,8 +14,10 @@ namespace Zalt\SnippetsLoader;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ServerRequestInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
-use Zalt\Base\BasicRedirectorFactory;
+use Zalt\Base\BasicRedirector;
 use Zalt\Base\RedirectorInterface;
+use Zalt\Base\RequestInfo;
+use Zalt\Base\RequestInfoFactory;
 use Zalt\Html\Html;
 use Zalt\Mock\PotemkinTranslator;
 use Zalt\Mock\SimpleFlashRequestFactory;
@@ -49,13 +51,9 @@ class SnippetLoaderFactoryTest extends TestCase
     
     public function testWorkingFactory()
     {
-        $config  = ['x' => 'y'];
-        $brf     =  new BasicRedirectorFactory();
         $classes = [
-            ServerRequestInterface::class => SimpleFlashRequestFactory::createWithoutServiceManager('http://localhost/index.php'),
             TranslatorInterface::class => new PotemkinTranslator(),
-            RedirectorInterface::class => $brf(new SimpleServiceManager([])), 
-            'config' => $config,
+            RedirectorInterface::class => new BasicRedirector(), 
         ];
 
         $this->assertFalse(Html::hasSnippetLoader());
@@ -63,6 +61,10 @@ class SnippetLoaderFactoryTest extends TestCase
         $sm    = new SimpleServiceManager($classes);
         $class = new SnippetLoaderFactory();
         $sl    = $class($sm);
+        $sl->addConstructorVariable(
+            RequestInfo::class,
+            RequestInfoFactory::getMezzioRequestInfo(SimpleFlashRequestFactory::createWithoutServiceManager('http://localhost/index.php'))
+        );
 
         $this->assertInstanceOf(SnippetLoader::class, $sl);
 

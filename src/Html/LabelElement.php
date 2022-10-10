@@ -11,6 +11,9 @@
 
 namespace Zalt\Html;
 
+use Zalt\Late\Late;
+use Zalt\Late\LateInterface;
+
 /**
  *
  * @package    Zalt
@@ -78,25 +81,35 @@ class LabelElement extends \Zalt\Html\HtmlElement
         return new self(__FUNCTION__, $args);
     }
 
+    protected function renderContent()
+    {
+        if ($content = Html::getRenderer()->renderAny($this->_currentContent)) {
+            return $content;
+
+        } elseif ($this->_onEmptyContent) {
+            return Html::getRenderer()->renderAny($this->_onEmptyContent);
+
+        } else {
+            return '&nbsp;';
+        }
+    }
+
     /**
      * Function to allow overloading  of tag rendering only
      *
      * Renders the element tag with it's content into a html string
      *
-     * The $view is used to correctly encode and escape the output
-     *
-     * @param \Zend_View_Abstract $view
      * @return string Correctly encoded and escaped html output
      */
-    protected function renderElement(\Zend_View_Abstract $view)
+    protected function renderElement()
     {
         $this->_currentContent = array();
 
-        // If the label was assigned an element lazy,
+        // If the label was assigned an element late,
         // now is the time to get it's value.
         foreach ($this->_content as $key => $value) {
-            if ($value instanceof \Zalt\Lazy\LazyInterface) {
-                $value = \Zalt\Lazy::rise($value);
+            if ($value instanceof LateInterface) {
+                $value = Late::rise($value);
             }
             if ($value instanceof \Zend_Form_Element) {
                 if ($value instanceof \Zend_Form_Element_Hidden) {
@@ -107,11 +120,11 @@ class LabelElement extends \Zalt\Html\HtmlElement
                 $decorator = $value->getDecorator('Label');
                 if ($decorator) {
                     if (false === $decorator->getOption('escape')) {
-                        $label = \Zalt\Html::raw($value->getLabel());
+                        $label = Html::raw($value->getLabel());
                     } else {
                         $label = $value->getLabel();
                     }
-                    $class = $this->class ? \Zalt\Html::renderAny($view, $this->class) . ' ' : '';
+                    $class = $this->class ? Html::getRenderer()->renderAny($this->class) . ' ' : '';
                     if ($value->isRequired()) {
                         $class .= $this->getRequiredClass();
                         $this->_currentContent[$key] = array($this->getRequiredPrefix(), $label, $this->getRequiredPostfix());
@@ -134,20 +147,7 @@ class LabelElement extends \Zalt\Html\HtmlElement
             }
         }
 
-        return parent::renderElement($view);
-    }
-
-    protected function renderContent(\Zend_View_Abstract $view)
-    {
-        if ($content = \Zalt\Html::getRenderer()->renderAny($view, $this->_currentContent)) {
-            return $content;
-
-        } elseif ($this->_onEmptyContent) {
-            return \Zalt\Html::getRenderer()->renderAny($view, $this->_onEmptyContent);
-
-        } else {
-            return '&nbsp;';
-        }
+        return parent::renderElement();
     }
 
     public function setElement($element, $key = null)

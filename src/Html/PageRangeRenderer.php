@@ -71,8 +71,6 @@ class PageRangeRenderer implements HtmlInterface, Procrastinator
     /**
      * Echo the content.
      *
-     * The $view is not used but required by the interface definition
-     *
      * @return string Correctly encoded and escaped html output
      */
     public function render()

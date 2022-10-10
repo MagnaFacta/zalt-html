@@ -21,7 +21,7 @@ namespace Zalt\Late;
 interface Procrastinator
 {
     /**
-     * Returns a lazy instance of item. Do NOT use Zalt\Late::L() in this function!!!
+     * Returns a late instance of item. Do NOT use Zalt\Late\Late::L() in this function!!!
      *
      * @return LateInterface
      */

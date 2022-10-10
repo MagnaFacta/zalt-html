@@ -12,11 +12,13 @@
 
 namespace Zalt\Html;
 
+use Zalt\Late\Late;
+
 /**
  * A standaard TBODY element, that puts all contents in TR elements, implements the
  * ColomInterface and allows you to specify a row class.
  *
- * You can alternate row classes by using a lazy value.
+ * You can alternate row classes by using a late value.
  *
  * @see \Zalt\Html\TableElement
  *
@@ -181,7 +183,7 @@ class TBodyElement extends \Zalt\Html\HtmlElement implements \Zalt\Html\ColumnIn
             }
 
         } else {
-            $this->_onEmptyContent = \Zalt\Html::create($this->_defaultChildTag);
+            $this->_onEmptyContent = Html::create($this->_defaultChildTag);
             $this->_onEmptyLocal   = $this->_onEmptyContent->td($content);
 
         }
@@ -189,8 +191,8 @@ class TBodyElement extends \Zalt\Html\HtmlElement implements \Zalt\Html\ColumnIn
         // Collcount tells us to span the empty content cell
         if ($colcount) {
             if ($colcount instanceof \Zalt\Html\ColumnInterface) {
-                // Lazy calculation of number of columns when this is a ColumnInterface
-                $this->_onEmptyLocal->colspan = \Zalt\Lazy::method($colcount, 'getColumnCount');
+                // Late calculation of number of columns when this is a ColumnInterface
+                $this->_onEmptyLocal->colspan = Late::method($colcount, 'getColumnCount');
 
             } else {
                 // Passed fixed number of columns, just set
@@ -213,7 +215,7 @@ class TBodyElement extends \Zalt\Html\HtmlElement implements \Zalt\Html\ColumnIn
      * not the element tags. When repeatTags is true the both the tags and the
      * content are repeated.
      *
-     * @param mixed $repeater \Zalt\Lazy\RepeatableInterface or something that can be made into one.
+     * @param mixed $repeater \Zalt\Late\RepeatableInterface or something that can be made into one.
      * @param mixed $onEmptyContent Optional. When not null the content to display when the repeater does not result in data is set.
      * @param boolean $repeatTags Optional when not null the repeatTags switch is set.
      * @param mixed $colcount \Zalt\Html\ColumnInterface or intefer. Span the onEmpty content over $colcount cells
@@ -234,49 +236,44 @@ class TBodyElement extends \Zalt\Html\HtmlElement implements \Zalt\Html\ColumnIn
     /**
      * Static helper function for creation, used by @see \Zalt\Html\Creator.
      *
-     * @param mixed $arg_array Optional \Zalt\Ra::args processed settings
+     * @param mixed $args Optional args processed settings
      * @return \Zalt\Html\TBodyElement with tag 'tbody'
      */
-    public static function tbody($arg_array = null)
+    public static function tbody(...$args)
     {
-        $args = func_get_args();
         return new self(__FUNCTION__, $args);
     }
 
     /**
      * Static helper function for creation, used by @see \Zalt\Html\Creator.
      *
-     * @param mixed $arg_array Optional \Zalt\Ra::args processed settings
+     * @param mixed $args Optional args processed settings
      * @return \Zalt\Html\TBodyElement with tag 'tfoot'
      */
-    public static function tfoot($arg_array = null)
+    public static function tfoot(...$args)
     {
-        $args = func_get_args();
         return new self(__FUNCTION__, $args);
     }
 
     /**
      * Static helper function for creation, used by @see \Zalt\Html\Creator.
      *
-     * @param mixed $arg_array Optional \Zalt\Ra::args processed settings
+     * @param mixed $args Optional args processed settings
      * @return \Zalt\Html\TBodyElement with tag 'thead'
      */
-    public static function thead($arg_array = null)
+    public static function thead(...$args)
     {
-        $args = func_get_args();
         return new self(__FUNCTION__, array('DefaultRowChildTag' => 'th'), $args);
     }
 
     /**
      * Add a row with a class and the correct type of default child tag to this element
      *
-     * @param mixed $arg_array \Zalt::args() values
+     * @param mixed $args Optional args processed settings
      * @return \Zalt\Html\TrElement
      */
-    public function tr($arg_array = null)
+    public function tr(...$args)
     {
-        $args = func_get_args();
-
         // Set default child tag first and het because otherwise
         // the children are created first and the default child tag
         // is set afterwards.
@@ -284,7 +281,7 @@ class TBodyElement extends \Zalt\Html\HtmlElement implements \Zalt\Html\ColumnIn
             array_unshift($args, array('DefaultChildTag' => $this->getDefaultRowChildTag()));
         }
 
-        $tr = \Zalt\Html::createArray('tr', $args);
+        $tr = Html::createArray('tr', $args);
 
         $this[] = $tr;
 

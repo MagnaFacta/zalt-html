@@ -19,7 +19,7 @@ use Zalt\Late\Stack\RepeatableStack;
 use Zalt\Ra\Ra;
 
 /**
- * Why get lazy:
+ * Why get late:
  * 1 - You want to use a result later that is not yet known
  * 2 - You want the result repeated for a sequence of items
  * 3 - You want a result on some object but do not have the object yet
@@ -53,7 +53,7 @@ class Late
     public static $verbose = false;
 
     /**
-     * Returns a lazy object that alternates through all the parameters used
+     * Returns a late object that alternates through all the parameters used
      * to call this function. (At least two , but more is allowed.)
      *
      * @param mixed $value1
@@ -83,7 +83,7 @@ class Late
     }
 
     /**
-     * Create a lazy comparison operation
+     * Create a late comparison operation
      *
      * @param mixed $opLeft
      * @param string $oper The operator to use for this comparison
@@ -170,7 +170,7 @@ class Late
     }
 
     /**
-     * Get a named call to the lazy stack
+     * Get a named call to the late stack
      *
      * @return LateGet
      */
@@ -245,7 +245,7 @@ class Late
     }
 
     /**
-     * Return a lazy callable to an object
+     * Return a late callable to an object
      *
      * @param Object $object
      * @param string $method Method of the object
@@ -258,7 +258,7 @@ class Late
     }
 
     /**
-     * Perform a lazy call to an array
+     * Perform a late call to an array
      *
      * @param mixed $array
      * @param mixed $offset
@@ -270,7 +270,7 @@ class Late
     }
 
     /**
-     * Return a lazy retrieval of an object property
+     * Return a late retrieval of an object property
      *
      * @param Object $object
      * @param string $property Property of the object
@@ -325,7 +325,7 @@ class Late
      *
      * @param mixed $object Usually an object of type \Zalt\Late\LateInterface
      * @param mixed $stack Optional variable stack for evaluation
-     * @return mixed Something not lazy
+     * @return mixed Something not late
      */
     public static function rise($object, $stack = null)
     {

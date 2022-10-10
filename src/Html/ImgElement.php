@@ -12,6 +12,7 @@
 namespace Zalt\Html;
 
 use Zalt\Late\Late;
+use Zalt\Ra\Ra;
 
 /**
  * An image element with added functionality to automatically add with and height
@@ -186,7 +187,7 @@ class ImgElement extends HtmlElement
      * Static helper function for creation, used by @see \Zalt\Html\Creator.
      *
      * @param string $src The source
-     * @param array $args Optional \Zalt\Ra::args processed settings
+     * @param array $args Optional \Zalt\Ra\Ra::args processed settings
      * @return \Zalt\Html\ImgElement
      */
     public static function imgFile($src, ...$args)

@@ -21,7 +21,7 @@ namespace Zalt\Html;
  * @copyright  Copyright (c) 2011 Erasmus MC
  * @license    New BSD License
  */
-class StyleArrayAttribute extends \Zalt\Html\ArrayAttribute
+class StyleArrayAttribute extends ArrayAttribute
 {
     public function __construct($arg_array = null)
     {

@@ -21,7 +21,7 @@ namespace Zalt\Html;
  * @license    New BSD License
  * @since      Class available since \Zalt version 1.0
  */
-class MultiWrapper extends \Zalt\MultiWrapper implements \Zalt\Html\HtmlInterface
+class MultiWrapper extends \Zalt\Ra\MultiWrapper implements \Zalt\Html\HtmlInterface
 {
     /**
      * The class name used to create new class instances for function call results
@@ -35,18 +35,15 @@ class MultiWrapper extends \Zalt\MultiWrapper implements \Zalt\Html\HtmlInterfac
     /**
      * Renders the element into a html string
      *
-     * The $view is used to correctly encode and escape the output
-     *
-     * @param \Zend_View_Abstract $view
      * @return string Correctly encoded and escaped html output
      */
-    public function render(\Zend_View_Abstract $view)
+    public function render()
     {
         $results = array();
 
-        $renderer = \Zalt\Html::getRenderer();
+        $renderer = Html::getRenderer();
         foreach ($this->_array as $item) {
-            $result = $renderer->renderAny($view, $item);
+            $result = $renderer->renderAny($item);
 
             if ((null !== $result) && strlen($result)) {
                 $results[] = $result;

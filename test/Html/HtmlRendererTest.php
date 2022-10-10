@@ -87,6 +87,7 @@ class HtmlRendererTest extends \PHPUnit\Framework\TestCase
 
     public function setUp(): void
     {
+        ImgElement::setWebRoot(dirname(__DIR__));
         ImgElement::addImageDir('icons');
 
         Late::setStack([

@@ -38,7 +38,7 @@ class TableSnippetAbstract extends \Zalt\Snippets\SnippetAbstract
     /**
      * REQUIRED, but can be derived from $this->data
      *
-     * @var \Zalt\Lazy\RepeatableInterface
+     * @var \Zalt\Late\RepeatableInterface
      */
     protected $repeater;
 
@@ -68,10 +68,9 @@ class TableSnippetAbstract extends \Zalt\Snippets\SnippetAbstract
      *
      * This is a stub function either override getHtmlOutput() or override render()
      *
-     * @param \Zend_View_Abstract $view Just in case it is needed here
      * @return \Zalt\Html\HtmlInterface Something that can be rendered
      */
-    public function getHtmlOutput(\Zend_View_Abstract $view)
+    public function getHtmlOutput()
     {
         $table = new \Zalt\Html\TableElement($this->repeater);
 
@@ -86,7 +85,7 @@ class TableSnippetAbstract extends \Zalt\Snippets\SnippetAbstract
             $table->appendAttrib('class', $this->class);
         }
 
-        $container = \Zalt\Html::create()->div(array('class' => 'table-container'));
+        $container = Html::create()->div(array('class' => 'table-container'));
         $container[] = $table;
 
         return $container;
@@ -106,7 +105,7 @@ class TableSnippetAbstract extends \Zalt\Snippets\SnippetAbstract
     public function hasHtmlOutput()
     {
         if (! $this->repeater) {
-            $this->repeater = \Zalt\Lazy::repeat($this->data);
+            $this->repeater = Late::repeat($this->data);
         } else {
             // We do not know whether there is any link between
             // the data and the repeater, so do not use the data

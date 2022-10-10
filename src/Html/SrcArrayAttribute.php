@@ -25,7 +25,7 @@ namespace Zalt\Html;
  * @license    New BSD License
  * @since      Class available since version 1.0
  */
-class SrcArrayAttribute extends \Zalt\Html\UrlArrayAttribute
+class SrcArrayAttribute extends UrlArrayAttribute
 {
     public function __construct($args_array = null)
     {

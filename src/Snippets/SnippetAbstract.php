@@ -9,12 +9,9 @@
 
 namespace Zalt\Snippets;
 
-use Mezzio\Flash\FlashMessagesInterface;
-use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\ServerRequestInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
-use Zalt\Base\MessageTrait;
 use Zalt\Base\RedirectorInterface;
+use Zalt\Base\RequestInfo;
 use Zalt\Base\TranslateableTrait;
 use Zalt\Html\Html;
 use Zalt\Html\HtmlElement;
@@ -39,7 +36,6 @@ use Zalt\SnippetsLoader\SnippetOptions;
  */
 abstract class SnippetAbstract implements SnippetInterface
 {
-    use MessageTrait;
     use TranslateableTrait;
     
     /**
@@ -56,13 +52,13 @@ abstract class SnippetAbstract implements SnippetInterface
      */
     protected $class;
 
-    public function __construct(SnippetOptions $snippetOptions, ServerRequestInterface $request, TranslatorInterface $translate, protected RedirectorInterface $redirector)
+    public function __construct(SnippetOptions $snippetOptions, TranslatorInterface $translate,
+                                protected RequestInfo $requestInfo,
+                                protected RedirectorInterface $redirector)
     {
         // We're setting trait variables so no constructor promotion
-        $this->translate = $translate;
-        $this->request   = $request;
-        $this->messenger = $request->getAttribute('flash');
-        
+        $this->translate   = $translate;
+                
         $this->setSnippetOptions($snippetOptions);
     }
     

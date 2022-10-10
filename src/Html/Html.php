@@ -55,7 +55,7 @@ class Html
      * be as succint as possible.
      *
      * Use:
-     *     \Zalt\Html::$verbose = true;
+     *     \Zalt\Html\Html::$verbose = true;
      * to enable.
      *
      * @var boolean $verbose If true echo retrieval statements.
@@ -111,7 +111,7 @@ class Html
     /**
      * Creates a new HtmlElement with the arguments specfied in a single array.
      *
-     * @param string $tagName (or a Lazy object)
+     * @param string $tagName (or a Late object)
      * @param array $args
      * @return ElementInterface
      */
@@ -315,10 +315,9 @@ class Html
     }
 
     /**
-     * Renders the $content so that it can be used as output for the $view,
-     * including output escaping and encoding correction.
+     * Renders the $content so that it can be used as output.
      *
-     * @param mixed $content Anything number, string, array, Lazy, HtmlInterface, object with __toString
+     * @param mixed $content Anything number, string, array, Late, HtmlInterface, object with __toString
      * @return string Output to echo to the user
      */
     public static function renderAny($content)
@@ -326,11 +325,11 @@ class Html
         return self::getRenderer()->renderAny($content);
     }
 
-    public static function renderNew(\Zend_View_Abstract $view, $tagName, ...$args)
+    public static function renderNew($tagName, ...$args)
     {
         $element = self::getCreator()->create($tagName, $args);
 
-        return $element->render($view);
+        return $element->render();
     }
 
     /**

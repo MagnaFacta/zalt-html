@@ -13,8 +13,8 @@
 namespace Zalt\Late;
 
 /**
- * A lazy object for when you want to access an array but either the array
- * itself and/or the offset is a lazy object.
+ * A lates object for when you want to access an array but either the array
+ * itself and/or the offset is a late object.
  *
  * @package    Zalt
  * @subpackage Late
@@ -27,20 +27,20 @@ class ArrayAccessor extends \Zalt\Late\LateAbstract
 {
     /**
      *
-     * @var mixed Possibly lazy array
+     * @var mixed Possibly late array
      */
     private $_array;
 
     /**
      *
-     * @var mixed Possibly lazy offset
+     * @var mixed Possibly late offset
      */
     private $_offset;
 
     /**
      *
-     * @param mixed Possibly lazy array
-     * @param mixed Possibly lazy offset
+     * @param mixed Possibly late array
+     * @param mixed Possibly late offset
      */
     public function __construct($array, $offset)
     {
@@ -51,7 +51,7 @@ class ArrayAccessor extends \Zalt\Late\LateAbstract
     /**
     * The functions that fixes and returns a value.
     *
-    * Be warned: this function may return a lazy value.
+    * Be warned: this function may return a late value.
     *
     * @param StackInterface $stack A StackInterface object providing variable data
     * @return mixed

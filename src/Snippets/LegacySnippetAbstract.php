@@ -11,8 +11,9 @@
 
 namespace Zalt\Snippets;
 
-use Zalt\Controller\Action;
 use Psr\Http\Message\ResponseInterface;
+use Zalt\Controller\Action;
+use Zalt\Html\Html;
 
 /**
  * An abstract class for building snippets. Sub classes should override at least
@@ -200,10 +201,9 @@ abstract class LegacySnippetAbstract extends \Zalt\Translate\TranslateableAbstra
      *
      * You should override either getHtmlOutput() or this function to generate output
      *
-     * @param \Zend_View_Abstract $view
      * @return string Html output
      */
-    public function render(\Zend_View_Abstract $view)
+    public function render()
     {
         // \Zalt\EchoOut\EchoOut::r(sprintf('Rendering snippet %s.', get_class($this)));
         //
@@ -218,16 +218,16 @@ abstract class LegacySnippetAbstract extends \Zalt\Translate\TranslateableAbstra
             $this->redirectRoute();
 
         } else {
-            $html = $this->getHtmlOutput($view);
+            $html = $this->getHtmlOutput();
 
             if ($html) {
                 if ($html instanceof \Zalt\Html\HtmlInterface) {
                     if ($html instanceof \Zalt\Html\HtmlElement) {
                         $this->applyHtmlAttributes($html);
                     }
-                    return $html->render($view);
+                    return $html->render();
                 } else {
-                    return \Zalt\Html::renderAny($view, $html);
+                    return Html::renderAny($html);
                 }
             }
         }

@@ -154,8 +154,6 @@ class TrElement extends HtmlElement implements ColumnInterface
      *
      * Renders the element tag with it's content into a html string
      *
-     * The $view is used to correctly encode and escape the output
-     *
      * @return string Correctly encoded and escaped html output
      */
     protected function renderElement()

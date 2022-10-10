@@ -61,11 +61,11 @@ class ObjectStack implements StackInterface
             return $this->_object->$name;
         }
         if ($this->_throwOnMiss) {
-            throw new LateStackException("No lazy stack variable defined for '$name' parameter.");
+            throw new LateStackException("No late stack variable defined for '$name' parameter.");
         }
         if (Late::$verbose) {
             $class = get_class($this->_object);
-            // \Zalt\EchoOut\EchoOut::header("No lazy stack variable defined for '$name' parameter using a '$class' object.");
+            // \Zalt\EchoOut\EchoOut::header("No late stack variable defined for '$name' parameter using a '$class' object.");
         }
 
         return null;

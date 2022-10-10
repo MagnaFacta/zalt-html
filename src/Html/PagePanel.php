@@ -12,6 +12,11 @@
 
 namespace Zalt\Html;
 
+use Zalt\Late\Late;
+use Zalt\Late\ObjectWrap;
+use Zalt\Late\Procrastinator;
+use Zalt\Ra\Ra;
+
 /**
  * Html Element used to display paginator page links and links to increase or decrease
  * the number of items shown.
@@ -24,7 +29,7 @@ namespace Zalt\Html;
  * @license    New BSD License
  * @since      Class available since version 1.0
  */
-class PagePanel extends \Zalt\Html\Sequence implements \Zalt\Lazy\Procrastinator
+class PagePanel extends Sequence implements Procrastinator
 {
     /**
      * Fixed addition to url's required for links, i.e. htte
@@ -104,11 +109,11 @@ class PagePanel extends \Zalt\Html\Sequence implements \Zalt\Lazy\Procrastinator
     protected $_itemCountValues  = array(5, 10, 15, 20, 50, 100, 200, 500, 1000, 2000);
 
     /**
-     * Lazy instance of this object
+     * Late instance of this object
      *
-     * @var \Zalt\Lazy\ObjectWrap
+     * @var \Zalt\Late\ObjectWrap
      */
-    protected $_lazy;
+    protected $_late;
 
     /**
      * Returns the current page collection.
@@ -153,16 +158,16 @@ class PagePanel extends \Zalt\Html\Sequence implements \Zalt\Lazy\Procrastinator
         );
 
     /**
-     * Lazy call to the _pages parameter
+     * Late call to the _pages parameter
      *
-     * @var \Zalt\Lazy\ObjectWrap
+     * @var \Zalt\Late\ObjectWrap
      */
     public $pages;
 
     /**
-     * Lazy call to the _paginator parameter.
+     * Late call to the _paginator parameter.
      *
-     * @var \Zalt\Lazy\ObjectWrap
+     * @var \Zalt\Late\ObjectWrap
      */
     public $paginator;
 
@@ -173,18 +178,18 @@ class PagePanel extends \Zalt\Html\Sequence implements \Zalt\Lazy\Procrastinator
 
         foreach ($this->_defaultEnabledContent as $key => $content) {
             $other = isset($args[$key]) ? $args[$key] : null;
-            if ($other instanceof \Zalt\Html\AttributeInterface) {
-                $other->add(\Zalt\Lazy::iff($condition, $content));
+            if ($other instanceof AttributeInterface) {
+                $other->add(Late::iff($condition, $content));
             } else {
-                $args[$key] = \Zalt\Lazy::iff($condition, $content, $other);
+                $args[$key] = Late::iff($condition, $content, $other);
             }
         }
         foreach ($this->_defaultDisabledContent as $key => $content) {
             $other = isset($args[$key]) ? $args[$key] : null;
-            if ($other instanceof \Zalt\Html\AttributeInterface) {
-                $other->add(\Zalt\Lazy::iff($condition, null, $content));
+            if ($other instanceof AttributeInterface) {
+                $other->add(Late::iff($condition, null, $content));
             } else {
-                $args[$key] = \Zalt\Lazy::iff($condition, $other, $content);
+                $args[$key] = Late::iff($condition, $other, $content);
             }
         }
 
@@ -221,12 +226,12 @@ class PagePanel extends \Zalt\Html\Sequence implements \Zalt\Lazy\Procrastinator
     public function createCountLink($condition, $count, array $args)
     {
         // Use the condition for the $href
-        $element = \Zalt\Html::create()->a(
-            \Zalt\Lazy::iff($condition, $this->_createHref($this->_itemCountParam, $count)),
+        $element = Html::create()->a(
+            Late::iff($condition, $this->_createHref($this->_itemCountParam, $count)),
             $this->_applyDefaults($condition, $args));
 
         // and make the tagName an if
-        $element->tagName = \Zalt\Lazy::iff($condition, 'a', 'span');
+        $element->tagName = Late::iff($condition, 'a', 'span');
 
         return $element;
     }
@@ -235,25 +240,25 @@ class PagePanel extends \Zalt\Html\Sequence implements \Zalt\Lazy\Procrastinator
      * Returns an element with a conditional tagName: it will become either an A or a SPAN
      * element.
      *
-     * @param \Zalt\Lazy $condition Condition for link display
+     * @param \Zalt\Late $condition Condition for link display
      * @param int $page    Page number of this link
      * @param array $args  Content of the page
      * @return \Zalt\Html\HtmlElement
      */
     public function createPageLink($condition, $page, array $args)
     {
-        $element = new \Zalt\Html\HtmlElement(
-                \Zalt\Lazy::iff($condition, 'a', 'span'),
-                array('href' => \Zalt\Lazy::iff($condition, $this->_createHref($this->_currentPageParam, $page))),
-                $this->_applyDefaults($condition, $args)
-                );
+        $element = new HtmlElement(
+            Late::iff($condition, 'a', 'span'),
+            array('href' => Late::iff($condition, $this->_createHref($this->_currentPageParam, $page))),
+            $this->_applyDefaults($condition, $args)
+            );
 
         return $element;
     }
 
     public function firstPage($label = '<<', $args_array = null)
     {
-        $args = \Zalt\Ra::args(func_get_args());
+        $args = Ra::args(func_get_args());
 
         // Apply default
         if (! isset($args[0])) {
@@ -465,13 +470,13 @@ class PagePanel extends \Zalt\Html\Sequence implements \Zalt\Lazy\Procrastinator
     {
         parent::init();
 
-        $this->paginator = $this->toLazy()->getPaginator();
-        $this->pages     = $this->toLazy()->getPages();
+        $this->paginator = $this->toLate()->getPaginator();
+        $this->pages     = $this->toLate()->getPages();
     }
 
     public function lastPage($label = '>>', $args_array = null)
     {
-        $args = \Zalt\Ra::args(func_get_args());
+        $args = Ra::args(func_get_args());
 
         // Apply default
         if (! isset($args[0])) {
@@ -483,7 +488,7 @@ class PagePanel extends \Zalt\Html\Sequence implements \Zalt\Lazy\Procrastinator
 
     public function nextPage($label = '>', $args_array = null)
     {
-        $args = \Zalt\Ra::args(func_get_args());
+        $args = Ra::args(func_get_args());
 
         // Apply default
         if (! isset($args[0])) {
@@ -507,7 +512,7 @@ class PagePanel extends \Zalt\Html\Sequence implements \Zalt\Lazy\Procrastinator
      * @param string $next Label for goto next page link
      * @param string $last Label for goto last page link
      * @param string $glue In between links glue
-     * @param mixed $args \Zalt\Ra::args extra arguments applied to all links
+     * @param mixed $args \Zalt\Ra\Ra::args extra arguments applied to all links
      * @return \Zalt\Html\Sequence
      */
     public function pageLinks($first = '<<', $previous = '<', $next = '>', $last = '>>', $glue = ' ', $args = null)
@@ -515,14 +520,14 @@ class PagePanel extends \Zalt\Html\Sequence implements \Zalt\Lazy\Procrastinator
         $argDefaults = array('first' => '<<', 'previous' => '<', 'next' => '>', 'last' => '>>', 'glue' => ' ');
         $argNames    = array_keys($argDefaults);
 
-        $args = \Zalt\Ra::args(func_get_args(), $argNames, $argDefaults);
+        $args = Ra::args(func_get_args(), $argNames, $argDefaults);
 
         foreach ($argNames as $name) {
             $$name = $args[$name];
             unset($args[$name]);
         }
 
-        $div = \Zalt\Html::create()->sequence(array('glue' => $glue));
+        $div = Html::create()->sequence(array('glue' => $glue));
 
         if ($first) { // Can be null or array()
             $div[] = $this->firstPage((array) $first + $args);
@@ -538,13 +543,13 @@ class PagePanel extends \Zalt\Html\Sequence implements \Zalt\Lazy\Procrastinator
             $div[] = $this->lastPage((array) $last + $args);
         }
 
-        return \Zalt\Lazy::iff(\Zalt\Lazy::comp($this->pages->pageCount, '>', 1), $div);
+        return Late::iff(Late::comp($this->pages->pageCount, '>', 1), $div);
     }
 
     /**
      * Create a page panel
      *
-     * @param mixed $paginator \Zalt\Ra::args() for an \Zalt\Html\Sequence
+     * @param mixed $paginator \Zalt\Ra\Ra::args() for an \Zalt\Html\Sequence
      * @param mixed $request
      * @param mixed $args
      * @return self
@@ -563,7 +568,7 @@ class PagePanel extends \Zalt\Html\Sequence implements \Zalt\Lazy\Procrastinator
 
     public function previousPage($label = '<', $args_array = null)
     {
-        $args = \Zalt\Ra::args(func_get_args());
+        $args = Ra::args(func_get_args());
 
         // Apply default
         if (! isset($args[0])) {
@@ -575,7 +580,7 @@ class PagePanel extends \Zalt\Html\Sequence implements \Zalt\Lazy\Procrastinator
 
     public function rangePages($glue = ' ', $args_array = null)
     {
-        $args = \Zalt\Ra::args(func_get_args(), array('glue'), array('glue' => ' '));
+        $args = Ra::args(func_get_args(), array('glue'), array('glue' => ' '));
 
         return new \Zalt\Html\PageRangeRenderer($this, $args);
     }
@@ -664,32 +669,17 @@ class PagePanel extends \Zalt\Html\Sequence implements \Zalt\Lazy\Procrastinator
     }
 
     /**
-     * Set the View object
+     * Returns a Late instance of item. Do NOT use Zalt\Late\Late::L() in this function!!!
      *
-     * @param  \Zend_View_Interface $view
-     * @return \Zalt\Html\PagePanel (continuation pattern)
+     * @return \Zalt\Late\LateInterface
      */
-    public function setView(\Zend_View_Interface $view)
+    public function toLate()
     {
-        if ($this->_paginator) {
-            $this->_paginator->setView($view);
+        if (! $this->_late) {
+            $this->_late = new ObjectWrap($this);
         }
 
-        return parent::setView($view);
-    }
-
-    /**
-     * Returns a lazy instance of item. Do NOT use Zalt\Lazy::L() in this function!!!
-     *
-     * @return \Zalt\Lazy\LazyInterface
-     */
-    public function toLazy()
-    {
-        if (! $this->_lazy) {
-            $this->_lazy = new \Zalt\Lazy\ObjectWrap($this);
-        }
-
-        return $this->_lazy;
+        return $this->_late;
     }
 
     public function uptoOff($upto = '-', $off = '/', $glue = ' ')
@@ -710,7 +700,7 @@ class PagePanel extends \Zalt\Html\Sequence implements \Zalt\Lazy\Procrastinator
         $argDefaults = array('upto' => '~', 'off' => '/', 'less' => '-', 'more' => '+', 'all' => null, 'glue' => ' ');
         $argNames    = array_keys($argDefaults);
 
-        $args = \Zalt\Ra::args(func_get_args(), $argNames, $argDefaults);
+        $args = Ra::args(func_get_args(), $argNames, $argDefaults);
 
         foreach ($argNames as $name) {
             $$name = $args[$name];
@@ -724,18 +714,18 @@ class PagePanel extends \Zalt\Html\Sequence implements \Zalt\Lazy\Procrastinator
             $seq[] = $upto;
         }
         if (null !== $less) {
-            $cless = $this->toLazy()->getItemCountLess();
+            $cless = $this->toLate()->getItemCountLess();
             $seq[] = $this->createCountLink($cless, $cless, (array) $less + $args);
         }
         if (null !== $upto) {
             $seq[] = $this->pages->lastItemNumber;
         }
         if (null !== $more) {
-            $cmore = $this->toLazy()->getItemCountMore();
+            $cmore = $this->toLate()->getItemCountMore();
             $seq[] = $this->createCountLink($cmore, $cmore, (array) $more + $args);
         }
         if (null !== $all) {
-            $seq[] = $this->createCountLink($this->toLazy()->getItemCountNotMax(), $this->toLazy()->getItemCountMax(), (array) $all + $args);
+            $seq[] = $this->createCountLink($this->toLate()->getItemCountNotMax(), $this->toLate()->getItemCountMax(), (array) $all + $args);
         }
         if (null !== $off) {
             if (null !== $upto) {

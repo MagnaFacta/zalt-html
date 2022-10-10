@@ -27,7 +27,7 @@ namespace Zalt\Late;
 abstract class LateAbstract implements LateInterface
 {
     /**
-     * Return a lazy version of the call
+     * Return a late version of the call
      *
      * @return LateCall
      */
@@ -37,7 +37,7 @@ abstract class LateAbstract implements LateInterface
     }
 
     /**
-     * Return a lazy version of the property retrieval
+     * Return a late version of the property retrieval
      *
      * @return LateProperty
      */
@@ -102,7 +102,7 @@ abstract class LateAbstract implements LateInterface
     }
 
     /**
-     * Returns a lazy call where this object is the first parameter
+     * Returns a late call where this object is the first parameter
      *
      * @param $callableOrObject object|callable
      * @param mixed $nameOrArg1 optional method|mixed

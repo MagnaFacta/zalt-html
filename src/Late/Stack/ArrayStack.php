@@ -46,10 +46,10 @@ class ArrayStack extends ArrayObject implements StackInterface
             return $this->offsetGet($name);
         }
         if ($this->_throwOnMiss) {
-            throw new LateStackException("No lazy stack variable defined for '$name' parameter.");
+            throw new LateStackException("No late stack variable defined for '$name' parameter.");
         }
         if (Late::$verbose) {
-            // \Zalt\EchoOut\EchoOut::header("No lazy stack variable defined for '$name' parameter.");
+            // \Zalt\EchoOut\EchoOut::header("No late stack variable defined for '$name' parameter.");
         }
 
         return null;

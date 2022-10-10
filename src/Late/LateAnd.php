@@ -89,7 +89,7 @@ class LateAnd extends LateAbstract implements Countable
     /**
     * The functions that fixes and returns a value.
     *
-    * Be warned: this function may return a lazy value.
+    * Be warned: this function may return a late value.
     *
     * @param StackInterface $stack A StackInterface object providing variable data
     * @return mixed
@@ -98,7 +98,7 @@ class LateAnd extends LateAbstract implements Countable
     {
         foreach ($this->_values as $value) {
             if ($value && ($value instanceof LateInterface)) {
-                $value = \Zalt\Late::riseObject($value, $stack);
+                $value = Late::riseObject($value, $stack);
             }
             if (! $value) {
                 return false;

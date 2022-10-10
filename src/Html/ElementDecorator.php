@@ -12,6 +12,8 @@
 
 namespace Zalt\Html;
 
+use Zalt\Html\HtmlInterface;
+use Zalt\Late\RepeatableFormElements;
 use Zalt\Ra\Ra;
 
 /**
@@ -90,24 +92,23 @@ class ElementDecorator extends \Zend_Form_Decorator_Abstract
     public function render($content)
     {
         if ((null === ($element = $this->getElement())) ||
-            (null === ($view = $element->getView())) ||
             (null === ($htmlelement = $this->getHtmlElement()))) {
             return $content;
         }
 
         if ($prologue = $this->getPrologue()) {
-            if ($prologue instanceof \Zalt\Lazy\RepeatableFormElements) {
+            if ($prologue instanceof RepeatableFormElements) {
                 // Not every browser can handle empty divs (e.g. IE 6)
                 if ($hidden = $prologue->getHidden()) {
-                    $prologue = \Zalt\Html::create()->div($hidden);
+                    $prologue = Html::create()->div($hidden);
                 } else {
                     $prologue = null;
                 }
             }
-            if ($prologue instanceof \Zalt\Html\HtmlInterface) {
-                $prologue = $prologue->render($view);
+            if ($prologue instanceof HtmlInterface) {
+                $prologue = $prologue->render();
             } else {
-                $prologue = \Zalt\Html::getRenderer()->renderAny($view, $prologue);
+                $prologue = Html::getRenderer()->renderAny($prologue);
             }
         } else {
             $prologue = '';
@@ -118,20 +119,20 @@ class ElementDecorator extends \Zend_Form_Decorator_Abstract
                 $errors = Ra::flatten($errors);
                 $errors = array_unique($errors);
 
-                if ($prependErrors instanceof \Zalt\Html\ElementInterface) {
+                if ($prependErrors instanceof ElementInterface) {
                     $html = $prependErrors;
                 } else {
-                    $html = \Zalt\Html::create('ul');
+                    $html = Html::create('ul');
                 }
                 foreach ($errors as $error) {
                     $html->append($error);
                 }
 
-                $prologue .= $html->render($view);
+                $prologue .= $html->render();
             }
         }
 
-        $result = $this->renderElement($htmlelement, $view);
+        $result = $this->renderElement($htmlelement);
 
         if (parent::APPEND == $this->getPlacement()) {
             return $prologue . $result . $content;
@@ -147,12 +148,12 @@ class ElementDecorator extends \Zend_Form_Decorator_Abstract
      * Override this method rather than render() as this
      * is saver and the default logic is handled.
      *
-     * @param  string $content Content to decorate
+     * @param  \Zalt\Html\HtmlInterface $htmlElement Content to decorate
      * @return string
      */
-    public function renderElement(\Zalt\Html\HtmlInterface $htmlElement, \Zend_View $view)
+    public function renderElement(\Zalt\Html\HtmlInterface $htmlElement)
     {
-        return $htmlElement->render($view);
+        return $htmlElement->render();
     }
 
     /**
@@ -185,7 +186,7 @@ class ElementDecorator extends \Zend_Form_Decorator_Abstract
     /**
      * Hidden elements should be displayed at the start of the form.
      *
-     * If the prologue is a \Zalt\Lazy\RepeatableFormElements repeater then all the hidden elements are
+     * If the prologue is a \Zalt\Late\RepeatableFormElements repeater then all the hidden elements are
      * displayed in a div at the start of the form.
      *
      * @param mixed $prologue E.g. a repeater or a html element

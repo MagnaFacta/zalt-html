@@ -74,16 +74,11 @@ abstract class AttributeAbstract implements AttributeInterface
     /**
      * Renders the element into a html string
      *
-     * The $view is used to correctly encode and escape the output
-     *
      * @return string Correctly encoded and escaped html output
      */
     public function render()
     {
-        // Output escaping is done in \Zend_View_Helper_HtmlElement->_htmlAttribs()
-        //
-        // The reason for using render($view) is only in case the attribute needs the view to get the right data.
-        // Those attributes must overrule render().
+        // Output escaping is done in HtmlElement->_htmlAttribs()
         return $this->get();
     }
 

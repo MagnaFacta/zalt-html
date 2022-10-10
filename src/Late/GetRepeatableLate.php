@@ -49,7 +49,7 @@ class GetRepeatableLate extends LateAbstract
     /**
      * The functions that fixes and returns a value.
      *
-     * Be warned: this function may return a lazy value.
+     * Be warned: this function may return a late value.
      *
      * @param StackInterface $stack A \Zalt\Late\StackInterface object providing variable data
      * @return mixed

@@ -12,6 +12,8 @@
 
 namespace Zalt\Html;
 
+use Zalt\Late\RepeatableInterface;
+
 /**
  * RepeatRenderer wraps itself around some content and returns at rendering
  * time that content repeated multiple times or the $_emptyContent when the
@@ -22,7 +24,7 @@ namespace Zalt\Html;
  * throw errors if you try to use them in ways that the actual $_content does
  * not allow.
  *
- * @see \Zalt\Lazy\Repeatable
+ * @see \Zalt\Lates\Repeatable
  *
  * @package    Zalt
  * @subpackage Html
@@ -56,16 +58,16 @@ class RepeatRenderer implements \Zalt\Html\ElementInterface
     /**
      * The repeater containing a dataset
      *
-     * @var \Zalt\Lazy\RepeatableInterface
+     * @var \Zalt\Late\RepeatableInterface
      */
     protected $_repeater;
 
     /**
      *
-     * @param \Zalt\Lazy\RepeatableInterface $repeater
+     * @param RepeatableInterface $repeater
      * @param string $glue Optional, content to display between repeated instances
      */
-    public function __construct(\Zalt\Lazy\RepeatableInterface $repeater, $glue = null)
+    public function __construct(RepeatableInterface $repeater, $glue = null)
     {
         $this->setRepeater($repeater);
         $this->setGlue($glue);
@@ -139,29 +141,26 @@ class RepeatRenderer implements \Zalt\Html\ElementInterface
     /**
      * Renders the element into a html string
      *
-     * The $view is used to correctly encode and escape the output
-     *
-     * @param \Zend_View_Abstract $view
      * @return string Correctly encoded and escaped html output
      */
-    public function render(\Zend_View_Abstract $view)
+    public function render()
     {
-        $renderer = \Zalt\Html::getRenderer();
+        $renderer = Html::getRenderer();
         if ($this->hasRepeater() && $this->_content) {
             $data = $this->getRepeater();
             if ($data->__start()) {
                 $html = array();
                 while ($data->__next()) {
-                    $html[] = $renderer->renderArray($view, $this->_content);
+                    $html[] = $renderer->renderArray($this->_content);
                 }
 
                 if ($html) {
-                    return implode($renderer->renderAny($view, $this->_glue), $html);
+                    return implode($renderer->renderAny($this->_glue), $html);
                 }
             }
         }
         if ($this->_emptyContent) {
-            return $renderer->renderAny($view, $this->_emptyContent);
+            return $renderer->renderAny($this->_emptyContent);
         }
 
         return null;
@@ -173,7 +172,7 @@ class RepeatRenderer implements \Zalt\Html\ElementInterface
         return $this;
     }
 
-    private function setRepeater(\Zalt\Lazy\RepeatableInterface $data)
+    private function setRepeater(RepeatableInterface $data)
     {
         $this->_repeater = $data;
         return $this;

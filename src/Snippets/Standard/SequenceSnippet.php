@@ -15,7 +15,8 @@
 
 namespace Zalt\Snippets\Standard;
 
-use Zalt\Request\RequestInfo;
+use Zalt\Html\Html;
+use Zalt\Ra\Ra;
 
 /**
  *
@@ -42,22 +43,11 @@ class SequenceSnippet extends \Zalt\Snippets\SnippetAbstract
     protected $_html = [];
 
     /**
-     *
-     * @var \Zend_Controller_Request_Abstract
-     */
-    protected $request;
-
-    /**
      * A parameter that if true resets the queue
      *
      * @var string
      */
     protected $resetParam;
-
-    /**
-     * @var RequestInfo
-     */
-    protected ?RequestInfo $requestInfo = null;
 
     /**
      *
@@ -87,7 +77,7 @@ class SequenceSnippet extends \Zalt\Snippets\SnippetAbstract
     protected function _getSnippets($snippet)
     {
         if (is_array($snippet)) {
-            list($snippets, $params) = \Zalt\Ra::keySplit($snippet);
+            list($snippets, $params) = Ra::keySplit($snippet);
 
             $extraParams = $params + $this->snippetParameters;
         } else {
@@ -142,7 +132,7 @@ class SequenceSnippet extends \Zalt\Snippets\SnippetAbstract
         }
 
         if (! $this->snippetLoader) {
-            $this->snippetLoader = \Zalt\Html::getSnippetLoader();
+            $this->snippetLoader = Html::getSnippetLoader();
         }
     }
 
@@ -151,10 +141,9 @@ class SequenceSnippet extends \Zalt\Snippets\SnippetAbstract
      *
      * This is a stub function either override getHtmlOutput() or override render()
      *
-     * @param \Zend_View_Abstract $view Just in case it is needed here
      * @return \Zalt\Html\HtmlInterface Something that can be rendered
      */
-    public function getHtmlOutput(\Zend_View_Abstract $view)
+    public function getHtmlOutput()
     {
         return $this->_html;
     }

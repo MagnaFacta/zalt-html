@@ -17,7 +17,7 @@ use Zalt\Late\StackInterface;
 /**
  * There is no stack, throw errors when used
  *
- * Defines a source for variable values in a lazy evaluation.
+ * Defines a source for variable values in a late evaluation.
  *
  * @package    Zalt
  * @subpackage Late_Stack
@@ -35,7 +35,7 @@ class EmptyStack implements StackInterface
     /**
      * The constructor can be used to set a source name.
      *
-     * Debugging lazy stuff is hard enough, so we can use all the easy help we can get.
+     * Debugging late stuff is hard enough, so we can use all the easy help we can get.
      *
      * @param string $source An optional source name to specify where this stack was created.
      */
@@ -53,9 +53,9 @@ class EmptyStack implements StackInterface
     public function LateGet($name)
     {
         if ($this->_source) {
-            throw new LateStackException("No lazy stack defined when called from '$this->_source', but asked for '$name' parameter.");
+            throw new LateStackException("No late stack defined when called from '$this->_source', but asked for '$name' parameter.");
         } else {
-            throw new LateStackException("No lazy stack defined, but asked for '$name' parameter.");
+            throw new LateStackException("No late stack defined, but asked for '$name' parameter.");
         }
     }
 }

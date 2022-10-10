@@ -16,6 +16,8 @@ use Psr\Http\Message\ServerRequestInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Zalt\Base\BasicRedirector;
 use Zalt\Base\RedirectorInterface;
+use Zalt\Base\RequestInfo;
+use Zalt\Base\RequestInfoFactory;
 use Zalt\Html\Html;
 use Zalt\Mock\PotemkinTranslator;
 use Zalt\Mock\SimpleFlashRequestFactory;
@@ -50,12 +52,15 @@ class SnippetsParameterTest extends TestCase
 
         $classes = [
             RedirectorInterface::class    => new BasicRedirector(),
-            ServerRequestInterface::class => SimpleFlashRequestFactory::createWithoutServiceManager('http://localhost/index.php'),
             TranslatorInterface::class    => new PotemkinTranslator(),
         ];
 
         $this->sm = new SimpleServiceManager($classes);
         $this->sl = new SnippetLoader($this->sm, ['Zalt']);
+        $this->sl->addConstructorVariable(
+            RequestInfo::class,
+            RequestInfoFactory::getMezzioRequestInfo(SimpleFlashRequestFactory::createWithoutServiceManager('http://localhost/index.php'))
+        );
 
         Html::setSnippetLoader($this->sl);
     }

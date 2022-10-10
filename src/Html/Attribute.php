@@ -21,7 +21,7 @@ namespace Zalt\Html;
  * @since      Class available since version 1.0
  */
 
-class Attribute extends \Zalt\Html\AttributeAbstract
+class Attribute extends AttributeAbstract
 {
     private $_value;
 

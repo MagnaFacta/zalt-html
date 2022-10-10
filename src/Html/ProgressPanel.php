@@ -12,6 +12,8 @@
 
 namespace Zalt\Html;
 
+use Zalt\Ra\Ra;
+
 /**
  *
  *
@@ -90,11 +92,11 @@ class ProgressPanel extends \Zalt\Html\HtmlElement
     /**
      * Creates a 'div' progress panel
      *
-     * @param mixed $arg_array A \Zalt\Ra::args data collection.
+     * @param mixed $args Optional args processed settings
      */
-    public function __construct($arg_array = null)
+    public function __construct(...$args)
     {
-        $args = \Zalt\Ra::args(func_get_args());
+        $args = Ra::args($args);
 
         parent::__construct('div', $args);
     }
@@ -116,12 +118,11 @@ class ProgressPanel extends \Zalt\Html\HtmlElement
     /**
      * Creates a 'div' progress panel
      *
-     * @param mixed $arg_array A \Zalt\Ra::args data collection.
+     * @param mixed $args Optional args processed settings
      * @return self
      */
-    public static function progress($arg_array = null)
+    public static function progress(...$args)
     {
-        $args = func_get_args();
         return new self($args);
     }
 
@@ -130,12 +131,9 @@ class ProgressPanel extends \Zalt\Html\HtmlElement
      *
      * Renders the element tag with it's content into a html string
      *
-     * The $view is used to correctly encode and escape the output
-     *
-     * @param \Zend_View_Abstract $view
      * @return string Correctly encoded and escaped html output
      */
-    protected function renderElement(\Zend_View_Abstract $view)
+    protected function renderElement()
     {
         if ($this->_lastChild) {
             $this->_lastChild->class = $this->progressTextClass;
@@ -152,6 +150,6 @@ class ProgressPanel extends \Zalt\Html\HtmlElement
             $this->style = 'position: relative;';
         }
 
-        return parent::renderElement($view);
+        return parent::renderElement();
     }
 }

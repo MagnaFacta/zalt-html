@@ -11,6 +11,9 @@
 
 namespace Zalt\Html;
 
+use Zalt\Late\Late;
+use Zalt\Late\LateInterface;
+
 /**
  * This class handles the rendering of input elements.
  *
@@ -36,7 +39,7 @@ class InputRenderer implements \Zalt\Html\HtmlInterface
     const MODE_UNTIL = 'until';
     const MODE_UPTO = 'upto';
 
-    const ARGUMENT_ERROR = 'Invalid argument of type %s in %s. Only \Zend_Form and \Zend_Form_Element objects are allowed and \Zalt\Lazy\LazyInterface objects as long as they devolve to \Zend_Form or \Zend_Form_Element.';
+    const ARGUMENT_ERROR = 'Invalid argument of type %s in %s. Only \Zend_Form and \Zend_Form_Element objects are allowed and \Zalt\Late\LateInterface objects as long as they devolve to \Zend_Form or \Zend_Form_Element.';
 
     private $_decorators;
     private $_element;
@@ -44,7 +47,7 @@ class InputRenderer implements \Zalt\Html\HtmlInterface
 
     /**
      *
-     * @param \Zend_Form|\Zend_Form_Element|\Zalt\Lazy\LazyInterface $element
+     * @param \Zend_Form|\Zend_Form_Element|\Zalt\Late\LateInterface $element
      * @param $mode One of the class MODE_ constants
      * @param array of string|array|\Zend_Form_Decorator_Interface $decorators Optional An arrya that contains values
      * that are either a string value that identifies an existing decorator or an array that creates an new decorator
@@ -55,7 +58,7 @@ class InputRenderer implements \Zalt\Html\HtmlInterface
         if (($element instanceof \Zend_Form_Element) ||
                 ($element instanceof \Zend_Form_DisplayGroup) ||
                 ($element instanceof \Zend_Form) ||
-                ($element instanceof \Zalt\Lazy\LazyInterface)) {
+                ($element instanceof LateInterface)) {
 
             switch ($mode) {
                 case self::MODE_COMPLETE:
@@ -114,8 +117,8 @@ class InputRenderer implements \Zalt\Html\HtmlInterface
 
     private static function _checkElement($element, $function)
     {
-        if ($element instanceof \Zalt\Lazy\LazyInterface) {
-            $element = \Zalt\Lazy::rise($element);
+        if ($element instanceof LateInterface) {
+            $element = Late::rise($element);
         }
 
         if (($element instanceof \Zend_Form_Element) ||
@@ -177,7 +180,7 @@ class InputRenderer implements \Zalt\Html\HtmlInterface
             return self::inputDisplayGroup($element);
         }
 
-        // Assume all lazy's to be elements (should be rare in any case.
+        // Assume all late's to be elements (should be rare in any case.
         return self::inputElement($element);
     }
 
@@ -267,57 +270,57 @@ class InputRenderer implements \Zalt\Html\HtmlInterface
     }
 
 
-    public function render(\Zend_View_Abstract $view)
+    public function render()
     {
         switch ($this->_mode) {
             case self::MODE_COMPLETE:
-                return self::renderComplete($view, $this->_element);
+                return self::renderComplete($this->_element);
 
             case self::MODE_DISPLAY_GROUP:
-                return self::renderDisplayGroup($view, $this->_element);
+                return self::renderDisplayGroup($this->_element);
 
             case self::MODE_ELEMENT:
-                return self::renderElement($view, $this->_element);
+                return self::renderElement($this->_element);
 
             case self::MODE_EXCEPT:
-                return self::renderExcept($view, $this->_element, $this->_decorators);
+                return self::renderExcept($this->_element, $this->_decorators);
 
             case self::MODE_FORM:
-                return self::renderForm($view, $this->_element);
+                return self::renderForm($this->_element);
 
             case self::MODE_HTML:
-                return $this->_element->render($view);
+                return $this->_element->render(Html::getRenderer()->getView());
 
             case self::MODE_ONLY:
-                return self::renderOnly($view, $this->_element, $this->_decorators);
+                return self::renderOnly($this->_element, $this->_decorators);
 
             case self::MODE_UNTIL:
-                return self::renderUntil($view, $this->_element, $this->_decorators);
+                return self::renderUntil($this->_element, $this->_decorators);
 
             case self::MODE_UPTO:
-                return self::renderUpto($view, $this->_element, $this->_decorators);
+                return self::renderUpto($this->_element, $this->_decorators);
 
             // default: Not needed, checked in constructor
         }
     }
 
-    public static function renderComplete(\Zend_View_Abstract $view, $element)
+    public static function renderComplete($element)
     {
         $element = self::_checkElement($element, __FUNCTION__);
-        return $element->render($view);
+        return $element->render(Html::getRenderer()->getView());
     }
 
-    public static function renderDisplayGroup(\Zend_View_Abstract $view, \Zend_Form_DisplayGroup $displayGroup)
+    public static function renderDisplayGroup(\Zend_Form_DisplayGroup $displayGroup)
     {
-        return self::renderUntil($view, $displayGroup,
+        return self::renderUntil($displayGroup,
             array('Zend_Form_Decorator_Fieldset'));
-        return self::renderOnly($view, $displayGroup,
-            array('Zend_Form_Decorator_FormElements', 'Zend_Form_Decorator_Fieldset'));
+//        return self::renderOnly($displayGroup,
+//            array('Zend_Form_Decorator_FormElements', 'Zend_Form_Decorator_Fieldset'));
     }
 
-    public static function renderElement(\Zend_View_Abstract $view, $element)
+    public static function renderElement($element)
     {
-        return self::renderUntil($view, $element, array(
+        return self::renderUntil($element, array(
             'Zend_Form_Decorator_ViewHelper',
             'Zend_Form_Decorator_File',
             '\\Zalt\\Form\\Decorator\\Table',
@@ -325,10 +328,10 @@ class InputRenderer implements \Zalt\Html\HtmlInterface
             ));
     }
 
-    public static function renderExcept(\Zend_View_Abstract $view, $element, array $except_decorators)
+    public static function renderExcept($element, array $except_decorators)
     {
         $element = self::_checkElement($element, __FUNCTION__);
-        $element->setView($view);
+        $element->setView(Html::getRenderer()->getView());
 
         $content = '';
         foreach ($element->getDecorators() as $name => $decorator) {
@@ -350,19 +353,19 @@ class InputRenderer implements \Zalt\Html\HtmlInterface
         return $content;
     }
 
-    public static function renderForm(\Zend_View_Abstract $view, \Zend_Form $form)
+    public static function renderForm(\Zend_Form $form)
     {
-        if ($form instanceof \Zalt\Form && $form->isLazy()) {
-            return self::renderUntil($view, $form, array('Zend_Form_Decorator_Form'));
+        if ($form instanceof \MUtil\Form && $form->isLazy()) {
+            return self::renderUntil($form, array('Zend_Form_Decorator_Form'));
         } else {
-            return self::renderComplete($view, $form);
+            return self::renderComplete($form);
         }
     }
 
-    public static function renderOnly(\Zend_View_Abstract $view, $element, array $decorators)
+    public static function renderOnly($element, array $decorators)
     {
         $element = self::_checkElement($element, __FUNCTION__);
-        $element->setView($view);
+        $element->setView(Html::getRenderer()->getView());
 
         $content = '';
         foreach ($decorators as $decoratorinfo) {
@@ -396,10 +399,10 @@ class InputRenderer implements \Zalt\Html\HtmlInterface
         return $content;
     }
 
-    public static function renderUntil(\Zend_View_Abstract $view, $element, array $until_decorators)
+    public static function renderUntil($element, array $until_decorators)
     {
         $element = self::_checkElement($element, __FUNCTION__);
-        $element->setView($view);
+        $element->setView(Html::getRenderer()->getView());
 
         $content = '';
         foreach ($element->getDecorators() as $name => $decorator) {
@@ -417,10 +420,10 @@ class InputRenderer implements \Zalt\Html\HtmlInterface
         self::_throwStopError($element, $until_decorators, __FUNCTION__);
     }
 
-    public static function renderUpto(\Zend_View_Abstract $view, $element, array $until_decorators)
+    public static function renderUpto($element, array $until_decorators)
     {
         $element = self::_checkElement($element, __FUNCTION__);
-        $element->setView($view);
+        $element->setView(Html::getRenderer()->getView());
 
         $content = '';
         foreach ($element->getDecorators() as $name => $decorator) {

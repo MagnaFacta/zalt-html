@@ -29,7 +29,7 @@ class LateProperty extends LateAbstract
     private $_object;
 
     /**
-     * @var string ot lazy
+     * @var string or late
      */
     private $_property;
 
@@ -42,7 +42,7 @@ class LateProperty extends LateAbstract
     /**
     * The functions that fixes and returns a value.
     *
-    * Be warned: this function may return a lazy value.
+    * Be warned: this function may return a late value.
     *
     * @param \Zalt\Late\StackInterface $stack A \Zalt\Late\StackInterface object providing variable data
     * @return mixed

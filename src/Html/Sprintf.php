@@ -12,6 +12,8 @@
 
 namespace Zalt\Html;
 
+use Zalt\Ra\Ra;
+
 /**
  * Sprintf class is used to use sprintf with renderable content .
  *
@@ -19,9 +21,9 @@ namespace Zalt\Html;
  * @subpackage Html
  * @copyright  Copyright (c) 2011 Erasmus MC
  * @license    New BSD License
- * @since      Class available since \Zalt version 1.2
+ * @since      Class available since \Zalt version 1.0
  */
-class Sprintf extends \ArrayObject implements \Zalt\Html\ElementInterface
+class Sprintf extends \ArrayObject implements ElementInterface
 {
     /**
      * Object classes that should not be added to the core array, but should be set using
@@ -43,13 +45,6 @@ class Sprintf extends \ArrayObject implements \Zalt\Html\ElementInterface
         );
 
     /**
-     * View object
-     *
-     * @var \Zend_View_Interface
-     */
-    public $view = null;
-
-    /**
      * Adds an HtmlElement to this element
      *
      * @see \Zalt\Html\Creator
@@ -60,7 +55,7 @@ class Sprintf extends \ArrayObject implements \Zalt\Html\ElementInterface
      */
     public function __call($name, array $arguments)
     {
-        $elem = \Zalt\Html::createArray($name, $arguments);
+        $elem = Html::createArray($name, $arguments);
 
         $this[] = $elem;
 
@@ -69,13 +64,13 @@ class Sprintf extends \ArrayObject implements \Zalt\Html\ElementInterface
 
     /**
      *
-     * @param mixed $arg_array \Zalt\Ra::args parameter passing
+     * @param mixed $arg_array \Zalt\Ra\Ra::args parameter passing
      */
     public function __construct($arg_array = null)
     {
         parent::__construct();
 
-        $args = \Zalt\Ra::args(func_get_args());
+        $args = Ra::args(func_get_args());
 
         $this->init();
 
@@ -94,16 +89,6 @@ class Sprintf extends \ArrayObject implements \Zalt\Html\ElementInterface
     public function getTagName()
     {
         return null;
-    }
-
-    /**
-     * Get the current view
-     *
-     * @return \Zend_View
-     */
-    public function getView()
-    {
-        return $this->view;
     }
 
     /**
@@ -128,10 +113,6 @@ class Sprintf extends \ArrayObject implements \Zalt\Html\ElementInterface
             }
         }
 
-        /*
-        if (! $this->_specialTypes) {
-            \Zalt\EchoOut\EchoOut::backtrace();
-        } // */
         foreach ($this->_specialTypes as $class => $method) {
             if ($newval instanceof $class) {
                 $this->$method($newval, $index);
@@ -146,20 +127,11 @@ class Sprintf extends \ArrayObject implements \Zalt\Html\ElementInterface
     /**
      * Renders the element into a html string
      *
-     * The $view is used to correctly encode and escape the output
-     *
-     * @param \Zend_View_Abstract $view
      * @return string Correctly encoded and escaped html output
      */
-    public function render(\Zend_View_Abstract $view)
+    public function render()
     {
-        if (null === $view) {
-            $view = $this->getView();
-        } else {
-            $this->setView($view);
-        }
-
-        $params = \Zalt\Html::getRenderer()->renderArray($view, $this->getIterator(), false);
+        $params = Html::getRenderer()->renderArray($this->getIterator(), false);
 
         if ($params) {
             return call_user_func_array('sprintf', $params);
@@ -169,24 +141,12 @@ class Sprintf extends \ArrayObject implements \Zalt\Html\ElementInterface
     }
 
     /**
-     * Set the View object
      *
-     * @param  \Zend_View_Interface $view
-     * @return \Zend_View_Helper_Abstract
-     */
-    public function setView(\Zend_View_Interface $view)
-    {
-        $this->view = $view;
-        return $this;
-    }
-
-    /**
-     *
-     * @param mixed $arg_array \Zalt\Ra::args parameter passing
+     * @param mixed $arg_array \Zalt\Ra\Ra::args parameter passing
      */
     public static function sprintf($arg_array = null)
     {
-        $args = \Zalt\Ra::args(func_get_args());
+        $args = Ra::args(func_get_args());
 
         return new self($args);
     }

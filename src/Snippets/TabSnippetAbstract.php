@@ -11,6 +11,8 @@
 
 namespace Zalt\Snippets;
 
+use Zalt\Html\Html;
+
 /**
  * Abstract class for quickly creating a tabbed bar, or rather a div that contains a number
  * of links, adding specific classes for display.
@@ -131,7 +133,7 @@ abstract class TabSnippetAbstract extends \Zalt\Snippets\SnippetAbstract
                 $this->href = $this->href + $this->baseUrl;
             }
 
-            $tabRow = \Zalt\Html::create()->ul();
+            $tabRow = Html::create()->ul();
 
             foreach ($tabs as $tabId => $content) {
 

@@ -21,7 +21,7 @@ namespace Zalt\Html;
  * @license    New BSD License
  * @since      Class available since \Zalt version 1.0
  */
-class OnClickArrayAttribute extends \Zalt\Html\JavascriptArrayAttribute
+class OnClickArrayAttribute extends JavascriptArrayAttribute
 {
     /**
      *

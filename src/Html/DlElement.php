@@ -184,7 +184,7 @@ class DlElement extends HtmlElement implements FormLayout
     public function setAsFormLayout(\Zend_Form $form, $width = null,
             array $order = array('element', 'errors', 'description'))
     {
-        // Make a Lazy repeater for the form elements and set it as the element repeater
+        // Make a Late repeater for the form elements and set it as the element repeater
         $formrep = new RepeatableFormElements($form);
         $formrep->setSplitHidden(true); // These are treated separately
         $this->setRepeater($formrep);
@@ -221,7 +221,7 @@ class DlElement extends HtmlElement implements FormLayout
     public function setAutoWidthFormLayout(\Zend_Form $form, $factor = 1,
             array $order = array('element', 'errors', 'description'))
     {
-        // Lazy call becase the form might not be completed at this stage.
+        // Late call becase the form might not be completed at this stage.
         return $this->setAsFormLayout(
                 $form,
                 Late::call(array(self::class, 'calculateAutoWidthFormLayout'), $form, $factor),

@@ -90,8 +90,6 @@ class TdElement extends HtmlElement
     /**
      * Function to allow overloading of content rendering only
      *
-     * The $view is used to correctly encode and escape the output
-     *
      * @return string Correctly encoded and escaped html output
      */
     protected function renderContent()

@@ -52,7 +52,7 @@ class ParallelRepeater implements RepeatableInterface
     }
 
     /**
-     * Return a lazy version of the property retrieval
+     * Return a late version of the property retrieval
      *
      * @return LateInterface
      */
@@ -100,7 +100,7 @@ class ParallelRepeater implements RepeatableInterface
     }
 
     /**
-     * Return a lazy version of the property retrieval
+     * Return a late version of the property retrieval
      *
      * @return LateProperty
      */

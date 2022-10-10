@@ -11,6 +11,8 @@
 
 namespace Zalt\Snippets;
 
+use Zalt\Ra\Ra;
+
 /**
  * Generic wizard snippet.
  *
@@ -295,7 +297,7 @@ abstract class WizardFormSnippetAbstract extends \Zalt\Snippets\ModelFormSnippet
         }
 
         $bridge   = array_shift($args);
-        $elements = \Zalt\Ra::flatten($args);
+        $elements = Ra::flatten($args);
         $form     = $bridge->getForm();
 
         //Remove the elements from the _items variable

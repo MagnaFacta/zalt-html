@@ -13,9 +13,9 @@
 namespace Zalt\Late;
 
 /**
- * Wrap lazyness around an object.
+ * Wrap lateness around an object.
  *
- * Calls to methods and properties return a lazy object that will be
+ * Calls to methods and properties return a late object that will be
  * evaluated only when forced to a string value or when called using ->__toValue().
  *
  * <code>
@@ -24,8 +24,8 @@ namespace Zalt\Late;
  *
  * $arrayObj['a'] = 'old';
  *
- * $lazy_obj = new \Zalt\Late\ObjectWrap($arrayObj);
- * $output = array($arrayObj->a, $lazy_obj->a, $arrayObj->count(), $lazy_obj->count());
+ * $lateObj = new \Zalt\Late\ObjectWrap($arrayObj);
+ * $output = array($arrayObj->a, $lateObj->a, $arrayObj->count(), $lateObj->count());
  *
  * echo $output[0] . ' -> ' . $output[1] . ' | ' . $output[2] . ' -> ' . $output[3];
  * // Result old -> old | 1 -> 1
@@ -55,7 +55,7 @@ class ObjectWrap extends LateAbstract
     /**
     * The functions that fixes and returns a value.
     *
-    * Be warned: this function may return a lazy value.
+    * Be warned: this function may return a late value.
     *
     * @param StackInterface $stack A StackInterface object providing variable data
     * @return mixed

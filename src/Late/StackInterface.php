@@ -13,7 +13,7 @@
 namespace Zalt\Late;
 
 /**
- * Defines a source for variable values in a lazy evaluation.
+ * Defines a source for variable values in a late evaluation.
  *
  * As it works as an alternative stack, that is wat we call it.
  *

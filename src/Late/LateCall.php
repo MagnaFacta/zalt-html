@@ -46,7 +46,7 @@ class LateCall extends LateAbstract
     /**
      * The functions that fixes and returns a value.
      *
-     * Be warned: this function may return a lazy value.
+     * Be warned: this function may return a late value.
      *
      * @param StackInterface $stack A StackInterface object providing variable data
      * @return mixed 

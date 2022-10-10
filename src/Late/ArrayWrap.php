@@ -15,7 +15,7 @@ namespace Zalt\Late;
 use ArrayObject;
 
 /**
- * Wrap lazyness around an array.
+ * Wrap lateness around an array.
  *
  * @package    Zalt
  * @subpackage Late

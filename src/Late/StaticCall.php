@@ -26,7 +26,7 @@ class StaticCall
     protected $_className;
 
     /**
-     * Return a lazy version of the call
+     * Return a late version of the call
      *
      * @return LateCall
      */

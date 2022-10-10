@@ -11,6 +11,9 @@
 
 namespace Zalt\Snippets\Standard;
 
+use Zalt\Late\Late;
+use Zalt\Late\Repeatable;
+
 /**
  * Generic import wizard.
  *
@@ -282,7 +285,7 @@ class ModelImportSnippet extends \Zalt\Snippets\WizardFormSnippetAbstract
 
             $element = $bridge->getForm()->createElement('html', 'importdisplay');
 
-            $repeater = \Zalt\Lazy::repeat(new \LimitIterator($this->sourceModel->loadIterator(), 0, 20));
+            $repeater = Late::repeat(new \LimitIterator($this->sourceModel->loadIterator(), 0, 20));
             $table    = new \Zalt\Html\TableElement($repeater, array('class' => $this->formatBoxClass));
 
             foreach ($this->sourceModel->getItemsOrdered() as $name) {
@@ -539,7 +542,7 @@ class ModelImportSnippet extends \Zalt\Snippets\WizardFormSnippetAbstract
             $table = \Zalt\Html\TableElement::table();
             $table->caption($this->_('Import field definitions'));
             $table->appendAttrib('class', $this->formatBoxClass);
-            $repeater = new \Zalt\Lazy\Repeatable($fieldInfo);
+            $repeater = new Repeatable($fieldInfo);
             $table->setRepeater($repeater);
             foreach (reset($fieldInfo) as $title => $element)
             {

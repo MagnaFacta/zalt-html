@@ -133,7 +133,7 @@ use Zalt\Late\RepeatableInterface;
  * <div>&lt;b&gt;content&lt;/b&gt; &lt;br/&gt; &lt;i&gt;content&lt;/i&gt;</div>
  * </code>
  * To prevent output escaping and add raw Html contant use the \Zalt\Html\Raw
- * class by creating an instance or invoking \Zalt\Html::raw() or $this->raw().
+ * class by creating an instance or invoking \Zalt\Html\Html::raw() or $this->raw().
  * This example shows all three approaches in the first three lines:
  * <code>
  * $div = Html::create()->div(new Raw('<b>content</b>'));
@@ -302,14 +302,14 @@ class HtmlElement implements ElementInterface, Procrastinator
      * no data. But another reason might be that there is simply nothing to display e.g.
      * because of conditional statements.
      * <code>
-     * $div = \Zalt\Html::create()->div();
+     * $div = \Zalt\Html\Html::create()->div();
      * if (isset($data['short_description])) {
      *   $div->p($data['short_description]);
      * }
      * if (isset($data['long_description])) {
      *   $div->p($data['long_description]);
      * }
-     * $div->setOnEmpty(\Zalt\Html::create()->p('We do not yet have a description for this item.'));
+     * $div->setOnEmpty(\Zalt\\HtmlHtml::create()->p('We do not yet have a description for this item.'));
      * </code>
      *
      * When asking for the content an empty \Zalt\Html\Sequence is returned, so the last line can
@@ -1317,14 +1317,14 @@ class HtmlElement implements ElementInterface, Procrastinator
      * no data. But another reason might be that there is simply nothing to display e.g.
      * because of conditional statements.
      * <code>
-     * $div = \Zalt\Html::create()->div();
+     * $div = \Zalt\Html\Html::create()->div();
      * if (isset($data['short_description])) {
      *   $div->p($data['short_description]);
      * }
      * if (isset($data['long_description])) {
      *   $div->p($data['long_description]);
      * }
-     * $div->setOnEmpty(\Zalt\Html::create()->p('We do not yet have a description for this item.'));
+     * $div->setOnEmpty(\Zalt\Html\Html::create()->p('We do not yet have a description for this item.'));
      * </code>
      *
      * Some subclasses require their content to be a HtmlElement of a certain type. If the content

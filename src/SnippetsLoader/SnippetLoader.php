@@ -15,6 +15,7 @@ use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Zalt\Snippets\SnippetInterface;
+use Zalt\Loader\DependencyResolver\ConstructorDependencyParametersResolver;
 use Zalt\Loader\ProjectOverloader;
 use Zalt\Ra\Ra;
 
@@ -29,6 +30,11 @@ use Zalt\Ra\Ra;
  */
 class SnippetLoader implements SnippetLoaderInterface
 {
+    /**
+     * @var array Extra parameters that might be used in constructors
+     */
+    protected $constructorVariables = [];
+    
     /**
      *
      * @var ProjectOverloader
@@ -66,8 +72,14 @@ class SnippetLoader implements SnippetLoaderInterface
         }
         $this->setSource($source);
         $this->loader = new ProjectOverloader($source, $overloaders, false);
+        $this->loader->setDependencyResolver(new ConstructorDependencyParametersResolver());
     }
 
+    public function addConstructorVariable(string $key, mixed $value): void
+    {
+        $this->constructorVariables[$key] = $value;
+    }
+    
     /**
      * Add prefixed paths to the registry of paths
      *
@@ -99,7 +111,7 @@ class SnippetLoader implements SnippetLoaderInterface
             $snippetOptions = new SnippetOptions($snippetOptions);
         }
         
-        $snippet = $this->loader->create($className, $snippetOptions);
+        $snippet = $this->loader->create($className, $snippetOptions, ...$this->constructorVariables);
 
         if ($snippet instanceof SnippetInterface) {
             return $snippet;

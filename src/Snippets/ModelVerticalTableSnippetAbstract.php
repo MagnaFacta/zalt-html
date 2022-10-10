@@ -11,6 +11,8 @@
 
 namespace Zalt\Snippets;
 
+use Zalt\Html\Html;
+
 /**
  * Displays each fields of a single item in a model in a row in a Html table.
  *
@@ -99,7 +101,7 @@ abstract class ModelVerticalTableSnippetAbstract extends \Zalt\Snippets\ModelSni
 
         $table = $this->getShowTable($model);
 
-        $container = \Zalt\Html::create()->div(array('class' => 'table-container', 'renderWithoutContent' => false));
+        $container = Html::create()->div(array('class' => 'table-container', 'renderWithoutContent' => false));
         $container[] = $table;
         return $container;
     }
@@ -108,7 +110,7 @@ abstract class ModelVerticalTableSnippetAbstract extends \Zalt\Snippets\ModelSni
      * Function that allows for overruling the repeater loading.
      *
      * @param \Zalt\Model\ModelAbstract $model
-     * @return \Zalt\Lazy\RepeatableInterface
+     * @return \Zalt\Late\RepeatableInterface
      */
     public function getRepeater(\Zalt\Model\ModelAbstract $model)
     {

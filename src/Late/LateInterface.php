@@ -25,14 +25,14 @@ use ArrayAccess;
 interface LateInterface extends ArrayAccess
 {
     /**
-     * Return a lazy version of the call
+     * Return a late version of the call
      *
      * @return LateInterface
      */
     public function __call($name, array $arguments);
 
     /**
-     * Return a lazy version of the property retrieval
+     * Return a late version of the property retrieval
      *
      * @return LateInterface
      */
@@ -50,7 +50,7 @@ interface LateInterface extends ArrayAccess
     /**
      * The functions that fixes and returns a value.
      *
-     * Be warned: this function may return a lazy value.
+     * Be warned: this function may return a late value.
      *
      * @param StackInterface $stack A StackInterface object providing variable data
      * @return mixed

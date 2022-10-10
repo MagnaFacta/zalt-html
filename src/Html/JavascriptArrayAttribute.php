@@ -12,6 +12,9 @@
 
 namespace Zalt\Html;
 
+use Zalt\Late\Late;
+use Zalt\Ra\Ra;
+
 /**
  * Default attribute for javascript attributes with extra functions for common tasks
  *
@@ -21,7 +24,7 @@ namespace Zalt\Html;
  * @license    New BSD License
  * @since      Class available since version \Zalt 1.2
  */
-class JavascriptArrayAttribute extends \Zalt\Html\ArrayAttribute
+class JavascriptArrayAttribute extends ArrayAttribute
 {
     /**
      * String used to glue items together
@@ -44,11 +47,11 @@ class JavascriptArrayAttribute extends \Zalt\Html\ArrayAttribute
     /**
      *
      * @param string $type
-     * @param mixed $arg_array \Zalt\Ra::args
+     * @param mixed $arg_array \Zalt\Ra\Ra::args
      */
     public function __construct($type, $arg_array = null)
     {
-        $args = \Zalt\Ra::args(func_get_args(), 1);
+        $args = Ra::args(func_get_args(), 1);
         parent::__construct($type, 'javascript:', $args);
     }
 
@@ -78,7 +81,7 @@ class JavascriptArrayAttribute extends \Zalt\Html\ArrayAttribute
     {
         $this->add(array(
             "if (!confirm('",
-            \Zalt\Lazy::call('addslashes', $question),
+            Late::call('addslashes', $question),
             "')) {event.cancelBubble = true; return false;}"
             ));
         return $this;
@@ -92,7 +95,7 @@ class JavascriptArrayAttribute extends \Zalt\Html\ArrayAttribute
      */
     public function addLine($line_args)
     {
-        $lines = \Zalt\Ra::flatten(func_get_args());
+        $lines = Ra::flatten(func_get_args());
 
         foreach ($lines as $line) {
             $this->add($line);

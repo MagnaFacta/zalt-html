@@ -77,7 +77,7 @@ class Repeatable implements RepeatableInterface
     }
 
     /**
-     * Return a lazy version of the property retrieval
+     * Return a late version of the property retrieval
      *
      * @return LateProperty
      */

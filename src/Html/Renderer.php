@@ -19,7 +19,7 @@ use Zalt\Late\LateInterface;
 /**
  * Render output for a view.
  *
- * This object handles \Zalt\Html\HtmlInterface and \Zalt\Lazy\LazyInterface
+ * This object handles \Zalt\Html\HtmlInterface and LateInterface
  * objects natively, as well as array, scalar values and objects with a
  * __toString function.
  *
@@ -61,6 +61,11 @@ class Renderer
         'Zend_Form_Element'                => [InputRenderer::class => 'renderElement'],
         'Zend_Translate'                   => [Renderer::class => 'doNotRender'],
     );
+
+    /**
+     * @var \Zend_View_Abstract
+     */
+    private $_view;
 
     /**
      * Create the renderer
@@ -141,17 +146,30 @@ class Renderer
         return $this->_classRenderFunctions;
     }
 
+    public function getView(): \Zend_View_Abstract
+    {
+        if (! $this->_view) {
+            throw new HtmlException("View is missing while rendering element using old Zend view.");
+        }
+
+        return $this->_view;
+    }
+
+    public function hasView(): bool
+    {
+        return (bool) $this->_view;
+    }
+
     /**
-     * Renders the $content so that it can be used as output for the $view,
-     * including output escaping and encoding correction.
+     * Renders the $content so that it can be used as output.
      *
-     * This functions handles \Zalt\Html\HtmlInterface and \Zalt\Lazy\LazyInterface
+     * This functions handles \Zalt\Html\HtmlInterface and \Zalt\Late\LateInterface
      * objects natively, as well as array, scalar values and objects with a
      * __toString function.
      *
      * Other objects a definition should have a render function in getClassRenderList().
      *
-     * All Lazy variabables are raised.
+     * All Late variabables are raised.
      *
      * @param mixed $content Anything HtmlInterface, number, string, array, object with __toString
      *                      or an object that has a defined render function in getClassRenderList().
@@ -167,7 +185,6 @@ class Renderer
                 $stack = Late::getStack();
             }
             while ($content instanceof LateInterface) {
-                // \Zalt\EchoOut\EchoOut::countOccurences('lazyWhile');
                 $content = $content->__toValue($stack);
             }
         }
@@ -211,16 +228,15 @@ class Renderer
     }
 
     /**
-     * Renders the $content so that it can be used as output for the $view,
-     * including output escaping and encoding correction.
+     * Renders the $content so that it can be used as output.
      *
-     * This functions handles \Zalt\Html\HtmlInterface and \Zalt\Lazy\LazyInterface
+     * This functions handles \Zalt\Html\HtmlInterface and \Zalt\Late\LateInterface
      * objects natively, as well as array, scalar values and objects with a
      * __toString function.
      *
      * Other objects a definition should have a render function in getClassRenderList().
      *
-     * All Lazy variabables are raised.
+     * All Late variabables are raised.
      *
      * @param mixed $content Anything HtmlInterface, number, string, array, object with __toString
      *                      or an object that has a defined render function in getClassRenderList().
@@ -318,5 +334,10 @@ class Renderer
                 }
             }
         }
+    }
+
+    public function setView(\Zend_View_Abstract $view): void
+    {
+        $this->_view = $view;
     }
 }

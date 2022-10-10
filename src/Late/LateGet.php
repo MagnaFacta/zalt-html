@@ -13,7 +13,7 @@
 namespace Zalt\Late;
 
 /**
- * Creates a lazy get to returns a parameter set in the $stack used in \Zalt\Late::rise().
+ * Creates a late get to returns a parameter set in the $stack used in \Zalt\Late::rise().
  *
  * @package    Zalt
  * @subpackage Late
@@ -42,7 +42,7 @@ class LateGet extends LateAbstract
     /**
     * The functions that fixes and returns a value.
     *
-    * Be warned: this function may return a lazy value.
+    * Be warned: this function may return a late value.
     *
     * @param StackInterface $stack A StackInterface object providing variable data
     * @return mixed

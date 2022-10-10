@@ -12,6 +12,8 @@
 
 namespace Zalt\Snippets\Bootstrap;
 
+use Zalt\Html\Html;
+
 /**
  *
  * @package    Zalt
@@ -49,7 +51,7 @@ abstract class BootstrapTabSnippetAbstract extends \Zalt\Snippets\TabSnippetAbst
                 $this->href = $this->href + $this->baseUrl;
             }
 
-            $tabRow = \Zalt\Html::create()->ul();
+            $tabRow = Html::create()->ul();
             $tabRow->class = $this->tabClass;
 
             foreach ($tabs as $tabId => $content) {

@@ -11,6 +11,10 @@
 
 namespace Zalt\Html\Code;
 
+use Zalt\Html\Html;
+use Zalt\Late\Late;
+use Zalt\Late\LateInterface;
+
 /**
  *
  *
@@ -32,8 +36,8 @@ class JavaScript extends DynamicAbstract
      */
     public function getInHeader()
     {
-        if ($this->_inHeader instanceof \Zalt\Lazy\LazyInterface) {
-            return (boolean) \Zalt\Lazy::raise($this->_inHeader);
+        if ($this->_inHeader instanceof LateInterface) {
+            return (boolean) Late::raise($this->_inHeader);
         } else {
             return (boolean) $this->_inHeader;
         }
@@ -41,12 +45,9 @@ class JavaScript extends DynamicAbstract
     /**
      * Renders the element into a html string
      *
-     * The $view is used to correctly encode and escape the output
-     *
-     * @param \Zend_View_Abstract $view
      * @return string Correctly encoded and escaped html output
      */
-    public function render(\Zend_View_Abstract $view)
+    public function render()
     {
         $content = $this->getContentOutput();
 
@@ -54,9 +55,9 @@ class JavaScript extends DynamicAbstract
         // your JavaScript loading by putting all script tags at the end of
         // your body. (Except that inlineScript is always loaded last.)
         if ($this->getInHeader()) {
-            $scriptTag = $view->headScript();
+            $scriptTag = Html::getRenderer()->getView()->headScript();
         } else {
-            $scriptTag = $view->inlineScript();
+            $scriptTag = Html::getRenderer()->getView()->inlineScript();
         }
         $scriptTag->appendScript($content);
 

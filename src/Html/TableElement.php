@@ -539,7 +539,7 @@ class TableElement extends HtmlElement
             $table->addColumn($repeater_data->name, 'Name');
             $table->addColumn(Late::call([self::class, 'createVar'], Late::call([Late::class, 'rise'], $repeater_data->value), null, $objects_not_expanded), 'Value');
             $table->addColumn($repeater_data->from_code->if('in code', 'in program'), 'Defined');
-            // $table->addColumn(\Zalt\Lazy::iff($repeater_data->from_code, 'in code', 'in program'), 'Defined');
+            // $table->addColumn(Late::iff($repeater_data->from_code, 'in code', 'in program'), 'Defined');
 
         } else {
             if ($data instanceof \Traversable) {
@@ -670,7 +670,7 @@ class TableElement extends HtmlElement
     {
         if ($this->_repeater) {
             // Happens only during rendering when $this->_pivot is set
-            // Is set because Lazy execution expects it.
+            // Is set because Late execution expects it.
             return $this->_repeater;
         }
         return $this->_content[self::TBODY]->getRepeater();
@@ -678,8 +678,6 @@ class TableElement extends HtmlElement
 
     /**
      * Renders the element tag with it's content into a html string
-     *
-     * The $view is used to correctly encode and escape the output
      *
      * @return string Correctly encoded and escaped html output
      */
@@ -776,7 +774,7 @@ class TableElement extends HtmlElement
      */
     public function setAsFormLayout(\Zend_Form $form, $add_description = false, $include_description = false)
     {
-        // Make a Lazy repeater for the form elements and set it as the element repeater
+        // Make a Late repeater for the form elements and set it as the element repeater
         $formrep = new RepeatableFormElements($form);
         $formrep->setSplitHidden(true); // These are treated separately
         $this->setRepeater($formrep);
@@ -873,7 +871,7 @@ class TableElement extends HtmlElement
      * not the element tags. When repeatTags is true the both the tags and the
      * content are repeated.
      *
-     * @param mixed $repeater \Zalt\Lazy\RepeatableInterface or something that can be made into one.
+     * @param mixed $repeater \Zalt\Late\RepeatableInterface or something that can be made into one.
      * @param mixed $onEmptyContent Optional. When not null the content to display when the repeater does not result in data is set.
      * @param boolean $repeatTags Optional when not null the repeatTags switch is set.
      * @return \Zalt\Html\TableElement (continuation pattern)
@@ -900,7 +898,7 @@ class TableElement extends HtmlElement
      *
      * Addition of multiple bodies is not possible.
      *
-     * @param array $args Optional \Zalt\Ra::args processed settings
+     * @param mixed $args Optional args processed settings
      * @return \Zalt\Html\TBodyElement With 'tbody' tagName
      */
     public function tbody(...$args)
@@ -917,7 +915,7 @@ class TableElement extends HtmlElement
     /**
      * Returns a 'td' cell in the current row in the tbody
      *
-     * @param array $args Optional \Zalt\Ra::args processed settings
+     * @param mixed $args Optional args processed settings
      * @return \Zalt\Html\HtmlElement With 'td' tagName
      */
     public function td(...$args)
@@ -928,7 +926,7 @@ class TableElement extends HtmlElement
     /**
      * Returns a 'th' cell in the current row in the tbody
      *
-     * @param array $args Optional \Zalt\Ra::args processed settings
+     * @param mixed $args Optional args processed settings
      * @return \Zalt\Html\HtmlElement With 'th' tagName
      */
     public function tdh(...$args)
@@ -939,12 +937,12 @@ class TableElement extends HtmlElement
     /**
      * Returns a 'td' cell in a new row in the body with a colspan equal to the number of columns in the table.
      *
-     * @param array $args Optional \Zalt\Ra::args processed settings
+     * @param mixed $args Optional args processed settings
      * @return \Zalt\Html\HtmlElement With 'td' tagName
      */
     public function tdrow(...$args)
     {
-        $cell = $this->tr()->td($args, array('colspan' => $this->toLazy()->getColumnCount()));
+        $cell = $this->tr()->td($args, array('colspan' => $this->toLate()->getColumnCount()));
 
         // Make sure the next item is not added to this row.
         $this->_content[self::TBODY]->_lastChild = null;
@@ -955,7 +953,7 @@ class TableElement extends HtmlElement
     /**
      * Returns a 'td' cell in the current row in the footer
      *
-     * @param array $args Optional \Zalt\Ra::args processed settings
+     * @param mixed $args Optional args processed settings
      * @return \Zalt\Html\HtmlElement With 'td' tagName
      */
     public function tf(...$args)
@@ -966,7 +964,7 @@ class TableElement extends HtmlElement
     /**
      * Returns a 'th' cell in the current row in the footer
      *
-     * @param array $args Optional \Zalt\Ra::args processed settings
+     * @param mixed $args Optional args processed settings
      * @return \Zalt\Html\HtmlElement With 'th' tagName
      */
     public function tfh(...$args)
@@ -979,7 +977,7 @@ class TableElement extends HtmlElement
      *
      * Addition of multiple bodies is not possible.
      *
-     * @param array $args Optional \Zalt\Ra::args processed settings
+     * @param mixed $args Optional args processed settings
      * @return \Zalt\Html\TBodyElement With 'tfoot' tagName
      */
     public function tfoot(...$args)
@@ -999,12 +997,12 @@ class TableElement extends HtmlElement
     /**
      * Returns a 'td' cell in a new row in the footer with a colspan equal to the number of columns in the table.
      *
-     * @param array $args Optional \Zalt\Ra::args processed settings
+     * @param mixed $args Optional args processed settings
      * @return \Zalt\Html\HtmlElement With 'td' tagName
      */
     public function tfrow(...$args)
     {
-        $cell = $this->tfoot()->tr()->td($args, array('colspan' => $this->toLazy()->getColumnCount()));
+        $cell = $this->tfoot()->tr()->td($args, array('colspan' => $this->toLate()->getColumnCount()));
 
         // Make sure the next item is not added to this row.
         $this->_content[self::TBODY]->_lastChild = null;
@@ -1015,7 +1013,7 @@ class TableElement extends HtmlElement
     /**
      * Returns a 'th' cell in the current row in the header
      *
-     * @param array $args Optional \Zalt\Ra::args processed settings
+     * @param mixed $args Optional args processed settings
      * @return \Zalt\Html\HtmlElement With 'th' tagName
      */
     public function th(...$args)
@@ -1028,7 +1026,7 @@ class TableElement extends HtmlElement
      *
      * Addition of multiple bodies is not possible.
      *
-     * @param array $args Optional \Zalt\Ra::args processed settings
+     * @param mixed $args Optional args processed settings
      * @return \Zalt\Html\TBodyElement With 'thead' tagName
      */
     public function thead(...$args)
@@ -1048,7 +1046,7 @@ class TableElement extends HtmlElement
     /**
      * Returns a 'td' cell in the current row in the header
      *
-     * @param array $args Optional \Zalt\Ra::args processed settings
+     * @param mixed $args Optional args processed settings
      * @return \Zalt\Html\HtmlElement With 'td' tagName
      */
     public function thd(...$args)
@@ -1064,7 +1062,7 @@ class TableElement extends HtmlElement
      */
     public function thdrow(...$args)
     {
-        return $this->thead()->td($args, array('colspan' => $this->toLazy()->getColumnCount()));
+        return $this->thead()->td($args, array('colspan' => $this->toLate()->getColumnCount()));
     }
 
     /**
@@ -1080,7 +1078,7 @@ class TableElement extends HtmlElement
     public function thhrow(...$args)
     {
         // throw is not an allowed function name. Implemented in __call
-        $cell = $this->thead()->tr()->th($args, array('colspan' => $this->toLazy()->getColumnCount()));
+        $cell = $this->thead()->tr()->th($args, array('colspan' => $this->toLate()->getColumnCount()));
 
         // Make sure the next item is not added to this row.
         $this->_content[self::TBODY]->_lastChild = null;

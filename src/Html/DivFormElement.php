@@ -11,6 +11,10 @@
 
 namespace Zalt\Html;
 
+use Zalt\Late\Late;
+use Zalt\Late\RepeatableFormElements;
+use Zalt\Ra\Ra;
+
 /**
  * A Div displayer using bootstrap element classes
  *
@@ -44,9 +48,9 @@ class DivFormElement extends \Zalt\Html\HtmlElement implements \Zalt\Html\FormLa
      */
     public $renderWithoutContent = false;
 
-    public function __construct($arg_array = null)
+    public function __construct(...$args)
     {
-        $args = \Zalt\Ra::args(func_get_args());
+        $args = Ra::args($args);
 
         parent::__construct('div', array('class' => 'form-group'), $args);
     }
@@ -54,12 +58,11 @@ class DivFormElement extends \Zalt\Html\HtmlElement implements \Zalt\Html\FormLa
     /**
      * Static helper function for creation, used by @see \Zalt\Html\Creator.
      *
-     * @param mixed $arg_array Optional \Zalt\Ra::args processed settings
+     * @param mixed $args Optional args processed settings
      * @return \Zalt\Html\PFormElement
      */
-    public static function divForm($arg_array = null)
+    public static function divForm(...$args)
     {
-        $args = func_get_args();
         return new self($args);
     }
 
@@ -86,8 +89,8 @@ class DivFormElement extends \Zalt\Html\HtmlElement implements \Zalt\Html\FormLa
         $this->_repeatTags = true;
         $prependErrors     = $errorClass;
 
-        // Make a Lazy repeater for the form elements and set it as the element repeater
-        $formrep = new \Zalt\Lazy\RepeatableFormElements($form);
+        // Make a Late repeater for the form elements and set it as the element repeater
+        $formrep = new RepeatableFormElements($form);
         $formrep->setSplitHidden(true); // These are treated separately
         if ($this->getFlattenSubs()) {
             $formrep->setFlattenSubs(true); // And flatten the output
@@ -153,10 +156,10 @@ class DivFormElement extends \Zalt\Html\HtmlElement implements \Zalt\Html\FormLa
     public function setAutoWidthFormLayout(\Zend_Form $form, $factor = 1,
             array $order = array('label', 'element', 'errors', 'description'))
     {
-        // Lazy call becase the form might not be completed at this stage.
+        // Late call becase the form might not be completed at this stage.
         return $this->setAsFormLayout(
                 $form,
-                \Zalt\Lazy::call(array('\\Zalt\\Html\\DlElement', 'calculateAutoWidthFormLayout'), $form, $factor),
+                Late::call(array('\\Zalt\\Html\\DlElement', 'calculateAutoWidthFormLayout'), $form, $factor),
                 $order
                 );
     }

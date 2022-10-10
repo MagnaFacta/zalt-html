@@ -16,6 +16,8 @@ use Psr\Http\Message\ServerRequestInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Zalt\Base\BasicRedirector;
 use Zalt\Base\RedirectorInterface;
+use Zalt\Base\RequestInfo;
+use Zalt\Base\RequestInfoFactory;
 use Zalt\Loader\Exception\LoadException;
 use Zalt\Mock\PotemkinTranslator;
 use Zalt\Mock\SimpleFlashRequestFactory;
@@ -37,13 +39,15 @@ class SnippetLoaderDirTest extends TestCase
         $config  = ['x' => 'y'];
         $classes = [
             RedirectorInterface::class    => new BasicRedirector(),
-            ServerRequestInterface::class => SimpleFlashRequestFactory::createWithoutServiceManager('http://localhost/index.php'),
             TranslatorInterface::class    => new PotemkinTranslator(),
-            SnippetOptions::class         => new SnippetOptions($config),
         ];
 
         $sm = new SimpleServiceManager($classes);
         $sl = new SnippetLoader($sm, ['Zalt\\Snippets']);
+        $sl->addConstructorVariable(
+            RequestInfo::class, 
+            RequestInfoFactory::getMezzioRequestInfo(SimpleFlashRequestFactory::createWithoutServiceManager('http://localhost/index.php'))
+        );
 
         $snippet1 = $sl->getSnippet('Sub\\Null2Snippet', []);
         $this->assertInstanceOf(SnippetInterface::class, $snippet1);
@@ -58,12 +62,15 @@ class SnippetLoaderDirTest extends TestCase
         $config  = ['x' => 'y'];
         $classes = [
             RedirectorInterface::class    => new BasicRedirector(),
-            ServerRequestInterface::class => SimpleFlashRequestFactory::createWithoutServiceManager('http://localhost/index.php'),
             TranslatorInterface::class => new PotemkinTranslator(),
         ];
 
         $sm = new SimpleServiceManager($classes);
         $sl = new SnippetLoader($sm, ['Zalt\\Snippets\\Sub']);
+        $sl->addConstructorVariable(
+            RequestInfo::class,
+            RequestInfoFactory::getMezzioRequestInfo(SimpleFlashRequestFactory::createWithoutServiceManager('http://localhost/index.php'))
+        );
 
         $snippet1 = $sl->getSnippet('Null2Snippet', $config);
         $this->assertInstanceOf(SnippetInterface::class, $snippet1);
