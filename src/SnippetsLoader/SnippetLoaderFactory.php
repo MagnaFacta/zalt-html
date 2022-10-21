@@ -13,6 +13,7 @@ namespace Zalt\SnippetsLoader;
 
 use Psr\Container\ContainerInterface;
 use Zalt\Html\Html;
+use Zalt\Loader\ProjectOverloader;
 
 /**
  *
@@ -24,14 +25,9 @@ class SnippetLoaderFactory
 {
     public function __invoke(ContainerInterface $container): SnippetLoader
     {
-        $config = $container->has('config') ? $container->get('config') : [];
-        if (isset($config['overLoaderPaths'])) {
-            $dirs = (array) $config['overLoaderPaths'];
-        } else {
-            $dirs = ['Zalt'];
-        }
+        $overloader = $container->get(ProjectOverloader::class);
         
-        $output = new SnippetLoader($container, $dirs);
+        $output = new SnippetLoader($overloader->createSubFolderOverloader('Snippets'));
         
         // Preparing the other parts
         if (! Html::hasSnippetLoader()) {

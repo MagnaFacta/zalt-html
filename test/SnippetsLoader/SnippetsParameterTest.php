@@ -19,6 +19,8 @@ use Zalt\Base\RedirectorInterface;
 use Zalt\Base\RequestInfo;
 use Zalt\Base\RequestInfoFactory;
 use Zalt\Html\Html;
+use Zalt\Loader\ProjectOverloader;
+use Zalt\Loader\ProjectOverloaderFactory;
 use Zalt\Mock\PotemkinTranslator;
 use Zalt\Mock\SimpleFlashRequestFactory;
 use Zalt\Mock\SimpleServiceManager;
@@ -50,13 +52,25 @@ class SnippetsParameterTest extends TestCase
     {
         parent::setUp();
 
-        $classes = [
-            RedirectorInterface::class    => new BasicRedirector(),
-            TranslatorInterface::class    => new PotemkinTranslator(),
-        ];
+        $options  = ['x' => 'y'];
 
-        $this->sm = new SimpleServiceManager($classes);
-        $this->sl = new SnippetLoader($this->sm, ['Zalt']);
+        $this->sm = new SimpleServiceManager([
+           'config' => [
+               'overLoader' => [
+                    'Paths' => ['Zalt'],
+//                    'AddTo' => true,
+                     ],
+               ],
+           RedirectorInterface::class => new BasicRedirector(),
+           TranslatorInterface::class => new PotemkinTranslator(),
+           SnippetOptions::class      => new SnippetOptions($options),
+           ]);
+        $overFc = new ProjectOverloaderFactory();
+        $this->sm->set(ProjectOverloader::class, $overFc($this->sm));
+
+        $class = new SnippetLoaderFactory();
+
+        $this->sl = $class($this->sm);
         $this->sl->addConstructorVariable(
             RequestInfo::class,
             RequestInfoFactory::getMezzioRequestInfo(SimpleFlashRequestFactory::createWithoutServiceManager('http://localhost/index.php'))

@@ -36,12 +36,6 @@ class SnippetLoader implements SnippetLoaderInterface
     protected $constructorVariables = [];
     
     /**
-     *
-     * @var ProjectOverloader
-     */
-    protected $loader;
-
-    /**
      * The file locations where to look for snippets.
      *
      * Can be overruled in descendants
@@ -59,20 +53,11 @@ class SnippetLoader implements SnippetLoaderInterface
 
     /**
      * Sets the source of variables and the first directory for snippets
-     *
-     * @param ContainerInterface $source Something that is or can be made into ContainerInterface, otheriwse \Zend_Registry is used.
-     * @param array $overloaders New overloaders, first overloader is tried first, \Snippets is added automatically if not in the overloader directory name
      */
-    public function __construct(ContainerInterface $source, array $overloaders = [])
+    public function __construct(protected ProjectOverloader $loader)
     {
-        foreach ($overloaders as &$overloader) {
-            if (! str_contains($overloader, 'Snippets')) {
-                $overloader .= '\\Snippets';
-            }
-        }
-        $this->setSource($source);
-        $this->loader = new ProjectOverloader($source, $overloaders, false);
         $this->loader->setDependencyResolver(new ConstructorDependencyParametersResolver());
+        $this->setSource($this->loader->getContainer());
     }
 
     public function addConstructorVariable(string $key, mixed $value): void
@@ -128,7 +113,7 @@ class SnippetLoader implements SnippetLoaderInterface
      */
     public function getSource(): ContainerInterface
     {
-        return $this->snippetsSource;
+        return $this->loader->getContainer();
     }
 
     /**

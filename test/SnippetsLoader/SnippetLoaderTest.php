@@ -20,6 +20,8 @@ use Zalt\Base\RequestInfo;
 use Zalt\Base\RequestInfoFactory;
 use Zalt\Html\Html;
 use Zalt\Loader\Exception\LoadException;
+use Zalt\Loader\ProjectOverloader;
+use Zalt\Loader\ProjectOverloaderFactory;
 use Zalt\Mock\PotemkinTranslator;
 use Zalt\Mock\SimpleFlashRequestFactory;
 use Zalt\Mock\SimpleServiceManager;
@@ -40,16 +42,31 @@ class SnippetLoaderTest extends TestCase
     {
         parent::setUp();
 
-        $config  = ['x' => 'y'];
-        $classes = [
-            RedirectorInterface::class    => new BasicRedirector(),
-            TranslatorInterface::class    => new PotemkinTranslator(),
-            SnippetOptions::class         => new SnippetOptions($config),
-        ];
-        
-        $this->sm = new SimpleServiceManager($classes);
+        $options  = ['x' => 'y'];
 
-        Html::setSnippetLoader(new SnippetLoader($this->sm, ['Zalt']));
+        $this->sm = new SimpleServiceManager([
+           'config' => [
+               'overLoader' => [
+//                    'Paths' => $input,
+//                    'AddTo' => true,
+                       ],
+                   ],
+                   RedirectorInterface::class => new BasicRedirector(),
+                   TranslatorInterface::class => new PotemkinTranslator(),
+                   SnippetOptions::class      => new SnippetOptions($options),
+               ]);
+        $overFc = new ProjectOverloaderFactory();
+        $this->sm->set(ProjectOverloader::class, $overFc($this->sm));
+
+        $class = new SnippetLoaderFactory();
+        $sl    = $class($this->sm);
+
+        $sl->addConstructorVariable(
+            RequestInfo::class,
+            RequestInfoFactory::getMezzioRequestInfo(SimpleFlashRequestFactory::createWithoutServiceManager('http://localhost/index.php'))
+        );
+       
+        Html::setSnippetLoader($sl);
         Html::getSnippetLoader()->addConstructorVariable(
             RequestInfo::class,
             RequestInfoFactory::getMezzioRequestInfo(SimpleFlashRequestFactory::createWithoutServiceManager('http://localhost/index.php'))

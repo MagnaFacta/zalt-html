@@ -26,14 +26,6 @@ use Zalt\Snippets\SnippetInterface;
 interface SnippetLoaderInterface
 {
     /**
-     * Sets the source of variables and the first directory for snippets
-     *
-     * @param ContainerInterface $source Something that is or can be made into ContainerInterface, otherwise \Zend_Registry is used.
-     * @param array $overloaders prefix => pathname The initial paths to load from
-     */
-    public function __construct(ContainerInterface $source, array $overloaders = []);
-
-    /**
      * Add prefixed paths to the registry of paths
      *
      * @param string $prefix

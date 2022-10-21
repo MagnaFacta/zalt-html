@@ -19,6 +19,8 @@ use Zalt\Base\RedirectorInterface;
 use Zalt\Base\RequestInfo;
 use Zalt\Base\RequestInfoFactory;
 use Zalt\Loader\Exception\LoadException;
+use Zalt\Loader\ProjectOverloader;
+use Zalt\Loader\ProjectOverloaderFactory;
 use Zalt\Mock\PotemkinTranslator;
 use Zalt\Mock\SimpleFlashRequestFactory;
 use Zalt\Mock\SimpleServiceManager;
@@ -36,14 +38,23 @@ class SnippetLoaderDirTest extends TestCase
 {
     public function testDirLoadWithSub()
     {
-        $config  = ['x' => 'y'];
-        $classes = [
-            RedirectorInterface::class    => new BasicRedirector(),
-            TranslatorInterface::class    => new PotemkinTranslator(),
-        ];
+        $options  = ['x' => 'y'];
 
-        $sm = new SimpleServiceManager($classes);
-        $sl = new SnippetLoader($sm, ['Zalt\\Snippets']);
+        $sm = new SimpleServiceManager([
+           'config' => [
+               'overLoader' => [
+                   'Paths' => ['Zalt'],
+                   'AddTo' => true,
+               ],
+           ],
+           RedirectorInterface::class => new BasicRedirector(),
+           TranslatorInterface::class => new PotemkinTranslator(),
+           SnippetOptions::class      => new SnippetOptions($options),
+           ]);
+        $overFc = new ProjectOverloaderFactory();
+        $over   = $overFc($sm);
+
+        $sl = new SnippetLoader($over->createSubFolderOverloader('Snippets'));
         $sl->addConstructorVariable(
             RequestInfo::class, 
             RequestInfoFactory::getMezzioRequestInfo(SimpleFlashRequestFactory::createWithoutServiceManager('http://localhost/index.php'))
@@ -59,23 +70,32 @@ class SnippetLoaderDirTest extends TestCase
 
     public function testDirLoadOnlySub()
     {
-        $config  = ['x' => 'y'];
-        $classes = [
-            RedirectorInterface::class    => new BasicRedirector(),
-            TranslatorInterface::class => new PotemkinTranslator(),
-        ];
+        $options  = ['x' => 'y'];
 
-        $sm = new SimpleServiceManager($classes);
-        $sl = new SnippetLoader($sm, ['Zalt\\Snippets\\Sub']);
+        $sm = new SimpleServiceManager([
+           'config' => [
+               'overLoader' => [
+                   'Paths' => ['Zalt\\Snippets\\Sub'],
+                   'AddTo' => true,
+               ],
+           ],
+           RedirectorInterface::class => new BasicRedirector(),
+           TranslatorInterface::class => new PotemkinTranslator(),
+           SnippetOptions::class      => new SnippetOptions($options),
+           ]);
+        $overFc = new ProjectOverloaderFactory();
+        $over   = $overFc($sm);
+
+        $sl = new SnippetLoader($over);
         $sl->addConstructorVariable(
             RequestInfo::class,
             RequestInfoFactory::getMezzioRequestInfo(SimpleFlashRequestFactory::createWithoutServiceManager('http://localhost/index.php'))
         );
 
-        $snippet1 = $sl->getSnippet('Null2Snippet', $config);
+        $snippet1 = $sl->getSnippet('Null2Snippet', $options);
         $this->assertInstanceOf(SnippetInterface::class, $snippet1);
         $this->assertInstanceOf(Null2Snippet::class, $snippet1);
-        $snippet2 = $sl->getSnippet(NullSnippet::class, $config);
+        $snippet2 = $sl->getSnippet(NullSnippet::class, $options);
         $this->assertInstanceOf(SnippetInterface::class, $snippet2);
         $this->assertInstanceOf(NullSnippet::class, $snippet2);
 

@@ -19,6 +19,8 @@ use Zalt\Base\RedirectorInterface;
 use Zalt\Base\RequestInfo;
 use Zalt\Base\RequestInfoFactory;
 use Zalt\Html\Html;
+use Zalt\Loader\ProjectOverloader;
+use Zalt\Loader\ProjectOverloaderFactory;
 use Zalt\Mock\PotemkinTranslator;
 use Zalt\Mock\SimpleFlashRequestFactory;
 use Zalt\Mock\SimpleServiceManager;
@@ -42,7 +44,13 @@ class SnippetLoaderFactoryTest extends TestCase
 
     public function testMinimalFactory()
     {
-        $sm    = new SimpleServiceManager(['config' => []]);
+        $sm     = new SimpleServiceManager(['config' => ['overLoader' => [
+//            'Paths' => $input,
+//            'AddTo' => true,
+        ]]]);
+        $overFc = new ProjectOverloaderFactory();
+        $sm->set(ProjectOverloader::class, $overFc($sm));
+        
         $class = new SnippetLoaderFactory();
         $sl    = $class($sm);
         
@@ -51,16 +59,24 @@ class SnippetLoaderFactoryTest extends TestCase
     
     public function testWorkingFactory()
     {
-        $classes = [
-            TranslatorInterface::class => new PotemkinTranslator(),
-            RedirectorInterface::class => new BasicRedirector(), 
-        ];
-
         $this->assertFalse(Html::hasSnippetLoader());
-        
-        $sm    = new SimpleServiceManager($classes);
+
+        $sm     = new SimpleServiceManager([
+            'config' => [
+                'overLoader' => [
+//                    'Paths' => $input,
+//                    'AddTo' => true,
+                    ],
+                ],
+           RedirectorInterface::class => new BasicRedirector(),
+           TranslatorInterface::class => new PotemkinTranslator(),
+           ]);
+        $overFc = new ProjectOverloaderFactory();
+        $sm->set(ProjectOverloader::class, $overFc($sm));
+
         $class = new SnippetLoaderFactory();
         $sl    = $class($sm);
+
         $sl->addConstructorVariable(
             RequestInfo::class,
             RequestInfoFactory::getMezzioRequestInfo(SimpleFlashRequestFactory::createWithoutServiceManager('http://localhost/index.php'))

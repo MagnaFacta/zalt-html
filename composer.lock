@@ -252,7 +252,7 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/MagnaFacta/zalt-loader.git",
-                "reference": "61f02960d66cbbae8d984c847a2b6a8534f02b0b"
+                "reference": "cb56d416ba74f170b6cc97b1f12ebb3b0873dbde"
             },
             "require": {
                 "magnafacta/zalt-util": "dev-main",
@@ -293,7 +293,7 @@
                 }
             ],
             "description": "Zend Alternative Loader",
-            "time": "2022-10-10T15:00:18+00:00"
+            "time": "2022-10-21T13:10:18+00:00"
         },
         {
             "name": "magnafacta/zalt-util",
@@ -343,12 +343,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/mezzio/mezzio-flash.git",
-                "reference": "fc3303d4c461350012dcbfa9eb1793e617930233"
+                "reference": "c73f60fa1383e1a734e364bb1eecae68d938b7e4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mezzio/mezzio-flash/zipball/fc3303d4c461350012dcbfa9eb1793e617930233",
-                "reference": "fc3303d4c461350012dcbfa9eb1793e617930233",
+                "url": "https://api.github.com/repos/mezzio/mezzio-flash/zipball/c73f60fa1383e1a734e364bb1eecae68d938b7e4",
+                "reference": "c73f60fa1383e1a734e364bb1eecae68d938b7e4",
                 "shasum": ""
             },
             "require": {
@@ -406,25 +406,25 @@
                     "type": "community_bridge"
                 }
             ],
-            "time": "2022-10-08T01:41:09+00:00"
+            "time": "2022-10-16T01:11:55+00:00"
         },
         {
             "name": "mezzio/mezzio-helpers",
-            "version": "5.10.x-dev",
+            "version": "5.12.x-dev",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mezzio/mezzio-helpers.git",
-                "reference": "b7b4d67a832a7c99161bc6208b99f8c47c18ca3f"
+                "reference": "a66bda1b82a369af6eef99cec167490ed25d2e41"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mezzio/mezzio-helpers/zipball/b7b4d67a832a7c99161bc6208b99f8c47c18ca3f",
-                "reference": "b7b4d67a832a7c99161bc6208b99f8c47c18ca3f",
+                "url": "https://api.github.com/repos/mezzio/mezzio-helpers/zipball/a66bda1b82a369af6eef99cec167490ed25d2e41",
+                "reference": "a66bda1b82a369af6eef99cec167490ed25d2e41",
                 "shasum": ""
             },
             "require": {
                 "mezzio/mezzio-router": "^3.0",
-                "php": "^7.4 || ~8.0.0 || ~8.1.0",
+                "php": "~8.0.0 || ~8.1.0 || ~8.2.0",
                 "psr/container": "^1.0 || ^2.0",
                 "psr/http-message": "^1.0.1",
                 "psr/http-server-middleware": "^1.0"
@@ -435,10 +435,10 @@
             "require-dev": {
                 "ext-json": "*",
                 "laminas/laminas-coding-standard": "~2.4.0",
-                "laminas/laminas-diactoros": "^2.11.1",
-                "phpunit/phpunit": "^9.5.11",
+                "laminas/laminas-diactoros": "^2.19",
+                "phpunit/phpunit": "^9.5.25",
                 "psalm/plugin-phpunit": "^0.17.0",
-                "vimeo/psalm": "^4.17"
+                "vimeo/psalm": "^4.29"
             },
             "suggest": {
                 "ext-json": "If you wish to use the JsonStrategy with BodyParamsMiddleware"
@@ -483,25 +483,25 @@
                     "type": "community_bridge"
                 }
             ],
-            "time": "2022-10-09T01:20:55+00:00"
+            "time": "2022-10-15T01:40:57+00:00"
         },
         {
             "name": "mezzio/mezzio-router",
-            "version": "3.9.x-dev",
+            "version": "3.10.x-dev",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mezzio/mezzio-router.git",
-                "reference": "9669e5bb9ad979badbaf38af335b6ce65a67c8e8"
+                "reference": "3070bb65f61a93e108656b64012439b60e335571"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mezzio/mezzio-router/zipball/9669e5bb9ad979badbaf38af335b6ce65a67c8e8",
-                "reference": "9669e5bb9ad979badbaf38af335b6ce65a67c8e8",
+                "url": "https://api.github.com/repos/mezzio/mezzio-router/zipball/3070bb65f61a93e108656b64012439b60e335571",
+                "reference": "3070bb65f61a93e108656b64012439b60e335571",
                 "shasum": ""
             },
             "require": {
                 "fig/http-message-util": "^1.1.2",
-                "php": "^7.4 || ~8.0.0 || ~8.1.0",
+                "php": "~8.0.0 || ~8.1.0 || ~8.2.0",
                 "psr/container": "^1.0 || ^2.0",
                 "psr/http-factory": "^1.0",
                 "psr/http-message": "^1.0.1",
@@ -514,11 +514,11 @@
             },
             "require-dev": {
                 "laminas/laminas-coding-standard": "~2.4.0",
-                "laminas/laminas-diactoros": "^2.11",
-                "laminas/laminas-stratigility": "^3.4",
-                "phpunit/phpunit": "^9.5.11",
+                "laminas/laminas-diactoros": "^2.18",
+                "laminas/laminas-stratigility": "^3.8",
+                "phpunit/phpunit": "^9.5.25",
                 "psalm/plugin-phpunit": "^0.17.0",
-                "vimeo/psalm": "^4.17"
+                "vimeo/psalm": "^4.28"
             },
             "suggest": {
                 "mezzio/mezzio-aurarouter": "^3.0 to use the Aura.Router routing adapter",
@@ -565,7 +565,7 @@
                     "type": "community_bridge"
                 }
             ],
-            "time": "2022-10-09T12:43:04+00:00"
+            "time": "2022-10-17T01:50:00+00:00"
         },
         {
             "name": "mezzio/mezzio-session",
@@ -573,12 +573,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/mezzio/mezzio-session.git",
-                "reference": "39a859eb0e5939b31c4ca4adc2eee393694811a1"
+                "reference": "442a2abbcee44a466173c20485cfbe8e5a39f481"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mezzio/mezzio-session/zipball/39a859eb0e5939b31c4ca4adc2eee393694811a1",
-                "reference": "39a859eb0e5939b31c4ca4adc2eee393694811a1",
+                "url": "https://api.github.com/repos/mezzio/mezzio-session/zipball/442a2abbcee44a466173c20485cfbe8e5a39f481",
+                "reference": "442a2abbcee44a466173c20485cfbe8e5a39f481",
                 "shasum": ""
             },
             "require": {
@@ -642,7 +642,7 @@
                     "type": "community_bridge"
                 }
             ],
-            "time": "2022-10-08T01:11:39+00:00"
+            "time": "2022-10-15T01:11:11+00:00"
         },
         {
             "name": "mezzio/mezzio-session-cache",
@@ -650,12 +650,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/mezzio/mezzio-session-cache.git",
-                "reference": "e9035175fdb8813812573babbc5517cd5b955677"
+                "reference": "4595f8756f5b61eaf3cb78e4aabd4460d71ebd71"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mezzio/mezzio-session-cache/zipball/e9035175fdb8813812573babbc5517cd5b955677",
-                "reference": "e9035175fdb8813812573babbc5517cd5b955677",
+                "url": "https://api.github.com/repos/mezzio/mezzio-session-cache/zipball/4595f8756f5b61eaf3cb78e4aabd4460d71ebd71",
+                "reference": "4595f8756f5b61eaf3cb78e4aabd4460d71ebd71",
                 "shasum": ""
             },
             "require": {
@@ -719,7 +719,7 @@
                     "type": "community_bridge"
                 }
             ],
-            "time": "2022-10-02T01:52:59+00:00"
+            "time": "2022-10-15T00:54:24+00:00"
         },
         {
             "name": "psr/cache",
@@ -1154,12 +1154,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/cache.git",
-                "reference": "275664cbae92fc1b65860c555821116a8d0b0c7c"
+                "reference": "6f952c7164db8181ba82076d665af82bdaa3dbfe"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/cache/zipball/275664cbae92fc1b65860c555821116a8d0b0c7c",
-                "reference": "275664cbae92fc1b65860c555821116a8d0b0c7c",
+                "url": "https://api.github.com/repos/symfony/cache/zipball/6f952c7164db8181ba82076d665af82bdaa3dbfe",
+                "reference": "6f952c7164db8181ba82076d665af82bdaa3dbfe",
                 "shasum": ""
             },
             "require": {
@@ -1242,7 +1242,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-10-09T08:55:43+00:00"
+            "time": "2022-10-20T09:01:57+00:00"
         },
         {
             "name": "symfony/cache-contracts",
@@ -1500,12 +1500,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/translation.git",
-                "reference": "89c407bb283948fd9096764af547699a9bc33af7"
+                "reference": "2a32ad93ad16ffcd673f67fdd26ad04876d40222"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/translation/zipball/89c407bb283948fd9096764af547699a9bc33af7",
-                "reference": "89c407bb283948fd9096764af547699a9bc33af7",
+                "url": "https://api.github.com/repos/symfony/translation/zipball/2a32ad93ad16ffcd673f67fdd26ad04876d40222",
+                "reference": "2a32ad93ad16ffcd673f67fdd26ad04876d40222",
                 "shasum": ""
             },
             "require": {
@@ -1525,6 +1525,7 @@
                 "symfony/translation-implementation": "2.3|3.0"
             },
             "require-dev": {
+                "nikic/php-parser": "^4.13",
                 "psr/log": "^1|^2|^3",
                 "symfony/config": "^5.4|^6.0",
                 "symfony/console": "^5.4|^6.0",
@@ -1539,6 +1540,7 @@
                 "symfony/yaml": "^5.4|^6.0"
             },
             "suggest": {
+                "nikic/php-parser": "To use PhpAstExtractor",
                 "psr/log-implementation": "To use logging capability in translator",
                 "symfony/config": "",
                 "symfony/yaml": ""
@@ -1588,7 +1590,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-10-07T08:04:14+00:00"
+            "time": "2022-10-20T10:15:36+00:00"
         },
         {
             "name": "symfony/translation-contracts",
@@ -2117,12 +2119,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/php-code-coverage.git",
-                "reference": "d9ac413b26c33fb3aabc997fc4e5d60a026ec38c"
+                "reference": "74b7413e8d9788df77e296adabd7c1f6ca801a99"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/d9ac413b26c33fb3aabc997fc4e5d60a026ec38c",
-                "reference": "d9ac413b26c33fb3aabc997fc4e5d60a026ec38c",
+                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/74b7413e8d9788df77e296adabd7c1f6ca801a99",
+                "reference": "74b7413e8d9788df77e296adabd7c1f6ca801a99",
                 "shasum": ""
             },
             "require": {
@@ -2186,7 +2188,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2022-10-09T08:49:39+00:00"
+            "time": "2022-10-21T12:10:51+00:00"
         },
         {
             "name": "phpunit/php-file-iterator",
@@ -2435,12 +2437,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "8c21a5381a7218b9bcf9d7cb1b3a0230ec83a3c1"
+                "reference": "7847a4a920f686db261da1ccc92120800822661f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/8c21a5381a7218b9bcf9d7cb1b3a0230ec83a3c1",
-                "reference": "8c21a5381a7218b9bcf9d7cb1b3a0230ec83a3c1",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/7847a4a920f686db261da1ccc92120800822661f",
+                "reference": "7847a4a920f686db261da1ccc92120800822661f",
                 "shasum": ""
             },
             "require": {
@@ -2529,7 +2531,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-10-09T09:04:03+00:00"
+            "time": "2022-10-19T10:44:50+00:00"
         },
         {
             "name": "sebastian/cli-parser",
