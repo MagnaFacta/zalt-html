@@ -14,8 +14,6 @@ namespace Zalt\SnippetsLoader;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ServerRequestInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
-use Zalt\Base\BasicRedirector;
-use Zalt\Base\RedirectorInterface;
 use Zalt\Base\RequestInfo;
 use Zalt\Base\RequestInfoFactory;
 use Zalt\Html\Html;
@@ -68,7 +66,6 @@ class SnippetLoaderFactoryTest extends TestCase
 //                    'AddTo' => true,
                     ],
                 ],
-           RedirectorInterface::class => new BasicRedirector(),
            TranslatorInterface::class => new PotemkinTranslator(),
            ]);
         $overFc = new ProjectOverloaderFactory();

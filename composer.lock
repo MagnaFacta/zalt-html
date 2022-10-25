@@ -252,7 +252,7 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/MagnaFacta/zalt-loader.git",
-                "reference": "cb56d416ba74f170b6cc97b1f12ebb3b0873dbde"
+                "reference": "c3e3d50718711d9905a08cbac172774e92f8241f"
             },
             "require": {
                 "magnafacta/zalt-util": "dev-main",
@@ -293,7 +293,7 @@
                 }
             ],
             "description": "Zend Alternative Loader",
-            "time": "2022-10-21T13:10:18+00:00"
+            "time": "2022-10-24T10:18:55+00:00"
         },
         {
             "name": "magnafacta/zalt-util",
@@ -301,7 +301,7 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/MagnaFacta/zalt-util.git",
-                "reference": "b59c7dadbf72149e279286ed2d57863ecc530447"
+                "reference": "4a3dc6d7dcf39868488d437605574f4372612488"
             },
             "require": {
                 "guzzlehttp/psr7": "2.*",
@@ -335,7 +335,7 @@
                 }
             ],
             "description": "Alternative Utilities",
-            "time": "2022-10-10T13:25:35+00:00"
+            "time": "2022-10-24T10:19:52+00:00"
         },
         {
             "name": "mezzio/mezzio-flash",
@@ -1154,12 +1154,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/cache.git",
-                "reference": "6f952c7164db8181ba82076d665af82bdaa3dbfe"
+                "reference": "f47f5c0bc1551636f7b2cae8c946c58fcf0b2ae4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/cache/zipball/6f952c7164db8181ba82076d665af82bdaa3dbfe",
-                "reference": "6f952c7164db8181ba82076d665af82bdaa3dbfe",
+                "url": "https://api.github.com/repos/symfony/cache/zipball/f47f5c0bc1551636f7b2cae8c946c58fcf0b2ae4",
+                "reference": "f47f5c0bc1551636f7b2cae8c946c58fcf0b2ae4",
                 "shasum": ""
             },
             "require": {
@@ -1242,7 +1242,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-10-20T09:01:57+00:00"
+            "time": "2022-10-24T06:55:10+00:00"
         },
         {
             "name": "symfony/cache-contracts",

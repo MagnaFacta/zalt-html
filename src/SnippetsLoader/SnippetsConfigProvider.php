@@ -19,13 +19,12 @@ namespace Zalt\SnippetsLoader;
  * @subpackage SnippetsLoader
  * @since      Class available since version 1.0
  */
-class ConfigProvider
+class SnippetsConfigProvider
 {
     public function __invoke(): array
     {
         return [
             'dependencies' => $this->getDependencies(),
-            'snippetLoader' => ['directories' => ['Zalt']],
         ];
     }
 
@@ -36,9 +35,10 @@ class ConfigProvider
             'aliases'    => [
                 \MUtil\Snippets\SnippetLoaderInterface::class => SnippetLoader::class,
             ],
-            'invokables' => [
+            'factories' => [
                 SnippetLoader::class => SnippetLoaderFactory::class,
                 SnippetMiddleware::class => SnippetMiddleware::class,
+                SnippetResponderInterface::class => MezzioLaminasSnippetResponderFactory::class,
             ],
         ];
     }

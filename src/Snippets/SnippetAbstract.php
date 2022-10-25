@@ -9,10 +9,7 @@
 
 namespace Zalt\Snippets;
 
-use Symfony\Contracts\Translation\TranslatorInterface;
-use Zalt\Base\RedirectorInterface;
 use Zalt\Base\RequestInfo;
-use Zalt\Base\TranslateableTrait;
 use Zalt\Html\Html;
 use Zalt\Html\HtmlElement;
 use Zalt\Html\HtmlInterface;
@@ -36,8 +33,6 @@ use Zalt\SnippetsLoader\SnippetOptions;
  */
 abstract class SnippetAbstract implements SnippetInterface
 {
-    use TranslateableTrait;
-    
     /**
      * Attributes (e.g. class) for the main html element
      *
@@ -52,13 +47,9 @@ abstract class SnippetAbstract implements SnippetInterface
      */
     protected $class;
 
-    public function __construct(SnippetOptions $snippetOptions, TranslatorInterface $translate,
-                                protected RequestInfo $requestInfo,
-                                protected RedirectorInterface $redirector)
+    public function __construct(SnippetOptions $snippetOptions, 
+                                protected RequestInfo $requestInfo)
     {
-        // We're setting trait variables so no constructor promotion
-        $this->translate   = $translate;
-                
         $this->setSnippetOptions($snippetOptions);
     }
     
@@ -140,19 +131,6 @@ abstract class SnippetAbstract implements SnippetInterface
     public function hasHtmlOutput(): bool
     {
         return true;
-    }
-
-    /**
-     * When there is a redirectRoute this function will execute it.
-     *
-     * When hasHtmlOutput() is true this functions should not be called.
-     */
-    public function redirectRoute(): void
-    {
-        $url = $this->getRedirectRoute();
-        if ($url) {
-            $this->redirector->redirect($url);
-        }
     }
 
     /**

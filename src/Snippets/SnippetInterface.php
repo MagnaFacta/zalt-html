@@ -59,11 +59,4 @@ interface SnippetInterface extends HtmlInterface
      * @return boolean
      */
     public function hasHtmlOutput(): bool;
-
-    /**
-     * When there is a redirectRoute this function will execute it.
-     *
-     * When hasHtmlOutput() is true this functions should not be called.
-     */
-    public function redirectRoute(): void;
 }

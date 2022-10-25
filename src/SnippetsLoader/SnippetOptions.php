@@ -16,7 +16,9 @@ use Psr\Container\ContainerInterface;
 use Psr\Container\NotFoundExceptionInterface;
 
 /**
- *
+ * An object to pass simple striung, boolean, etc.. objects to a snipper, but will also pass extra objects to
+ * the constructor that are not available in the Service manager or overrule those in the Service manager container
+ * 
  * @package    Zalt
  * @subpackage SnippetsLoader
  * @since      Class available since version 1.0

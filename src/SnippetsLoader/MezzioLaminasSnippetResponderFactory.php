@@ -19,12 +19,10 @@ use Psr\Container\ContainerInterface;
  * @subpackage SnippetsLoader
  * @since      Class available since version 1.0
  */
-class SnippetMiddlewareFactory
+class MezzioLaminasSnippetResponderFactory
 {
-    public function __invoke(ContainerInterface $container): SnippetMiddleware
+    public function __invoke(ContainerInterface $container): MezzioLaminasSnippetResponder
     {
-        $loader = $container->get(SnippetLoader::class);
-        
-        return new SnippetMiddleware($loader);
+        return new MezzioLaminasSnippetResponder($container->get(SnippetLoader::class));
     }
 }
