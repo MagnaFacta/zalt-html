@@ -25,9 +25,10 @@ interface SnippetResponderInterface
     /**
      * @param array $snippetNames Array of snippets to load
      * @param mixed $snippetOptions arrau of something that can become an array or a SnippetOptions object
+     * @param ServerRequestInterface $request
      * @return \Psr\Http\Message\ResponseInterface
      */
-    public function getSnippetsResponse(array $snippetNames, mixed $snippetOptions = []): ResponseInterface;
+    public function getSnippetsResponse(array $snippetNames, mixed $snippetOptions = [], ?ServerRequestInterface $request = null): ResponseInterface;
 
     /**
      * Apply the request for this responder

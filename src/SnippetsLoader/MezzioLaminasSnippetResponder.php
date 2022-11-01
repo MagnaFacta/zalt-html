@@ -38,8 +38,12 @@ class MezzioLaminasSnippetResponder implements SnippetResponderInterface
     ) {
     }
 
-    public function getSnippetsResponse(array $snippetNames, mixed $snippetOptions = []): ResponseInterface
+    public function getSnippetsResponse(array $snippetNames, mixed $snippetOptions = [], ?ServerRequestInterface $request = null): ResponseInterface
     {
+        if ($request) {
+            $this->processRequest($request);
+        }
+        
         if (! $snippetOptions instanceof SnippetOptions) {
             if (! is_array($snippetOptions)) {
                 $snippetOptions = Ra::to($snippetOptions);
