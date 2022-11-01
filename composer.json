@@ -4,6 +4,7 @@
     "type": "library",
     "require": {
         "php": ">=8.1.0",
+        "magnafacta/zalt-late": "dev-main",
         "magnafacta/zalt-loader": "dev-psr-11",
         "magnafacta/zalt-util": "dev-main"
     },
@@ -28,6 +29,10 @@
         }
     },
     "repositories": [
+        {
+            "type": "git",
+            "url": "https://github.com/MagnaFacta/zalt-late.git"
+        },
         {
             "type": "git",
             "url": "https://github.com/MagnaFacta/zalt-loader.git"
