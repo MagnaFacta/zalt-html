@@ -78,6 +78,11 @@ class SnippetLoader implements SnippetLoaderInterface
         return $this;
     }
 
+    public function getOverLoader(): ProjectOverloader
+    {
+        return $this->loader;
+    }
+    
     /**
      * Searches and loads a .php snippet file.
      *

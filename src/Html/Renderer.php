@@ -54,12 +54,12 @@ class Renderer
      * @var array classname => static output function
      */
     protected $_initialClassRenderFunctions = array(
-        'Zend_Db_Adapter_Abstract'         => [Renderer::class => 'doNotRender'],
-        'Zend_Controller_Request_Abstract' => [Renderer::class => 'doNotRender'],
-        'Zend_Form'                        => [InputRenderer::class => 'renderForm'],
-        'Zend_Form_DisplayGroup'           => [InputRenderer::class => 'renderDisplayGroup'],
-        'Zend_Form_Element'                => [InputRenderer::class => 'renderElement'],
-        'Zend_Translate'                   => [Renderer::class => 'doNotRender'],
+        'Zend_Db_Adapter_Abstract'         => [Renderer::class, 'doNotRender'],
+        'Zend_Controller_Request_Abstract' => [Renderer::class, 'doNotRender'],
+        'Zend_Form'                        => [InputRenderer::class, 'renderForm'],
+        'Zend_Form_DisplayGroup'           => [InputRenderer::class, 'renderDisplayGroup'],
+        'Zend_Form_Element'                => [InputRenderer::class, 'renderElement'],
+        'Zend_Translate'                   => [Renderer::class, 'doNotRender'],
     );
 
     /**

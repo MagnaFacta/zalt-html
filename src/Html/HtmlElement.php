@@ -16,6 +16,7 @@ use Zalt\Late\LateInterface;
 use Zalt\Late\ObjectWrap;
 use Zalt\Late\ParallelRepeater;
 use Zalt\Late\Procrastinator;
+use Zalt\Late\Repeatable;
 use Zalt\Late\RepeatableInterface;
 
 /**
