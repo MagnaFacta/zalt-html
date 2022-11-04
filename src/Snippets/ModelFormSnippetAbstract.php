@@ -30,7 +30,7 @@ use Zalt\Ra\Ra;
  * @license    New BSD License
  * @since      Class available since version 1.4
  */
-abstract class ModelFormSnippetAbstract extends \Zalt\Snippets\ModelSnippetAbstract
+abstract class ModelFormSnippetAbstract extends ModelSnippetAbstract
 {
     /**
      * Optional csrf element
@@ -206,10 +206,10 @@ abstract class ModelFormSnippetAbstract extends \Zalt\Snippets\ModelSnippetAbstr
      * Overrule this function to add different elements to the browse table, without
      * having to recode the core table building code.
      *
-     * @param \Zalt\Model\Bridge\FormBridgeInterface $bridge
-     * @param \Zalt\Model\ModelAbstract $model
+     * @param \MUtil\Model\Bridge\FormBridgeInterface $bridge
+     * @param \MUtil\Model\ModelAbstract $model
      */
-    protected function addFormElements(\Zalt\Model\Bridge\FormBridgeInterface $bridge, \Zalt\Model\ModelAbstract $model)
+    protected function addFormElements(\MUtil\Model\Bridge\FormBridgeInterface $bridge, \MUtil\Model\ModelAbstract $model)
     {
         //Get all elements in the model if not already done
         $this->initItems();
@@ -221,12 +221,12 @@ abstract class ModelFormSnippetAbstract extends \Zalt\Snippets\ModelSnippetAbstr
     /**
      * Add items to the bridge, and remove them from the items array
      *
-     * @param \Zalt\Model\Bridge\FormBridgeInterface $bridge
+     * @param \MUtil\Model\Bridge\FormBridgeInterface $bridge
      * @param string $element1
      *
      * @return void
      */
-    protected function addItems(\Zalt\Model\Bridge\FormBridgeInterface $bridge, $element1)
+    protected function addItems(\MUtil\Model\Bridge\FormBridgeInterface $bridge, $element1)
     {
         $args = func_get_args();
         if (count($args)<2) {
@@ -339,7 +339,7 @@ abstract class ModelFormSnippetAbstract extends \Zalt\Snippets\ModelSnippetAbstr
      */
     protected function createForm($options = null)
     {
-        $form = new \Zalt\Form($options);
+        $form = new \MUtil\Form($options);
         $form->activateBootstrap();
         return $form;
     }
@@ -358,10 +358,9 @@ abstract class ModelFormSnippetAbstract extends \Zalt\Snippets\ModelSnippetAbstr
      *
      * This is a stub function either override getHtmlOutput() or override render()
      *
-     * @param \Zend_View_Abstract $view Just in case it is needed here
-     * @return \Zalt\Html\HtmlInterface Something that can be rendered
+     * @return mixed Something that can be rendered
      */
-    public function getHtmlOutput(\Zend_View_Abstract $view)
+    public function getHtmlOutput()
     {
         // Again, just to be sure all changes are set on the form
         $this->populateForm();
@@ -390,16 +389,19 @@ abstract class ModelFormSnippetAbstract extends \Zalt\Snippets\ModelSnippetAbstr
     }
 
     /**
-     * When hasHtmlOutput() is false a snippet user should check
-     * for a redirectRoute.
+     * When hasHtmlOutput() is false a snippet code user should check
+     * for a redirectRoute. Otherwise the redirect calling render() will
+     * execute the redirect.
      *
-     * When hasHtmlOutput() is true this functions should not be called.
+     * This function should never return a value when the snippet does
+     * not redirect.
      *
-     * @see \Zend_Controller_Action_Helper_Redirector
+     * Also when hasHtmlOutput() is true this function should not be
+     * called.
      *
-     * @return mixed Nothing or either an array or a string that is acceptable for Redector->gotoRoute()
+     * @return ?string Nothing or either an array or a string that is acceptable for Redector->gotoRoute()
      */
-    public function getRedirectRoute()
+    public function getRedirectRoute(): ?string
     {
         return $this->afterSaveRouteUrl;
     }
@@ -426,7 +428,7 @@ abstract class ModelFormSnippetAbstract extends \Zalt\Snippets\ModelSnippetAbstr
      *
      * @return boolean
      */
-    public function hasHtmlOutput()
+    public function hasHtmlOutput(): bool
     {
         if (parent::hasHtmlOutput()) {
             return $this->processForm();

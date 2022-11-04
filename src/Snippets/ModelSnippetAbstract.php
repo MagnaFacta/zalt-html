@@ -11,6 +11,8 @@
 
 namespace Zalt\Snippets;
 
+use Zalt\Model\Data\DataReaderInterface;
+
 /**
  * Contains base functionality to use a model in a snippet.
  *
@@ -25,7 +27,7 @@ namespace Zalt\Snippets;
  * @license    New BSD License
  * @since      Class available since version 1.1
  */
-abstract class ModelSnippetAbstract extends \Zalt\Snippets\SnippetAbstract
+abstract class ModelSnippetAbstract extends TranslatableSnippetAbstract
 {
     /**
      * Set a fixed model filter.
@@ -48,7 +50,7 @@ abstract class ModelSnippetAbstract extends \Zalt\Snippets\SnippetAbstract
     /**
      * The model, use $this->getModel() to fill
      *
-     * @var \Zalt\Model\ModelAbstract
+     * @var \MUtil\Model\ModelAbstract
      */
     private $_model;
 
@@ -79,8 +81,6 @@ abstract class ModelSnippetAbstract extends \Zalt\Snippets\SnippetAbstract
      */
     public $removePost = true;
 
-    protected ?\Zalt\Request\RequestInfo $requestInfo = null;
-
     /**
      * Searchfilter to use including model sorts, etcc..
      *
@@ -108,16 +108,16 @@ abstract class ModelSnippetAbstract extends \Zalt\Snippets\SnippetAbstract
     /**
      * Creates the model
      *
-     * @return \Zalt\Model\ModelAbstract
+     * @return \MUtil\Model\ModelAbstract
      */
     abstract protected function createModel();
 
     /**
      * Returns the model, always use this function
      *
-     * @return \Zalt\Model\ModelAbstract
+     * @return \Zalt\Model\Data\DataReaderInterface
      */
-    protected function getModel()
+    protected function getModel(): DataReaderInterface
     {
         if (! $this->_model) {
             $this->_model = $this->createModel();
@@ -139,7 +139,7 @@ abstract class ModelSnippetAbstract extends \Zalt\Snippets\SnippetAbstract
      *
      * @return boolean
      */
-    public function hasHtmlOutput()
+    public function hasHtmlOutput(): bool
     {
         return (boolean) $this->getModel();
     }
@@ -147,9 +147,9 @@ abstract class ModelSnippetAbstract extends \Zalt\Snippets\SnippetAbstract
     /**
      * Default processing of $model from standard settings
      *
-     * @param \Zalt\Model\ModelAbstract $model
+     * @param \MUtil\Model\ModelAbstract $model
      */
-    protected final function prepareModel(\Zalt\Model\ModelAbstract $model)
+    protected final function prepareModel(\MUtil\Model\ModelAbstract $model)
     {
         if ($this->sortParamAsc) {
             $model->setSortParamAsc($this->sortParamAsc);
@@ -177,9 +177,9 @@ abstract class ModelSnippetAbstract extends \Zalt\Snippets\SnippetAbstract
     /**
      * Overrule to implement snippet specific filtering and sorting.
      *
-     * @param \Zalt\Model\ModelAbstract $model
+     * @param \MUtil\Model\ModelAbstract $model
      */
-    protected function processFilterAndSort(\Zalt\Model\ModelAbstract $model)
+    protected function processFilterAndSort(\MUtil\Model\ModelAbstract $model)
     {
         if (false !== $this->searchFilter) {
             if (isset($this->searchFilter['limit'])) {
@@ -208,9 +208,9 @@ abstract class ModelSnippetAbstract extends \Zalt\Snippets\SnippetAbstract
      *
      * Overrule to implement snippet specific filtering and sorting.
      *
-     * @param \Zalt\Model\ModelAbstract $model
+     * @param \MUtil\Model\ModelAbstract $model
      */
-    protected function processSortOnly(\Zalt\Model\ModelAbstract $model)
+    protected function processSortOnly(\MUtil\Model\ModelAbstract $model)
     {
         if (count($this->requestInfo->getRequestQueryParams())) {
             $queryParams = $this->requestInfo->getRequestQueryParams();

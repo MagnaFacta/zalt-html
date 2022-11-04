@@ -6,6 +6,7 @@
         "php": ">=8.1.0",
         "magnafacta/zalt-late": "dev-main",
         "magnafacta/zalt-loader": "dev-psr-11",
+        "magnafacta/zalt-model": "2.x-dev",
         "magnafacta/zalt-util": "dev-main"
     },
     "require-dev": {
@@ -36,6 +37,10 @@
         {
             "type": "git",
             "url": "https://github.com/MagnaFacta/zalt-loader.git"
+        },
+        {
+            "type": "git",
+            "url": "https://github.com/MagnaFacta/zalt-model.git"
         },
         {
             "type": "git",

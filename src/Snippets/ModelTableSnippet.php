@@ -2,6 +2,7 @@
 
 /**
  *
+ *
  * @package    Zalt
  * @subpackage Snippets
  * @author     Matijs de Jong <mjong@magnafacta.nl>
@@ -9,30 +10,30 @@
  * @license    New BSD License
  */
 
-namespace Zalt\Snippets\Standard;
+namespace Zalt\Snippets;
 
 /**
- * Processes and displays a model form using the model
- * set through the $model snippet parameter.
+ * Displays multiple items from a model in a tabel by row using
+ * the model set through the $model snippet parameter.
  *
  * @package    Zalt
  * @subpackage Snippets
  * @copyright  Copyright (c) 2011 Erasmus MC
  * @license    New BSD License
- * @since      Class available since version 1.4
+ * @since      Class available since version 1.2
  */
-class ModelFormSnippet extends \Zalt\Snippets\ModelFormSnippetAbstract
+class ModelTableSnippet extends ModelTableSnippetAbstract
 {
     /**
      *
-     * @var \Zalt\Model\ModelAbstract
+     * @var \MUtil\Model\ModelAbstract
      */
     protected $model;
 
     /**
      * Creates the model
      *
-     * @return \Zalt\Model\ModelAbstract
+     * @return \MUtil\Model\ModelAbstract
      */
     protected function createModel()
     {

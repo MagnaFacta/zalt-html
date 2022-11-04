@@ -40,11 +40,11 @@ abstract class ModelTableSnippetAbstract extends \Zalt\Snippets\ModelSnippetAbst
     public $baseUrl;
 
     /**
-     * One of the \Zalt\Model\Bridge\BridgeAbstract MODE constants
+     * One of the \MUtil\Model\Bridge\BridgeAbstract MODE constants
      *
      * @var int
      */
-    protected $bridgeMode = \Zalt\Model\Bridge\BridgeAbstract::MODE_LAZY;
+    protected $bridgeMode = \MUtil\Model\Bridge\BridgeAbstract::MODE_LAZY;
 
     /**
      * Sets pagination on or off.
@@ -103,11 +103,11 @@ abstract class ModelTableSnippetAbstract extends \Zalt\Snippets\ModelSnippetAbst
      * Overrule this function to add different columns to the browse table, without
      * having to recode the core table building code.
      *
-     * @param \Zalt\Model\Bridge\TableBridge $bridge
-     * @param \Zalt\Model\ModelAbstract $model
+     * @param \MUtil\Model\Bridge\TableBridge $bridge
+     * @param \MUtil\Model\ModelAbstract $model
      * @return void
      */
-    protected function addBrowseTableColumns(\Zalt\Model\Bridge\TableBridge $bridge, \Zalt\Model\ModelAbstract $model)
+    protected function addBrowseTableColumns(\MUtil\Model\Bridge\TableBridge $bridge, \MUtil\Model\ModelAbstract $model)
     {
         if ($this->columns) {
             foreach ($this->columns as $column) {
@@ -149,10 +149,10 @@ abstract class ModelTableSnippetAbstract extends \Zalt\Snippets\ModelSnippetAbst
      *
      * Allows overruling
      *
-     * @param \Zalt\Model\ModelAbstract $model
+     * @param \MUtil\Model\ModelAbstract $model
      * @return \Zalt\Html\TableElement
      */
-    public function getBrowseTable(\Zalt\Model\ModelAbstract $model)
+    public function getBrowseTable(\MUtil\Model\ModelAbstract $model)
     {
         $bridge = $model->getBridgeFor('table');
 
@@ -178,10 +178,9 @@ abstract class ModelTableSnippetAbstract extends \Zalt\Snippets\ModelSnippetAbst
      *
      * This is a stub function either override getHtmlOutput() or override render()
      *
-     * @param \Zend_View_Abstract $view Just in case it is needed here
-     * @return \Zalt\Html\HtmlInterface Something that can be rendered
+     * @return mixed Something that can be rendered
      */
-    public function getHtmlOutput(\Zend_View_Abstract $view)
+    public function getHtmlOutput()
     {
         $model = $this->getModel();
 
@@ -195,9 +194,9 @@ abstract class ModelTableSnippetAbstract extends \Zalt\Snippets\ModelSnippetAbst
                 $paginator = $model->loadPaginator();
                 $table->setRepeater($paginator);
                 $this->addPaginator($table, $paginator);
-            } elseif ($this->bridgeMode === \Zalt\Model\Bridge\BridgeAbstract::MODE_LAZY) {
+            } elseif ($this->bridgeMode === \MUtil\Model\Bridge\BridgeAbstract::MODE_LAZY) {
                 $table->setRepeater($model->loadRepeatable());
-            } elseif ($this->bridgeMode === \Zalt\Model\Bridge\BridgeAbstract::MODE_SINGLE_ROW) {
+            } elseif ($this->bridgeMode === \MUtil\Model\Bridge\BridgeAbstract::MODE_SINGLE_ROW) {
                 $table->setRepeater(array($model->loadFirst()));
             } else {
                 $table->setRepeater($model->load());
@@ -210,9 +209,9 @@ abstract class ModelTableSnippetAbstract extends \Zalt\Snippets\ModelSnippetAbst
     /**
      * Overrule to implement snippet specific filtering and sorting.
      *
-     * @param \Zalt\Model\ModelAbstract $model
+     * @param \MUtil\Model\ModelAbstract $model
      */
-    protected function processFilterAndSort(\Zalt\Model\ModelAbstract $model)
+    protected function processFilterAndSort($model)
     {
         parent::processFilterAndSort($model);
 
@@ -233,19 +232,18 @@ abstract class ModelTableSnippetAbstract extends \Zalt\Snippets\ModelSnippetAbst
     }
 
     /**
-     * Render a string that becomes part of the HtmlOutput of the view
+     * Render a string that becomes part of the HtmlOutput
      *
      * You should override either getHtmlOutput() or this function to generate output
      *
-     * @param \Zend_View_Abstract $view
      * @return string Html output
      */
-    public function render(\Zend_View_Abstract $view)
+    public function render()
     {
         if ($this->_marker) {
-            $this->_marker->setEncoding($view->getEncoding());
+            $this->_marker->setEncoding();
         }
 
-        return parent::render($view);
+        return parent::render();
     }
 }
