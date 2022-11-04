@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "1f6c09f40078869279fdb5b2ecfbbb4c",
+    "content-hash": "b42089e53686f6d98bfb7f992546febd",
     "packages": [
         {
             "name": "dflydev/fig-cookies",
@@ -332,6 +332,42 @@
             "time": "2022-10-24T10:18:55+00:00"
         },
         {
+            "name": "magnafacta/zalt-model",
+            "version": "2.x-dev",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/MagnaFacta/zalt-model.git",
+                "reference": "9d2889468674b7eeb998903dc331403ecf19c4e7"
+            },
+            "require": {
+                "magnafacta/zalt-late": "dev-main",
+                "magnafacta/zalt-loader": "dev-psr-11",
+                "php": ">=8.1.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "9.*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Zalt\\Model\\": "src"
+                }
+            },
+            "autoload-dev": {
+                "psr-4": {
+                    "Zalt\\Model\\": "test\\"
+                }
+            },
+            "authors": [
+                {
+                    "name": "Matijs de Jong",
+                    "email": "mjong@magnafacta.nl"
+                }
+            ],
+            "description": "Zend Alternative Model",
+            "time": "2022-11-04T14:32:41+00:00"
+        },
+        {
             "name": "magnafacta/zalt-util",
             "version": "dev-main",
             "source": {
@@ -379,12 +415,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/mezzio/mezzio-flash.git",
-                "reference": "0bcc1e796044d1c7ea55df2fb6875d8d4c84dfec"
+                "reference": "a98ac204efebe3f65eef39ee3ae0f3c202fa46b3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mezzio/mezzio-flash/zipball/0bcc1e796044d1c7ea55df2fb6875d8d4c84dfec",
-                "reference": "0bcc1e796044d1c7ea55df2fb6875d8d4c84dfec",
+                "url": "https://api.github.com/repos/mezzio/mezzio-flash/zipball/a98ac204efebe3f65eef39ee3ae0f3c202fa46b3",
+                "reference": "a98ac204efebe3f65eef39ee3ae0f3c202fa46b3",
                 "shasum": ""
             },
             "require": {
@@ -398,7 +434,7 @@
             "require-dev": {
                 "laminas/laminas-coding-standard": "~2.4.0",
                 "phpunit/phpunit": "^9.5.26",
-                "psalm/plugin-phpunit": "^0.17.0",
+                "psalm/plugin-phpunit": "^0.18.0",
                 "vimeo/psalm": "^4.29.0"
             },
             "default-branch": true,
@@ -442,7 +478,7 @@
                     "type": "community_bridge"
                 }
             ],
-            "time": "2022-11-01T11:48:39+00:00"
+            "time": "2022-11-03T00:08:36+00:00"
         },
         {
             "name": "mezzio/mezzio-helpers",
@@ -527,12 +563,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/mezzio/mezzio-router.git",
-                "reference": "9ff41510d3aaeb072df133a994292357df6b74bf"
+                "reference": "5be32ca3bd930e29a78f9e7fb37e63d05ee29a55"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mezzio/mezzio-router/zipball/9ff41510d3aaeb072df133a994292357df6b74bf",
-                "reference": "9ff41510d3aaeb072df133a994292357df6b74bf",
+                "url": "https://api.github.com/repos/mezzio/mezzio-router/zipball/5be32ca3bd930e29a78f9e7fb37e63d05ee29a55",
+                "reference": "5be32ca3bd930e29a78f9e7fb37e63d05ee29a55",
                 "shasum": ""
             },
             "require": {
@@ -553,7 +589,7 @@
                 "laminas/laminas-diactoros": "^2.20.0",
                 "laminas/laminas-stratigility": "^3.9.0",
                 "phpunit/phpunit": "^9.5.26",
-                "psalm/plugin-phpunit": "^0.17.0",
+                "psalm/plugin-phpunit": "^0.18.0",
                 "vimeo/psalm": "^4.29.0"
             },
             "suggest": {
@@ -601,7 +637,7 @@
                     "type": "community_bridge"
                 }
             ],
-            "time": "2022-11-01T12:16:11+00:00"
+            "time": "2022-11-03T01:34:21+00:00"
         },
         {
             "name": "mezzio/mezzio-session",
@@ -609,12 +645,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/mezzio/mezzio-session.git",
-                "reference": "32835dfa4ea05d17179db594ec74073a42fce41a"
+                "reference": "f561110862a49af8a57db45225ae85df6d822db3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mezzio/mezzio-session/zipball/32835dfa4ea05d17179db594ec74073a42fce41a",
-                "reference": "32835dfa4ea05d17179db594ec74073a42fce41a",
+                "url": "https://api.github.com/repos/mezzio/mezzio-session/zipball/f561110862a49af8a57db45225ae85df6d822db3",
+                "reference": "f561110862a49af8a57db45225ae85df6d822db3",
                 "shasum": ""
             },
             "require": {
@@ -631,7 +667,7 @@
                 "laminas/laminas-coding-standard": "~2.4.0",
                 "laminas/laminas-diactoros": "^2.2",
                 "phpunit/phpunit": "^9.5.26",
-                "psalm/plugin-phpunit": "^0.17.0",
+                "psalm/plugin-phpunit": "^0.18.0",
                 "vimeo/psalm": "^4.29.0"
             },
             "suggest": {
@@ -678,7 +714,7 @@
                     "type": "community_bridge"
                 }
             ],
-            "time": "2022-11-01T11:38:37+00:00"
+            "time": "2022-11-03T01:37:20+00:00"
         },
         {
             "name": "mezzio/mezzio-session-cache",
@@ -686,12 +722,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/mezzio/mezzio-session-cache.git",
-                "reference": "28c6a8a9cc9d96057e7b4eb81965a7e840b2acae"
+                "reference": "29b8df5d0cfea9576b5ba4003aff3957f63f0874"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mezzio/mezzio-session-cache/zipball/28c6a8a9cc9d96057e7b4eb81965a7e840b2acae",
-                "reference": "28c6a8a9cc9d96057e7b4eb81965a7e840b2acae",
+                "url": "https://api.github.com/repos/mezzio/mezzio-session-cache/zipball/29b8df5d0cfea9576b5ba4003aff3957f63f0874",
+                "reference": "29b8df5d0cfea9576b5ba4003aff3957f63f0874",
                 "shasum": ""
             },
             "require": {
@@ -710,7 +746,7 @@
                 "laminas/laminas-coding-standard": "~2.4.0",
                 "laminas/laminas-diactoros": "^2.17.0",
                 "phpunit/phpunit": "^9.5.26",
-                "psalm/plugin-phpunit": "^0.17.0",
+                "psalm/plugin-phpunit": "^0.18.0",
                 "vimeo/psalm": "^4.29.0"
             },
             "suggest": {
@@ -755,7 +791,7 @@
                     "type": "community_bridge"
                 }
             ],
-            "time": "2022-11-01T09:35:20+00:00"
+            "time": "2022-11-03T00:37:16+00:00"
         },
         {
             "name": "psr/cache",
@@ -1190,12 +1226,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/cache.git",
-                "reference": "03370c55d7825bfeece2a16b150efe6162477281"
+                "reference": "af094f6701cd5f7259b13e85fc4e013321450a2e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/cache/zipball/03370c55d7825bfeece2a16b150efe6162477281",
-                "reference": "03370c55d7825bfeece2a16b150efe6162477281",
+                "url": "https://api.github.com/repos/symfony/cache/zipball/af094f6701cd5f7259b13e85fc4e013321450a2e",
+                "reference": "af094f6701cd5f7259b13e85fc4e013321450a2e",
                 "shasum": ""
             },
             "require": {
@@ -1278,7 +1314,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-10-28T16:24:13+00:00"
+            "time": "2022-11-02T09:08:04+00:00"
         },
         {
             "name": "symfony/cache-contracts",
@@ -1366,12 +1402,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-mbstring.git",
-                "reference": "9344f9cb97f3b19424af1a21a3b0e75b0a7d8d7e"
+                "reference": "8ad114f6b39e2c98a8b0e3bd907732c207c2b534"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/polyfill-mbstring/zipball/9344f9cb97f3b19424af1a21a3b0e75b0a7d8d7e",
-                "reference": "9344f9cb97f3b19424af1a21a3b0e75b0a7d8d7e",
+                "url": "https://api.github.com/repos/symfony/polyfill-mbstring/zipball/8ad114f6b39e2c98a8b0e3bd907732c207c2b534",
+                "reference": "8ad114f6b39e2c98a8b0e3bd907732c207c2b534",
                 "shasum": ""
             },
             "require": {
@@ -1387,7 +1423,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-main": "1.26-dev"
+                    "dev-main": "1.27-dev"
                 },
                 "thanks": {
                     "name": "symfony/polyfill",
@@ -1426,7 +1462,7 @@
                 "shim"
             ],
             "support": {
-                "source": "https://github.com/symfony/polyfill-mbstring/tree/v1.26.0"
+                "source": "https://github.com/symfony/polyfill-mbstring/tree/main"
             },
             "funding": [
                 {
@@ -1442,7 +1478,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-05-24T11:49:31+00:00"
+            "time": "2022-11-03T14:55:06+00:00"
         },
         {
             "name": "symfony/service-contracts",
@@ -1536,12 +1572,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/translation.git",
-                "reference": "261d195b8d6f33bb78f97d91cabc46b95329c927"
+                "reference": "c08de62caead8357244efcb809d0b1a2584f2198"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/translation/zipball/261d195b8d6f33bb78f97d91cabc46b95329c927",
-                "reference": "261d195b8d6f33bb78f97d91cabc46b95329c927",
+                "url": "https://api.github.com/repos/symfony/translation/zipball/c08de62caead8357244efcb809d0b1a2584f2198",
+                "reference": "c08de62caead8357244efcb809d0b1a2584f2198",
                 "shasum": ""
             },
             "require": {
@@ -1626,7 +1662,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-10-30T17:10:33+00:00"
+            "time": "2022-11-02T09:08:04+00:00"
         },
         {
             "name": "symfony/translation-contracts",
@@ -2156,12 +2192,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/php-code-coverage.git",
-                "reference": "a358c9d818d521da01361c5ada06ff8031288aaa"
+                "reference": "019a384e54a12d8bfca736f88c2f4478b432e71d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/a358c9d818d521da01361c5ada06ff8031288aaa",
-                "reference": "a358c9d818d521da01361c5ada06ff8031288aaa",
+                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/019a384e54a12d8bfca736f88c2f4478b432e71d",
+                "reference": "019a384e54a12d8bfca736f88c2f4478b432e71d",
                 "shasum": ""
             },
             "require": {
@@ -2225,7 +2261,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2022-11-01T06:33:37+00:00"
+            "time": "2022-11-03T07:46:09+00:00"
         },
         {
             "name": "phpunit/php-file-iterator",
@@ -3590,6 +3626,7 @@
     "stability-flags": {
         "magnafacta/zalt-late": 20,
         "magnafacta/zalt-loader": 20,
+        "magnafacta/zalt-model": 20,
         "magnafacta/zalt-util": 20
     },
     "prefer-stable": false,

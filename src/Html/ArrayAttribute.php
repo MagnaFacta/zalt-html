@@ -44,7 +44,7 @@ class ArrayAttribute extends AttributeAbstract implements ArrayAccess, Countable
      *
      * @var array function name => class
      */
-    protected $_specialTypes;
+    protected $_specialTypes = [];
 
     /**
      * The actual values
