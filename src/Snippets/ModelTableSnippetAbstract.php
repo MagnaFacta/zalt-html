@@ -11,6 +11,9 @@
 
 namespace Zalt\Snippets;
 
+use Zalt\Model\Data\DataReaderInterface;
+use Zalt\Snippets\ModelBridge\TableBridge;
+
 /**
  * Displays multiple items in a model below each other in an Html table.
  *
@@ -44,7 +47,7 @@ abstract class ModelTableSnippetAbstract extends \Zalt\Snippets\ModelSnippetAbst
      *
      * @var int
      */
-    protected $bridgeMode = \MUtil\Model\Bridge\BridgeAbstract::MODE_LAZY;
+    protected $bridgeMode = \MUtil\Model\Bridge\BridgeAbstract::MODE_ROWS;
 
     /**
      * Sets pagination on or off.
@@ -65,7 +68,7 @@ abstract class ModelTableSnippetAbstract extends \Zalt\Snippets\ModelSnippetAbst
      *
      * @var array
      */
-    public $columns;
+    public $columns = [];
 
     /**
      * Content to show when there are no rows.
@@ -107,8 +110,10 @@ abstract class ModelTableSnippetAbstract extends \Zalt\Snippets\ModelSnippetAbst
      * @param \MUtil\Model\ModelAbstract $model
      * @return void
      */
-    protected function addBrowseTableColumns(\MUtil\Model\Bridge\TableBridge $bridge, \MUtil\Model\ModelAbstract $model)
+    protected function addBrowseTableColumns(TableBridge $bridge, DataReaderInterface $dataModel)
     {
+        $model = $dataModel->getMetaModel();
+            
         if ($this->columns) {
             foreach ($this->columns as $column) {
                 call_user_func_array(array($bridge, 'addMultiSort'), $column);
@@ -149,12 +154,12 @@ abstract class ModelTableSnippetAbstract extends \Zalt\Snippets\ModelSnippetAbst
      *
      * Allows overruling
      *
-     * @param \MUtil\Model\ModelAbstract $model
+     * @param \Zalt\Model\Data\DataReaderInterface $dataModel
      * @return \Zalt\Html\TableElement
      */
-    public function getBrowseTable(\MUtil\Model\ModelAbstract $model)
+    public function getBrowseTable(DataReaderInterface $dataModel)
     {
-        $bridge = $model->getBridgeFor('table');
+        $bridge = $dataModel->getBridgeFor('table');
 
         if ($this->caption) {
             $bridge->caption($this->caption);
@@ -168,7 +173,7 @@ abstract class ModelTableSnippetAbstract extends \Zalt\Snippets\ModelSnippetAbst
             $bridge->setBaseUrl($this->baseUrl);
         }
 
-        $this->addBrowseTableColumns($bridge, $model);
+        $this->addBrowseTableColumns($bridge, $dataModel);
 
         return $bridge->getTable();
     }
@@ -190,18 +195,20 @@ abstract class ModelTableSnippetAbstract extends \Zalt\Snippets\ModelSnippetAbst
         $table = $this->getBrowseTable($model);
 
         if (! $table->getRepeater()) {
-            if ($this->browse) {
+            if (false && $this->browse) {
                 $paginator = $model->loadPaginator();
                 $table->setRepeater($paginator);
                 $this->addPaginator($table, $paginator);
             } elseif ($this->bridgeMode === \MUtil\Model\Bridge\BridgeAbstract::MODE_LAZY) {
-                $table->setRepeater($model->loadRepeatable());
+                $table->setRepeater($model->load());
+                // $table->setRepeater($model->loadRepeatable());
             } elseif ($this->bridgeMode === \MUtil\Model\Bridge\BridgeAbstract::MODE_SINGLE_ROW) {
                 $table->setRepeater(array($model->loadFirst()));
             } else {
                 $table->setRepeater($model->load());
             }
         }
+        // file_put_contents('modelsnippet.txt', __FUNCTION__ . '(' . __LINE__ . '): ' . print_r($model->load(), true) . "\n", FILE_APPEND);
 
         return $table;
     }
@@ -209,23 +216,23 @@ abstract class ModelTableSnippetAbstract extends \Zalt\Snippets\ModelSnippetAbst
     /**
      * Overrule to implement snippet specific filtering and sorting.
      *
-     * @param \MUtil\Model\ModelAbstract $model
+     * @param \Zalt\Model\Data\DataReaderInterface $dataModel
      */
-    protected function processFilterAndSort($model)
+    protected function processFilterAndSort(DataReaderInterface $dataModel)
     {
-        parent::processFilterAndSort($model);
+        parent::processFilterAndSort($dataModel);
 
         // Add generic text search filter and marker
-        $textKey = $model->getTextFilter();
+        $textKey = $dataModel->getTextFilter();
         $queryParams = $this->requestInfo->getRequestQueryParams();
         if (isset($queryParams[$textKey])) {
             $searchText = $queryParams[$textKey];
             // \Zalt\EchoOut\EchoOut::r($textKey . '[' . $searchText . ']');
-            $this->_marker = new \Zalt\Html\Marker($model->getTextSearches($searchText), 'strong', 'UTF-8');
+            $this->_marker = new \Zalt\Html\Marker($dataModel->getTextSearches($searchText), 'strong', 'UTF-8');
 
-            foreach ($model->getItemNames() as $name) {
-                if ($model->get($name, 'label') && (!$model->is($name, 'no_text_search', true))) {
-                    $model->set($name, 'markCallback', array($this->_marker, 'mark'));
+            foreach ($dataModel->getItemNames() as $name) {
+                if ($dataModel->get($name, 'label') && (!$dataModel->is($name, 'no_text_search', true))) {
+                    $dataModel->set($name, 'markCallback', array($this->_marker, 'mark'));
                 }
             }
         }

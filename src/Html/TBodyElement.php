@@ -28,7 +28,7 @@ use Zalt\Late\Late;
  * @license    New BSD License
  * @since      Class available since version 1.0
  */
-class TBodyElement extends \Zalt\Html\HtmlElement implements \Zalt\Html\ColumnInterface
+class TBodyElement extends HtmlElement implements ColumnInterface
 {
     public $defaultRowClass;
 
@@ -218,7 +218,7 @@ class TBodyElement extends \Zalt\Html\HtmlElement implements \Zalt\Html\ColumnIn
      * @param mixed $repeater \Zalt\Late\RepeatableInterface or something that can be made into one.
      * @param mixed $onEmptyContent Optional. When not null the content to display when the repeater does not result in data is set.
      * @param boolean $repeatTags Optional when not null the repeatTags switch is set.
-     * @param mixed $colcount \Zalt\Html\ColumnInterface or intefer. Span the onEmpty content over $colcount cells
+     * @param mixed $colcount \Zalt\Html\ColumnInterface or integer. Span the onEmpty content over $colcount cells
      * @return \Zalt\Html\TBodyElement (continuation pattern)
      */
     public function setRepeater($repeater, $onEmptyContent = null, $repeatTags = null, $colcount = null)

@@ -108,7 +108,7 @@ abstract class ModelSnippetAbstract extends TranslatableSnippetAbstract
     /**
      * Creates the model
      *
-     * @return \MUtil\Model\ModelAbstract
+     * @return \Zalt\Model\Data\DataReaderInterface
      */
     abstract protected function createModel();
 
@@ -149,7 +149,7 @@ abstract class ModelSnippetAbstract extends TranslatableSnippetAbstract
      *
      * @param \MUtil\Model\ModelAbstract $model
      */
-    protected final function prepareModel(\MUtil\Model\ModelAbstract $model)
+    protected final function prepareModel(DataReaderInterface $model)
     {
         if ($this->sortParamAsc) {
             $model->setSortParamAsc($this->sortParamAsc);
@@ -177,16 +177,16 @@ abstract class ModelSnippetAbstract extends TranslatableSnippetAbstract
     /**
      * Overrule to implement snippet specific filtering and sorting.
      *
-     * @param \MUtil\Model\ModelAbstract $model
+     * @param \MUtil\Model\ModelAbstract $dataModel
      */
-    protected function processFilterAndSort(\MUtil\Model\ModelAbstract $model)
+    protected function processFilterAndSort(DataReaderInterface $dataModel)
     {
         if (false !== $this->searchFilter) {
             if (isset($this->searchFilter['limit'])) {
-                $model->addFilter(array('limit' => $this->searchFilter['limit']));
+                $dataModel->addFilter(array('limit' => $this->searchFilter['limit']));
                 unset($this->searchFilter['limit']);
             }
-            $model->applyParameters($this->searchFilter, true);
+            $dataModel->applyParameters($this->searchFilter, true);
 
         } elseif (count($this->requestInfo->getRequestQueryParams())) {
             $params = $this->requestInfo->getRequestQueryParams();
@@ -199,7 +199,7 @@ abstract class ModelSnippetAbstract extends TranslatableSnippetAbstract
                 return is_array($i) || strlen($i);
             });
 
-            $model->applyParameters($params, $this->includeNumericFilters);
+            $dataModel->applyParameters($params, $this->includeNumericFilters);
         }
     }
 
@@ -208,18 +208,18 @@ abstract class ModelSnippetAbstract extends TranslatableSnippetAbstract
      *
      * Overrule to implement snippet specific filtering and sorting.
      *
-     * @param \MUtil\Model\ModelAbstract $model
+     * @param \MUtil\Model\ModelAbstract $dataModel
      */
-    protected function processSortOnly(\MUtil\Model\ModelAbstract $model)
+    protected function processSortOnly(DataReaderInterface $dataModel)
     {
         if (count($this->requestInfo->getRequestQueryParams())) {
             $queryParams = $this->requestInfo->getRequestQueryParams();
-            if (isset($queryParams[$model->getSortParamAsc()])) {
-                $sort = $queryParams[$model->getSortParamAsc()];
-                $model->addSort([$sort => SORT_ASC]);
-            } elseif (isset($queryParams[$model->getSortParamDesc()])) {
-                $sort = $queryParams[$model->getSortParamAsc()];
-                $model->addSort(array($sort => SORT_DESC));
+            if (isset($queryParams[$dataModel->getSortParamAsc()])) {
+                $sort = $queryParams[$dataModel->getSortParamAsc()];
+                $dataModel->addSort([$sort => SORT_ASC]);
+            } elseif (isset($queryParams[$dataModel->getSortParamDesc()])) {
+                $sort = $queryParams[$dataModel->getSortParamAsc()];
+                $dataModel->addSort(array($sort => SORT_DESC));
             }
         }
     }
