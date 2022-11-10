@@ -17,17 +17,15 @@ namespace Zalt\Snippets;
  * @subpackage Snippets
  * @since      Class available since version 1.0
  */
-class HtmlContentSnippet extends \MUtil\Snippets\SnippetAbstract
+class HtmlContentSnippet extends SnippetAbstract
 {
     /**
      * @var \Zalt\Html\HtmlInterface
      */
     protected $htmlContent;
 
-    public function getHtmlOutput(\Zend_View_Abstract $view)
+    public function getHtmlOutput()
     {
         return $this->htmlContent;
     }
-
-
 }

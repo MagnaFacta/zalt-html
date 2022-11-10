@@ -13,6 +13,7 @@ namespace Zalt\SnippetsLoader;
 
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Zalt\Base\RequestInfo;
 
 /**
  *
@@ -36,5 +37,5 @@ interface SnippetResponderInterface
      * @param \Psr\Http\Message\ServerRequestInterface $request
      * @return void
      */
-    public function processRequest(ServerRequestInterface $request): void;
+    public function processRequest(ServerRequestInterface $request): RequestInfo;
 }

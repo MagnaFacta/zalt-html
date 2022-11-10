@@ -33,6 +33,8 @@ use Zalt\Ra\Ra;
  */
 class MezzioLaminasSnippetResponder implements SnippetResponderInterface
 {
+    protected ServerRequestInterface $request;
+    
     public function __construct(
         protected SnippetLoader $snippetLoader
     ) {
@@ -70,12 +72,12 @@ class MezzioLaminasSnippetResponder implements SnippetResponderInterface
         return new HtmlResponse($html->render());
     }
     
-    public function processRequest(ServerRequestInterface $request): void
+    public function processRequest(ServerRequestInterface $request): RequestInfo
     {
-        $this->snippetLoader->addConstructorVariable(
-            RequestInfo::class,
-            RequestInfoFactory::getMezzioRequestInfo($request)
-        );
+        $this->request = $request;
+        
+        $requestInfo = RequestInfoFactory::getMezzioRequestInfo($request);
+        $this->snippetLoader->addConstructorVariable(RequestInfo::class, $requestInfo);
 
         $flash = $request->getAttribute(FlashMessageMiddleware::FLASH_ATTRIBUTE);
         if ($flash instanceof FlashMessagesInterface) {
@@ -83,5 +85,7 @@ class MezzioLaminasSnippetResponder implements SnippetResponderInterface
                 MessengerInterface::class,
                 new MezzioFlashMessenger($flash));
         }
+        
+        return $requestInfo;
     }
 }
