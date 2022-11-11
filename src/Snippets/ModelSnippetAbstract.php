@@ -110,7 +110,7 @@ abstract class ModelSnippetAbstract extends TranslatableSnippetAbstract
      *
      * @return \Zalt\Model\Data\DataReaderInterface
      */
-    abstract protected function createModel();
+    abstract protected function createModel(): DataReaderInterface;
 
     /**
      * Returns the model, always use this function
