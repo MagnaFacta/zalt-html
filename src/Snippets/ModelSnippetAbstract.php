@@ -69,19 +69,6 @@ abstract class ModelSnippetAbstract extends TranslatableSnippetAbstract
     public $extraSort;
 
     /**
-     *
-     * @var boolean $includeNumericFilters When true numeric filter keys (0, 1, 2...) are added to the filter as well
-     */
-    public $includeNumericFilters = false;
-
-    /**
-     * When true the post parameters are removed from the request while filtering
-     *
-     * @var boolean Should post variables be removed from the request?
-     */
-    public $removePost = true;
-
-    /**
      * Searchfilter to use including model sorts, etcc..
      *
      * The default is false, to signal that no data was passed. Any other value including
@@ -119,6 +106,10 @@ abstract class ModelSnippetAbstract extends TranslatableSnippetAbstract
      */
     protected function getModel(): DataReaderInterface
     {
+        \MUtil\Model::setDefaultBridge('itemTable', \Zalt\Snippets\ModelBridge\DetailTableBridge::class);
+        \MUtil\Model::setDefaultBridge('display',  \Zalt\Model\Bridge\DisplayBridge::class);
+        \MUtil\Model::setDefaultBridge('table', \Zalt\Snippets\ModelBridge\TableBridge::class);
+
         if (! $this->_model) {
             $this->_model = $this->createModel();
 
@@ -145,33 +136,34 @@ abstract class ModelSnippetAbstract extends TranslatableSnippetAbstract
     }
 
     /**
-     * Default processing of $model from standard settings
+     * Default processing of model from standard settings
      *
-     * @param \MUtil\Model\ModelAbstract $model
+     * @param \Zalt\Model\Data\DataReaderInterface $dataModel
      */
-    protected final function prepareModel(DataReaderInterface $model)
+    protected final function prepareModel(DataReaderInterface $dataModel)
     {
         if ($this->sortParamAsc) {
-            $model->setSortParamAsc($this->sortParamAsc);
+            $dataModel->setSortParamAsc($this->sortParamAsc);
         }
         if ($this->sortParamDesc) {
-            $model->setSortParamDesc($this->sortParamDesc);
+            $dataModel->setSortParamDesc($this->sortParamDesc);
         }
 
-        $this->processFilterAndSort($model);
+        $this->processFilterAndSort($dataModel);
 
         if ($this->_fixedFilter) {
-            $model->addFilter($this->_fixedFilter);
+            $dataModel->addFilter($this->_fixedFilter);
         }
         if ($this->extraFilter) {
-            $model->addFilter($this->extraFilter);
+            $dataModel->addFilter($this->extraFilter);
         }
         if ($this->extraSort) {
-            $model->addSort($this->extraSort);
+            $dataModel->addSort($this->extraSort);
         }
         if ($this->_fixedSort) {
-            $model->addSort($this->_fixedSort);
+            $dataModel->addSort($this->_fixedSort);
         }
+        file_put_contents('data/logs/echo.txt', print_r($dataModel->getFilter(), true) . "\n", FILE_APPEND);
     }
 
     /**
@@ -182,24 +174,25 @@ abstract class ModelSnippetAbstract extends TranslatableSnippetAbstract
     protected function processFilterAndSort(DataReaderInterface $dataModel)
     {
         if (false !== $this->searchFilter) {
-            if (isset($this->searchFilter['limit'])) {
-                $dataModel->addFilter(array('limit' => $this->searchFilter['limit']));
-                unset($this->searchFilter['limit']);
-            }
-            $dataModel->applyParameters($this->searchFilter, true);
+            $dataModel->addFilter($this->searchFilter);
 
-        } elseif (count($this->requestInfo->getRequestQueryParams())) {
-            $params = $this->requestInfo->getRequestQueryParams();
-            $params += $this->requestInfo->getRequestMatchedParams();
-            if (!$this->removePost) {
-                $params += $this->requestInfo->getRequestPostParams();
-            }
+        } elseif (count($this->requestInfo->getParams())) {
+            $params = $this->requestInfo->getParams();
+
             // Remove all empty values (but not arrays) from the filter
             $params = array_filter($params, function($i) {
                 return is_array($i) || strlen($i);
             });
+            
+            $keys = $dataModel->getMetaModel()->getKeys();
+            foreach ($keys as $key => $field) {
+                if (isset($params[$key])) {
+                    $params[$field] = $params[$key];
+                    unset($params[$key]);
+                }
+            }
 
-            $dataModel->applyParameters($params, $this->includeNumericFilters);
+            $dataModel->addFilter($params);
         }
     }
 
@@ -213,7 +206,7 @@ abstract class ModelSnippetAbstract extends TranslatableSnippetAbstract
     protected function processSortOnly(DataReaderInterface $dataModel)
     {
         if (count($this->requestInfo->getRequestQueryParams())) {
-            $queryParams = $this->requestInfo->getRequestQueryParams();
+            $queryParams = $this->requestInfo->getParams();
             if (isset($queryParams[$dataModel->getSortParamAsc()])) {
                 $sort = $queryParams[$dataModel->getSortParamAsc()];
                 $dataModel->addSort([$sort => SORT_ASC]);

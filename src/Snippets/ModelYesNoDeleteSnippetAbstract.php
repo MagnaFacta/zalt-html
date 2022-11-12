@@ -23,7 +23,7 @@ namespace Zalt\Snippets;
  * @license    New BSD License
  * @since      Class available since version 1.4.4
  */
-abstract class ModelYesNoDeleteSnippetAbstract extends \Zalt\Snippets\ModelVerticalTableSnippetAbstract
+abstract class ModelYesNoDeleteSnippetAbstract extends \Zalt\Snippets\ModelDetailTableSnippetAbstract
 {
     /**
      * The action to go to when the user clicks 'No'.

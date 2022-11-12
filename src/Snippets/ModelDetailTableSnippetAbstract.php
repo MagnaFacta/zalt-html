@@ -12,13 +12,16 @@
 namespace Zalt\Snippets;
 
 use Zalt\Html\Html;
+use Zalt\Model\Bridge\BridgeInterface;
+use Zalt\Model\Data\DataReaderInterface;
+use Zalt\Snippets\ModelBridge\DetailTableBridge;
 
 /**
  * Displays each fields of a single item in a model in a row in a Html table.
  *
- * To use this class either subclass or use the existing default ModelVerticalTableSnippet.
+ * To use this class either subclass or use the existing default ModelDetailTableSnippet.
  *
- * @see ModelVerticalTableSnippet.
+ * @see        ModelDetailTableSnippet.
  *
  * @package    Zalt
  * @subpackage Snippets
@@ -26,7 +29,7 @@ use Zalt\Html\Html;
  * @license    New BSD License
  * @since      Class available since version 1.4
  */
-abstract class ModelVerticalTableSnippetAbstract extends \Zalt\Snippets\ModelSnippetAbstract
+abstract class ModelDetailTableSnippetAbstract extends ModelSnippetAbstract
 {
     /**
      *
@@ -60,20 +63,22 @@ abstract class ModelVerticalTableSnippetAbstract extends \Zalt\Snippets\ModelSni
      * Overrule this function to add different columns to the browse table, without
      * having to recode the core table building code.
      *
-     * @param \Zalt\Model\Bridge\VerticalTableBridge $bridge
-     * @param \Zalt\Model\ModelAbstract $model
+     * @param \Zalt\Snippets\ModelBridge\DetailTableBridge $bridge
+     * @param \Zalt\Model\Data\DataReaderInterface $dataModel
      * @return void
      */
-    protected function addShowTableRows(\Zalt\Model\Bridge\VerticalTableBridge $bridge, \Zalt\Model\ModelAbstract $model)
+    protected function addShowTableRows(DetailTableBridge $bridge, DataReaderInterface $dataModel)
     {
-        foreach($model->getItemsOrdered() as $name) {
-            if ($label = $model->get($name, 'label')) {
+        $metaModel = $dataModel->getMetaModel();
+
+        foreach($metaModel->getItemsOrdered() as $name) {
+            if ($label = $metaModel->get($name, 'label')) {
                 $bridge->addItem($name, $label);
             }
         }
 
-        if ($model->has('row_class')) {
-            // Make sure deactivated rounds are show as deleted
+        if ($metaModel->has('row_class')) {
+            // Make sure deactivated rounds are shown as deleted
             foreach ($bridge->getTable()->tbody() as $tr) {
                 foreach ($tr as $td) {
                     if ('td' === $td->tagName) {
@@ -92,14 +97,14 @@ abstract class ModelVerticalTableSnippetAbstract extends \Zalt\Snippets\ModelSni
      * @param \Zend_View_Abstract $view Just in case it is needed here
      * @return \Zalt\Html\HtmlInterface Something that can be rendered
      */
-    public function getHtmlOutput(\Zend_View_Abstract $view)
+    public function getHtmlOutput()
     {
-        $model = $this->getModel();
+        $dataModel = $this->getModel();
         if ($this->trackUsage) {
-            $model->trackUsage();
+            $dataModel->trackUsage();
         }
 
-        $table = $this->getShowTable($model);
+        $table = $this->getShowTable($dataModel);
 
         $container = Html::create()->div(array('class' => 'table-container', 'renderWithoutContent' => false));
         $container[] = $table;
@@ -109,12 +114,12 @@ abstract class ModelVerticalTableSnippetAbstract extends \Zalt\Snippets\ModelSni
     /**
      * Function that allows for overruling the repeater loading.
      *
-     * @param \Zalt\Model\ModelAbstract $model
+     * @param \Zalt\Model\ModelAbstract $dataModel
      * @return \Zalt\Late\RepeatableInterface
      */
-    public function getRepeater(\Zalt\Model\ModelAbstract $model)
+    public function getRepeater(\Zalt\Model\ModelAbstract $dataModel)
     {
-        return $model->loadRepeatable();
+        return $dataModel->loadRepeatable();
     }
 
     /**
@@ -122,29 +127,31 @@ abstract class ModelVerticalTableSnippetAbstract extends \Zalt\Snippets\ModelSni
      *
      * Allows overruling
      *
-     * @param \Zalt\Model\ModelAbstract $model
+     * @param \Zalt\Model\ModelAbstract $dataModel
      * @return \Zalt\Html\TableElement
      */
-    public function getShowTable(\Zalt\Model\ModelAbstract $model)
+    public function getShowTable(DataReaderInterface $dataModel)
     {
-        $bridge = $model->getBridgeFor('itemTable', array('class' => $this->class));
+        $metaModel = $dataModel->getMetaModel();
+        
+        $bridge = $dataModel->getBridgeFor('itemTable', ['class' => $this->class]);
         $bridge->setColumnCount($this->bridgeColumns)
                 ->setMode($this->bridgeMode);
 
-        if ($model->hasDependencies()) {
-            $this->bridgeMode = \Zalt\Model\Bridge\BridgeAbstract::MODE_SINGLE_ROW;
+        if ($metaModel->hasDependencies()) {
+            $this->bridgeMode = BridgeInterface::MODE_SINGLE_ROW;
         }
-        if (\Zalt\Model\Bridge\BridgeAbstract::MODE_SINGLE_ROW == $this->bridgeMode) {
+        if (BridgeInterface::MODE_SINGLE_ROW == $this->bridgeMode) {
             // Trigger the dependencies
             $bridge->getRow();
         }
 
-        $this->setShowTableHeader($bridge, $model);
-        $this->setShowTableFooter($bridge, $model);
-        $this->addShowTableRows($bridge, $model);
+        $this->setShowTableHeader($bridge, $dataModel);
+        $this->setShowTableFooter($bridge, $dataModel);
+        $this->addShowTableRows($bridge, $dataModel);
 
         if (! $bridge->getRepeater()) {
-            $bridge->setRepeater($this->getRepeater($model));
+            $bridge->setRepeater($this->getRepeater($dataModel));
         }
 
         return $bridge->getTable();
@@ -156,11 +163,11 @@ abstract class ModelVerticalTableSnippetAbstract extends \Zalt\Snippets\ModelSni
      * Overrule this function to set the header differently, without
      * having to recode the core table building code.
      *
-     * @param \Zalt\Model\Bridge\VerticalTableBridge $bridge
-     * @param \Zalt\Model\ModelAbstract $model
+     * @param \Zalt\Snippets\ModelBridge\DetailTableBridge $bridge
+     * @param \Zalt\Model\Data\DataReaderInterface $dataModel
      * @return void
      */
-    protected function setShowTableFooter(\Zalt\Model\Bridge\VerticalTableBridge $bridge, \Zalt\Model\ModelAbstract $model)
+    protected function setShowTableFooter(DetailTableBridge $bridge, DataReaderInterface $dataModel)
     { }
 
     /**
@@ -169,10 +176,10 @@ abstract class ModelVerticalTableSnippetAbstract extends \Zalt\Snippets\ModelSni
      * Overrule this function to set the header differently, without
      * having to recode the core table building code.
      *
-     * @param \Zalt\Model\Bridge\VerticalTableBridge $bridge
-     * @param \Zalt\Model\ModelAbstract $model
+     * @param \Zalt\Snippets\ModelBridge\DetailTableBridge $bridge
+     * @param \Zalt\Model\Data\DataReaderInterface $dataModel
      * @return void
      */
-    protected function setShowTableHeader(\Zalt\Model\Bridge\VerticalTableBridge $bridge, \Zalt\Model\ModelAbstract $model)
+    protected function setShowTableHeader(DetailTableBridge $bridge, DataReaderInterface $dataModel)
     { }
 }

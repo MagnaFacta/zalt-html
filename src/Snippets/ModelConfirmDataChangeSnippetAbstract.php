@@ -23,7 +23,7 @@ use Psr\Cache\CacheItemPoolInterface;
  * @license    New BSD License
  * @since      Class available since \Zalt version 1.7.2 30-sep-2015 18:49:24
  */
-abstract class ModelConfirmDataChangeSnippetAbstract extends \Zalt\Snippets\ModelVerticalTableSnippetAbstract
+abstract class ModelConfirmDataChangeSnippetAbstract extends \Zalt\Snippets\ModelDetailTableSnippetAbstract
 {
     /**
      * The action to go to when the user clicks 'No'.

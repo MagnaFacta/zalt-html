@@ -10,7 +10,9 @@
  * @license    New BSD License
  */
 
-namespace Zalt\Snippets\Standard;
+namespace Zalt\Snippets;
+
+use Zalt\Model\Data\DataReaderInterface;
 
 /**
  * Displays each field of a single item in a model in a row in a Html table
@@ -22,11 +24,11 @@ namespace Zalt\Snippets\Standard;
  * @license    New BSD License
  * @since      Class available since version 1.2
  */
-class ModelVerticalTableSnippet extends \Zalt\Snippets\ModelVerticalTableSnippetAbstract
+class ModelDetailTableSnippet extends ModelDetailTableSnippetAbstract
 {
     /**
      *
-     * @var \Zalt\Model\ModelAbstract
+     * @var \Zalt\Model\Data\DataReaderInterface
      */
     protected $model;
 
@@ -35,7 +37,7 @@ class ModelVerticalTableSnippet extends \Zalt\Snippets\ModelVerticalTableSnippet
      *
      * @return \Zalt\Model\ModelAbstract
      */
-    protected function createModel()
+    protected function createModel(): DataReaderInterface
     {
         return $this->model;
     }

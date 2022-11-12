@@ -74,7 +74,7 @@ class TableBridge extends TableBridgeAbstract
             }
             $thContent[] = $this->getHeaderFormatted($name, $label);
         } else {
-            $tdContent[] = $this->$name;
+            $tdContent[] = $name;
             $thContent[] = $label;
         }
 
