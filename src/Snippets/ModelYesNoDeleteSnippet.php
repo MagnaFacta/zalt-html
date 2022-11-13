@@ -10,7 +10,9 @@
  * @license    New BSD License
  */
 
-namespace Zalt\Snippets\Standard;
+namespace Zalt\Snippets;
+
+use Zalt\Model\Data\FullDataInterface;
 
 /**
  * Ask conformation for deletion and deletes item when confirmed.
@@ -23,7 +25,7 @@ namespace Zalt\Snippets\Standard;
  * @license    New BSD License
  * @since      Class available since version 1.4.4
  */
-class ModelYesNoDeleteSnippet extends \Zalt\Snippets\ModelYesNoDeleteSnippetAbstract
+class ModelYesNoDeleteSnippet extends ModelYesNoDeleteSnippetAbstract
 {
     /**
      *
@@ -34,9 +36,9 @@ class ModelYesNoDeleteSnippet extends \Zalt\Snippets\ModelYesNoDeleteSnippetAbst
     /**
      * Creates the model
      *
-     * @return \Zalt\Model\ModelAbstract
+     * @return \Zalt\Model\Data\FullDataInterface
      */
-    protected function createModel()
+    protected function createModel(): FullDataInterface
     {
         return $this->model;
     }

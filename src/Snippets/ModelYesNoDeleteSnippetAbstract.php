@@ -12,6 +12,9 @@
 
 namespace Zalt\Snippets;
 
+use Zalt\Model\Data\DataReaderInterface;
+use Zalt\Snippets\ModelBridge\DetailTableBridge;
+
 /**
  * Ask Yes/No conformation for deletion and deletes item when confirmed.
  *
@@ -23,7 +26,7 @@ namespace Zalt\Snippets;
  * @license    New BSD License
  * @since      Class available since version 1.4.4
  */
-abstract class ModelYesNoDeleteSnippetAbstract extends \Zalt\Snippets\ModelDetailTableSnippetAbstract
+abstract class ModelYesNoDeleteSnippetAbstract extends ModelDetailTableSnippetAbstract
 {
     /**
      * The action to go to when the user clicks 'No'.
@@ -32,35 +35,35 @@ abstract class ModelYesNoDeleteSnippetAbstract extends \Zalt\Snippets\ModelDetai
      *
      * @var string
      */
-    protected $abortAction = 'show';
+    protected string $abortAction = '/';
 
     /**
      * @see \Zend_Controller_Action_Helper_Redirector
      *
-     * @var mixed Nothing or either an array or a string that is acceptable for Redector->gotoRoute()
+     * @var string Nothing or either an array or a string that is acceptable for Redector->gotoRoute()
      */
-    protected $afterSaveRouteUrl;
+    protected string $afterSaveRouteUrl = '';
 
     /**
      * Optional class for use on buttons, overruled by $buttonNoClass and $buttonYesClass
      *
-     * @var string
+     * @var ?string
      */
-    protected $buttonClass;
+    protected ?string $buttonClass;
 
     /**
      * Optional class for use on No button
      *
-     * @var string
+     * @var ?string
      */
-    protected $buttonNoClass;
+    protected ?string $buttonNoClass = null;
 
     /**
      * Optional class for use on Yes button
      *
-     * @var string
+     * @var ?string
      */
-    protected $buttonYesClass;
+    protected ?string $buttonYesClass = null;
 
     /**
      *
@@ -80,7 +83,7 @@ abstract class ModelYesNoDeleteSnippetAbstract extends \Zalt\Snippets\ModelDetai
      *
      * @var string Required
      */
-    protected $confirmParameter = 'confirmed';
+    protected string $confirmParameter = 'confirmed';
 
     /**
      * The action to go to when the user clicks 'Yes' and the data is deleted.
@@ -89,42 +92,14 @@ abstract class ModelYesNoDeleteSnippetAbstract extends \Zalt\Snippets\ModelDetai
      *
      * @var string
      */
-    protected $deleteAction = 'index';
+    protected string $deleteAction = 'index';
 
     /**
      * The question to as the user.
      *
-     * @var sting Optional
+     * @var ?string Optional
      */
-    protected $deleteQuestion;
-
-    /**
-     * Variable to either keep or throw away the request data
-     * not specified in the route.
-     *
-     * @var boolean True then the route is reset
-     */
-    public $resetRoute = true;
-
-    /**
-     * Called after the check that all required registry values
-     * have been set correctly has run.
-     *
-     * @return void
-     */
-    public function afterRegistry()
-    {
-        parent::afterRegistry();
-
-        if ($this->buttonClass) {
-            if (! $this->buttonNoClass) {
-                $this->buttonNoClass = $this->buttonClass;
-            }
-            if (! $this->buttonYesClass) {
-                $this->buttonYesClass = $this->buttonClass;
-            }
-        }
-    }
+    protected ?string $deleteQuestion;
 
     /**
      * The delete question.
@@ -133,7 +108,7 @@ abstract class ModelYesNoDeleteSnippetAbstract extends \Zalt\Snippets\ModelDetai
      */
     protected function getQuestion()
     {
-        if ($this->deleteQuestion) {
+        if (isset($this->deleteQuestion)) {
             return $this->deleteQuestion;
         } else {
             return $this->_('Do you really want to delete this item?');
@@ -150,7 +125,7 @@ abstract class ModelYesNoDeleteSnippetAbstract extends \Zalt\Snippets\ModelDetai
      *
      * @return mixed Nothing or either an array or a string that is acceptable for Redector->gotoRoute()
      */
-    public function getRedirectRoute()
+    public function getRedirectRoute(): string
     {
         return $this->afterSaveRouteUrl;
     }
@@ -159,14 +134,9 @@ abstract class ModelYesNoDeleteSnippetAbstract extends \Zalt\Snippets\ModelDetai
      * The place to check if the data set in the snippet is valid
      * to generate the snippet.
      *
-     * When invalid data should result in an error, you can throw it
-     * here but you can also perform the check in the
-     * checkRegistryRequestsAnswers() function from the
-     * {@see \Zalt\Registry\TargetInterface}.
-     *
      * @return boolean
      */
-    public function hasHtmlOutput()
+    public function hasHtmlOutput(): bool
     {
         $queryParams = $this->requestInfo->getRequestQueryParams();
         if (isset($queryParams[$this->confirmParameter])) {
@@ -187,7 +157,6 @@ abstract class ModelYesNoDeleteSnippetAbstract extends \Zalt\Snippets\ModelDetai
     protected function performAction()
     {
         $model = $this->getModel();
-        // \Zalt\EchoOut\EchoOut::track($model->getFilter());
         $model->delete();
 
         $this->setAfterDeleteRoute();
@@ -205,12 +174,8 @@ abstract class ModelYesNoDeleteSnippetAbstract extends \Zalt\Snippets\ModelDetai
     protected function setAfterDeleteRoute()
     {
         // Default is just go to the index
-        /*if ($this->deleteAction && ($this->request->getActionName() !== $this->deleteAction)) {
-            $this->afterSaveRouteUrl = array(
-                $this->request->getControllerKey() => $this->request->getControllerName(),
-                $this->request->getActionKey() => $this->deleteAction,
-                );
-        }*/
+        $startUrl = $this->requestInfo->getBasePath();
+        $this->afterSaveRouteUrl = substr($startUrl, 0, stripos($startUrl, '/') - 1);
     }
 
     /**
@@ -223,20 +188,30 @@ abstract class ModelYesNoDeleteSnippetAbstract extends \Zalt\Snippets\ModelDetai
      * @param \Zalt\Model\ModelAbstract $model
      * @return void
      */
-    protected function setShowTableFooter(\Zalt\Model\Bridge\VerticalTableBridge $bridge, \Zalt\Model\ModelAbstract $model)
+    protected function setShowTableFooter(DetailTableBridge $bridge, DataReaderInterface $dataModel)
     {
+        if (isset($this->buttonClass)) {
+            if (! $this->buttonNoClass) {
+                $this->buttonNoClass = $this->buttonClass;
+            }
+            if (! $this->buttonYesClass) {
+                $this->buttonYesClass = $this->buttonClass;
+            }
+        }
+
         $footer = $bridge->tfrow();
+        $startUrl = $this->requestInfo->getBasePath();
 
         $footer[] = $this->getQuestion();
         $footer[] = ' ';
         $footer->a(
-                array($this->confirmParameter => 1),
+                [$startUrl, $this->confirmParameter => 1],
                 $this->_('Yes'),
                 array('class' => $this->buttonYesClass)
                 );
         $footer[] = ' ';
         $footer->a(
-                array('action' => $this->abortAction),
+                [str_replace('/' . $this->requestInfo->getCurrentAction() . '/', $this->abortAction, $startUrl)],
                 $this->_('No'),
                 array('class' => $this->buttonNoClass)
                 );

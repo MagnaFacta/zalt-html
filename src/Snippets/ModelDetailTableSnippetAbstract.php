@@ -114,10 +114,10 @@ abstract class ModelDetailTableSnippetAbstract extends ModelSnippetAbstract
     /**
      * Function that allows for overruling the repeater loading.
      *
-     * @param \Zalt\Model\ModelAbstract $dataModel
+     * @param \Zalt\Model\Data\DataReaderInterface $dataModel
      * @return \Zalt\Late\RepeatableInterface
      */
-    public function getRepeater(\Zalt\Model\ModelAbstract $dataModel)
+    public function getRepeater(DataReaderInterface $dataModel)
     {
         return $dataModel->loadRepeatable();
     }
