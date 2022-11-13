@@ -183,15 +183,21 @@ abstract class ModelTableSnippetAbstract extends \Zalt\Snippets\ModelSnippetAbst
         $filter = parent::getFilter($metaModel);
         
         // Add generic text search filter and marker
-        $searchText = $this->requestInfo->getParam($this->searchTextParam);;
+        $searchFilter = []; 
+        $searchText   = $this->requestInfo->getParam($this->searchTextParam);
         if ($searchText) {
+            // TODO: move this to the DataReaderModel!
             $this->_marker = new \Zalt\Html\Marker($metaModel->getTextSearches($searchText), 'strong', 'UTF-8');
 
             foreach ($metaModel->getItemNames() as $name) {
                 if ($metaModel->get($name, 'label') && (!$metaModel->is($name, 'no_text_search', true))) {
+                    $searchFilter[] = $name . " LIKE '%$searchText%'"; 
                     $metaModel->set($name, 'markCallback', array($this->_marker, 'mark'));
                 }
             }
+        }
+        if ($searchFilter) {
+            $filter[] = $searchFilter;
         }
         
         return $filter;
@@ -249,7 +255,7 @@ abstract class ModelTableSnippetAbstract extends \Zalt\Snippets\ModelSnippetAbst
     public function render()
     {
         if ($this->_marker) {
-            $this->_marker->setEncoding();
+            // $this->_marker->setEncoding();
         }
 
         return parent::render();
