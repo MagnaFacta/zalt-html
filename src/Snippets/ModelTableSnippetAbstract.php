@@ -12,6 +12,7 @@
 namespace Zalt\Snippets;
 
 use Zalt\Model\Data\DataReaderInterface;
+use Zalt\Model\MetaModelInterface;
 use Zalt\Snippets\ModelBridge\TableBridge;
 
 /**
@@ -80,11 +81,9 @@ abstract class ModelTableSnippetAbstract extends \Zalt\Snippets\ModelSnippetAbst
     public $onEmpty = null;
 
     /**
-     * When true the post parameters are removed from the request while filtering
-     *
-     * @var boolean Should post variables be removed from the request?
+     * @var string The parameter name that contains the search text
      */
-    public $removePost = false;
+    protected $searchTextParam = 'search';
 
     /**
      * When true (= default) the headers get sortable links.
@@ -160,6 +159,7 @@ abstract class ModelTableSnippetAbstract extends \Zalt\Snippets\ModelSnippetAbst
     public function getBrowseTable(DataReaderInterface $dataModel)
     {
         $bridge = $dataModel->getMetaModel()->getBridgeFor('table');
+        $this->prepareBridge($bridge);
 
         if ($this->caption) {
             $bridge->caption($this->caption);
@@ -176,6 +176,25 @@ abstract class ModelTableSnippetAbstract extends \Zalt\Snippets\ModelSnippetAbst
         $this->addBrowseTableColumns($bridge, $dataModel);
 
         return $bridge->getTable();
+    }
+
+    public function getFilter(MetaModelInterface $metaModel) : array
+    {
+        $filter = parent::getFilter($metaModel);
+        
+        // Add generic text search filter and marker
+        $searchText = $this->requestInfo->getParam($this->searchTextParam);;
+        if ($searchText) {
+            $this->_marker = new \Zalt\Html\Marker($metaModel->getTextSearches($searchText), 'strong', 'UTF-8');
+
+            foreach ($metaModel->getItemNames() as $name) {
+                if ($metaModel->get($name, 'label') && (!$metaModel->is($name, 'no_text_search', true))) {
+                    $metaModel->set($name, 'markCallback', array($this->_marker, 'mark'));
+                }
+            }
+        }
+        
+        return $filter;
     }
 
     /**
@@ -213,31 +232,12 @@ abstract class ModelTableSnippetAbstract extends \Zalt\Snippets\ModelSnippetAbst
         return $table;
     }
 
-    /**
-     * Overrule to implement snippet specific filtering and sorting.
-     *
-     * @param \Zalt\Model\Data\DataReaderInterface $dataModel
-     */
-    protected function processFilterAndSort(DataReaderInterface $dataModel)
+    public function prepareBridge(TableBridge $bridge)
     {
-        parent::processFilterAndSort($dataModel);
-
-        // Add generic text search filter and marker
-        $textKey = $dataModel->getTextFilter();
-        $queryParams = $this->requestInfo->getRequestQueryParams();
-        if (isset($queryParams[$textKey])) {
-            $searchText = $queryParams[$textKey];
-            // \Zalt\EchoOut\EchoOut::r($textKey . '[' . $searchText . ']');
-            $this->_marker = new \Zalt\Html\Marker($dataModel->getTextSearches($searchText), 'strong', 'UTF-8');
-
-            foreach ($dataModel->getItemNames() as $name) {
-                if ($dataModel->get($name, 'label') && (!$dataModel->is($name, 'no_text_search', true))) {
-                    $dataModel->set($name, 'markCallback', array($this->_marker, 'mark'));
-                }
-            }
-        }
+        $bridge->sortAscParam = $this->sortParamAsc;
+        $bridge->sortDescParam = $this->sortParamDesc;
     }
-
+    
     /**
      * Render a string that becomes part of the HtmlOutput
      *

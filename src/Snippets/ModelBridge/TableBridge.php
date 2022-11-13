@@ -12,6 +12,7 @@ declare(strict_types=1);
 namespace Zalt\Snippets\ModelBridge;
 
 use Zalt\Html\AElement;
+use Zalt\Html\Html;
 use Zalt\Model\Bridge\BridgeAbstract;
 use Zalt\Model\Data\DataReaderInterface;
 use Zalt\Ra\MultiWrapper;
@@ -39,7 +40,7 @@ class TableBridge extends TableBridgeAbstract
     /**
      * @var string Parameter name for ascending sort from dataModel
      */
-    protected string $sortAscParam;
+    public string $sortAscParam;
     
     /**
      * @var string link class for element sorted ascending
@@ -49,7 +50,7 @@ class TableBridge extends TableBridgeAbstract
     /**
      * @var string Parameter name for descending sort from dataModel
      */
-    protected string $sortDescParam;
+    public string $sortDescParam;
 
     /**
      * @var string Parameter name for current sort
@@ -168,9 +169,10 @@ class TableBridge extends TableBridgeAbstract
         }
 
         $sortUrl[$sortParam]  = $name;
-        $sortUrl[$nsortParam] = null;  // Fix: no need for RouteReset if the link sets the other sort param to null
+        $sortUrl[$nsortParam] = null;
         $sortUrl = $sortUrl + $this->baseUrl;
+        // file_put_contents('data/logs/echo.txt', __CLASS__ . '->' . __FUNCTION__ . '(' . __LINE__ . '): ' . print_r($sortUrl, true) . "\n", FILE_APPEND);
 
-        return \Zalt\Html\Html::create()->a($sortUrl, array('class' => $class, 'title' => $this->metaModel->get($name, 'description')), $label);
+        return Html::create()->a($sortUrl, array('class' => $class, 'title' => $this->metaModel->get($name, 'description')), $label);
     }
 }

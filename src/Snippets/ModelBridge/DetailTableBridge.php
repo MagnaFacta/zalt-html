@@ -157,6 +157,32 @@ class DetailTableBridge extends TableBridgeAbstract
         $this->_checkColumnAdded($attr);
     }
 
+    public function getTable()
+    {
+        if ($this->columnCount) {
+            // Check for end of rows
+            //
+            // First get the number of columns that should be in the current row
+            if ($this->columnCounts) {
+                // \MUtil\EchoOut\EchoOut::r($this->columnCounts);
+                $maxColumns = $this->columnCounts;
+            } else {
+                $maxColumns = array($this->columnCount);
+            }
+
+            // Pad the table for as long as it takes
+            foreach ($maxColumns as $maxColumn) {
+                while ($this->currentColumn < $maxColumn) {
+                    $this->table->tdh();
+                    $this->table->td();
+                    $this->currentColumn++;
+                }
+            }
+        }
+
+        return $this->table;
+    }
+    
     public function setColumnCount($count)
     {
         $this->columnCount = $count;

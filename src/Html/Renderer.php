@@ -244,9 +244,7 @@ class Renderer
      */
     public function renderArray($content, $glue = '', $stack = null)
     {
-        // \Zalt\EchoOut\EchoOut::timeFunctionStart(__FUNCTION__);
-
-        $output = array();
+        $output = [];
 
         // \Zalt\EchoOut\EchoOut::countOccurences('render');
         foreach ($content as $key => $value) {
@@ -298,9 +296,8 @@ class Renderer
             // \Zalt\EchoOut\EchoOut::timeFunctionStop(__FUNCTION__);
             return $output;
         }
-        $output = implode($glue, $output);
         // \Zalt\EchoOut\EchoOut::timeFunctionStop(__FUNCTION__);
-        return $output;
+        return implode($glue, $output);
     }
 
     public function setBaseUrl(string|BaseUrl $baseUrl): void

@@ -12,6 +12,7 @@
 namespace Zalt\Snippets;
 
 use Zalt\Model\Data\DataReaderInterface;
+use Zalt\Model\MetaModelInterface;
 
 /**
  * Contains base functionality to use a model in a snippet.
@@ -30,13 +31,20 @@ use Zalt\Model\Data\DataReaderInterface;
 abstract class ModelSnippetAbstract extends TranslatableSnippetAbstract
 {
     /**
+     * The model, use $this->getModel() to fill
+     *
+     * @var \Zalt\Model\Data\DataReaderInterface;
+     */
+    private $_dataModel;
+
+    /**
      * Set a fixed model filter.
      *
      * Leading _ means not overwritten by sources.
      *
      * @var array
      */
-    protected $_fixedFilter;
+    protected $_fixedFilter = [];
 
     /**
      * Set a fixed model sort.
@@ -45,78 +53,146 @@ abstract class ModelSnippetAbstract extends TranslatableSnippetAbstract
      *
      * @var array
      */
-    protected $_fixedSort;
-
-    /**
-     * The model, use $this->getModel() to fill
-     *
-     * @var \MUtil\Model\ModelAbstract
-     */
-    private $_model;
+    protected $_fixedSort = [];
 
     /**
      * Optional extra filter
      *
      * @var array
      */
-    public $extraFilter;
+    public $extraFilter = [];
 
     /**
      * Optional extra sort(s)
      *
      * @var array
      */
-    public $extraSort;
+    public $extraSort = [];
 
     /**
-     * Searchfilter to use including model sorts, etcc..
+     * Searchfilter to use instead of filtering by request
      *
-     * The default is false, to signal that no data was passed. Any other value including
-     * null means the value is used.
+     * The default is false, to signal that no data was passed. Any other value means the value is used.
      *
-     * @var array
+     * @var array|bool
      */
     protected $searchFilter = false;
 
     /**
-     * The $request param that stores the ascending sort
+     * The request param that contains the ascending sort
      *
      * @var string
      */
-    protected $sortParamAsc;
+    protected $sortParamAsc = 'asort';
 
     /**
-     * The $request param that stores the descending sort
+     * The request param that contains the descending sort
      *
      * @var string
      */
-    protected $sortParamDesc;
+    protected $sortParamDesc = 'dsort';
 
+    protected function cleanUpFilter(array $filter, MetaModelInterface $metaModel)
+    {
+        // Change key filters to to field name filters 
+        $keys = $metaModel->getKeys();
+        foreach ($keys as $key => $field) {
+            if (isset($filter[$key])) {
+                $filter[$field] = $filter[$key];
+                unset($filter[$key]);
+            }
+        }
+        
+        foreach ($filter as $field => $value) {
+            if (! (is_int($field) || $metaModel->has($field))) {
+                unset($filter[$field]);
+            }
+        }
+        return $filter;        
+    }
+    
     /**
      * Creates the model
      *
      * @return \Zalt\Model\Data\DataReaderInterface
      */
-    abstract protected function createModel(): DataReaderInterface;
+    abstract protected function createModel() : DataReaderInterface;
+
+    public function getFilter(MetaModelInterface $metaModel) : array
+    {
+        if (false !== $this->searchFilter) {
+            $filter = $this->searchFilter;
+        } else {
+            $filter = $this->getRequestFilter($metaModel);
+        }
+
+        return array_merge($this->_fixedFilter, $this->extraFilter, $this->cleanUpFilter($filter, $metaModel));
+    }
 
     /**
      * Returns the model, always use this function
      *
      * @return \Zalt\Model\Data\DataReaderInterface
      */
-    protected function getModel(): DataReaderInterface
+    protected function getModel() : DataReaderInterface
     {
-        \MUtil\Model::setDefaultBridge('itemTable', \Zalt\Snippets\ModelBridge\DetailTableBridge::class);
-        \MUtil\Model::setDefaultBridge('display',  \Zalt\Model\Bridge\DisplayBridge::class);
-        \MUtil\Model::setDefaultBridge('table', \Zalt\Snippets\ModelBridge\TableBridge::class);
+        if (! $this->_dataModel) {
+            \MUtil\Model::setDefaultBridge('itemTable', \Zalt\Snippets\ModelBridge\DetailTableBridge::class);
+            \MUtil\Model::setDefaultBridge('display', \Zalt\Model\Bridge\DisplayBridge::class);
+            \MUtil\Model::setDefaultBridge('table', \Zalt\Snippets\ModelBridge\TableBridge::class);
 
-        if (! $this->_model) {
-            $this->_model = $this->createModel();
+            $this->_dataModel = $this->createModel();
 
-            $this->prepareModel($this->_model);
+            $this->prepareModel($this->_dataModel);
         }
 
-        return $this->_model;
+        return $this->_dataModel;
+    }
+
+    public function getRequestFilter(MetaModelInterface $metaModel) : array
+    {
+        $filter = $this->requestInfo->getParams();
+
+        // Remove sort parameters
+        unset($filter[$this->sortParamAsc], $filter[$this->sortParamDesc]);
+
+        // Remove all empty values (but not arrays) from the filter
+        $filter = array_filter($filter, function ($f) {
+            return is_array($f) || strlen($f);
+        });
+
+        return $filter;
+    }
+
+    public function getRequestSort(MetaModelInterface $metaModel) : array
+    {
+        $sort = [];
+
+        // Loop to add the sort in parameter order
+        foreach ($this->requestInfo->getParams() as $key => $field) {
+            switch ($key) {
+                case $this->sortParamAsc:
+                    $sort[$field] = SORT_ASC;
+                    break;
+
+                case $this->sortParamDesc:
+                    $sort[$field] = SORT_DESC;
+                    break;
+
+                default:
+                    // Intentional fall through
+            }
+            if (count($sort) > 1) {
+                break;
+            }
+        }
+
+        return $sort;
+    }
+
+    public function getSort(MetaModelInterface $metaModel) : array
+    {
+        return array_merge($this->_fixedSort, $this->extraSort, $this->getRequestSort($metaModel));
     }
 
     /**
@@ -130,90 +206,21 @@ abstract class ModelSnippetAbstract extends TranslatableSnippetAbstract
      *
      * @return boolean
      */
-    public function hasHtmlOutput(): bool
+    public function hasHtmlOutput() : bool
     {
         return (boolean) $this->getModel();
     }
 
     /**
-     * Default processing of model from standard settings
+     * Default processing of data model from standard settings
      *
      * @param \Zalt\Model\Data\DataReaderInterface $dataModel
      */
-    protected final function prepareModel(DataReaderInterface $dataModel)
+    protected final function prepareModel(DataReaderInterface $dataModel): void
     {
-        if ($this->sortParamAsc) {
-            $dataModel->setSortParamAsc($this->sortParamAsc);
-        }
-        if ($this->sortParamDesc) {
-            $dataModel->setSortParamDesc($this->sortParamDesc);
-        }
-
-        $this->processFilterAndSort($dataModel);
-
-        if ($this->_fixedFilter) {
-            $dataModel->addFilter($this->_fixedFilter);
-        }
-        if ($this->extraFilter) {
-            $dataModel->addFilter($this->extraFilter);
-        }
-        if ($this->extraSort) {
-            $dataModel->addSort($this->extraSort);
-        }
-        if ($this->_fixedSort) {
-            $dataModel->addSort($this->_fixedSort);
-        }
-        file_put_contents('data/logs/echo.txt', print_r($dataModel->getFilter(), true) . "\n", FILE_APPEND);
-    }
-
-    /**
-     * Overrule to implement snippet specific filtering and sorting.
-     *
-     * @param \MUtil\Model\ModelAbstract $dataModel
-     */
-    protected function processFilterAndSort(DataReaderInterface $dataModel)
-    {
-        if (false !== $this->searchFilter) {
-            $dataModel->addFilter($this->searchFilter);
-
-        } elseif (count($this->requestInfo->getParams())) {
-            $params = $this->requestInfo->getParams();
-
-            // Remove all empty values (but not arrays) from the filter
-            $params = array_filter($params, function($i) {
-                return is_array($i) || strlen($i);
-            });
-            
-            $keys = $dataModel->getMetaModel()->getKeys();
-            foreach ($keys as $key => $field) {
-                if (isset($params[$key])) {
-                    $params[$field] = $params[$key];
-                    unset($params[$key]);
-                }
-            }
-
-            $dataModel->addFilter($params);
-        }
-    }
-
-    /**
-     * Use this when overruling processFilterAndSort()
-     *
-     * Overrule to implement snippet specific filtering and sorting.
-     *
-     * @param \MUtil\Model\ModelAbstract $dataModel
-     */
-    protected function processSortOnly(DataReaderInterface $dataModel)
-    {
-        if (count($this->requestInfo->getRequestQueryParams())) {
-            $queryParams = $this->requestInfo->getParams();
-            if (isset($queryParams[$dataModel->getSortParamAsc()])) {
-                $sort = $queryParams[$dataModel->getSortParamAsc()];
-                $dataModel->addSort([$sort => SORT_ASC]);
-            } elseif (isset($queryParams[$dataModel->getSortParamDesc()])) {
-                $sort = $queryParams[$dataModel->getSortParamAsc()];
-                $dataModel->addSort(array($sort => SORT_DESC));
-            }
-        }
+        $metaModel = $dataModel->getMetaModel();
+        
+        $dataModel->setFilter($this->getFilter($metaModel));
+        $dataModel->setSort($this->getSort($metaModel));
     }
 }
