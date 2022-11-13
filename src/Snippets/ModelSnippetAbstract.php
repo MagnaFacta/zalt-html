@@ -192,7 +192,7 @@ abstract class ModelSnippetAbstract extends TranslatableSnippetAbstract
 
     public function getSort(MetaModelInterface $metaModel) : array
     {
-        return array_merge($this->_fixedSort, $this->extraSort, $this->getRequestSort($metaModel));
+        return $this->getRequestSort($metaModel) + $this->extraSort + $this->_fixedSort;
     }
 
     /**

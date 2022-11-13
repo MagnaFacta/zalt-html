@@ -234,6 +234,7 @@ abstract class ModelTableSnippetAbstract extends \Zalt\Snippets\ModelSnippetAbst
 
     public function prepareBridge(TableBridge $bridge)
     {
+        $bridge->currentUrl = $this->requestInfo->getBasePath();
         $bridge->sortAscParam = $this->sortParamAsc;
         $bridge->sortDescParam = $this->sortParamDesc;
     }

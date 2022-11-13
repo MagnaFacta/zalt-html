@@ -25,8 +25,6 @@ use Zalt\Ra\MultiWrapper;
  */
 class TableBridge extends TableBridgeAbstract
 {
-    protected array $baseUrl = [];
-
     /**
      * @var string link class to sort ascending
      */
@@ -168,11 +166,6 @@ class TableBridge extends TableBridgeAbstract
             }
         }
 
-        $sortUrl[$sortParam]  = $name;
-        $sortUrl[$nsortParam] = null;
-        $sortUrl = $sortUrl + $this->baseUrl;
-        // file_put_contents('data/logs/echo.txt', __CLASS__ . '->' . __FUNCTION__ . '(' . __LINE__ . '): ' . print_r($sortUrl, true) . "\n", FILE_APPEND);
-
-        return Html::create()->a($sortUrl, array('class' => $class, 'title' => $this->metaModel->get($name, 'description')), $label);
+        return Html::create()->a([$this->currentUrl, $sortParam => $name], ['class' => $class, 'title' => $this->metaModel->get($name, 'description')], $label);
     }
 }

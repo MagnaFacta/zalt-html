@@ -34,7 +34,7 @@ abstract class AttributeAbstract implements AttributeInterface
      * @param string $name The name of the attribute
      * @param mixed $value
      */
-    public function __construct(string $name, $value = null)
+    public function __construct(string $name, mixed $value = null)
     {
         $this->name = $name;
 

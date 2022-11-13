@@ -5,8 +5,6 @@
  * @package    Zalt
  * @subpackage Html
  * @author     Matijs de Jong <mjong@magnafacta.nl>
- * @copyright  Copyright (c) 2011 Erasmus MC
- * @license    New BSD License
  */
 
 namespace Zalt\Html;
@@ -15,6 +13,7 @@ use ArrayAccess;
 use Countable;
 use IteratorAggregate;
 use Traversable;
+use Zalt\Ra\Ra;
 
 /**
  * Parent class for all array based attribute classes.
@@ -26,8 +25,6 @@ use Traversable;
  *
  * @package    Zalt
  * @subpackage Html
- * @copyright  Copyright (c) 2011 Erasmus MC
- * @license    New BSD License
  * @since      Class available since version 1.0
  */
 class ArrayAttribute extends AttributeAbstract implements ArrayAccess, Countable, IteratorAggregate
@@ -51,14 +48,14 @@ class ArrayAttribute extends AttributeAbstract implements ArrayAccess, Countable
      *
      * @var array
      */
-    protected $_values;
+    protected $_values = [];
 
     /**
      *
      * @param string $name The name of the attribute
-     * @param array $args
+     * @param mixed $args
      */
-    public function __construct($name, ...$args)
+    public function __construct($name, mixed $args)
     {
         parent::__construct($name, $args);
     }
@@ -212,7 +209,7 @@ class ArrayAttribute extends AttributeAbstract implements ArrayAccess, Countable
      * @param string $value Output escaped value
      * @return string
      */
-    public function getKeyValue($key, $value)
+    public function getKeyValue($key, $value): string
     {
         return $value;
     }

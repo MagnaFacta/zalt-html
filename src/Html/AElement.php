@@ -57,7 +57,7 @@ class AElement extends \Zalt\Html\HtmlElement
      */
     public function __construct($href, ...$argArray)
     {
-        $args = Ra::args(func_get_args(), array('href' => '\\Zalt\\Html\\HrefArrayAttribute'));
+        $args = Ra::args(func_get_args(), ['href' => HrefArrayAttribute::class]);
 
         if (isset($args['href']) && (! $args['href'] instanceof AttributeInterface)) {
             $args['href'] = new HrefArrayAttribute($args['href']);

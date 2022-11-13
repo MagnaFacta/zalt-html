@@ -26,7 +26,7 @@ namespace Zalt\Html;
  */
 class HrefArrayAttribute extends UrlArrayAttribute
 {
-    public function __construct(...$args)
+    public function __construct(mixed $args)
     {
         parent::__construct('href', $args);
     }

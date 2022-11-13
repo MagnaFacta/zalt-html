@@ -27,9 +27,8 @@ namespace Zalt\Html;
  */
 class SrcArrayAttribute extends UrlArrayAttribute
 {
-    public function __construct($args_array = null)
+    public function __construct(mixed $args)
     {
-        $args = func_get_args();
         parent::__construct('src', $args);
     }
 
