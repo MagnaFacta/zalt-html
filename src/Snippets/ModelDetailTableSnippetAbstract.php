@@ -125,9 +125,7 @@ abstract class ModelDetailTableSnippetAbstract extends ModelSnippetAbstract
     /**
      * Creates from the model a \Zalt\Html\TableElement that can display multiple items.
      *
-     * Allows overruling
-     *
-     * @param \Zalt\Model\ModelAbstract $dataModel
+     * @param \Zalt\Model\Data\DataReaderInterface $dataModel
      * @return \Zalt\Html\TableElement
      */
     public function getShowTable(DataReaderInterface $dataModel)
@@ -150,7 +148,7 @@ abstract class ModelDetailTableSnippetAbstract extends ModelSnippetAbstract
         $this->setShowTableFooter($bridge, $dataModel);
         $this->addShowTableRows($bridge, $dataModel);
 
-        if (! $bridge->getRepeater()) {
+        if (! $bridge->hasRepeater()) {
             $bridge->setRepeater($this->getRepeater($dataModel));
         }
 

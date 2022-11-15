@@ -38,11 +38,14 @@ abstract class ModelYesNoDeleteSnippetAbstract extends ModelDetailTableSnippetAb
     protected string $abortUrl = '';
 
     /**
-     * @see \Zend_Controller_Action_Helper_Redirector
-     *
+     * @var string AFter action actual return url 
+     */
+    protected string $afterActionRouteUrl = '';
+    
+    /**
      * @var string Nothing or either an array or a string that is acceptable for Redector->gotoRoute()
      */
-    protected string $afterSaveRouteUrl = '';
+    protected string $afterDeleteUrl = '';
 
     /**
      * Optional class for use on buttons, overruled by $buttonNoClass and $buttonYesClass
@@ -127,7 +130,7 @@ abstract class ModelYesNoDeleteSnippetAbstract extends ModelDetailTableSnippetAb
      */
     public function getRedirectRoute(): string
     {
-        return $this->afterSaveRouteUrl;
+        return $this->afterActionRouteUrl;
     }
 
     /**
@@ -174,10 +177,9 @@ abstract class ModelYesNoDeleteSnippetAbstract extends ModelDetailTableSnippetAb
     protected function setAfterDeleteRoute()
     {
         // Default is just go to the index
-        $startUrl = $this->requestInfo->getBasePath();
-        $startUrl = substr($startUrl, 0, strrpos($startUrl, '/'));
-        $startUrl = substr($startUrl, 0, strrpos($startUrl, '/'));
-        $this->afterSaveRouteUrl = $startUrl;
+        if ($this->afterDeleteUrl) {
+            $this->afterActionRouteUrl = $this->afterDeleteUrl;
+        }
     }
 
     /**

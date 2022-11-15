@@ -11,6 +11,7 @@
 
 namespace Zalt\Snippets;
 
+use Zalt\Model\Bridge\BridgeInterface;
 use Zalt\Model\Data\DataReaderInterface;
 use Zalt\Model\MetaModelInterface;
 use Zalt\Snippets\ModelBridge\TableBridge;
@@ -174,6 +175,7 @@ abstract class ModelTableSnippetAbstract extends \Zalt\Snippets\ModelSnippetAbst
         }
 
         $this->addBrowseTableColumns($bridge, $dataModel);
+        $this->ensureRepeater($bridge, $dataModel);
 
         return $bridge->getTable();
     }
@@ -218,22 +220,6 @@ abstract class ModelTableSnippetAbstract extends \Zalt\Snippets\ModelSnippetAbst
             $model->trackUsage();
         }
         $table = $this->getBrowseTable($model);
-
-        if (! $table->getRepeater()) {
-            if (false && $this->browse) {
-                $paginator = $model->loadPaginator();
-                $table->setRepeater($paginator);
-                $this->addPaginator($table, $paginator);
-            } elseif ($this->bridgeMode === \MUtil\Model\Bridge\BridgeAbstract::MODE_LAZY) {
-                $table->setRepeater($model->load());
-                // $table->setRepeater($model->loadRepeatable());
-            } elseif ($this->bridgeMode === \MUtil\Model\Bridge\BridgeAbstract::MODE_SINGLE_ROW) {
-                $table->setRepeater(array($model->loadFirst()));
-            } else {
-                $table->setRepeater($model->load());
-            }
-        }
-        // file_put_contents('modelsnippet.txt', __FUNCTION__ . '(' . __LINE__ . '): ' . print_r($model->load(), true) . "\n", FILE_APPEND);
 
         return $table;
     }

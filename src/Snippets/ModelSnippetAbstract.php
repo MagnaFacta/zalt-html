@@ -11,6 +11,7 @@
 
 namespace Zalt\Snippets;
 
+use Zalt\Model\Bridge\BridgeInterface;
 use Zalt\Model\Data\DataReaderInterface;
 use Zalt\Model\MetaModelInterface;
 
@@ -118,6 +119,26 @@ abstract class ModelSnippetAbstract extends TranslatableSnippetAbstract
      */
     abstract protected function createModel() : DataReaderInterface;
 
+    protected function ensureRepeater(BridgeInterface $bridge, DataReaderInterface $dataModel)
+    {
+        if (! $bridge->hasRepeater()) {
+            if (false && $this->browse) {
+                $paginator = $dataModel->loadPaginator();
+                $bridge->setRepeater($paginator);
+                $this->addPaginator($bride->getTable(), $paginator);
+            } elseif ($this->bridgeMode === \MUtil\Model\Bridge\BridgeAbstract::MODE_LAZY) {
+                file_put_contents('data/logs/echo.txt', __FUNCTION__ . '(' . __LINE__ . '): ' . "LAZY\n", FILE_APPEND);
+                $bridge->setRepeater($dataModel->loadRepeatable());
+            } elseif ($this->bridgeMode === \MUtil\Model\Bridge\BridgeAbstract::MODE_SINGLE_ROW) {
+                $bridge->setRow($dataModel->loadFirst());
+            } else {
+                $bridge->setRepeater($dataModel->load());
+            }
+        }
+        // file_put_contents('data/logs/echo.txt', __FUNCTION__ . '(' . __LINE__ . '): [' . $this->bridgeMode . ']' . get_class($bridge->getRepeater()) . "\n", FILE_APPEND);
+        // file_put_contents('data/logs/echo.txt', __FUNCTION__ . '(' . __LINE__ . '): ' . print_r($dataModel->load(), true) . "\n", FILE_APPEND);
+    }
+
     public function getFilter(MetaModelInterface $metaModel) : array
     {
         if (false !== $this->searchFilter) {
@@ -125,7 +146,7 @@ abstract class ModelSnippetAbstract extends TranslatableSnippetAbstract
         } else {
             $filter = $this->getRequestFilter($metaModel);
         }
-        // Filter in request overrules same filter from extraFilter settings which again overrule fixedFilter settings
+        // Filter in request overrules same filter from extraFilter settings which again overrule fiwxedFilter settings
         // Sinc the arrays can contian numeric keys we use array_merge to include those from all filters
         return array_merge($this->_fixedFilter, $this->extraFilter, $this->cleanUpFilter($filter, $metaModel));
     }

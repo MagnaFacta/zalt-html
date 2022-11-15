@@ -1108,6 +1108,15 @@ class HtmlElement implements ElementInterface, Procrastinator
     }
 
     /**
+     *
+     * @return bool
+     */
+    public function hasRepeater(): bool
+    {
+        return (bool) $this->_repeater;
+    }
+
+    /**
      * Does a specific item exist in the content
      *
      * @param scalar $offset
