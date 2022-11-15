@@ -12,8 +12,6 @@
 
 namespace Zalt\Snippets;
 
-use Zalt\Model\Data\DataReaderInterface;
-
 /**
  * Displays each field of a single item in a model in a row in a Html table
  * the model set through the $model snippet parameter.
@@ -26,19 +24,5 @@ use Zalt\Model\Data\DataReaderInterface;
  */
 class ModelDetailTableSnippet extends ModelDetailTableSnippetAbstract
 {
-    /**
-     *
-     * @var \Zalt\Model\Data\DataReaderInterface
-     */
-    protected $model;
-
-    /**
-     * Creates the model
-     *
-     * @return \Zalt\Model\ModelAbstract
-     */
-    protected function createModel(): DataReaderInterface
-    {
-        return $this->model;
-    }
+    use DataReaderGenericModelTrait;
 }

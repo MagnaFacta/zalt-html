@@ -12,8 +12,6 @@
 
 namespace Zalt\Snippets;
 
-use Zalt\Model\Data\FullDataInterface;
-
 /**
  * Ask conformation for deletion and deletes item when confirmed.
  *
@@ -27,19 +25,5 @@ use Zalt\Model\Data\FullDataInterface;
  */
 class ModelYesNoDeleteSnippet extends ModelYesNoDeleteSnippetAbstract
 {
-    /**
-     *
-     * @var \Zalt\Model\ModelAbstract
-     */
-    protected $model;
-
-    /**
-     * Creates the model
-     *
-     * @return \Zalt\Model\Data\FullDataInterface
-     */
-    protected function createModel(): FullDataInterface
-    {
-        return $this->model;
-    }
+    use FullDataGenericModelTrait;
 }

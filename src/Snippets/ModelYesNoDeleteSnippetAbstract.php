@@ -35,7 +35,7 @@ abstract class ModelYesNoDeleteSnippetAbstract extends ModelDetailTableSnippetAb
      *
      * @var string
      */
-    protected string $abortAction = '/';
+    protected string $abortUrl = '';
 
     /**
      * @see \Zend_Controller_Action_Helper_Redirector
@@ -175,7 +175,9 @@ abstract class ModelYesNoDeleteSnippetAbstract extends ModelDetailTableSnippetAb
     {
         // Default is just go to the index
         $startUrl = $this->requestInfo->getBasePath();
-        $this->afterSaveRouteUrl = substr($startUrl, 0, stripos($startUrl, '/') - 1);
+        $startUrl = substr($startUrl, 0, strrpos($startUrl, '/'));
+        $startUrl = substr($startUrl, 0, strrpos($startUrl, '/'));
+        $this->afterSaveRouteUrl = $startUrl;
     }
 
     /**
@@ -207,13 +209,15 @@ abstract class ModelYesNoDeleteSnippetAbstract extends ModelDetailTableSnippetAb
         $footer->a(
                 [$startUrl, $this->confirmParameter => 1],
                 $this->_('Yes'),
-                array('class' => $this->buttonYesClass)
+                ['class' => $this->buttonYesClass]
                 );
-        $footer[] = ' ';
-        $footer->a(
-                [str_replace('/' . $this->requestInfo->getCurrentAction() . '/', $this->abortAction, $startUrl)],
+        if ($this->abortUrl) {
+            $footer[] = ' ';
+            $footer->a(
+                [$this->abortUrl],
                 $this->_('No'),
-                array('class' => $this->buttonNoClass)
-                );
+                ['class' => $this->buttonNoClass]
+            );
+        }
     }
 }

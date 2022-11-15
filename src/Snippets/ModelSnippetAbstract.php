@@ -125,7 +125,8 @@ abstract class ModelSnippetAbstract extends TranslatableSnippetAbstract
         } else {
             $filter = $this->getRequestFilter($metaModel);
         }
-
+        // Filter in request overrules same filter from extraFilter settings which again overrule fixedFilter settings
+        // Sinc the arrays can contian numeric keys we use array_merge to include those from all filters
         return array_merge($this->_fixedFilter, $this->extraFilter, $this->cleanUpFilter($filter, $metaModel));
     }
 
@@ -192,6 +193,7 @@ abstract class ModelSnippetAbstract extends TranslatableSnippetAbstract
 
     public function getSort(MetaModelInterface $metaModel) : array
     {
+        // Sorts in request overrule extraSort settings which again overrule fixedSort settings
         return $this->getRequestSort($metaModel) + $this->extraSort + $this->_fixedSort;
     }
 
