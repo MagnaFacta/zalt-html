@@ -11,8 +11,6 @@
 
 namespace Zalt\Snippets;
 
-use Zalt\Model\Data\DataReaderInterface;
-
 /**
  * Processes and displays a model form using the model
  * set through the $model snippet parameter.
@@ -25,19 +23,5 @@ use Zalt\Model\Data\DataReaderInterface;
  */
 class ModelFormSnippet extends ModelFormSnippetAbstract
 {
-    /**
-     *
-     * @var \Zalt\Model\Data\DataReaderInterface
-     */
-    protected $model;
-
-    /**
-     * Creates the model
-     *
-     * @return \Zalt\Model\Data\DataReaderInterface
-     */
-    protected function createModel(): DataReaderInterface
-    {
-        return $this->model;
-    }
+    use FullDataGenericModelTrait;
 }

@@ -13,6 +13,7 @@ namespace Zalt\Snippets\ModelBridge;
 
 use Zalt\Model\Data\DataReaderInterface;
 use Zalt\Model\Data\FullDataInterface;
+use Zalt\Model\Exceptions\MetaModelException;
 use Zalt\Ra\Ra;
 
 /**
@@ -490,10 +491,14 @@ class ZendFormBridge extends \Zalt\Model\Bridge\FormBridgeAbstract
         }
     }
 
-    protected function setForm(\Zend_form $form)
+    public function setForm(mixed $form): void
     {
-        $this->form = $form;
-        
-        $this->form->setName($this->metaModel->getName());
+        if ($form instanceof \Zend_Form) {
+            $this->form = $form;
+
+            $this->form->setName($this->metaModel->getName());
+        } else {
+            throw new MetaModelException(sprintf("Form parameter must be an instance of \Zend_Form in %s->setForm(). Object of '%s' class given instead."), __CLASS__, get_class($form));
+        }
     }
 }

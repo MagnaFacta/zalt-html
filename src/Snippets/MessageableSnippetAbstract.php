@@ -14,6 +14,7 @@ namespace Zalt\Snippets;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Zalt\Base\RequestInfo;
 use Zalt\Message\MessageTrait;
+use Zalt\Message\MessengerInterface;
 use Zalt\SnippetsLoader\SnippetOptions;
 
 /**

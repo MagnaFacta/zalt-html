@@ -23,13 +23,12 @@ namespace Zalt\Html;
  */
 class StyleArrayAttribute extends ArrayAttribute
 {
-    public function __construct($arg_array = null)
+    public function __construct(mixed $args)
     {
-        $args = func_get_args();
         parent::__construct('style', $args);
     }
 
-    public function getKeyValue($key, $value)
+    public function getKeyValue($key, $value): string
     {
         return $key . ': ' . $value . ';';
     }

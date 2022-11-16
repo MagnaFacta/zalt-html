@@ -149,6 +149,26 @@ abstract class ModelTableSnippetAbstract extends \Zalt\Snippets\ModelSnippetAbst
         //$table->tfrow()->pagePanel($paginator, null, array('baseUrl' => $this->baseUrl));
     }
 
+    protected function ensureRepeater(BridgeInterface $bridge, DataReaderInterface $dataModel)
+    {
+        if (! $bridge->hasRepeater()) {
+            if (false && $this->browse) {
+                $paginator = $dataModel->loadPaginator();
+                $bridge->setRepeater($paginator);
+                $this->addPaginator($bride->getTable(), $paginator);
+            } elseif ($this->bridgeMode === \MUtil\Model\Bridge\BridgeAbstract::MODE_LAZY) {
+                // file_put_contents('data/logs/echo.txt', __FUNCTION__ . '(' . __LINE__ . '): ' . "LAZY\n", FILE_APPEND);
+                $bridge->setRepeater($dataModel->loadRepeatable());
+            } elseif ($this->bridgeMode === \MUtil\Model\Bridge\BridgeAbstract::MODE_SINGLE_ROW) {
+                $bridge->setRow($dataModel->loadFirst());
+            } else {
+                $bridge->setRepeater($dataModel->load());
+            }
+        }
+        // file_put_contents('data/logs/echo.txt', __FUNCTION__ . '(' . __LINE__ . '): [' . $this->bridgeMode . ']' . get_class($bridge->getRepeater()) . "\n", FILE_APPEND);
+        // file_put_contents('data/logs/echo.txt', __FUNCTION__ . '(' . __LINE__ . '): ' . print_r($dataModel->load(), true) . "\n", FILE_APPEND);
+    }
+
     /**
      * Creates from the model a \Zalt\Html\TableElement that can display multiple items.
      *

@@ -12,6 +12,7 @@
 namespace Zalt\Snippets;
 
 use Psr\Cache\CacheItemPoolInterface;
+use Zalt\Base\RequestInfo;
 
 /**
  *
@@ -22,33 +23,12 @@ use Psr\Cache\CacheItemPoolInterface;
  * @license    New BSD License
  * @since      Class available since 1.7.2
  */
-abstract class FormSnippetAbstract extends \Zalt\Snippets\SnippetAbstract
+abstract class FormSnippetAbstract extends MessageableSnippetAbstract
 {
     /**
-     * Optional csrf element
-     *
-     * @var \Zend_Form_Element_Hash
+     * @var ?string Nothing or an url string
      */
-    protected $_csrf;
-
-    /**
-     *
-     * @var \Zend_Form
-     */
-    protected $_form;
-
-    /**
-     *
-     * @var \Zend_Form_Element_Submit
-     */
-    protected $_saveButton;
-
-    /**
-     * @see \Zend_Controller_Action_Helper_Redirector
-     *
-     * @var mixed Nothing or either an array or a string that is acceptable for Redirector->gotoRoute()
-     */
-    protected $afterSaveRouteUrl;
+    protected ?string $afterSaveRouteUrl;
 
     /**
      *
@@ -91,46 +71,21 @@ abstract class FormSnippetAbstract extends \Zalt\Snippets\SnippetAbstract
     protected $csrfTimeout = 300;
 
     /**
-     * As it is better for translation utilities to set the labels etc. translated,
-     * the \Zalt default is to disable translation.
-     *
-     * However, this also disables the translation of validation messages, which we
-     * cannot set translated. The \Zalt form is extended so it can make this switch.
-     *
-     * @var boolean True
-     */
-    protected $disableValidatorTranslation = false;
-
-    /**
      *
      * @var array
      */
     protected $formData = array();
 
     /**
+     * @var string The actual redirect route to use
+     */
+    protected string $redirectRoute = '';    
+    
+    /**
      *
      * @var string class attribute for labels
      */
     protected $labelClass = 'label';
-
-    /**
-     * Automatically calculate and set the width of the labels
-     *
-     * @var int
-     */
-    protected $layoutAutoWidthFactor = 1;
-
-    /**
-     * Set the width of the labels
-     *
-     * @var int
-     */
-    protected $layoutFixedWidth;
-
-    /**
-     * @var \Zalt\Request\RequestInfo
-     */
-    protected ?\Zalt\Request\RequestInfo $requestInfo = null;
 
     /**
      * The name of the action to forward to after form completion
@@ -162,7 +117,7 @@ abstract class FormSnippetAbstract extends \Zalt\Snippets\SnippetAbstract
      *
      * @var string
      */
-    protected $saveLabel = null;
+    protected $saveLabel = 'OK';
 
     /**
      * Use csrf token on form for protection against Cross Site Request Forgery
@@ -177,60 +132,25 @@ abstract class FormSnippetAbstract extends \Zalt\Snippets\SnippetAbstract
      * As the save button is not part of the model - but of the interface - it
      * does deserve it's own function.
      */
-    protected function addCsrf()
-    {
-        if (! $this->_csrf) {
-            $this->_form->addElement('hash', $this->csrfId, array(
-                'salt' => 'mutil_' . $this->requestInfo->getCurrentController() . '_' . $this->requestInfo->getCurrentAction(),
-                'timeout' => $this->csrfTimeout,
-                ));
-            $this->_csrf = $this->_form->getElement($this->csrfId);
-        }
-
-        return $this;
-    }
+    abstract protected function addCsrf(string $csrfId, int $csrfTimeout);
 
     /**
      * Add the elements to the form
-     *
-     * @param \Zend_Form $form
      */
-    abstract protected function addFormElements(\Zend_Form $form);
+    abstract protected function addFormElements(mixed $form);
 
     /**
-     * Simple default function for making sure there is a $this->_saveButton.
+     * Simple default function for making sure there is a saveButton.
      *
      * As the save button is not part of the model - but of the interface - it
-     * does deserve it's own function.
+     * does deserve its own function.
+     * 
+     * @param string $saveButtonId
+     * @param string $saveLabel
+     * @param string $buttonClass
+     * @return mixed
      */
-    protected function addSaveButton()
-    {
-        if ($this->_saveButton) {
-            $this->saveButtonId = $this->_saveButton->getName();
-
-            if (! $this->_form->getElement($this->saveButtonId)) {
-                $this->_form->addElement($this->_saveButton);
-            }
-        } elseif ($this->saveButtonId) {
-            //If not already there, add a save button
-            $this->_saveButton = $this->_form->getElement($this->saveButtonId);
-
-            if (! $this->_saveButton) {
-                if (null === $this->saveLabel) {
-                    $this->saveLabel = $this->_('Save');
-                }
-
-                $options = array('label' => $this->saveLabel);
-                if ($this->buttonClass) {
-                    $options['class'] = $this->buttonClass;
-                }
-
-                $this->_saveButton = $this->_form->createElement('submit', $this->saveButtonId, $options);
-
-                $this->_form->addElement($this->_saveButton);
-            }
-        }
-    }
+    abstract protected function addSaveButton(string $saveButtonId, string $saveLabel, string $buttonClass);
 
     /**
      * Hook that allows actions when data was saved
@@ -243,7 +163,7 @@ abstract class FormSnippetAbstract extends \Zalt\Snippets\SnippetAbstract
     {
         if ($changed) {
             // Clean cache on changes
-            if ($this->cacheTags && ($this->cache instanceof \Symfony\Contracts\Cache\TagAwareCacheInterface)) {
+            if ($this->cacheTags && ($this->cache instanceof CacheItemPoolInterface)) {
                 $this->cache->invalidateTags((array) $this->cacheTags);
             }
         }
@@ -253,25 +173,19 @@ abstract class FormSnippetAbstract extends \Zalt\Snippets\SnippetAbstract
      * Perform some actions on the form, right before it is displayed but already populated
      *
      * Here we add the table display to the form.
-     *
-     * @return \Zend_Form
      */
     public function beforeDisplay()
     {
         if ($this->_csrf) {
             $this->_csrf->initCsrfToken();
         }
-
-        if ($this->layoutAutoWidthFactor || $this->layoutFixedWidth) {
-            $div = new \Zalt\Html\DivFormElement();
-
-            if ($this->layoutFixedWidth) {
-                $div->setAsFormLayout($this->_form, $this->layoutFixedWidth);
-            } else {
-                $div->setAutoWidthFormLayout($this->_form, $this->layoutAutoWidthFactor);
-            }
-        }
     }
+
+    /**
+     * Perform some actions to the data before it is saved to the database
+     */
+    protected function beforeSave()
+    { }
 
     /**
      * After validation we clean the form data to remove all
@@ -279,31 +193,24 @@ abstract class FormSnippetAbstract extends \Zalt\Snippets\SnippetAbstract
      * this filters the data as well).
      */
     public function cleanFormData()
-    {
-        $this->formData = $this->_form->getValues();
-    }
+    {  }
 
     /**
      * Creates an empty form. Allows overruling in sub-classes.
      *
-     * @param mixed $options
-     * @return \Zend_Form
+     * @param array $options
+     * @return mixed
      */
-    protected function createForm($options = null)
-    {
-        $form = new \Zalt\Form($options);
-
-        return $form;
-    }
+    abstract protected function createForm(array $options = []);
 
     /**
      * Return the default values for the form
      *
      * @return array
      */
-    protected function getDefaultFormValues()
+    protected function getDefaultFormValues(): array
     {
-        return array();
+        return [];
     }
 
     /**
@@ -311,32 +218,31 @@ abstract class FormSnippetAbstract extends \Zalt\Snippets\SnippetAbstract
      *
      * This is a stub function either override getHtmlOutput() or override render()
      *
-     * @param \Zend_View_Abstract $view Just in case it is needed here
-     * @return \Zalt\Html\HtmlInterface Something that can be rendered
+     * @return mixed Something that can be rendered / output
      */
-    public function getHtmlOutput(\Zend_View_Abstract $view)
+    public function getHtmlOutput()
     {
         // Again, just to be sure all changes are set on the form
         $this->populateForm();
 
         $this->beforeDisplay();
 
-        return $this->_form;
+        return $this->getFormOutput();
     }
 
+    abstract public function getFormOutput(): mixed;
+    
     /**
      * When hasHtmlOutput() is false a snippet user should check
      * for a redirectRoute.
      *
      * When hasHtmlOutput() is true this functions should not be called.
-     *
-     * @see \Zend_Controller_Action_Helper_Redirector
-     *
-     * @return mixed Nothing or either an array or a string that is acceptable for Redector->gotoRoute()
+     * 
+     * @return mixed Nothing or an url string
      */
-    public function getRedirectRoute()
+    public function getRedirectRoute(): ?string
     {
-        return $this->afterSaveRouteUrl;
+        return $this->redirectRoute;
     }
 
     /**
@@ -354,35 +260,35 @@ abstract class FormSnippetAbstract extends \Zalt\Snippets\SnippetAbstract
      * The place to check if the data set in the snippet is valid
      * to generate the snippet.
      *
-     * When invalid data should result in an error, you can throw it
-     * here but you can also perform the check in the
-     * checkRegistryRequestsAnswers() function from the
-     * {@see Zalt\Registry\TargetInterface}.
-     *
      * @return boolean
      */
-    public function hasHtmlOutput()
+    public function hasHtmlOutput(): bool
     {
         if (parent::hasHtmlOutput()) {
             return $this->processForm();
         }
     }
 
+    public function isPost(): bool
+    {
+        return $this->requestInfo->isPost();
+    }
+    
+    abstract public function isSaveClicked(): bool;
+    
     /**
      * Makes sure there is a form.
      */
     protected function loadForm()
     {
-        if (! $this->_form) {
-            $options = array();
+        $options = array();
 
-            $options['class'] = 'form-horizontal';
-            $options['role'] = 'form';
+        $options['class'] = 'form-horizontal';
+        $options['role'] = 'form';
 
-            $this->_form = $this->createForm($options);
+        $this->_form = $this->createForm($options);
 
-            $this->addFormElements($this->_form);
-        }
+        $this->addFormElements($this->_form);
     }
 
     /**
@@ -390,7 +296,7 @@ abstract class FormSnippetAbstract extends \Zalt\Snippets\SnippetAbstract
      *
      * Or from whatever other source you specify here.
      */
-    protected function loadFormData()
+    protected function loadFormData(): array
     {
         if ($this->isPost()) {
             $this->formData = $this->getPostData();
@@ -417,21 +323,12 @@ abstract class FormSnippetAbstract extends \Zalt\Snippets\SnippetAbstract
     protected function onInValid()
     {
         $this->addMessage(sprintf($this->_('Input error! Changes to %s not saved!'), $this->getTopic()));
-
-        if ($this->_csrf) {
-            if ($this->_csrf->getMessages()) {
-                $this->addMessage($this->_('The form was open for too long or was opened in multiple windows.'));
-            }
-        }
     }
 
     /**
      * Hook for setting the data on the form.
      */
-    protected function populateForm()
-    {
-        $this->_form->populate($this->formData);
-    }
+    abstract protected function populateForm();
 
     /**
      * Step by step form processing
@@ -446,11 +343,11 @@ abstract class FormSnippetAbstract extends \Zalt\Snippets\SnippetAbstract
         // Make sure there is $this->formData
         $this->loadFormData();
 
-        // Make sure there is a $this->_form
+        // Make sure there is a from
         $this->loadForm();
 
-        // Create $this->_saveButton
-        $this->addSaveButton();
+        // Create a saveButton
+        $this->addSaveButton($this->saveButtonId, $this->saveLabel, $this->buttonClass);
 
         // Use Csrf when enabled
         if ($this->useCsrf) {
@@ -462,13 +359,14 @@ abstract class FormSnippetAbstract extends \Zalt\Snippets\SnippetAbstract
             $this->populateForm();
 
             // If there is a save button it should be checked, otherwise just validate
-            if ((! $this->_saveButton) || $this->_saveButton->isChecked()) {
+            if ($this->isSaveClicked()) {
 
                 if ($this->validateForm($this->formData)) {
                     // Remove all unwanted data
                     $this->cleanFormData();
 
                     // Save
+                    $this->beforeSave();
                     $this->afterSave($this->saveData());
 
                     // Reroute (always, override function otherwise)
@@ -490,7 +388,7 @@ abstract class FormSnippetAbstract extends \Zalt\Snippets\SnippetAbstract
      *
      * @return int The number of "row level" items changed
      */
-    protected function saveData()
+    protected function saveData(): int
     {
         return 0;
     }
@@ -503,23 +401,7 @@ abstract class FormSnippetAbstract extends \Zalt\Snippets\SnippetAbstract
      */
     protected function setAfterSaveRoute(array $params = array())
     {
-        // Only reroute when it is to a different url
-        /* if ($params
-                || ($this->routeAction && ($this->request->getActionName() !== $this->routeAction))
-                || ($this->routeController && ($this->request->getControllerName() !== $this->routeController))) {
-
-            if ($this->routeController) {
-                $controllerName = $this->routeController;
-            } else {
-                $controllerName = $this->request->getControllerName();
-            }
-
-            $this->afterSaveRouteUrl = $params + array(
-                $this->request->getControllerKey() => $controllerName,
-                $this->request->getActionKey() => $this->routeAction,
-                'RouteReset' => true,
-                );
-        } */
+        $this->redirectRoute = $this->afterSaveRouteUrl;
 
         return $this;
     }
@@ -529,9 +411,5 @@ abstract class FormSnippetAbstract extends \Zalt\Snippets\SnippetAbstract
      *
      * @return boolean True if validation was OK and data should be saved.
      */
-    protected function validateForm()
-    {
-        // Note we use an \Zalt\Form
-        return $this->_form->isValid($this->formData, $this->disableValidatorTranslation);
-    }
+    abstract protected function validateForm(array $formData): bool;
 }
