@@ -104,21 +104,6 @@ class TableBridge extends TableBridgeAbstract
         $tbody = $tds[0];
         $tbody->class = 'table-button';
 
-//        if ($this->useRowHref) {
-//            if ($this->row_href) {
-//                if ($link instanceof \Zalt\Html\HtmlElement) {
-//                    $tds[0]->onclick = array('location.href=\'', $link->href, '\';');
-//                } else {
-//                    $tds[0]->onclick = '// Dummy on click';
-//                }
-//                $this->has_multi_refs = true;
-//            } else {
-//                if ($link instanceof \Zalt\Html\HtmlElement) {
-//                    $this->row_href = $link->href;
-//                }
-//            }
-//        }
-
         return new MultiWrapper($tds);
     }
 

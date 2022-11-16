@@ -28,7 +28,7 @@ abstract class FormSnippetAbstract extends MessageableSnippetAbstract
     /**
      * @var ?string Nothing or an url string
      */
-    protected ?string $afterSaveRouteUrl;
+    protected string $afterSaveRouteUrl = '';
 
     /**
      *
