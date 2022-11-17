@@ -64,7 +64,7 @@ abstract class MultiRowModelFormAbstract extends \Zalt\Snippets\ModelFormSnippet
      *
      * Or from whatever other source you specify here.
      */
-    protected function loadFormData()
+    protected function loadFormData(): array
     {
         $model = $this->getModel();
         $mname = $model->getName();
@@ -99,6 +99,7 @@ abstract class MultiRowModelFormAbstract extends \Zalt\Snippets\ModelFormSnippet
         }
 
         // \Zalt\EchoOut\EchoOut::track($this->formData);
+        return $this->formData;
     }
 
     /**
@@ -108,7 +109,7 @@ abstract class MultiRowModelFormAbstract extends \Zalt\Snippets\ModelFormSnippet
      *
      * @see afterSave()
      */
-    protected function saveData()
+    protected function saveData(): int
     {
         $this->beforeSave();
 
@@ -126,6 +127,6 @@ abstract class MultiRowModelFormAbstract extends \Zalt\Snippets\ModelFormSnippet
         $changed = $model->getChanged();
 
         // Message the save
-        $this->afterSave($changed);
+        return $changed;
     }
 }

@@ -34,6 +34,15 @@ use Zalt\Html\HtmlInterface;
 interface SnippetInterface extends HtmlInterface
 {
     /**
+     * Create the snippets content
+     *
+     * This is a stub function either override getHtmlOutput() or override render()
+     *
+     * @return mixed Something that can be rendered
+     */
+    public function getHtmlOutput();
+        
+    /**
      * When hasHtmlOutput() is false a snippet code user should check
      * for a redirectRoute. Otherwise the redirect calling render() will
      * execute the redirect.

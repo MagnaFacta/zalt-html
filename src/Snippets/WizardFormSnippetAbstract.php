@@ -11,6 +11,8 @@
 
 namespace Zalt\Snippets;
 
+use Zalt\Model\Bridge\FormBridgeInterface;
+use Zalt\Model\Data\DataReaderInterface;
 use Zalt\Ra\Ra;
 
 /**
@@ -210,7 +212,7 @@ abstract class WizardFormSnippetAbstract extends \Zalt\Snippets\ModelFormSnippet
         $this->addPreviousButton();
         $this->addNextButton();
 
-        $element = new \Zalt\Form\Element\Html('button_spacer');
+        $element = new \MUtil\Form\Element\Html('button_spacer');
         $element->raw('&nbsp;');
         $element->setDecorators(array('ViewHelper'));
 
@@ -241,6 +243,11 @@ abstract class WizardFormSnippetAbstract extends \Zalt\Snippets\ModelFormSnippet
         $this->_addButton($this->_cancelButton, $this->cancelButtonId, $this->cancelLabel, $this->_('Cancel'), $class);
     }
 
+    protected function addCsrf(string $csrfId, int $csrfTimeout)
+    {
+        
+    }
+    
     /**
      * Adds elements from the model to the bridge that creates the form.
      *
@@ -248,13 +255,13 @@ abstract class WizardFormSnippetAbstract extends \Zalt\Snippets\ModelFormSnippet
      * having to recode the core table building code.
      *
      * @param \Zalt\Model\Bridge\FormBridgeInterface $bridge
-     * @param \Zalt\Model\ModelAbstract $model
+     * @param \Zalt\Model\Data\DataReaderInterface $model
      * @param int $step The current step
      */
-    protected function addFormElementsFor(\Zalt\Model\Bridge\FormBridgeInterface $bridge, \Zalt\Model\ModelAbstract $model, $step)
+    protected function addFormElementsFor(FormBridgeInterface $bridge, DataReaderInterface $model, $step)
     {
         //Get all elements in the model if not already done
-        $this->initItems();
+        $this->initItems($model->getMetaModel());
 
         // Store the current step
         $bridge->addHidden($this->stepFieldName);
@@ -285,7 +292,7 @@ abstract class WizardFormSnippetAbstract extends \Zalt\Snippets\ModelFormSnippet
      * Add items in hidden form to the bridge, and remove them from the items array
      *
      * @param \Zalt\Model\Bridge\FormBridgeInterface $bridge
-     * @param string $element1
+     * @param mixed $element1
      *
      * @return void
      */
@@ -347,14 +354,19 @@ abstract class WizardFormSnippetAbstract extends \Zalt\Snippets\ModelFormSnippet
         }
     }
 
+    protected function addSaveButton(string $saveButtonId, string $saveLabel, string $buttonClass)
+    {
+        // Not used
+    }
+    
     /**
      * Add the elements from the model to the bridge for the current step
      *
      * @param \Zalt\Model\Bridge\FormBridgeInterface $bridge
-     * @param \Zalt\Model\ModelAbstract $model
+     * @param \Zalt\Model\Data\DataReaderInterface $model
      * @param int $step The current step
      */
-    abstract protected function addStepElementsFor(\Zalt\Model\Bridge\FormBridgeInterface $bridge, \Zalt\Model\ModelAbstract $model, $step);
+    abstract protected function addStepElementsFor(FormBridgeInterface $bridge, DataReaderInterface $model, $step);
 
     /**
      * Overrule this function for any activities you want to take place
@@ -371,10 +383,8 @@ abstract class WizardFormSnippetAbstract extends \Zalt\Snippets\ModelFormSnippet
      * Perform some actions on the form, right before it is displayed but already populated
      *
      * Here we add the table display to the form.
-     *
-     * @return \Zend_Form
      */
-    protected function beforeDisplay()
+    public function beforeDisplay()
     {
         $this->beforeDisplayFor($this->currentStep);
     }
@@ -391,6 +401,12 @@ abstract class WizardFormSnippetAbstract extends \Zalt\Snippets\ModelFormSnippet
     protected function beforeDisplayFor($step)
     { }
 
+    protected function createForm(array $options = [])
+    {
+        return new \Gems\Form();
+    }
+    
+    
     /**
      * Creates from the model a \Zend_Form using createForm and adds elements
      * using addFormElements().
@@ -407,13 +423,18 @@ abstract class WizardFormSnippetAbstract extends \Zalt\Snippets\ModelFormSnippet
         $bridge = $model->getBridgeFor('form', $baseform);
 
         $this->_items = null;
-        $this->initItems();
+        $this->initItems($model->getMetaModel());
 
         $this->addFormElementsFor($bridge, $model, $step);
 
         return $baseform;
     }
 
+    public function getFormOutput(): mixed
+    {
+        return null;
+    }
+    
     /**
      * The number of steps in this form
      *
@@ -470,6 +491,11 @@ abstract class WizardFormSnippetAbstract extends \Zalt\Snippets\ModelFormSnippet
         return false;
     }
 
+    public function isSaveClicked(): bool
+    {
+        return $this->isFinishedClicked();
+    }
+
     /**
      * True when the user clicked the previous button
      *
@@ -507,11 +533,11 @@ abstract class WizardFormSnippetAbstract extends \Zalt\Snippets\ModelFormSnippet
 
         // Use Csrf when enabled
         if ($this->useCsrf) {
-            if ($this->_csrf) {
-                $this->_form->addElement($this->_csrf);
-            } else {
-                $this->addCsrf();
-            }
+//            if ($this->_csrf) {
+//                $this->_form->addElement($this->_csrf);
+//            } else {
+//                $this->addCsrf();
+//            }
         }
 
         $this->populateForm();
@@ -524,6 +550,11 @@ abstract class WizardFormSnippetAbstract extends \Zalt\Snippets\ModelFormSnippet
     public function onStartStep()
     {
         return $this->currentStep === $this->originalStep;
+    }
+
+    protected function populateForm()
+    {
+        // Not used
     }
 
     /**
@@ -555,7 +586,7 @@ abstract class WizardFormSnippetAbstract extends \Zalt\Snippets\ModelFormSnippet
                 $this->loadFormFor($this->currentStep - 1);
 
             } else {
-                if ($this->validateForm()) {
+                if ($this->validateForm($this->formData)) {
                     $this->afterFormValidationFor($this->currentStep);
 
                     if ($this->isNextClicked()) {
@@ -589,8 +620,6 @@ abstract class WizardFormSnippetAbstract extends \Zalt\Snippets\ModelFormSnippet
 
     /**
      * Set what to do when the form is 'finished' or 'cancelled'.
-     *
-     * @return \Zalt\Snippets\Standard\ModelImportSnippet
      */
     protected function setAfterSaveRoute()
     {
@@ -600,5 +629,10 @@ abstract class WizardFormSnippetAbstract extends \Zalt\Snippets\ModelFormSnippet
         if (! $this->afterSaveRouteUrl) {
             $this->afterSaveRouteUrl[$this->stepFieldName] = 1;
         }
+    }
+
+    protected function validateForm(array $formData): bool
+    {
+        // Not used
     }
 }

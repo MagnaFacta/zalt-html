@@ -98,7 +98,7 @@ class DetailTableBridge extends TableBridgeAbstract
                     $this->columnCounts = array_pad($this->columnCounts, $rowspan, $this->columnCount - $colCount);
                 }
 
-                // \MUtil\EchoOut\EchoOut::r($this->columnCounts);
+                // \\EchoOut\EchoOut::r($this->columnCounts);
             }
         }
     }
@@ -111,7 +111,7 @@ class DetailTableBridge extends TableBridgeAbstract
             //
             // First get the number of columns that should be in the current row
             if ($this->columnCounts) {
-                // \MUtil\EchoOut\EchoOut::r($this->columnCounts);
+                // \\EchoOut\EchoOut::r($this->columnCounts);
                 $maxColumns = reset($this->columnCounts);
             } else {
                 $maxColumns = $this->columnCount;
@@ -120,7 +120,7 @@ class DetailTableBridge extends TableBridgeAbstract
             // Now add new row if over column margin.
             //
             // Do this before the ROWSPAN is applied as that applies to future rows
-            // \MUtil\EchoOut\EchoOut::r((is_string($name) ? $name : 'array') . '-' . $this->currentColumn . '-' . $maxColumns);
+            // \\EchoOut\EchoOut::r((is_string($name) ? $name : 'array') . '-' . $this->currentColumn . '-' . $maxColumns);
             if ($this->currentColumn >= $maxColumns) {
                 $this->table->tr();
                 $this->currentColumn = 0;
@@ -164,7 +164,7 @@ class DetailTableBridge extends TableBridgeAbstract
             //
             // First get the number of columns that should be in the current row
             if ($this->columnCounts) {
-                // \MUtil\EchoOut\EchoOut::r($this->columnCounts);
+                // \\EchoOut\EchoOut::r($this->columnCounts);
                 $maxColumns = $this->columnCounts;
             } else {
                 $maxColumns = array($this->columnCount);

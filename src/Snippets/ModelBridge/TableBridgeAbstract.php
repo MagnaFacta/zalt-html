@@ -136,12 +136,12 @@ abstract class TableBridgeAbstract extends \Zalt\Model\Bridge\BridgeAbstract
     }
 
     /**
-     * Returns a formatted value or a lazy call to that function,
+     * Returns a formatted value or a late call to that function,
      * depending on the mode.
      *
      * @param string $name The field name or key name
      * @param mixed $label The label to display
-     * @return mixed Lazy unless in single row mode
+     * @return mixed Late unless in single row mode
      * @throws \Zalt\Model\Exceptions\MetaModelException
      */
     public function getHeaderFormatted(string $name, mixed $label): mixed
@@ -173,7 +173,7 @@ abstract class TableBridgeAbstract extends \Zalt\Model\Bridge\BridgeAbstract
     }
 
     /**
-     * Set the repeater source for the lazy data
+     * Set the repeater source for the late data
      *
      * @param mixed $repeater \Zalt\Late\RepeatableInterface or something that can be made into one.
      * @return BridgeInterface (continuation pattern)

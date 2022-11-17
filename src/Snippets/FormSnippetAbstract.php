@@ -351,7 +351,7 @@ abstract class FormSnippetAbstract extends MessageableSnippetAbstract
 
         // Use Csrf when enabled
         if ($this->useCsrf) {
-            $this->addCsrf();
+            $this->addCsrf($this->csrfId, $this->csrfTimeout);
         }
 
         if ($this->isPost()) {
@@ -399,7 +399,7 @@ abstract class FormSnippetAbstract extends MessageableSnippetAbstract
      * #param array $params Url items to set for this route
      * @return self (continuation pattern)
      */
-    protected function setAfterSaveRoute(array $params = array())
+    protected function setAfterSaveRoute()
     {
         $this->redirectRoute = $this->afterSaveRouteUrl;
 

@@ -13,6 +13,7 @@ namespace Zalt\Snippets\Standard;
 
 use Zalt\Late\Late;
 use Zalt\Late\Repeatable;
+use Zalt\Model\MetaModelInterface;
 
 /**
  * Generic import wizard.
@@ -905,7 +906,7 @@ class ModelImportSnippet extends \Zalt\Snippets\WizardFormSnippetAbstract
      *
      * @return boolean
      */
-    public function hasHtmlOutput()
+    public function hasHtmlOutput(): bool
     {
         return parent::hasHtmlOutput();
     }
@@ -913,9 +914,9 @@ class ModelImportSnippet extends \Zalt\Snippets\WizardFormSnippetAbstract
     /**
      * Initialize the _items variable to hold all items from the model
      */
-    protected function initItems()
+    protected function initItems(MetaModelInterface $metaModel)
     {
-        parent::initItems();
+        parent::initItems($metaModel);
 
         // Remove content as big text slab will slow things down and storage is locally in file
         $i = array_search('content', $this->_items);
@@ -929,7 +930,7 @@ class ModelImportSnippet extends \Zalt\Snippets\WizardFormSnippetAbstract
      *
      * Or from whatever other source you specify here.
      */
-    protected function loadFormData()
+    protected function loadFormData(): array
     {
         if ($this->isPost()) {
             $this->formData = $this->getRequestPostParams() + $this->formData;
@@ -964,6 +965,7 @@ class ModelImportSnippet extends \Zalt\Snippets\WizardFormSnippetAbstract
         }
 
         // \Zalt\EchoOut\EchoOut::track($_POST, $_FILES, $this->formData);
+        return $this->formData;
     }
 
     /**
@@ -1067,9 +1069,10 @@ class ModelImportSnippet extends \Zalt\Snippets\WizardFormSnippetAbstract
      *
      * @see afterSave()
      */
-    protected function saveData()
+    protected function saveData(): int
     {
         // do nothing, save occurs in batch
+        return 0;
     }
 
     /**

@@ -102,7 +102,7 @@ class TableSnippetAbstract extends \Zalt\Snippets\SnippetAbstract
      *
      * @return boolean
      */
-    public function hasHtmlOutput()
+    public function hasHtmlOutput(): bool
     {
         if (! $this->repeater) {
             $this->repeater = Late::repeat($this->data);

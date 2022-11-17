@@ -64,7 +64,7 @@ class ZendFormBridge extends \Zalt\Model\Bridge\FormBridgeAbstract
         if ($addValidators) {
             $this->_applyValidators($name, $element);
         }
-        // \MUtil\EchoOut\EchoOut::r($element->getOrder(), $element->getName());
+        // \\EchoOut\EchoOut::r($element->getOrder(), $element->getName());
 
         return $element;
     }
@@ -138,8 +138,8 @@ class ZendFormBridge extends \Zalt\Model\Bridge\FormBridgeAbstract
      * usage: $this->addDisplayGroup('mygroup', array('elements', array('element1', 'element2'), 'description', 'Pretty name for the group'));
      *
      * @param string $name Name of element
-     * @param array $elements or \MUtil\Ra::pairs() name => value array with 'elements' item in it
-     * @param mixed $arrayOrKey1 \MUtil\Ra::pairs() name => value array
+     * @param array $elements or \Zalt\Ra\Ra::pairs() name => value array with 'elements' item in it
+     * @param mixed $arrayOrKey1 \Zalt\Ra\Ra::pairs() name => value array
      * @return \Zend_Form_Displaygroup
      */
     public function addDisplayGroup($name, $elements, $arrayOrKey1 = null, $value1 = null, $key2 = null, $value2 = null)

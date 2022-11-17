@@ -21,7 +21,7 @@ class NowYouSeeMeSnippet extends SnippetAbstract
 {
     protected bool $visibility = false;
 
-    public function hasHtmlOutput() : bool
+    public function hasHtmlOutput(): bool
     {
         return $this->visibility;
     }

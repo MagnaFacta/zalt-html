@@ -96,7 +96,7 @@ class TableBridge extends TableBridgeAbstract
     /**
      *
      * @param \Zalt\Html\AElement $link Or anything else to put a the column
-     * @return \MUtil\MultiWrapper containing the column, header and footer cell
+     * @return \Zalt\Ra\MultiWrapper containing the column, header and footer cell
      */
     public function addItemLink(AElement $link)
     {
@@ -122,9 +122,9 @@ class TableBridge extends TableBridgeAbstract
      *
      * @param string $name
      * @param mixed $label
-     * @return \MUtil\Html\AElement
+     * @return \Zalt\Html\AElement
      */
-    public function createSortLink(string $name, $label = null)
+    public function createSortLink(string $name, $label = null): AElement
     {
         $name = $this->_checkName($name);
         

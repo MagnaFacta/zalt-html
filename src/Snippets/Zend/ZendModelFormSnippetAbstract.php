@@ -22,5 +22,4 @@ use Zalt\Snippets\ModelFormSnippetAbstract;
 abstract class ZendModelFormSnippetAbstract extends ModelFormSnippetAbstract
 {
     use ZendFormSnippetTrait;
-    
 }

@@ -159,7 +159,7 @@ class SequenceSnippet extends \Zalt\Snippets\SnippetAbstract
      *
      * @return boolean
      */
-    public function hasHtmlOutput()
+    public function hasHtmlOutput(): bool
     {
         while ((! $this->_html) && $this->_session->list) {
             $current  = reset($this->_session->list);

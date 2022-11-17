@@ -157,7 +157,7 @@ class AElement extends \Zalt\Html\HtmlElement
             if (! isset($args['title'])) {
                 $args['title'] = $email;
             }
-            $href = array('mailto:', $email);
+            $href = ['mailto:', $email];
         }
         if (! isset($args['onclick'])) {
             // Make sure the mail link only opens a mail window.

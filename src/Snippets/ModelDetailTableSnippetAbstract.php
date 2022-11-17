@@ -42,7 +42,7 @@ abstract class ModelDetailTableSnippetAbstract extends ModelSnippetAbstract
      *
      * @var int
      */
-    protected $bridgeMode = \Zalt\Model\Bridge\BridgeAbstract::MODE_LAZY;
+    protected $bridgeMode = BridgeInterface::MODE_LAZY;
 
     /**
      * Shortfix to add class attribute

@@ -157,7 +157,7 @@ abstract class ModelTableSnippetAbstract extends \Zalt\Snippets\ModelSnippetAbst
                 $bridge->setRepeater($paginator);
                 $this->addPaginator($bride->getTable(), $paginator);
             } elseif ($this->bridgeMode === \MUtil\Model\Bridge\BridgeAbstract::MODE_LAZY) {
-                // file_put_contents('data/logs/echo.txt', __FUNCTION__ . '(' . __LINE__ . '): ' . "LAZY\n", FILE_APPEND);
+                // file_put_contents('data/logs/echo.txt', __FUNCTION__ . '(' . __LINE__ . '): ' . "LATE\n", FILE_APPEND);
                 $bridge->setRepeater($dataModel->loadRepeatable());
             } elseif ($this->bridgeMode === \MUtil\Model\Bridge\BridgeAbstract::MODE_SINGLE_ROW) {
                 $bridge->setRow($dataModel->loadFirst());

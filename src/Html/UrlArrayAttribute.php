@@ -68,11 +68,7 @@ class UrlArrayAttribute extends ArrayAttribute
         foreach (Html::getRenderer()->renderArray($url, false) as $key => $value) {
             if (strlen($value)) {
                 if (is_int($key)) {
-                    if ($urlString) {
-                        $urlString .= '/' . trim($value, '/');
-                    } else {
-                        $urlString = rtrim($value, '/');
-                    }
+                    $urlString .= $value;
                 } elseif ($key) {
                     // Prevent double escaping by using rawurlencode() instead
                     // of urlencode()
@@ -80,12 +76,20 @@ class UrlArrayAttribute extends ArrayAttribute
                 }
             }
         }
+        if (str_contains($urlString, '//')) {
+            $urlString = preg_replace('!([^:])//!', '\1/', $urlString);
+        }
+        $urlString = rtrim($urlString, '/');
 
         if ($urlParameters) {
             foreach ($urlParameters as $key => $value) {
                 $params[] = $key . '=' . $value;
             }
-            return $urlString . '?' . implode('&', $params);
+            if (str_contains($urlString, '?')) {
+                return $urlString . '&' . implode('&', $params);
+            } else {
+                return $urlString . '?' . implode('&', $params);
+            }
         } else {
             return $urlString;
         }

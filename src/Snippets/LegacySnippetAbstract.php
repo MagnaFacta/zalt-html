@@ -173,7 +173,7 @@ abstract class LegacySnippetAbstract extends \Zalt\Translate\TranslateableAbstra
      *
      * @return boolean
      */
-    public function hasHtmlOutput()
+    public function hasHtmlOutput(): bool 
     {
         return true;
     }

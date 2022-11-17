@@ -58,7 +58,7 @@ abstract class EmptySnippetAbstract extends \Zalt\Registry\TargetAbstract
      *
      * @return boolean
      */
-    public function hasHtmlOutput()
+    public function hasHtmlOutput(): bool
     {
         return false;
     }

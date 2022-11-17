@@ -52,22 +52,23 @@ class UrlAttributeTest extends \PHPUnit\Framework\TestCase
     public function urlGenerationProvider()
     {
         return [
-            [['http://localhost', 'dump'], 'http://localhost/dump'],
-            [['dump', 'http://localhost/'], 'dump/http://localhost'],
+            [['http://localhost/', 'dump'], 'http://localhost/dump'],
+            [['dump', 'http://localhost/'], 'dumphttp://localhost'],
             [['dump/', '/more'], 'dump/more'],
-            [['/dump', 'more'], '/dump/more'],
-            [['use', 'param', 'value' => 'pair'], 'use/param?value=pair'],
+            [['/dump', 'more'], '/dumpmore'],
+            [['use', '/param', 'value' => 'pair'], 'use/param?value=pair'],
             [['use', 'multiple' => 'param', 'value' => 'pairs'], 'use?multiple=param&value=pairs'],
-            [['use', 'multiple' => 'param', 'with', 'everything', 'value' => 'pairs', 'mixed'], 'use/with/everything/mixed?multiple=param&value=pairs'],
+            [['use', 'multiple' => 'param', 'with', 'everything', 'value' => 'pairs', '/mixed'], 'usewitheverything/mixed?multiple=param&value=pairs'],
             [['just' => 'use', 'multiple' => 'param', 'value' => 'pairs'], '?just=use&multiple=param&value=pairs'],
             [['escape', 'param' => 'values', 'with' => '&>'], 'escape?param=values&with=%26amp%3B%26gt%3B'],
             [['/but', 'do' => 'not', 'show' => 'empty', 'values' => ''], '/but?do=not&show=empty'],
             [['/and', 'do' => 'not', 'show' => 'null', 'values' => null], '/and?do=not&show=null'],
             [['/but', 'do' => 'always', 'show' => 'zero', 'values' => 0], '/but?do=always&show=zero&values=0'],
-            [['/also', '', 'ignore', null, 'all', 'empty', 'stringparts'], '/also/ignore/all/empty/stringparts'],
-            [['/also', '', 'ignore', null, 'all', 'empty', 'stringparts', false, 'except', 0], '/also/ignore/all/empty/stringparts/except/0'],
+            [['/also', '', 'ignore/', null, 'all', '/empty/', 'stringparts'], '/alsoignore/all/empty/stringparts'],
+            [['/also/', '', '/ignore/', null, 'all', '/empty/', 'stringparts/', false, '/except/', 0], '/also/ignore/all/empty/stringparts/except/0'],
             [['/and', '' => 'don\'t', 'ignore' => 'any', 'empty' => 'keys'], '/and?ignore=any&empty=keys'],
-            [[1 => '/but', 0 => 'dont', 'ignore' => 'any', 'zero' => 'keys'], '/but/dont?ignore=any&zero=keys'],
+            [[1 => '/but/', 0 => 'dont', 'ignore' => 'any', 'zero' => 'keys'], '/but/dont?ignore=any&zero=keys'],
+            [[1 => '/but/', 0 => 'use?ampersand=when', 'already' => 'qustionmark', 'was' => 'used'], '/but/use?ampersand=when&already=qustionmark&was=used'],
             ];
     }
 }

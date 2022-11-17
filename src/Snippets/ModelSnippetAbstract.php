@@ -41,7 +41,7 @@ abstract class ModelSnippetAbstract extends TranslatableSnippetAbstract
      *
      * @return boolean
      */
-    public function hasHtmlOutput() : bool
+    public function hasHtmlOutput(): bool
     {
         return (boolean) $this->getModel();
     }

@@ -41,17 +41,6 @@ trait ZendFormSnippetTrait
 
     /**
      * As it is better for translation utilities to set the labels etc. translated,
-     * the \Zalt default is to disable translation.
-     *
-     * However, this also disables the translation of validation messages, which we
-     * cannot set translated. The \Zalt form is extended so it can make this switch.
-     *
-     * @var boolean True
-     * /
-    protected $disableValidatorTranslation = false;
-
-    /**
-     * As it is better for translation utilities to set the labels etc. translated,
      * the \MUtil default is to disable translation.
      *
      * However, this also disables the translation of validation messages, which we
@@ -158,6 +147,7 @@ trait ZendFormSnippetTrait
     protected function createForm(array $options = [])
     {
         $this->_form = new \MUtil\Form($options);
+        file_put_contents('data/logs/echo.txt', __CLASS__ . '->' . __FUNCTION__ . '(' . __LINE__ . '): ' .  get_class($this->_form) . "\n", FILE_APPEND);
 
         return $this->_form;
     }
