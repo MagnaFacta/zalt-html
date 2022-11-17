@@ -177,11 +177,6 @@ trait ModelSnippetTrait
     protected function getModel() : DataReaderInterface
     {
         if (! $this->_dataModel) {
-            \MUtil\Model::setDefaultBridge('display', \Zalt\Model\Bridge\DisplayBridge::class);
-            \MUtil\Model::setDefaultBridge('form', \Zalt\Snippets\ModelBridge\ZendFormBridge::class);
-            \MUtil\Model::setDefaultBridge('itemTable', \Zalt\Snippets\ModelBridge\DetailTableBridge::class);
-            \MUtil\Model::setDefaultBridge('table', \Zalt\Snippets\ModelBridge\TableBridge::class);
-
             $this->_dataModel = $this->createModel();
 
             $this->prepareModel($this->_dataModel);
