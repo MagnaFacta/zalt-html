@@ -23,7 +23,7 @@ use Zalt\Html\Html;
  * @license    New BSD License
  * @since      Class available since version 1.1
  */
-abstract class TabSnippetAbstract extends \Zalt\Snippets\SnippetAbstract
+abstract class TabSnippetAbstract extends \Zalt\Snippets\TranslatableSnippetAbstract
 {
     /**
      * Optional standard url parts
@@ -64,11 +64,6 @@ abstract class TabSnippetAbstract extends \Zalt\Snippets\SnippetAbstract
      * @var array
      */
     protected $href = array();
-
-    /**
-     * @var \Zalt\Request\RequestInfo
-     */
-    protected ?\Zalt\Request\RequestInfo $requestInfo = null;
 
     /**
      *
@@ -112,15 +107,7 @@ abstract class TabSnippetAbstract extends \Zalt\Snippets\SnippetAbstract
         return $this->currentTab;
     }
 
-    /**
-     * Create the snippets content
-     *
-     * This is a stub function either override getHtmlOutput() or override render()
-     *
-     * @param \Zend_View_Abstract $view Just in case it is needed here
-     * @return \Zalt\Html\HtmlInterface Something that can be rendered
-     */
-    public function getHtmlOutput(\Zend_View_Abstract $view)
+    public function getHtmlOutput()
     {
         $tabs = $this->getTabs();
 

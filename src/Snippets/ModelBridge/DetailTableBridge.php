@@ -145,6 +145,10 @@ class DetailTableBridge extends TableBridgeAbstract
 
         $this->_checkColumnNewRow();
 
+        if (null === $label) {
+            $label = $this->metaModel->get($name, 'label');
+        }
+        
         $labelContent = $this->getHeaderFormatted($name, $label);
         if ($this->labelTh) {
             $this->table->tdh($labelContent, $hattr);
@@ -153,6 +157,19 @@ class DetailTableBridge extends TableBridgeAbstract
         }
 
         $this->table->td($this->$name, $attr);
+
+        $this->_checkColumnAdded($attr);
+    }
+
+    public function addOther(mixed $object, mixed $label, array $attr = [])
+    {
+        if ($this->labelTh) {
+            $this->table->tdh($label, $attr);
+        } else {
+            $this->table->td($label, $attr);
+        }
+
+        $this->table->td($object, $attr);
 
         $this->_checkColumnAdded($attr);
     }

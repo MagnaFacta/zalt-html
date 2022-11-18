@@ -26,9 +26,10 @@ class TranslatableSnippetAbstract extends SnippetAbstract
 {
     use TranslateableTrait;
 
-    public function __construct(SnippetOptions $snippetOptions,
-                                protected RequestInfo $requestInfo, 
-                                TranslatorInterface $translate)
+    public function __construct(
+        SnippetOptions $snippetOptions,
+        protected RequestInfo $requestInfo, 
+        TranslatorInterface $translate)
     {
         // We're setting trait variables so no constructor promotion
         $this->translate   = $translate;

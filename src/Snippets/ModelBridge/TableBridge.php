@@ -107,6 +107,43 @@ class TableBridge extends TableBridgeAbstract
         return new MultiWrapper($tds);
     }
 
+    public function addMultiSort(...$args)
+    {
+        $headers = null;
+        $content = null;
+
+        foreach ($args as $name) {
+            if (is_string($name)) {
+                $name = $this->_checkName($name);
+
+                $headers[] = $this->getHeaderFormatted($name, $this->metaModel->get($name, 'label'));
+                $content[] = $this->$name;
+
+            } elseif (is_array($name)) {
+                if ($c = array_shift($name)) {
+                    $content[] = $c;
+                }
+                if ($h = array_shift($name)) {
+                    $headers[] = $h;
+                }
+                if ($cc = array_shift($name)) { // Content class
+                    $content[] = $cc;
+                }
+                if ($hc = array_shift($name)) {
+                    $headers[] = $hc;
+                } elseif ($cc) {
+                    $headers[] = $cc;
+                }
+
+            } else {
+                $headers[] = $name;
+                $content[] = $name;
+            }
+        }
+
+        return $this->table->addColumn($content, $headers);
+    }
+
     public function addSortable(string $name, ?string $label = null, mixed $tdClass = '', mixed $thClass = '')
     {
         $name = $this->_checkName($name);
@@ -133,7 +170,7 @@ class TableBridge extends TableBridgeAbstract
         }
 
         if (! $label) {
-            $label = $this->metaModel->get($name, $label);
+            $label = $this->metaModel->get($name, 'label');
         }
         $label = $this->getHeaderFormatted($name, $label);
 
