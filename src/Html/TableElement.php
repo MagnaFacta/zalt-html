@@ -109,7 +109,7 @@ class TableElement extends HtmlElement
      *
      * @var string|array A string or array of string values of the allowed element tags.
      */
-    protected $_allowedChildTags = array(self::CAPTION, self::COLGROUPS, self::TBODY, self::TFOOT, self::THEAD);
+    protected $_allowedChildTags = array(self::CAPTION, self::COLGROUPS, self::TFOOT, self::THEAD);
 
     /**
      * Always end with a new line. Makes the html code better readable

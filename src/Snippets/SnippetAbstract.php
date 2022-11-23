@@ -142,10 +142,7 @@ abstract class SnippetAbstract implements SnippetInterface
      */
     public function render()
     {
-        if ($this->getRedirectRoute()) {
-            $this->redirectRoute();
-
-        } else {
+        if (! $this->getRedirectRoute()) {
             $html = $this->getHtmlOutput();
 
             if ($html) {

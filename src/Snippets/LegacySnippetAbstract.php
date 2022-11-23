@@ -86,26 +86,6 @@ abstract class LegacySnippetAbstract extends \Zalt\Translate\TranslateableAbstra
     }
 
     /**
-     * Applies the $this=>attributes and $this->class snippet parameters to the
-     * $html element.
-     *
-     * @param \Zalt\Html\HtmlElement $html Element to apply the snippet parameters to.
-     */
-    protected function applyHtmlAttributes(\Zalt\Html\HtmlElement $html)
-    {
-        if ($this->attributes) {
-            foreach ($this->attributes as $name => $value) {
-                if (! is_numeric($name)) {
-                    $html->appendAttrib($name, $value);
-                }
-            }
-        }
-        if ($this->class) {
-            $html->appendAttrib('class', $this->class);
-        }
-    }
-
-    /**
      * Create the snippets content
      *
      * This is a stub function either override getHtmlOutput() or override render()

@@ -11,9 +11,12 @@ declare(strict_types=1);
 
 namespace Zalt\Snippets\ModelBridge;
 
+use Zalt\Html\Html;
+use Zalt\Html\HtmlInterface;
 use Zalt\Late\Late;
 use Zalt\Model\Bridge\BridgeInterface;
 use Zalt\Model\Data\DataReaderInterface;
+use Zalt\Ra\Ra;
 
 /**
  *
@@ -47,18 +50,18 @@ abstract class TableBridgeAbstract extends \Zalt\Model\Bridge\BridgeAbstract
         return call_user_func_array(array($this->table, $name), $arguments);
     }
 
-    public function __construct(DataReaderInterface $dataModel, $elementArgs = null)
+    public function __construct(DataReaderInterface $dataModel, ...$args)
     {
         parent::__construct($dataModel);
 
         $this->_chainedBridge = $this->metaModel->getBridgeFor('display');
         
-        if ($elementArgs instanceof \Zalt\Html\ElementInterface) {
-            $this->table = $elementArgs;
+        // Remove empty cell in tables, the loader adds a 0 => null to the array
+        $args = array_filter($args);
+        if (isset($args[0]) && $args[0] instanceof ElementInterface) {
+            $this->table = $args[0];
         } else {
-            $args = \Zalt\Ra\Ra::args(func_get_args(), 1);
-
-            $this->table = \Zalt\Html\Html::table($args);
+            $this->table = Html::table(...$args);
         }
     }
 
@@ -87,7 +90,7 @@ abstract class TableBridgeAbstract extends \Zalt\Model\Bridge\BridgeAbstract
         }
 
         if (is_object($function)) {
-            if (($function instanceof \Zalt\Html\ElementInterface)
+            if (($function instanceof ElementInterface)
                 || method_exists($function, 'append')) {
                 return [clone $function, 'append'];
             }
@@ -95,7 +98,7 @@ abstract class TableBridgeAbstract extends \Zalt\Model\Bridge\BridgeAbstract
 
         // Assume it is a html tag when a string
         if (is_string($function)) {
-            return [\Zalt\Html\Html::create($function), 'append'];
+            return [Html::create($function), 'append'];
         }
 
         return $function;
