@@ -26,7 +26,7 @@ use Zalt\Base\RequestInfo;
 abstract class FormSnippetAbstract extends MessageableSnippetAbstract
 {
     /**
-     * @var ?string Nothing or an url string
+     * @var string Nothing or an url string to be used when we have saved successfully
      */
     protected string $afterSaveRouteUrl = '';
 
@@ -74,7 +74,7 @@ abstract class FormSnippetAbstract extends MessageableSnippetAbstract
      *
      * @var array
      */
-    protected $formData = array();
+    protected $formData = [];
 
     /**
      * @var string The actual redirect route to use
@@ -86,22 +86,6 @@ abstract class FormSnippetAbstract extends MessageableSnippetAbstract
      * @var string class attribute for labels
      */
     protected $labelClass = 'label';
-
-    /**
-     * The name of the action to forward to after form completion
-     *
-     * @var string
-     */
-    protected $routeAction = 'index';
-
-    /**
-     * The name of the controller to forward to after form completion
-     *
-     * When empty the current controller is used
-     *
-     * @var string
-     */
-    protected $routeController;
 
     /**
      * The form Id used for the save button
@@ -395,15 +379,10 @@ abstract class FormSnippetAbstract extends MessageableSnippetAbstract
 
     /**
      * Set what to do when the form is 'finished'.
-     *
-     * #param array $params Url items to set for this route
-     * @return self (continuation pattern)
      */
     protected function setAfterSaveRoute()
     {
         $this->redirectRoute = $this->afterSaveRouteUrl;
-
-        return $this;
     }
 
     /**
