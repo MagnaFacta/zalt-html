@@ -159,9 +159,9 @@ class TableBridge extends TableBridgeAbstract
      *
      * @param string $name
      * @param mixed $label
-     * @return \Zalt\Html\AElement
+     * @return \Zalt\Html\AElement|string
      */
-    public function createSortLink(string $name, $label = null): AElement
+    public function createSortLink(string $name, $label = null): AElement|string
     {
         $name = $this->_checkName($name);
         
