@@ -30,18 +30,22 @@ use Zalt\Message\MezzioFlashMessenger;
  */
 class SnippetMiddleware implements MiddlewareInterface
 {
+    protected RequestInfo $requestInfo;
+    
     public function __construct(
-        private SnippetLoader $snippetLoader
+        protected SnippetLoader $snippetLoader
     ) {
     }
 
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
-        $this->snippetLoader->addConstructorVariable(
-            RequestInfo::class, 
-            RequestInfoFactory::getMezzioRequestInfo($request)
-        );
+        // Check in case already set
+        if (! $this->requestInfo instanceof RequestInfo) {
+            $this->requestInfo = RequestInfoFactory::getMezzioRequestInfo($request);
+        }
+        
+        $this->snippetLoader->addConstructorVariable(RequestInfo::class, $this->requestInfo);
         
         $flash = $request->getAttribute(FlashMessageMiddleware::FLASH_ATTRIBUTE);
         if ($flash instanceof FlashMessagesInterface) {

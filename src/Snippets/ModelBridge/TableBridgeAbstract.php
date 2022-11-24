@@ -55,8 +55,10 @@ abstract class TableBridgeAbstract extends \Zalt\Model\Bridge\BridgeAbstract
         parent::__construct($dataModel);
 
         $this->_chainedBridge = $this->metaModel->getBridgeFor('display');
-        
-        // Remove empty cell in tables, the loader adds a 0 => null to the array
+
+        // Remove empty cell in tables, as something adds set the array to [0 => null]
+        // I have spent two hours trying to find the cause and even tried to reproduce
+        // it in basic code. I give up.  -- Matijs 
         $args = array_filter($args);
         if (isset($args[0]) && $args[0] instanceof ElementInterface) {
             $this->table = $args[0];
