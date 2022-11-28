@@ -34,6 +34,11 @@ use Zalt\SnippetsLoader\SnippetOptions;
 abstract class SnippetAbstract implements SnippetInterface
 {
     /**
+     * @var bool Prevent double attribute applying
+     */
+    private bool $_applyAttributes = true;
+    
+    /**
      * Attributes (e.g. class) for the main html element
      *
      * @var array
@@ -71,6 +76,7 @@ abstract class SnippetAbstract implements SnippetInterface
         if ($this->class) {
             $html->appendAttrib('class', $this->class);
         }
+        $this->_applyAttributes = false;
     }
 
     /**
@@ -147,7 +153,7 @@ abstract class SnippetAbstract implements SnippetInterface
 
             if ($html) {
                 if ($html instanceof HtmlInterface) {
-                    if ($html instanceof HtmlElement) {
+                    if ($this->_applyAttributes && ($html instanceof HtmlElement)) {
                         $this->applyHtmlAttributes($html);
                     }
                     return $html->render();

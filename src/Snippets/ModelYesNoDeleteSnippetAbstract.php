@@ -12,6 +12,7 @@
 
 namespace Zalt\Snippets;
 
+use Zalt\Html\Html;
 use Zalt\Model\Data\DataReaderInterface;
 use Zalt\Snippets\ModelBridge\DetailTableBridge;
 
@@ -103,6 +104,41 @@ abstract class ModelYesNoDeleteSnippetAbstract extends ModelDetailTableSnippetAb
      * @var ?string Optional
      */
     protected ?string $deleteQuestion;
+
+    /**
+     * @return mixed|null|\Zalt\Html\HtmlElement
+     * /
+    public function getHtmlOutput()
+    {
+        if (isset($this->buttonClass)) {
+            if (! $this->buttonNoClass) {
+                $this->buttonNoClass = $this->buttonClass;
+            }
+            if (! $this->buttonYesClass) {
+                $this->buttonYesClass = $this->buttonClass;
+            }
+        }
+
+        $footer = Html::div();
+        $startUrl = $this->requestInfo->getBasePath();
+
+        $footer[] = $this->getQuestion();
+        $footer[] = ' ';
+        $footer->a(
+            [$startUrl, $this->confirmParameter => 1],
+            $this->_('Yes'),
+            ['class' => $this->buttonYesClass]
+        );
+        if ($this->abortUrl) {
+            $footer[] = ' ';
+            $footer->a(
+                [$this->abortUrl],
+                $this->_('No'),
+                ['class' => $this->buttonNoClass]
+            );
+        }
+        return $footer;
+    }
 
     /**
      * The delete question.

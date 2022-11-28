@@ -65,33 +65,38 @@ class UrlArrayAttribute extends ArrayAttribute
         $urlString = '';
         $urlParameters = array();
 
-        foreach (Html::getRenderer()->renderArray($url, false) as $key => $value) {
-            if (strlen($value)) {
-                if (is_int($key)) {
-                    $urlString .= $value;
-                } elseif ($key) {
-                    // Prevent double escaping by using rawurlencode() instead
-                    // of urlencode()
-                    $urlParameters[$key] = rawurlencode($value);
+        try {
+            foreach (Html::getRenderer()->renderArray($url, false) as $key => $value) {
+                if (strlen($value)) {
+                    if (is_int($key)) {
+                        $urlString .= $value;
+                    } elseif ($key) {
+                        // Prevent double escaping by using rawurlencode() instead
+                        // of urlencode()
+                        $urlParameters[$key] = rawurlencode($value);
+                    }
                 }
             }
-        }
-        if (str_contains($urlString, '//')) {
-            $urlString = preg_replace('!([^:])//!', '\1/', $urlString);
-        }
-        $urlString = rtrim($urlString, '/');
+            if (str_contains($urlString, '//')) {
+                $urlString = preg_replace('!([^:])//!', '\1/', $urlString);
+            }
+            $urlString = rtrim($urlString, '/');
 
-        if ($urlParameters) {
-            foreach ($urlParameters as $key => $value) {
-                $params[] = $key . '=' . $value;
-            }
-            if (str_contains($urlString, '?')) {
-                return $urlString . '&' . implode('&', $params);
+            if ($urlParameters) {
+                foreach ($urlParameters as $key => $value) {
+                    $params[] = $key . '=' . $value;
+                }
+                if (str_contains($urlString, '?')) {
+                    return $urlString . '&' . implode('&', $params);
+                } else {
+                    return $urlString . '?' . implode('&', $params);
+                }
             } else {
-                return $urlString . '?' . implode('&', $params);
+                return $urlString;
             }
-        } else {
-            return $urlString;
+        } catch (\Throwable $exception) {
+            return $exception->getMessage();
         }
+        
     }
 }

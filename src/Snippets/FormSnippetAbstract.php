@@ -13,6 +13,7 @@ namespace Zalt\Snippets;
 
 use Psr\Cache\CacheItemPoolInterface;
 use Zalt\Base\RequestInfo;
+use Zalt\Late\Late;
 
 /**
  *
@@ -145,6 +146,8 @@ abstract class FormSnippetAbstract extends MessageableSnippetAbstract
      */
     protected function afterSave($changed)
     {
+        Late::addStack('post', $this->formData);
+        
         if ($changed) {
             // Clean cache on changes
             if ($this->cacheTags && ($this->cache instanceof CacheItemPoolInterface)) {
@@ -325,7 +328,8 @@ abstract class FormSnippetAbstract extends MessageableSnippetAbstract
     protected function processForm()
     {
         // Make sure there is $this->formData
-        $this->loadFormData();
+        $data = $this->loadFormData();
+        Late::addStack('post', $data);
 
         // Make sure there is a from
         $this->loadForm();

@@ -38,13 +38,6 @@ abstract class ModelTableSnippetAbstract extends \Zalt\Snippets\ModelSnippetAbst
     protected $_marker;
 
     /**
-     * Url parts added to each link in the resulting table
-     *
-     * @var array
-     */
-    public $baseUrl;
-
-    /**
      * One of the \MUtil\Model\Bridge\BridgeAbstract MODE constants
      *
      * @var int
@@ -190,9 +183,6 @@ abstract class ModelTableSnippetAbstract extends \Zalt\Snippets\ModelSnippetAbst
         } else {
             $bridge->getOnEmpty()->raw('&hellip;');
         }
-        if ($this->baseUrl) {
-            $bridge->setBaseUrl($this->baseUrl);
-        }
 
         $this->addBrowseTableColumns($bridge, $dataModel);
         $this->ensureRepeater($bridge, $dataModel);
@@ -246,8 +236,8 @@ abstract class ModelTableSnippetAbstract extends \Zalt\Snippets\ModelSnippetAbst
 
     public function prepareBridge(TableBridge $bridge)
     {
-        $bridge->currentUrl = $this->requestInfo->getBasePath();
-        $bridge->sortAscParam = $this->sortParamAsc;
+        $bridge->currentUrl    = $this->requestInfo->getBasePath();
+        $bridge->sortAscParam  = $this->sortParamAsc;
         $bridge->sortDescParam = $this->sortParamDesc;
     }
     
