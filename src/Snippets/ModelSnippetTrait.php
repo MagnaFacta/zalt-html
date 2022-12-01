@@ -194,7 +194,7 @@ trait ModelSnippetTrait
     {
         $metaModel = $dataModel->getMetaModel();
 
-        $dataModel->addFilter($this->getFilter($metaModel));
-        $dataModel->addSort($this->getSort($metaModel));
+        $dataModel->setFilter($this->getFilter($metaModel));
+        $dataModel->setSort($this->getSort($metaModel));
     }
 }
