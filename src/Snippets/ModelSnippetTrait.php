@@ -93,7 +93,7 @@ trait ModelSnippetTrait
 
     protected function cleanUpFilter(array $filter, MetaModelInterface $metaModel)
     {
-        // Change key filters to to field name filters 
+        // Change key filters to to field name filters
         $keys = $metaModel->getKeys();
         foreach ($keys as $key => $field) {
             if (isset($filter[$key])) {
@@ -124,7 +124,7 @@ trait ModelSnippetTrait
 
     public function getRequestFilter(MetaModelInterface $metaModel) : array
     {
-        $filter = $this->requestInfo->getParams();
+        $filter = $this->requestInfo->getRequestMatchedParams() + $this->requestInfo->getRequestQueryParams();
 
         // Remove sort parameters
         unset($filter[$this->sortParamAsc], $filter[$this->sortParamDesc]);
@@ -194,7 +194,7 @@ trait ModelSnippetTrait
     {
         $metaModel = $dataModel->getMetaModel();
 
-        $dataModel->setFilter($this->getFilter($metaModel));
-        $dataModel->setSort($this->getSort($metaModel));
+        $dataModel->addFilter($this->getFilter($metaModel));
+        $dataModel->addSort($this->getSort($metaModel));
     }
 }
