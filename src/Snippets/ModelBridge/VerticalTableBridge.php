@@ -9,10 +9,9 @@
  * @license    New BSD License
  */
 
-namespace Zalt\Snippet\ModelBridge;
+namespace Zalt\Snippets\ModelBridge;
 
 use Zalt\Late\Late;
-use Zalt\Snippets\ModelBridge\TableBridgeAbstract;
 
 /**
  *
@@ -22,17 +21,17 @@ use Zalt\Snippets\ModelBridge\TableBridgeAbstract;
  * @license    New BSD License
  * @since      Class available since version 1.0
  */
-class VerticalTableBridge extends TableBridgeAbstract
+class VerticalTableBridge extends DetailTableBridge
 {
-    protected int $columnCount   = 1;
-    protected array $columnCounts  = [];
-    protected int $currentColumn = 0;
+    protected $columnCount   = 1;
+    protected $columnCounts  = [];
+    protected $currentColumn = 0;
 
     /**
      *
      * @var boolean True if th's should be used for label class.
      */
-    protected bool $labelTh = true;
+    protected $labelTh = true;
 
     private function _checkAttributesFor($name, array $attr)
     {
