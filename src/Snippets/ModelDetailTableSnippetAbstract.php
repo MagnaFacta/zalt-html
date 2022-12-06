@@ -44,6 +44,8 @@ abstract class ModelDetailTableSnippetAbstract extends ModelSnippetAbstract
      */
     protected $bridgeMode = BridgeInterface::MODE_LAZY;
 
+    protected mixed $onEmpty = null;
+
     /**
      * Shortfix to add class attribute
      *
@@ -150,6 +152,9 @@ abstract class ModelDetailTableSnippetAbstract extends ModelSnippetAbstract
 
         if (! $bridge->hasRepeater()) {
             $bridge->setRepeater($this->getRepeater($dataModel));
+        }
+        if ($this->onEmpty) {
+            $bridge->getTable()->setOnEmpty($this->onEmpty);
         }
 
         return $bridge->getTable();
