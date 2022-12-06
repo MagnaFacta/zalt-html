@@ -40,7 +40,7 @@ abstract class ModelFormSnippetAbstract extends FormSnippetAbstract
     
     /**
      * Output only those elements actually used by the form.
-     *
+     *  
      * When false all fields without a label or elementClass are hidden,
      * when true those are left out, unless they happend to be a key field or
      * needed for a dependency.

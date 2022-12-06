@@ -91,7 +91,7 @@ trait ModelSnippetTrait
      */
     abstract protected function createModel() : DataReaderInterface;
 
-    protected function cleanUpFilter(array $filter, MetaModelInterface $metaModel)
+    protected function cleanUpFilter(array $filter, MetaModelInterface $metaModel): array
     {
         // Change key filters to to field name filters
         $keys = $metaModel->getKeys();
