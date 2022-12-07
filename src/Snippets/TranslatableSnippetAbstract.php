@@ -28,12 +28,12 @@ class TranslatableSnippetAbstract extends SnippetAbstract
 
     public function __construct(
         SnippetOptions $snippetOptions,
-        protected RequestInfo $requestInfo, 
+        RequestInfo $requestInfo, 
         TranslatorInterface $translate)
     {
         // We're setting trait variables so no constructor promotion
         $this->translate   = $translate;
 
-        parent::__construct($snippetOptions, $this->requestInfo);
+        parent::__construct($snippetOptions, $requestInfo);
     }
 }
