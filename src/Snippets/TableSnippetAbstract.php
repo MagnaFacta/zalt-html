@@ -11,6 +11,10 @@
 
 namespace Zalt\Snippets;
 
+use Zalt\Html\Html;
+use Zalt\Html\TableElement;
+use Zalt\Late\Late;
+
 /**
  * Outputs the data supplied through the $data or $repeater parameter
  * in a simple standard Html table.
@@ -21,7 +25,7 @@ namespace Zalt\Snippets;
  * @license    New BSD License
  * @since      Class available since version 1.1
  */
-class TableSnippetAbstract extends \Zalt\Snippets\SnippetAbstract
+class TableSnippetAbstract extends TranslatableSnippetAbstract
 {
     /**
      * Optional, instead of repeater array containing the data to show
@@ -49,7 +53,7 @@ class TableSnippetAbstract extends \Zalt\Snippets\SnippetAbstract
      *
      * @param \Zalt\Html\TableElement $table
      */
-    protected function addColumns(\Zalt\Html\TableElement $table)
+    protected function addColumns(TableElement $table)
     {
         if ($this->data) {
             $row = reset($this->data);
@@ -72,7 +76,7 @@ class TableSnippetAbstract extends \Zalt\Snippets\SnippetAbstract
      */
     public function getHtmlOutput()
     {
-        $table = new \Zalt\Html\TableElement($this->repeater);
+        $table = new TableElement($this->repeater);
 
         if ($this->onEmpty) {
             $table->setOnEmpty($this->onEmpty);

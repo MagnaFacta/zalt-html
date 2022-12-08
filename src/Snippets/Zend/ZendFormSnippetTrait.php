@@ -147,7 +147,6 @@ trait ZendFormSnippetTrait
     protected function createForm(array $options = [])
     {
         $this->_form = new \MUtil\Form($options);
-        file_put_contents('data/logs/echo.txt', __CLASS__ . '->' . __FUNCTION__ . '(' . __LINE__ . '): ' .  get_class($this->_form) . "\n", FILE_APPEND);
 
         return $this->_form;
     }
