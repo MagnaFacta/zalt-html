@@ -92,9 +92,12 @@ abstract class TableBridgeAbstract extends \Zalt\Model\Bridge\BridgeAbstract
         }
 
         if (is_object($function)) {
-            if (($function instanceof ElementInterface)
-                || method_exists($function, 'append')) {
-                return [clone $function, 'append'];
+            if (($function instanceof ElementInterface) || method_exists($function, 'append')) {
+                return function ($value) use ($function) {
+                    $clone = clone $function;
+                    $clone->append($value);
+                    return $clone;
+                };
             }
         }
 
