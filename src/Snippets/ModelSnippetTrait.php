@@ -93,10 +93,10 @@ trait ModelSnippetTrait
 
     protected function cleanUpFilter(array $filter, MetaModelInterface $metaModel): array
     {
-        // Change key filters to to field name filters
+        // Change key filters to field name filters
         $keys = $metaModel->getKeys();
         foreach ($keys as $key => $field) {
-            if (isset($filter[$key])) {
+            if (isset($filter[$key]) && $key !== $field) {
                 $filter[$field] = $filter[$key];
                 unset($filter[$key]);
             }
