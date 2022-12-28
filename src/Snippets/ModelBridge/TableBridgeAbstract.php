@@ -54,7 +54,7 @@ abstract class TableBridgeAbstract extends \Zalt\Model\Bridge\BridgeAbstract
     {
         parent::__construct($dataModel);
 
-        $this->_chainedBridge = $this->metaModel->getBridgeFor('display');
+        $this->_chainedBridge = $this->dataModel->getBridgeFor('display');
 
         // Remove empty cell in tables, as something adds set the array to [0 => null]
         // I have spent two hours trying to find the cause and even tried to reproduce
@@ -191,19 +191,6 @@ abstract class TableBridgeAbstract extends \Zalt\Model\Bridge\BridgeAbstract
         parent::setRepeater($repeater);
 
         $this->table->setRepeater($this->_repeater);
-
-        return $this;
-    }
-
-    public function setSortData(DataReaderInterface $model): TableBridgeAbstract
-    {
-        $sort = $model->getSort();
-
-        $this->sortAscParam  = $model->getSortParamAsc();
-        $this->sortDescParam = $model->getSortParamDesc();
-
-        $this->sortAsc = reset($sort) !== SORT_DESC;
-        $this->sortKey = key($sort) ?: '';
 
         return $this;
     }

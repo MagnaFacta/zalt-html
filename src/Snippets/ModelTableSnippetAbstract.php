@@ -172,7 +172,7 @@ abstract class ModelTableSnippetAbstract extends \Zalt\Snippets\ModelSnippetAbst
      */
     public function getBrowseTable(DataReaderInterface $dataModel)
     {
-        $bridge = $dataModel->getMetaModel()->getBridgeFor('table');
+        $bridge = $dataModel->getBridgeFor('table');
         $this->prepareBridge($bridge);
 
         if ($this->caption) {
@@ -227,7 +227,7 @@ abstract class ModelTableSnippetAbstract extends \Zalt\Snippets\ModelSnippetAbst
         $model = $this->getModel();
 
         if ($this->trackUsage) {
-            $model->trackUsage();
+            $model->getMetaModel()->trackUsage();
         }
         $table = $this->getBrowseTable($model);
 
