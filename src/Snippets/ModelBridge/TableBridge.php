@@ -195,9 +195,6 @@ class TableBridge extends TableBridgeAbstract
     {
         $sort = $model->getSort();
 
-//        $this->sortAscParam  = $model->getSortParamAsc();
-//        $this->sortDescParam = $model->getSortParamDesc();
-
         $this->sortAsc = reset($sort) !== SORT_DESC;
         $this->sortKey = key($sort) ?: '';
 
