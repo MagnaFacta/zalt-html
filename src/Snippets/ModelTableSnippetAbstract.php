@@ -75,16 +75,16 @@ abstract class ModelTableSnippetAbstract extends \Zalt\Snippets\ModelSnippetAbst
     public $onEmpty = null;
 
     /**
-     * @var string The parameter name that contains the search text
-     */
-    protected $searchTextParam = 'search';
-
-    /**
      * When true (= default) the headers get sortable links.
      *
      * @var boolean
      */
     public $sortableLinks = true;
+
+    /**
+     * @var string The parameter name that contains the search text
+     */
+    protected string $textSearchField = 'search';
 
     /**
      * When true query only the used columns
@@ -196,14 +196,14 @@ abstract class ModelTableSnippetAbstract extends \Zalt\Snippets\ModelSnippetAbst
         
         // Add generic text search filter and marker
         $searchFilter = []; 
-        $searchText   = $this->requestInfo->getParam($this->searchTextParam);
+        $searchText   = $this->requestInfo->getParam($this->textSearchField);
         if ($searchText) {
             // TODO: move this to the DataReaderModel!
             $this->_marker = new \Zalt\Html\Marker($metaModel->getTextSearches($searchText), 'strong', 'UTF-8');
 
             foreach ($metaModel->getItemNames() as $name) {
                 if ($metaModel->get($name, 'label') && (!$metaModel->is($name, 'no_text_search', true))) {
-                    $searchFilter[] = $name . " LIKE '%$searchText%'"; 
+                    $searchFilter[$name] = [MetaModelInterface::FILTER_CONTAINS => $searchText]; 
                     $metaModel->set($name, 'markCallback', array($this->_marker, 'mark'));
                 }
             }
