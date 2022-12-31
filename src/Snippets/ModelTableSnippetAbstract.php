@@ -11,6 +11,7 @@
 
 namespace Zalt\Snippets;
 
+use Zalt\Html\Marker;
 use Zalt\Model\Bridge\BridgeInterface;
 use Zalt\Model\Data\DataReaderInterface;
 use Zalt\Model\MetaModelInterface;
@@ -31,12 +32,6 @@ use Zalt\Snippets\ModelBridge\TableBridge;
  */
 abstract class ModelTableSnippetAbstract extends \Zalt\Snippets\ModelSnippetAbstract
 {
-    /**
-     *
-     * @var \Zalt\Html\Marker Class for marking text in the output
-     */
-    protected $_marker;
-
     /**
      * One of the \MUtil\Model\Bridge\BridgeAbstract MODE constants
      *
@@ -141,6 +136,11 @@ abstract class ModelTableSnippetAbstract extends \Zalt\Snippets\ModelSnippetAbst
     {
         //$table->tfrow()->pagePanel($paginator, null, array('baseUrl' => $this->baseUrl));
     }
+    
+    public function cleanUpTextFilter(string $searchText) : array
+    {
+        return array_filter(explode(' ', strtolower(preg_replace("[^A-Za-z0-9]", " ", $searchText))));
+    }
 
     protected function ensureRepeater(BridgeInterface $bridge, DataReaderInterface $dataModel)
     {
@@ -194,22 +194,13 @@ abstract class ModelTableSnippetAbstract extends \Zalt\Snippets\ModelSnippetAbst
     {
         $filter = parent::getFilter($metaModel);
         
-        // Add generic text search filter and marker
-        $searchFilter = []; 
-        $searchText   = $this->requestInfo->getParam($this->textSearchField);
+        $searchText = $this->requestInfo->getParam($this->textSearchField);
         if ($searchText) {
-            // TODO: move this to the DataReaderModel!
-            $this->_marker = new \Zalt\Html\Marker($metaModel->getTextSearches($searchText), 'strong', 'UTF-8');
-
-            foreach ($metaModel->getItemNames() as $name) {
-                if ($metaModel->get($name, 'label') && (!$metaModel->is($name, 'no_text_search', true))) {
-                    $searchFilter[$name] = [MetaModelInterface::FILTER_CONTAINS => $searchText]; 
-                    $metaModel->set($name, 'markCallback', array($this->_marker, 'mark'));
-                }
+            // Add generic text search filter and marker
+            $searchFilter = $this->getTextFilter($metaModel, $searchText);
+            if ($searchFilter) {
+                $filter = array_merge($filter, $searchFilter);
             }
-        }
-        if ($searchFilter) {
-            $filter[] = $searchFilter;
         }
         
         return $filter;
@@ -233,27 +224,66 @@ abstract class ModelTableSnippetAbstract extends \Zalt\Snippets\ModelSnippetAbst
 
         return $table;
     }
+    
+    public function getTextFilter(MetaModelInterface $metaModel, string $searchText): array
+    {
+        $output = [];
+        $searches = $this->cleanUpTextFilter($searchText);
+        if ($searches) {
+            $fields = $metaModel->getCol('label');
+            foreach ($metaModel->getCol('no_text_search') as $field => $value)  {
+                if ($value) {
+                    unset($fields[$field]);
+                }
+            }
+            
+            $marker = new Marker($searches, 'strong', 'UTF-8');
+            $metaModel->setCol(array_keys($fields), ['markCallback' => [$marker, 'mark']]);
+            
+            $options = $metaModel->getCol('multiOptions');
+
+            foreach ($searches as $search) {
+                $current = [];
+                foreach ($fields as $field => $label) {
+                    if (isset($options[$field])) {
+                        $inValues = [];
+                        foreach ($options[$field] as $value => $label) {
+                            if (str_contains(strtolower($label), $search)) {
+                                $inValues[] = $value;
+                            }
+                        }
+                        if ($inValues) {
+                            $current[$field] = $inValues;
+                        }
+                    } else {
+                        switch ($metaModel->get($field, 'type')) {
+                            case MetaModelInterface::TYPE_DATE:
+                            case MetaModelInterface::TYPE_DATETIME:
+                            case MetaModelInterface::TYPE_TIME:
+                            case MetaModelInterface::TYPE_NUMERIC:
+                                if (intval($search)) {
+                                    $current[$field] = [MetaModelInterface::FILTER_CONTAINS => $search];
+                                }
+                                break;
+                            case MetaModelInterface::TYPE_CHILD_MODEL:
+                                break;
+                            default:
+                                $current[$field] = [MetaModelInterface::FILTER_CONTAINS => $search];
+                        }
+                    }
+                }
+                if ($current) {
+                    $output[] = $current;
+                }
+            }
+        }
+        return $output;
+    }
 
     public function prepareBridge(TableBridge $bridge)
     {
         $bridge->currentUrl    = $this->requestInfo->getBasePath();
         $bridge->sortAscParam  = $this->sortParamAsc;
         $bridge->sortDescParam = $this->sortParamDesc;
-    }
-    
-    /**
-     * Render a string that becomes part of the HtmlOutput
-     *
-     * You should override either getHtmlOutput() or this function to generate output
-     *
-     * @return string Html output
-     */
-    public function render()
-    {
-        if ($this->_marker) {
-            // $this->_marker->setEncoding();
-        }
-
-        return parent::render();
     }
 }
