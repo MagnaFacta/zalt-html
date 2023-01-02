@@ -103,7 +103,7 @@ abstract class ModelDetailTableSnippetAbstract extends ModelSnippetAbstract
     {
         $dataModel = $this->getModel();
         if ($this->trackUsage) {
-            $dataModel->trackUsage();
+            $dataModel->getMetaModel()->trackUsage();
         }
 
         $table = $this->getShowTable($dataModel);
