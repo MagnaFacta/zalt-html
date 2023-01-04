@@ -29,12 +29,17 @@ class SnippetOptions implements ContainerInterface
         private array $options 
     ) {}
     
-    public function get(string $id)
+    public function get(string $id): mixed
     {
         if (isset($this->options[$id])) {
             return $this->options[$id];
         }
         return null;
+    }
+
+    public function getOptions(): array
+    {
+        return $this->options;
     }
 
     public function has(string $id) : bool

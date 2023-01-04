@@ -164,19 +164,21 @@ abstract class SnippetAbstract implements SnippetInterface
         }
     }
 
-    public function setSnippetOption($id, $value)
+    public function setSnippetOption(string $id, mixed $value): void
     {
         $this->$id = $value;
     }
-    
-    public function setSnippetOptions(SnippetOptions $snippetOptions)
+
+    public function setSnippetOptions(SnippetOptions $snippetOptions): self
     {
-        // Set variables from config
-        foreach (get_object_vars($this) as $property => $object) {
-            if ($snippetOptions->has($property) && ('_' != substr($property, 0, 1))) {
-                $this->setSnippetOption($property, $snippetOptions->get($property));
+        $options = $snippetOptions->getOptions();
+
+        foreach($options as $name => $value) {
+            if (property_exists($this, $name)) {
+                $this->setSnippetOption($name, $value);
             }
         }
+
         return $this;
     }
 }
