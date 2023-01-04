@@ -190,4 +190,14 @@ class TableBridge extends TableBridgeAbstract
 
         return Html::create()->a([$this->currentUrl, $sortParam => $name], ['class' => $class, 'title' => $this->metaModel->get($name, 'description')], $label);
     }
+
+    public function setSortData(DataReaderInterface $model): TableBridgeAbstract
+    {
+        $sort = $model->getSort();
+
+        $this->sortAsc = reset($sort) !== SORT_DESC;
+        $this->sortKey = key($sort) ?: '';
+
+        return $this;
+    }
 }

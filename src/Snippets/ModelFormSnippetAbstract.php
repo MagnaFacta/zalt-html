@@ -205,10 +205,7 @@ abstract class ModelFormSnippetAbstract extends FormSnippetAbstract
     {
         // Perform the save
         $model          = $this->getModel();
-        $this->formData = $model->save($this->formData);
-        $changed        = $model->getChanged();
-
-        // Message the save
-        return $changed;
+        $this->formData = $model->save($this->formData, $this->requestInfo->getRequestMatchedParams());
+        return $model->getChanged();
     }
 }
