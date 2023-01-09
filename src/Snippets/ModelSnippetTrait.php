@@ -117,6 +117,10 @@ trait ModelSnippetTrait
         } else {
             $filter = $this->getRequestFilter($metaModel);
         }
+//        file_put_contents('data/logs/echo.txt', __CLASS__ . '->' . __FUNCTION__ . '(' . __LINE__ . '): ' .  print_r($this->_fixedFilter, true) . "\n", FILE_APPEND);
+//        file_put_contents('data/logs/echo.txt', __CLASS__ . '->' . __FUNCTION__ . '(' . __LINE__ . '): ' .  print_r($this->extraFilter, true) . "\n", FILE_APPEND);
+//        file_put_contents('data/logs/echo.txt', __CLASS__ . '->' . __FUNCTION__ . '(' . __LINE__ . '): ' .  print_r($this->cleanUpFilter($filter, $metaModel), true) . "\n", FILE_APPEND);
+        
         // Filter in request overrules same filter from extraFilter settings which again overrule fiwxedFilter settings
         // Sinc the arrays can contian numeric keys we use array_merge to include those from all filters
         return array_merge($this->_fixedFilter, $this->extraFilter, $this->cleanUpFilter($filter, $metaModel));
@@ -124,7 +128,7 @@ trait ModelSnippetTrait
 
     public function getRequestFilter(MetaModelInterface $metaModel) : array
     {
-        $filter = $this->requestInfo->getRequestMatchedParams() + $this->requestInfo->getRequestQueryParams();
+        $filter = $this->requestInfo->getRequestMatchedParams() + $this->requestInfo->getRequestMatchedParams();
 
         // Remove sort parameters
         unset($filter[$this->sortParamAsc], $filter[$this->sortParamDesc]);
