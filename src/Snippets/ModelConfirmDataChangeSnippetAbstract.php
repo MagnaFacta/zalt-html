@@ -116,30 +116,6 @@ abstract class ModelConfirmDataChangeSnippetAbstract extends \Zalt\Snippets\Mode
     protected $saveData;
 
     /**
-     * Called after the check that all required registry values
-     * have been set correctly has run.
-     *
-     * @return void
-     */
-    public function afterRegistry()
-    {
-        parent::afterRegistry();
-
-        if (! $this->saveData) {
-            throw new \Zend_Exception("No data to save specified while using " . __CLASS__);
-        }
-
-        if ($this->buttonClass) {
-            if (! $this->buttonNoClass) {
-                $this->buttonNoClass = $this->buttonClass;
-            }
-            if (! $this->buttonYesClass) {
-                $this->buttonYesClass = $this->buttonClass;
-            }
-        }
-    }
-
-    /**
      * Creates the model
      *
      * @return \Zalt\Model\ModelAbstract
@@ -188,7 +164,7 @@ abstract class ModelConfirmDataChangeSnippetAbstract extends \Zalt\Snippets\Mode
      */
     public function hasHtmlOutput(): bool
     {
-        $queryParams = $this->getRequestQueryParams();
+        $queryParams = $this->requestInfo->getRequestQueryParams();
         if (isset($queryParams[$this->confirmParameter])) {
             $this->performAction();
 
