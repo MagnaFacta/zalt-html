@@ -254,6 +254,7 @@ abstract class FormSnippetAbstract extends MessageableSnippetAbstract
         if (parent::hasHtmlOutput()) {
             return $this->processForm();
         }
+        return false;
     }
 
     public function isPost(): bool
@@ -286,11 +287,11 @@ abstract class FormSnippetAbstract extends MessageableSnippetAbstract
     protected function loadFormData(): array
     {
         if ($this->isPost()) {
-            $this->formData = $this->getPostData();
+            $this->formData = $this->requestInfo->getRequestPostParams();
             return $this->formData;
         }
 
-        $this->formData = $this->getDefaultFormValues() + $this->getPostData();
+        $this->formData = $this->getDefaultFormValues() + $this->requestInfo->getRequestPostParams();
         return $this->formData;
     }
 
