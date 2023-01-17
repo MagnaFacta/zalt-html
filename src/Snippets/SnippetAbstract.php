@@ -9,6 +9,7 @@
 
 namespace Zalt\Snippets;
 
+use Psr\Http\Message\ResponseInterface;
 use Zalt\Base\RequestInfo;
 use Zalt\Html\Html;
 use Zalt\Html\HtmlElement;

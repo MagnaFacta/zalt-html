@@ -61,6 +61,11 @@ class MezzioLaminasSnippetResponder implements SnippetResponderInterface
             if ($snippet->hasHtmlOutput()) {
                 $html->append($snippet);
             } else {
+                $response = $snippet->getResponse();
+                
+                if ($response) {
+                    return $response;                    
+                }
                 $url = $snippet->getRedirectRoute();
                 
                 if ($url) {

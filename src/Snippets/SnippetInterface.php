@@ -11,6 +11,7 @@
 
 namespace Zalt\Snippets;
 
+use Psr\Http\Message\ResponseInterface;
 use Zalt\Html\HtmlInterface;
 
 /**
@@ -57,6 +58,8 @@ interface SnippetInterface extends HtmlInterface
      */
     public function getRedirectRoute(): ?string;
 
+    public function getResponse(): ?ResponseInterface;
+    
     /**
      * The place to check if the data set in the snippet is valid
      * to generate the snippet.
