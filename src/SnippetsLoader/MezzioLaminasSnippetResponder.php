@@ -13,15 +13,15 @@ namespace Zalt\SnippetsLoader;
 
 use Laminas\Diactoros\Response\HtmlResponse;
 use Laminas\Diactoros\Response\RedirectResponse;
-use Mezzio\Flash\FlashMessageMiddleware;
-use Mezzio\Flash\FlashMessagesInterface;
+use Mezzio\Session\SessionInterface;
+use Mezzio\Session\SessionMiddleware;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Zalt\Base\RequestInfo;
 use Zalt\Base\RequestInfoFactory;
 use Zalt\Html\Sequence;
 use Zalt\Message\MessengerInterface;
-use Zalt\Message\MezzioFlashMessenger;
+use Zalt\Message\MezzioSessionMessenger;
 use Zalt\Ra\Ra;
 
 /**
@@ -84,11 +84,11 @@ class MezzioLaminasSnippetResponder implements SnippetResponderInterface
         $requestInfo = RequestInfoFactory::getMezzioRequestInfo($request);
         $this->snippetLoader->addConstructorVariable(RequestInfo::class, $requestInfo);
 
-        $flash = $request->getAttribute(FlashMessageMiddleware::FLASH_ATTRIBUTE);
-        if ($flash instanceof FlashMessagesInterface) {
+        $session = $request->getAttribute(SessionMiddleware::SESSION_ATTRIBUTE);
+        if ($session instanceof SessionInterface) {
             $this->snippetLoader->addConstructorVariable(
                 MessengerInterface::class,
-                new MezzioFlashMessenger($flash));
+                new MezzioSessionMessenger($session));
         }
         
         return $requestInfo;
