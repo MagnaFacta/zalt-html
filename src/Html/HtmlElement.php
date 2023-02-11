@@ -154,10 +154,6 @@ use Zalt\Late\RepeatableInterface;
  * <code>
  *   \Zalt\Late\RepeatableInterface => setRepeater
 *  </code>
- * and for some elements:
- * <code>
- *   \Zend_Form  => setAsFormLayout
- * </code>
  * The following 4 examples show how you can create a repeatablediv
  * <code>
  * 1: $div = Html::create()->div(array('repeater' => $repeater));

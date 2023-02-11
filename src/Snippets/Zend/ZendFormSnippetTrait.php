@@ -118,7 +118,7 @@ trait ZendFormSnippetTrait
         parent::beforeDisplay();
 
         if ($this->layoutAutoWidthFactor || $this->layoutFixedWidth) {
-            $div = new \Zalt\Html\DivFormElement();
+            $div = new \Zalt\Html\Zend\ZendDivFormElement();
 
             if ($this->layoutFixedWidth) {
                 $div->setAsFormLayout($this->_form, $this->layoutFixedWidth);
@@ -146,7 +146,7 @@ trait ZendFormSnippetTrait
      */
     protected function createForm(array $options = [])
     {
-        $this->_form = new \MUtil\Form($options);
+        $this->_form = new \Zend_Form($options);
 
         return $this->_form;
     }

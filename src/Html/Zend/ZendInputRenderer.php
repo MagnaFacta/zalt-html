@@ -9,8 +9,10 @@
  * @license    New BSD License
  */
 
-namespace Zalt\Html;
+namespace Zalt\Html\Zend;
 
+use Zalt\Html\Html;
+use Zalt\Html\One;
 use Zalt\Late\Late;
 use Zalt\Late\LateInterface;
 
@@ -27,7 +29,7 @@ use Zalt\Late\LateInterface;
  * @license    New BSD License
  * @since      Class available since version 1.0
  */
-class InputRenderer implements \Zalt\Html\HtmlInterface
+class ZendInputRenderer implements \Zalt\Html\HtmlInterface
 {
     const MODE_COMPLETE = 'complete';
     const MODE_DISPLAY_GROUP = 'displayGroup';
@@ -233,7 +235,7 @@ class InputRenderer implements \Zalt\Html\HtmlInterface
     public static function inputLabel($arg_array = array())
     {
         $args = func_get_args();
-        return new \Zalt\Html\LabelElement('label', $args);
+        return new \Zalt\Html\Zend\ZendLabelElement('label', $args);
     }
 
 
@@ -323,8 +325,8 @@ class InputRenderer implements \Zalt\Html\HtmlInterface
         return self::renderUntil($element, array(
             'Zend_Form_Decorator_ViewHelper',
             'Zend_Form_Decorator_File',
-            '\\Zalt\\Form\\Decorator\\Table',
-            '\\Zalt\\Form\\Decorator\\Subforms'
+            '\\MUtil\\Form\\Decorator\\Table',
+            '\\MUtil\\Form\\Decorator\\Subforms',
             ));
     }
 
@@ -402,8 +404,9 @@ class InputRenderer implements \Zalt\Html\HtmlInterface
     public static function renderUntil($element, array $until_decorators)
     {
         $element = self::_checkElement($element, __FUNCTION__);
+        
         $element->setView(Html::getRenderer()->getView());
-
+        
         $content = '';
         foreach ($element->getDecorators() as $name => $decorator) {
             $decorator->setElement($element);

@@ -12,9 +12,10 @@
 namespace Zalt\Html;
 
 use Zalt\Base\BaseUrl;
-use Zalt\Lists\ClassList;
+use Zalt\Html\Zend\ZendInputRenderer;
 use Zalt\Late\Late;
 use Zalt\Late\LateInterface;
+use Zalt\Lists\ClassList;
 
 /**
  * Render output for a view.
@@ -56,9 +57,9 @@ class Renderer
     protected $_initialClassRenderFunctions = array(
         'Zend_Db_Adapter_Abstract'         => [Renderer::class, 'doNotRender'],
         'Zend_Controller_Request_Abstract' => [Renderer::class, 'doNotRender'],
-        'Zend_Form'                        => [InputRenderer::class, 'renderForm'],
-        'Zend_Form_DisplayGroup'           => [InputRenderer::class, 'renderDisplayGroup'],
-        'Zend_Form_Element'                => [InputRenderer::class, 'renderElement'],
+        'Zend_Form'                        => [ZendInputRenderer::class, 'renderForm'],
+        'Zend_Form_DisplayGroup'           => [ZendInputRenderer::class, 'renderDisplayGroup'],
+        'Zend_Form_Element'                => [ZendInputRenderer::class, 'renderElement'],
         'Zend_Translate'                   => [Renderer::class, 'doNotRender'],
     );
 
@@ -198,7 +199,9 @@ class Renderer
 
             } elseif (is_object($content)) {
                 if ($function = $this->_classRenderFunctions->get($content)) {
-                    // \Zalt\EchoOut\EchoOut::track($function);
+                    if (is_array($function) && isset($function[1]))
+                    file_put_contents('data/logs/echo.txt', __CLASS__ . '->' . __FUNCTION__ . '(' . __LINE__ . '): ' .  get_class($content) . '->' . $function[0] . '::' . $function[1] . "\n", FILE_APPEND);
+
                     $output = call_user_func($function, $content);
                 } elseif (method_exists($content, '__toString')) {
                     $output = Html::escape($content->__toString());

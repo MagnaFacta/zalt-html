@@ -12,17 +12,15 @@
 
 namespace Zalt\Html;
 
-use Iterator;
-use Traversable;
-
-use Zalt\Ra\MultiWrapper; 
-use Zalt\Ra\Ra;
+use Zalt\Html\Zend\ZendFormLayout;
 use Zalt\Late\Alternate;
 use Zalt\Late\Late;
 use Zalt\Late\LateInterface;
 use Zalt\Late\RepeatableByKeyValue;
 use Zalt\Late\RepeatableFormElements;
 use Zalt\Late\RepeatableObjectProperties;
+use Zalt\Ra\MultiWrapper;
+use Zalt\Ra\Ra;
 
 /**
  * TableElement is an extension of HtmlElement that add's a lot of table specific extra functionality
@@ -33,8 +31,7 @@ use Zalt\Late\RepeatableObjectProperties;
  * @license    New BSD License
  * @since      Class available since version 1.0
  */
-class TableElement extends HtmlElement
-        implements ColumnInterface, FormLayout
+class TableElement extends HtmlElement implements ColumnInterface
 {
     /**
      * Content position constant for caption
@@ -159,7 +156,7 @@ class TableElement extends HtmlElement
      * @see $_specialTypesDefault
      *
      * @var array Of 'class or interfacename' => 'class method' of null
-     */
+     * /
     protected $_specialTypes = array(
         'Zend_Form' => 'setAsFormLayout',
         );
@@ -771,7 +768,7 @@ class TableElement extends HtmlElement
      * @param boolean $add_description When true the description is displayed
      * @param boolean $include_description When false the description is added in a separate column instead of the element column.
      * @return \Zalt\Html\TableElement
-     */
+     * /
     public function setAsFormLayout(\Zend_Form $form, $add_description = false, $include_description = false)
     {
         // Make a Late repeater for the form elements and set it as the element repeater
@@ -796,7 +793,7 @@ class TableElement extends HtmlElement
         }
 
         // Set this element as the form decorator
-        $decorator = new \Zalt\Html\ElementDecorator();
+        $decorator = new Zend\ZendElementDecorator();
         $decorator->setHtmlElement($this);
         $decorator->setPrologue($formrep); // Renders hidden elements before this element
         $form->setDecorators(array($decorator, 'AutoFocus', 'Form'));

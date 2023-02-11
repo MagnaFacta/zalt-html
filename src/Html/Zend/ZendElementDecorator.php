@@ -10,8 +10,10 @@
  * @license    New BSD License
  */
 
-namespace Zalt\Html;
+namespace Zalt\Html\Zend;
 
+use Zalt\Html\ElementInterface;
+use Zalt\Html\Html;
 use Zalt\Html\HtmlInterface;
 use Zalt\Late\RepeatableFormElements;
 use Zalt\Ra\Ra;
@@ -25,7 +27,7 @@ use Zalt\Ra\Ra;
  * @license    New BSD License
  * @since      Class available since version 1.0
  */
-class ElementDecorator extends \Zend_Form_Decorator_Abstract
+class ZendElementDecorator extends \Zend_Form_Decorator_Abstract
 {
     /**
      *
@@ -102,12 +104,12 @@ class ElementDecorator extends \Zend_Form_Decorator_Abstract
                 if ($hidden = $prologue->getHidden()) {
                     $prologue = Html::create()->div($hidden);
                 } else {
-                    $prologue = null;
+                    $prologue = '';
                 }
             }
             if ($prologue instanceof HtmlInterface) {
                 $prologue = $prologue->render();
-            } else {
+            } elseif ($prologue) {
                 $prologue = Html::getRenderer()->renderAny($prologue);
             }
         } else {
@@ -160,7 +162,7 @@ class ElementDecorator extends \Zend_Form_Decorator_Abstract
      * Set the default
      *
      * @param \Zalt\Html\HtmlInterface $htmlElement
-     * @return \Zalt\Html\ElementDecorator (continuation pattern)
+     * @return \Zalt\Html\ZendElementDecorator (continuation pattern)
      */
     public function setHtmlElement(\Zalt\Html\HtmlInterface $htmlElement)
     {
@@ -175,7 +177,7 @@ class ElementDecorator extends \Zend_Form_Decorator_Abstract
      * otherwise an UL is created
      *
      * @param mixed $prepend false, true or \Zalt\Html\HtmlElement
-     * @return \Zalt\Html\ElementDecorator (continuation pattern)
+     * @return \Zalt\Html\ZendElementDecorator (continuation pattern)
      */
     public function setPrependErrors($prepend = true)
     {
@@ -190,7 +192,7 @@ class ElementDecorator extends \Zend_Form_Decorator_Abstract
      * displayed in a div at the start of the form.
      *
      * @param mixed $prologue E.g. a repeater or a html element
-     * @return \Zalt\Html\ElementDecorator
+     * @return \Zalt\Html\ZendElementDecorator
      */
     public function setPrologue($prologue)
     {

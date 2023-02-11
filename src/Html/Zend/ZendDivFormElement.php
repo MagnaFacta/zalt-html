@@ -9,8 +9,9 @@
  * @license    New BSD License
  */
 
-namespace Zalt\Html;
+namespace Zalt\Html\Zend;
 
+use Zalt\Html\ListElement;
 use Zalt\Late\Late;
 use Zalt\Late\RepeatableFormElements;
 use Zalt\Ra\Ra;
@@ -24,7 +25,7 @@ use Zalt\Ra\Ra;
  * @license    New BSD License
  * @since      Class available since version 1.6.4
  */
-class DivFormElement extends \Zalt\Html\HtmlElement implements \Zalt\Html\FormLayout
+class ZendDivFormElement extends \Zalt\Html\HtmlElement implements ZendFormLayout
 {
     /**
      * Can process form elements
@@ -56,10 +57,10 @@ class DivFormElement extends \Zalt\Html\HtmlElement implements \Zalt\Html\FormLa
     }
 
     /**
-     * Static helper function for creation, used by @see \Zalt\Html\Creator.
+     * Static helper function for creation, used by @param mixed $args Optional args processed settings
      *
-     * @param mixed $args Optional args processed settings
-     * @return \Zalt\Html\PFormElement
+     * @see \Zalt\Html\Creator.
+     *
      */
     public static function divForm(...$args)
     {
@@ -75,6 +76,12 @@ class DivFormElement extends \Zalt\Html\HtmlElement implements \Zalt\Html\FormLa
         return $this->_flattenSubs;
     }
 
+    public function render()
+    {
+        return parent::render();
+    }
+    
+
     /**
      * Apply this element to the form as the output decorator.
      *
@@ -82,7 +89,7 @@ class DivFormElement extends \Zalt\Html\HtmlElement implements \Zalt\Html\FormLa
      * @param mixed $width The style.width content for the labels
      * @param array $order The display order of the elements
      * @param string $errorClass Class name to display all errors in
-     * @return \Zalt\Html\DlElement
+     * @return \Zalt\Html\DivElement
      */
     public function setAsFormLayout(\Zend_Form $form, $width = null, $order = array('label', 'element', 'errors', 'description'), $errorClass = 'errors')
     {
@@ -131,15 +138,15 @@ class DivFormElement extends \Zalt\Html\HtmlElement implements \Zalt\Html\FormLa
         }
 
         // Set this element as the form decorator
-        $decorator = new \Zalt\Html\ElementDecorator();
+        $decorator = new ZendElementDecorator();
         $decorator->setHtmlElement($this);
         $decorator->setPrologue($formrep);  // Renders hidden elements before this element
         if ($prependErrors) {
-            $decorator->setPrependErrors(\Zalt\Html\ListElement::ul(
+            $decorator->setPrependErrors(ListElement::ul(
                     array('class' => $errorClass, 'style' => array('margin-left' => $width))
                     ));
         }
-        $form->setDecorators(array($decorator, 'AutoFocus', 'Form'));
+        $form->setDecorators([$decorator, 'AutoFocus', 'Form']);
 
         return $this;
     }
@@ -151,7 +158,7 @@ class DivFormElement extends \Zalt\Html\HtmlElement implements \Zalt\Html\FormLa
      * @param float $factor To multiply the widest nummers of letters in the labels with to calculate the width in em
      * at drawing time
      * @param array $order The display order of the elements
-     * @return \Zalt\Html\PFormElement
+     * @return \Zalt\Html\Zend\ZendDivFormElement
      */
     public function setAutoWidthFormLayout(\Zend_Form $form, $factor = 1,
             array $order = array('label', 'element', 'errors', 'description'))
@@ -167,7 +174,7 @@ class DivFormElement extends \Zalt\Html\HtmlElement implements \Zalt\Html\FormLa
     /**
      *
      * @param boolean $flatten Should subforms be flattened as tables
-     * @return \Zalt\Html\DivFormElement
+     * @return \Zalt\Html\ZendDivFormElement
      */
     public function setFlattenSubs($flatten = true)
     {

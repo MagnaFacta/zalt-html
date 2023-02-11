@@ -72,19 +72,23 @@ class TableBridge extends TableBridgeAbstract
                 $label = $this->metaModel->get($name, $label);
             }
             $thContent[] = $this->getHeaderFormatted($name, $label);
+
+            if ($this->metaModel->has($name, 'tdClass')) {
+                $tdClass = array_filter([$tdClass, $this->metaModel->get($name, 'tdClass')]);
+            }
+            if ($this->metaModel->has($name, 'thClass')) {
+                $thClass = array_filter([$thClass, $this->metaModel->get($name, 'thClass')]);
+            }
         } else {
             $tdContent[] = $name;
             $thContent[] = $label;
+            
+            $tdClass = null;
+            $thClass = null;
         }
 
-        if ($this->metaModel->has($name, 'tdClass')) {
-            $tdClass = array_filter([$tdClass, $this->metaModel->get($name, 'tdClass')]);    
-        }
         if ($tdClass) {
             $tdContent['class'] = $tdClass;
-        }
-        if ($this->metaModel->has($name, 'thClass')) {
-            $thClass = array_filter([$thClass, $this->metaModel->get($name, 'thClass')]);
         }
         if ($thClass) {
             $thContent['class'] = $thClass;

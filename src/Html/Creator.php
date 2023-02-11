@@ -11,9 +11,12 @@
 
 namespace Zalt\Html;
 
+use Zalt\Html\Zend\ZendPFormElement;
+use Zalt\Html\Zend\ZendInputRenderer;
+use Zalt\Html\Zend\ZendLabelElement;
+use Zalt\Late\Late;
 use Zalt\Lists\FunctionList;
 use Zalt\Lists\LookupList;
-use Zalt\Late\Late;
 use Zalt\Ra\Ra;
 
 /**
@@ -82,24 +85,23 @@ class Creator
         'iframe'            => [IFrame::class, 'iFrame'],
         'img'               => [ImgElement::class, 'img'],
         'image'             => [ImgElement::class, 'img'],
-        'input'             => [InputRenderer::class, 'input'],
-        'inputComplete'     => [InputRenderer::class, 'inputComplete'],
-        'inputDescription'  => [InputRenderer::class, 'inputDescription'],
-        'inputDisplayGroup' => [InputRenderer::class, 'inputDisplayGroup'],
-        'inputElement'      => [InputRenderer::class, 'inputElement'],
-        'inputErrors'       => [InputRenderer::class, 'inputErrors'],
-        'inputExcept'       => [InputRenderer::class, 'inputExcept'],
-        'inputForm'         => [InputRenderer::class, 'inputForm'],
-        'inputLabel'        => [LabelElement::class, 'label'],
-        'inputOnly'         => [InputRenderer::class, 'inputOnly'],
-        'inputOnlyArray'    => [InputRenderer::class, 'inputOnlyArray'],
-        'inputUntil'        => [InputRenderer::class, 'inputUntil'],
-        'inputUpto'         => [InputRenderer::class, 'inputUpto'],
-        'label'             => [LabelElement::class, 'label'],
+        'input'             => [ZendInputRenderer::class, 'input'],
+        'inputComplete'     => [ZendInputRenderer::class, 'inputComplete'],
+        'inputDescription'  => [ZendInputRenderer::class, 'inputDescription'],
+        'inputDisplayGroup' => [ZendInputRenderer::class, 'inputDisplayGroup'],
+        'inputElement'      => [ZendInputRenderer::class, 'inputElement'],
+        'inputErrors'       => [ZendInputRenderer::class, 'inputErrors'],
+        'inputExcept'       => [ZendInputRenderer::class, 'inputExcept'],
+        'inputForm'         => [ZendInputRenderer::class, 'inputForm'],
+        'inputLabel'        => [ZendLabelElement::class, 'label'],
+        'inputOnly'         => [ZendInputRenderer::class, 'inputOnly'],
+        'inputOnlyArray'    => [ZendInputRenderer::class, 'inputOnlyArray'],
+        'inputUntil'        => [ZendInputRenderer::class, 'inputUntil'],
+        'inputUpto'         => [ZendInputRenderer::class, 'inputUpto'],
+        'label'             => [ZendLabelElement::class, 'label'],
         'menu'              => [ListElement::class, 'menu'],
         'ol'                => [ListElement::class, 'ol'],
         'pagePanel'         => [PagePanel::class, 'pagePanel'],
-        'pForm'             => [PFormElement::class, 'pForm'],
         'progress'          => [ProgressPanel::class, 'progress'],
         'progressPanel'     => [ProgressPanel::class, 'progress'],
         'raw'               => [Raw::class, 'raw'],

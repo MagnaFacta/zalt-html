@@ -10,7 +10,7 @@
  * @license    New BSD License
  */
 
-namespace Zalt\Html;
+namespace Zalt\Html\Zend;
 
 /**
  * Interface extensions that allows HtmlElements to define how to display
@@ -22,13 +22,13 @@ namespace Zalt\Html;
  * @license    New BSD License
  * @since      Class available since version 1.0
  */
-interface FormLayout
+interface ZendFormLayout
 {
     /**
      * Apply this element to the form as the output decorator.
      *
      * @param \Zend_Form $form
-     * @return FormLayout
+     * @return ZendFormLayout
      */
     public function setAsFormLayout(\Zend_Form $form);
 }

@@ -9,8 +9,9 @@
  * @license    New BSD License
  */
 
-namespace Zalt\Html;
+namespace Zalt\Html\Zend;
 
+use Zalt\Html\Html;
 use Zalt\Late\Late;
 use Zalt\Late\LateInterface;
 
@@ -22,7 +23,7 @@ use Zalt\Late\LateInterface;
  * @license    New BSD License
  * @since      Class available since \Zalt version 1.0
  */
-class LabelElement extends \Zalt\Html\HtmlElement
+class ZendLabelElement extends \Zalt\Html\HtmlElement
 {
     /**
      * Declaring $class a public property, ensures the attribute
