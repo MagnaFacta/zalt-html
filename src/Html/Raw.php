@@ -12,6 +12,7 @@
 namespace Zalt\Html;
 
 use Zalt\Late\Late;
+use Zalt\Late\LateInterface;
 
 /**
  * The Raw class is used to output html without character encoding or escaping.
@@ -75,6 +76,13 @@ class Raw implements HtmlInterface
         $IN_TAG  = 3; // In an element tag (closing or opening does not matter
         $IN_QUOT = 4; // In a double quoted string in an element tag
 
+        if ($this->_value instanceof LateInterface) {
+            $this->_value = Late::rise($this->_value);
+        }
+        if ($this->_value instanceof HtmlInterface) {
+            $this->_value = $this->_value->render();
+        }
+        
         $length   = strlen($this->_value);
         $result   = array();
         $startPos = 0;
