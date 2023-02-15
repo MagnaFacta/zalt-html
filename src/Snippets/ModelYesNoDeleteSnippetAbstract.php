@@ -12,9 +12,12 @@
 
 namespace Zalt\Snippets;
 
+use Psr\Cache\CacheItemPoolInterface;
+use Symfony\Contracts\Cache\TagAwareCacheInterface;
 use Zalt\Html\Html;
 use Zalt\Model\Data\DataReaderInterface;
 use Zalt\Snippets\ModelBridge\DetailTableBridge;
+use Zalt\Snippets\ModelBridge\VerticalTableBridge;
 
 /**
  * Ask Yes/No conformation for deletion and deletes item when confirmed.
@@ -69,34 +72,19 @@ abstract class ModelYesNoDeleteSnippetAbstract extends ModelDetailTableSnippetAb
      */
     protected ?string $buttonYesClass = null;
 
-    /**
-     *
-     * @var \Psr\Cache\CacheItemPoolInterface
-     */
-    protected $cache;
+    protected CacheItemPoolInterface $cache;
 
     /**
      * Variable to set tags for cache cleanup after changes
      *
-     * @var array
      */
-    public $cacheTags;
+    public array $cacheTags;
 
     /**
      * The request parameter used to store the confirmation
      *
-     * @var string Required
      */
     protected string $confirmParameter = 'confirmed';
-
-    /**
-     * The action to go to when the user clicks 'Yes' and the data is deleted.
-     *
-     * If you want to change to another controller you'll have to code it.
-     *
-     * @var string
-     */
-    protected string $deleteAction = 'index';
 
     /**
      * The question to as the user.
@@ -172,8 +160,6 @@ abstract class ModelYesNoDeleteSnippetAbstract extends ModelDetailTableSnippetAb
     /**
      * The place to check if the data set in the snippet is valid
      * to generate the snippet.
-     *
-     * @return boolean
      */
     public function hasHtmlOutput(): bool
     {
@@ -200,8 +186,8 @@ abstract class ModelYesNoDeleteSnippetAbstract extends ModelDetailTableSnippetAb
 
         $this->setAfterDeleteRoute();
 
-        if ($this->cacheTags && ($this->cache instanceof \Symfony\Contracts\Cache\TagAwareCacheInterface)) {
-            $this->cache->invalidateTags((array) $this->cacheTags);
+        if ($this->cacheTags && ($this->cache instanceof TagAwareCacheInterface)) {
+            $this->cache->invalidateTags($this->cacheTags);
         }
     }
 
@@ -223,10 +209,6 @@ abstract class ModelYesNoDeleteSnippetAbstract extends ModelDetailTableSnippetAb
      *
      * Overrule this function to set the header differently, without
      * having to recode the core table building code.
-     *
-     * @param \Zalt\Model\Bridge\VerticalTableBridge $bridge
-     * @param \Zalt\Model\ModelAbstract $model
-     * @return void
      */
     protected function setShowTableFooter(DetailTableBridge $bridge, DataReaderInterface $dataModel)
     {
