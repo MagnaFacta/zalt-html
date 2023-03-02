@@ -14,6 +14,9 @@ namespace Zalt\SnippetsLoader;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Zalt\Base\RequestInfo;
+use Zalt\Model\MetaModellerInterface;
+use Zalt\SnippetsActions\SnippetActionInterface;
+use Zalt\SnippetsHandler\ActionNotSnippetActionException;
 
 /**
  *
@@ -24,6 +27,13 @@ use Zalt\Base\RequestInfo;
 interface SnippetResponderInterface
 {
     /**
+     * @param string $className
+     * @return \Zalt\SnippetsActions\SnippetActionInterface
+     * @throws ActionNotSnippetActionException 
+     */
+    public function getSnippetsAction(string $className): SnippetActionInterface;
+
+    /**
      * @param array $snippetNames Array of snippets to load
      * @param mixed $snippetOptions arrau of something that can become an array or a SnippetOptions object
      * @param ServerRequestInterface $request
@@ -32,10 +42,18 @@ interface SnippetResponderInterface
     public function getSnippetsResponse(array $snippetNames, mixed $snippetOptions = [], ?ServerRequestInterface $request = null): ResponseInterface;
 
     /**
-     * Apply the request for this responder
+     * Optional function to add the model ad a constructor variable to the loader
+     * 
+     * @param \Zalt\Model\MetaModellerInterface $model
+     * @return void
+     */
+    public function processModel(MetaModellerInterface $model): void;
+
+    /**
+     * Apply the request for this responder, required to run
      * 
      * @param \Psr\Http\Message\ServerRequestInterface $request
-     * @return void
+     * @return \Zalt\Base\RequestInfo
      */
     public function processRequest(ServerRequestInterface $request): RequestInfo;
 }

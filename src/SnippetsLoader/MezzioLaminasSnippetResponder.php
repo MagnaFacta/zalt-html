@@ -22,7 +22,13 @@ use Zalt\Base\RequestInfoFactory;
 use Zalt\Html\Sequence;
 use Zalt\Message\MessengerInterface;
 use Zalt\Message\MezzioSessionMessenger;
+use Zalt\Model\Data\DataReaderInterface;
+use Zalt\Model\Data\DataWriterInterface;
+use Zalt\Model\MetaModelInterface;
+use Zalt\Model\MetaModellerInterface;
 use Zalt\Ra\Ra;
+use Zalt\SnippetsActions\SnippetActionInterface;
+use Zalt\SnippetsHandler\ActionNotSnippetActionException;
 
 /**
  * Responder with as input Mezzio Psr Objects and as output Laminas Pst Responses
@@ -38,6 +44,23 @@ class MezzioLaminasSnippetResponder implements SnippetResponderInterface
     public function __construct(
         protected SnippetLoader $snippetLoader
     ) {
+    }
+    
+    public function getSnippetsAction(string $className): SnippetActionInterface
+    {
+        // Prepend action if overloading
+        if (! (str_contains($className, '\\SnippetsActions\\') || str_starts_with($className, 'SnippetsActions\\'))) {
+            $className = 'SnippetsActions\\' . $className;
+        }
+
+        // There will probavly be a loader in the future
+        $action = new $className();
+        if ($action instanceof SnippetActionInterface) {
+            return $action;
+        }
+
+        $interface = SnippetActionInterface::class;
+        throw new ActionNotSnippetActionException("The action: '$className' does not implement the $interface interface.");
     }
 
     public function getSnippetsResponse(array $snippetNames, mixed $snippetOptions = [], ?ServerRequestInterface $request = null): ResponseInterface
@@ -76,7 +99,24 @@ class MezzioLaminasSnippetResponder implements SnippetResponderInterface
         
         return new HtmlResponse($html->render());
     }
-    
+
+    public function processModel(MetaModellerInterface $model): void
+    {
+        if ($model instanceof DataReaderInterface) {
+            $this->snippetLoader->addConstructorVariable(DataReaderInterface::class, $model);
+        }
+        if ($model instanceof DataWriterInterface) {
+            $this->snippetLoader->addConstructorVariable(DataWriterInterface::class, $model);
+        }
+        if ($model instanceof FullDataInterface) {
+            $this->snippetLoader->addConstructorVariable(FullDataInterface::class, $model);
+        }
+        
+        $this->snippetLoader->addConstructorVariable(MetaModellerInterface::class, $model);
+        $this->snippetLoader->addConstructorVariable(MetaModelInterface::class, $model->getMetaModel());
+    }
+
+
     public function processRequest(ServerRequestInterface $request): RequestInfo
     {
         $this->request = $request;
