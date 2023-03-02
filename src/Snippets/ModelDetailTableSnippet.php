@@ -12,6 +12,11 @@
 
 namespace Zalt\Snippets;
 
+use Symfony\Contracts\Translation\TranslatorInterface;
+use Zalt\Base\RequestInfo;
+use Zalt\Model\Data\DataReaderInterface;
+use Zalt\SnippetsLoader\SnippetOptions;
+
 /**
  * Displays each field of a single item in a model in a row in a Html table
  * the model set through the $model snippet parameter.
@@ -25,4 +30,11 @@ namespace Zalt\Snippets;
 class ModelDetailTableSnippet extends ModelDetailTableSnippetAbstract
 {
     use DataReaderGenericModelTrait;
+    
+    public function __construct(SnippetOptions $snippetOptions, RequestInfo $requestInfo, TranslatorInterface $translate, DataReaderInterface $model)
+    {
+        parent::__construct($snippetOptions, $requestInfo, $translate);
+
+        $this->model = $model;
+    }
 }

@@ -42,12 +42,12 @@ abstract class ModelFormSnippetAbstract extends FormSnippetAbstract
      * Output only those elements actually used by the form.
      *  
      * When false all fields without a label or elementClass are hidden,
-     * when true those are left out, unless they happend to be a key field or
+     * when true those are left out, unless they happened to be a key field or
      * needed for a dependency.
      *
      * @var boolean
      */
-    protected bool $onlyUsedElements = false;
+    protected bool $onlyUsedElements = true;
 
     /**
      * Adds elements from the model to the bridge that creates the form.

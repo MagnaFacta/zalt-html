@@ -37,7 +37,7 @@ abstract class ModelTableSnippetAbstract extends \Zalt\Snippets\ModelSnippetAbst
      *
      * @var int
      */
-    protected $bridgeMode = \MUtil\Model\Bridge\BridgeAbstract::MODE_ROWS;
+    protected $bridgeMode = BridgeInterface::MODE_ROWS;
 
     /**
      * Sets pagination on or off.

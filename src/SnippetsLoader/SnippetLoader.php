@@ -12,8 +12,6 @@
 namespace Zalt\SnippetsLoader;
 
 use Psr\Container\ContainerInterface;
-use Psr\Http\Message\ServerRequestInterface;
-use Symfony\Contracts\Translation\TranslatorInterface;
 use Zalt\Snippets\SnippetInterface;
 use Zalt\Loader\DependencyResolver\ConstructorDependencyParametersResolver;
 use Zalt\Loader\ProjectOverloader;

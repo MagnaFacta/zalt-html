@@ -199,9 +199,6 @@ class Renderer
 
             } elseif (is_object($content)) {
                 if ($function = $this->_classRenderFunctions->get($content)) {
-                    if (is_array($function) && isset($function[1]))
-                    file_put_contents('data/logs/echo.txt', __CLASS__ . '->' . __FUNCTION__ . '(' . __LINE__ . '): ' .  get_class($content) . '->' . $function[0] . '::' . $function[1] . "\n", FILE_APPEND);
-
                     $output = call_user_func($function, $content);
                 } elseif (method_exists($content, '__toString')) {
                     $output = Html::escape($content->__toString());

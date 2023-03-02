@@ -12,6 +12,11 @@
 
 namespace Zalt\Snippets;
 
+use Symfony\Contracts\Translation\TranslatorInterface;
+use Zalt\Base\RequestInfo;
+use Zalt\Model\Data\DataReaderInterface;
+use Zalt\SnippetsLoader\SnippetOptions;
+
 /**
  * Displays multiple items from a model in a tabel by row using
  * the model set through the $model snippet parameter.
@@ -25,4 +30,15 @@ namespace Zalt\Snippets;
 class ModelTableSnippet extends ModelTableSnippetAbstract
 {
     use DataReaderGenericModelTrait;
+
+    public function __construct(
+        SnippetOptions $snippetOptions, 
+        RequestInfo $requestInfo, 
+        TranslatorInterface $translate, 
+        DataReaderInterface $model)
+    {
+        parent::__construct($snippetOptions, $requestInfo, $translate);
+        
+        $this->model = $model;
+    }
 }
