@@ -42,7 +42,7 @@ class MezzioLaminasSnippetResponder implements SnippetResponderInterface
     protected ServerRequestInterface $request;
     
     public function __construct(
-        protected SnippetLoader $snippetLoader
+        protected SnippetLoaderInterface $snippetLoader
     ) {
     }
     

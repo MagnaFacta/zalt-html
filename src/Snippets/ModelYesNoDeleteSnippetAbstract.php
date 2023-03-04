@@ -87,9 +87,7 @@ abstract class ModelYesNoDeleteSnippetAbstract extends ModelDetailTableSnippetAb
     protected string $confirmParameter = 'confirmed';
 
     /**
-     * The question to as the user.
-     *
-     * @var ?string Optional
+     * @var ?string Optional The question to ask the user.
      */
     protected ?string $deleteQuestion;
 

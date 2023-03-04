@@ -26,6 +26,13 @@ use Zalt\Snippets\SnippetInterface;
 interface SnippetLoaderInterface
 {
     /**
+     * @param string $key
+     * @param mixed  $value
+     * @return void
+     */
+    public function addConstructorVariable(string $key, mixed $value): void;
+
+    /**
      * Add prefixed paths to the registry of paths
      *
      * @param string $prefix

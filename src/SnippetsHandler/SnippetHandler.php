@@ -46,6 +46,8 @@ class SnippetHandler implements RequestHandlerInterface
      */
     public static $actions = ['index' => BrowseTableAction::class];
 
+    public static array $parameters = ['id' => '\d+',]; 
+    
     protected ServerRequestInterface $request;
     
     protected RequestInfo $requestInfo;

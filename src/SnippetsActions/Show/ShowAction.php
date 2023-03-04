@@ -14,6 +14,7 @@ namespace Zalt\SnippetsActions\Show;
 use Zalt\Snippets\ModelDetailTableSnippet;
 use Zalt\SnippetsActions\AbstractAction;
 use Zalt\SnippetsActions\ModelActionInterface;
+use Zalt\SnippetsActions\ParameterActionInterface;
 use Zalt\SnippetsActions\ModelActionTrait;
 
 /**
@@ -22,7 +23,7 @@ use Zalt\SnippetsActions\ModelActionTrait;
  * @subpackage SnippetsActions
  * @since      Class available since version 1.0
  */
-class ShowAction extends AbstractAction implements ModelActionInterface
+class ShowAction extends AbstractAction implements ModelActionInterface, ParameterActionInterface
 {
     use ModelActionTrait;
     

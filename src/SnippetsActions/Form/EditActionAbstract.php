@@ -13,6 +13,7 @@ namespace Zalt\SnippetsActions\Form;
 
 use Zalt\SnippetsActions\AbstractAction;
 use Zalt\SnippetsActions\ModelActionInterface;
+use Zalt\SnippetsActions\PostActionInterface;
 use Zalt\SnippetsActions\ModelActionTrait;
 
 /**
@@ -21,7 +22,7 @@ use Zalt\SnippetsActions\ModelActionTrait;
  * @subpackage SnippetsActions\Form
  * @since      Class available since version 1.0
  */
-class EditActionAbstract extends AbstractAction implements ModelActionInterface
+class EditActionAbstract extends AbstractAction implements ModelActionInterface, PostActionInterface
 {
     use ModelActionTrait;
     
