@@ -107,6 +107,7 @@ abstract class ModelDetailTableSnippetAbstract extends ModelSnippetAbstract
         }
 
         $table = $this->getShowTable($dataModel);
+        $this->applyHtmlAttributes($table);
 
         $container = Html::create()->div(array('class' => 'table-container', 'renderWithoutContent' => false));
         $container[] = $table;
@@ -134,7 +135,7 @@ abstract class ModelDetailTableSnippetAbstract extends ModelSnippetAbstract
     {
         $metaModel = $dataModel->getMetaModel();
         
-        $bridge = $dataModel->getBridgeFor('itemTable', ['class' => $this->class]);
+        $bridge = $dataModel->getBridgeFor('itemTable');
         $bridge->setColumnCount($this->bridgeColumns)
                 ->setMode($this->bridgeMode);
 

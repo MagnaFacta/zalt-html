@@ -32,7 +32,7 @@ class ZendEditAction extends EditActionAbstract
      * Automatically calculate and set the width of the labels
      * @var int
      */
-    public int $layoutAutoWidthFactor = 1;
+    public int $layoutAutoWidthFactor = 0;
 
     /**
      * Set the (fixed) width of the labels, if zero: is calculated
