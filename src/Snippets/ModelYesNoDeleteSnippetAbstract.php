@@ -12,12 +12,8 @@
 
 namespace Zalt\Snippets;
 
-use Psr\Cache\CacheItemPoolInterface;
-use Symfony\Contracts\Cache\TagAwareCacheInterface;
-use Zalt\Html\Html;
 use Zalt\Model\Data\DataReaderInterface;
 use Zalt\Snippets\ModelBridge\DetailTableBridge;
-use Zalt\Snippets\ModelBridge\VerticalTableBridge;
 
 /**
  * Ask Yes/No conformation for deletion and deletes item when confirmed.
@@ -71,14 +67,6 @@ abstract class ModelYesNoDeleteSnippetAbstract extends ModelDetailTableSnippetAb
      * @var ?string
      */
     protected ?string $buttonYesClass = null;
-
-    protected CacheItemPoolInterface $cache;
-
-    /**
-     * Variable to set tags for cache cleanup after changes
-     *
-     */
-    public array $cacheTags;
 
     /**
      * The request parameter used to store the confirmation
@@ -183,10 +171,6 @@ abstract class ModelYesNoDeleteSnippetAbstract extends ModelDetailTableSnippetAb
         $model->delete();
 
         $this->setAfterDeleteRoute();
-
-        if ($this->cacheTags && ($this->cache instanceof TagAwareCacheInterface)) {
-            $this->cache->invalidateTags($this->cacheTags);
-        }
     }
 
     /**
