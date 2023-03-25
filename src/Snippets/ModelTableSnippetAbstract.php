@@ -33,7 +33,7 @@ use Zalt\Snippets\ModelBridge\TableBridge;
 abstract class ModelTableSnippetAbstract extends \Zalt\Snippets\ModelSnippetAbstract
 {
     /**
-     * One of the \MUtil\Model\Bridge\BridgeAbstract MODE constants
+     * One of the BridgeInterface MODE constants
      *
      * @var int
      */
@@ -94,8 +94,8 @@ abstract class ModelTableSnippetAbstract extends \Zalt\Snippets\ModelSnippetAbst
      * Overrule this function to add different columns to the browse table, without
      * having to recode the core table building code.
      *
-     * @param \MUtil\Model\Bridge\TableBridge $bridge
-     * @param \MUtil\Model\ModelAbstract $model
+     * @param TableBridge $bridge
+     * @param DataReaderInterface $model
      * @return void
      */
     protected function addBrowseTableColumns(TableBridge $bridge, DataReaderInterface $dataModel)
@@ -149,10 +149,10 @@ abstract class ModelTableSnippetAbstract extends \Zalt\Snippets\ModelSnippetAbst
                 $paginator = $dataModel->loadPaginator();
                 $bridge->setRepeater($paginator);
                 $this->addPaginator($bride->getTable(), $paginator);
-            } elseif ($this->bridgeMode === \MUtil\Model\Bridge\BridgeAbstract::MODE_LAZY) {
+            } elseif ($this->bridgeMode === BridgeInterface::MODE_LAZY) {
                 // file_put_contents('data/logs/echo.txt', __FUNCTION__ . '(' . __LINE__ . '): ' . "LATE\n", FILE_APPEND);
                 $bridge->setRepeater($dataModel->loadRepeatable());
-            } elseif ($this->bridgeMode === \MUtil\Model\Bridge\BridgeAbstract::MODE_SINGLE_ROW) {
+            } elseif ($this->bridgeMode === BridgeInterface::MODE_SINGLE_ROW) {
                 $bridge->setRow($dataModel->loadFirst());
             } else {
                 $bridge->setRepeater($dataModel->load());
