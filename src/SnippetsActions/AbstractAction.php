@@ -38,6 +38,11 @@ abstract class AbstractAction implements SnippetActionInterface
      */
     public string $class = '';
 
+    public function appendSnippet(string $snippetClass)
+    {
+        $this->_snippets[] = $snippetClass;
+    }
+
     /**
      * Filters the names that should not be requested.
      *
