@@ -23,29 +23,29 @@ trait ModelActionTrait
      * Optional extra filter
      * @var array
      */
-    public $extraFilter = [];
+    public array $extraFilter = [];
 
     /**
      * Optional extra sort(s)
      * @var array
      */
-    public $extraSort = [];
+    public array $extraSort = [];
 
     /**
      * Searchfilter. The default is false, to signal that no data was passed. Any other value means the value is used.
      * @var array|bool
      */
-    public $searchFilter = false;
+    public mixed $searchFilter = false;
 
     /**
      * @var string The request param that contains the ascending sort
      */
-    public $sortParamAsc = 'asort';
+    public string $sortParamAsc = 'asort';
 
     /**
      * @var string The request param that contains the descending sort
      */
-    public $sortParamDesc = 'dsort';
+    public string $sortParamDesc = 'dsort';
 
     /**
      * @param array $filter Extra filter statements to add

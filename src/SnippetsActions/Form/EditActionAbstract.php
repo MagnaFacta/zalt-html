@@ -29,7 +29,7 @@ class EditActionAbstract extends AbstractAction implements ModelActionInterface,
     /**
      * @var string class attribute for buttons
      */
-    public $buttonClass = 'button btn btn-sm btn-primary';
+    public string $buttonClass = 'button btn btn-sm btn-primary';
 
     /**
      * Variable to set tags for cache cleanup after changes
@@ -47,30 +47,46 @@ class EditActionAbstract extends AbstractAction implements ModelActionInterface,
      * Field id for crsf protection field.
      * @var string
      */
-    public $csrfId = 'no_csrf';
+    public string $csrfId = 'no_csrf';
 
     /**
      * The timeout for crsf, 300 is default
      * @var int
      */
-    public $csrfTimeout = 300;
+    public int $csrfTimeout = 300;
 
     /**
      * @var string class attribute for labels
      */
-    public $labelClass = 'label';
+    public string $labelClass = 'label';
+
+    /**
+     * Output only those elements actually used by the form.
+     *
+     * When false all fields without a label or elementClass are hidden,
+     * when true those are left out, unless they happened to be a key field or
+     * needed for a dependency.
+     *
+     * @var boolean
+     */
+    protected bool $onlyUsedElements = true;
 
     /**
      * The form Id used for the save button. If empty save button is not added.
      * @var string
      */
-    public $saveButtonId = 'save_button';
+    public string $saveButtonId = 'save_button';
 
     /**
      * The save button label (default is translated 'Save')
      * @var string
      */
-    public $saveLabel = 'OK';
+    public string $saveLabel = 'OK';
+
+    /**
+     * @var string[] Array describing what is saved
+     */
+    protected array $subjects = ['item', 'items'];
 
     /**
      * Use csrf token on form for protection against Cross Site Request Forgery
