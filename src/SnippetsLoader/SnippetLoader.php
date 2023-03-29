@@ -58,6 +58,11 @@ class SnippetLoader implements SnippetLoaderInterface
         $this->setSource($this->loader->getContainer());
     }
 
+    /**
+     * @param string $key
+     * @param mixed  $value
+     * @return void
+     */
     public function addConstructorVariable(string $key, mixed $value): void
     {
         $this->constructorVariables[$key] = $value;

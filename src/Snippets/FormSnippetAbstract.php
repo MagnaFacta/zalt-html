@@ -271,7 +271,7 @@ abstract class FormSnippetAbstract extends MessageableSnippetAbstract
     {
         $options = array();
 
-        $options['class'] = 'form-horizontal';
+        $options['class'] = (isset($options['class']) ? $options['class'] . ' ' : '') . 'form-horizontal';
         $options['role'] = 'form';
 
         $this->_form = $this->createForm($options);
