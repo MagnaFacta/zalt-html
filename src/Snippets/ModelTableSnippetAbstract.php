@@ -12,6 +12,9 @@
 namespace Zalt\Snippets;
 
 use Zalt\Html\Marker;
+use Zalt\Html\Paginator\LinkPaginator;
+use Zalt\Html\Paginator\PaginatorInterface;
+use Zalt\Html\TableElement;
 use Zalt\Model\Bridge\BridgeInterface;
 use Zalt\Model\Data\DataReaderInterface;
 use Zalt\Model\MetaModelInterface;
@@ -68,6 +71,21 @@ abstract class ModelTableSnippetAbstract extends \Zalt\Snippets\ModelSnippetAbst
      * @var mixed
      */
     public $onEmpty = null;
+
+    /**
+     * @var int Pagenumber starting with offset zero
+     */
+    protected int $pageItems = 10;
+
+    /**
+     * @var int Pagenumber starting with offset ONE
+     */
+    protected int $pageNumber = 1;
+
+    /**
+     * @var string
+     */
+    protected string $paginatorClass = LinkPaginator::class;
 
     /**
      * When true (= default) the headers get sortable links.
@@ -132,9 +150,14 @@ abstract class ModelTableSnippetAbstract extends \Zalt\Snippets\ModelSnippetAbst
      * @param \Zalt\Html\TableElement $table
      * $param \Zend_Paginator $paginator
      */
-    protected function addPaginator(\Zalt\Html\TableElement $table, \Zend_Paginator $paginator)
+    protected function addPaginator(TableElement $table, int $count, int $page, int $items)
     {
-        //$table->tfrow()->pagePanel($paginator, null, array('baseUrl' => $this->baseUrl));
+        $paginator = $this->getPaginator();
+        $paginator->setCount($count)
+            ->setPageItems($items)
+            ->setPageNumber($page);
+
+        $table->tfrow()->append($paginator->getHtmlPagelinks());
     }
     
     public function cleanUpTextFilter(string $searchText) : array
@@ -142,15 +165,21 @@ abstract class ModelTableSnippetAbstract extends \Zalt\Snippets\ModelSnippetAbst
         return array_filter(explode(' ', strtolower(preg_replace("[^A-Za-z0-9]", " ", $searchText))));
     }
 
+    /**
+     * @param BridgeInterface $bridge
+     * @param DataReaderInterface $dataModel
+     * @return void
+     */
     protected function ensureRepeater(BridgeInterface $bridge, DataReaderInterface $dataModel)
     {
         if (! $bridge->hasRepeater()) {
-            if (false && $this->browse) {
-                $paginator = $dataModel->loadPaginator();
-                $bridge->setRepeater($paginator);
-                $this->addPaginator($bride->getTable(), $paginator);
+            if ($this->browse) {
+                $items  = $this->getPageItems();
+                $page   = $this->getPageNumber();
+                $bridge->setRepeater($dataModel->loadPageWithCount($count, $page, $items));
+
+                $this->addPaginator($bridge->getTable(), $count, $page, $items);
             } elseif ($this->bridgeMode === BridgeInterface::MODE_LAZY) {
-                // file_put_contents('data/logs/echo.txt', __FUNCTION__ . '(' . __LINE__ . '): ' . "LATE\n", FILE_APPEND);
                 $bridge->setRepeater($dataModel->loadRepeatable());
             } elseif ($this->bridgeMode === BridgeInterface::MODE_SINGLE_ROW) {
                 $bridge->setRow($dataModel->loadFirst());
@@ -158,8 +187,6 @@ abstract class ModelTableSnippetAbstract extends \Zalt\Snippets\ModelSnippetAbst
                 $bridge->setRepeater($dataModel->load());
             }
         }
-        // file_put_contents('data/logs/echo.txt', __FUNCTION__ . '(' . __LINE__ . '): [' . $this->bridgeMode . ']' . get_class($bridge->getRepeater()) . "\n", FILE_APPEND);
-        // file_put_contents('data/logs/echo.txt', __FUNCTION__ . '(' . __LINE__ . '): ' . print_r($dataModel->load(), true) . "\n", FILE_APPEND);
     }
 
     /**
@@ -224,7 +251,64 @@ abstract class ModelTableSnippetAbstract extends \Zalt\Snippets\ModelSnippetAbst
 
         return $table;
     }
-    
+
+    public function getPageItems(): int
+    {
+        $items = $this->requestInfo->getParam(PaginatorInterface::REQUEST_ITEMS);
+        if ($items) {
+            $this->pageItems = $items;
+        }
+        return $this->pageItems;
+    }
+
+    public function getPageNumber(): int
+    {
+        $page = $this->requestInfo->getParam(PaginatorInterface::REQUEST_PAGE);
+        if ($page) {
+            $this->pageNumber = $page;
+        }
+        return $this->pageNumber;
+    }
+
+    public function getPaginator(): PaginatorInterface
+    {
+        $output = new $this->paginatorClass();
+
+        if (method_exists($output, 'setCurrentUrl')) {
+            $output->setCurrentUrl($this->getRequestUrl());
+        }
+        if (method_exists($output, 'setTranslator')) {
+            $output->setTranslator($this->translate);
+        }
+
+        return $output;
+    }
+
+    public function getRequestUrl(): array
+    {
+        $url = [$this->requestInfo->getBasePath()];
+
+        // Loop to add the sort in parameter order
+        foreach ($this->requestInfo->getParams() as $key => $field) {
+            switch ($key) {
+                case $this->sortParamAsc:
+                    $url[$this->sortParamAsc] = $field;
+                    break;
+
+                case $this->sortParamDesc:
+                    $url[$this->sortParamDesc] = $field;
+                    break;
+
+                default:
+                    // Intentional fall through
+            }
+        }
+        $url[PaginatorInterface::REQUEST_PAGE] = $this->getPageNumber();
+        $url[PaginatorInterface::REQUEST_ITEMS] = $this->getPageItems();
+
+        return $url;
+    }
+
     public function getTextFilter(MetaModelInterface $metaModel, string $searchText): array
     {
         $output = [];
