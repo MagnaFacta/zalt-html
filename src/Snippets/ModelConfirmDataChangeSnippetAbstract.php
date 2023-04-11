@@ -217,10 +217,10 @@ abstract class ModelConfirmDataChangeSnippetAbstract extends \Zalt\Snippets\Mode
      * having to recode the core table building code.
      *
      * @param \Zalt\Model\Bridge\VerticalTableBridge $bridge
-     * @param \Zalt\Model\ModelAbstract $model
+     * @param \Zalt\Model\ModelAbstract $dataModel
      * @return void
      */
-    protected function setShowTableFooter(DetailTableBridge $bridge, DataReaderInterface $model)
+    protected function setShowTableFooter(DetailTableBridge $bridge, DataReaderInterface $dataModel)
     {
         $footer = $bridge->tfrow();
 
