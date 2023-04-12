@@ -192,7 +192,7 @@ class TableBridge extends TableBridgeAbstract
             }
         }
 
-        return Html::create()->a([$this->currentUrl, $sortParam => $name], ['class' => $class, 'title' => $this->metaModel->get($name, 'description')], $label);
+        return Html::create()->a($this->getUrl([$sortParam => $name]), ['class' => $class, 'title' => $this->metaModel->get($name, 'description')], $label);
     }
 
     public function setSortData(DataReaderInterface $model): TableBridgeAbstract

@@ -22,6 +22,9 @@ class LinkPaginator extends PaginatorAbstract
 {
     use CurrentUrlPaginatorTrait;
 
+    public int $maximumItems = 100000;
+    public int $minimumItems = 5;
+
     /**
      * @return string|null Null for not output, string for output
      */
@@ -41,9 +44,9 @@ class LinkPaginator extends PaginatorAbstract
     protected function getItems(): array
     {
         return [
-            $this->getItemLink(intval($this->pageItems / 2), '-'),
+            $this->getItemLink($this->getLessItems(), '-'),
             $this->pageItems,
-            $this->getItemLink(intval($this->pageItems * 2), '+'),
+            $this->getItemLink($this->getMoreItems(), '+'),
             ];
     }
 
@@ -71,6 +74,32 @@ class LinkPaginator extends PaginatorAbstract
     public function getLastPageLabel(): ?string
     {
         return '>>';
+    }
+
+    public function getLessItems(): int
+    {
+        $base = intval($this->pageItems / 2);
+
+        if ($base < $this->minimumItems) {
+            return $this->minimumItems;
+        }
+
+        return $base;
+    }
+
+    public function getMoreItems(): int
+    {
+        $current = (string) $this->pageItems;
+        if ('1' === \substr($current, 0, 1)) {
+            $base = intval($this->pageItems * 2.5);
+        } else {
+            $base = intval($this->pageItems * 2);
+        }
+
+        if ($base > $this->maximumItems) {
+            return $this->maximumItems;
+        }
+        return $base;
     }
 
     /**

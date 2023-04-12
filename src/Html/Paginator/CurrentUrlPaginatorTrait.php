@@ -42,7 +42,7 @@ trait CurrentUrlPaginatorTrait
             return Html::create()->span($label, ['class' => $this->itemsDisabledClass]);
         }
         return Html::create()->a(
-            array_merge($this->currentUrl, [ PaginatorInterface::REQUEST_ITEMS => $itemCount, PaginatorInterface::REQUEST_PAGE => $this->pageNumber]),
+            $this->getUrl([PaginatorInterface::REQUEST_ITEMS => $itemCount, PaginatorInterface::REQUEST_PAGE => $this->pageNumber]),
             $label,
             ['class' => $this->itemsLinkClass]
         );
@@ -62,10 +62,15 @@ trait CurrentUrlPaginatorTrait
             return Html::create()->span($label, ['class' => $class]);
         }
         return Html::create()->a(
-            array_merge($this->currentUrl, [PaginatorInterface::REQUEST_PAGE => $pageNumber, PaginatorInterface::REQUEST_ITEMS => $this->pageItems]),
+            $this->getUrl([PaginatorInterface::REQUEST_PAGE => $pageNumber, PaginatorInterface::REQUEST_ITEMS => $this->pageItems]),
             $label,
             ['class' => $this->pageLinkClass]
         );
+    }
+
+    protected function getUrl(array $params = [])
+    {
+        return array_merge($this->currentUrl, $params);
     }
 
     public function setCurrentUrl(array $currentUrl)
