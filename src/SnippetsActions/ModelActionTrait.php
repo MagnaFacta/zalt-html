@@ -20,8 +20,7 @@ namespace Zalt\SnippetsActions;
 trait ModelActionTrait
 {
     /**
-     * Optional extra filter
-     * @var array
+     * @var array Optional extra filter
      */
     public array $extraFilter = [];
 
@@ -32,8 +31,7 @@ trait ModelActionTrait
     public array $extraSort = [];
 
     /**
-     * Searchfilter. The default is false, to signal that no data was passed. Any other value means the value is used.
-     * @var array|bool
+     * @var array|bool The default is false, to signal that no data was passed. Any other value means the value is used.
      */
     public mixed $searchFilter = false;
 

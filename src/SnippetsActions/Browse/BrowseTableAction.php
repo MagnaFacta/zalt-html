@@ -30,53 +30,37 @@ class BrowseTableAction extends AbstractAction implements ModelActionInterface
     protected array $_snippets = [ModelTableSnippet::class];
 
     /**
-     * One of the BridgeInterface MODE constants
-     *
-     * @var int
+     * @var int One of the BridgeInterface MODE constants
      */
     public int $bridgeMode = BridgeInterface::MODE_ROWS;
 
     /**
-     * Sets pagination on or off.
-     *
-     * @var boolean
+     * @var boolean Sets pagination on or off.
      */
     public bool $browse = false;
 
     /**
-     * Optional table caption.
-     *
-     * @var string
+     * @var string Optional table caption.
      */
     public string $caption = '';
 
     /**
-     * An array of nested arrays, each defining the input for setMultiSort
-     *
-     * @var array
+     * @var array An array of nested arrays, each defining the input for setMultiSort
      */
     public array $columns = [];
 
     /**
-     * Content to show when there are no rows. May be an object or string or null
-     *
-     * Null shows '&hellip;'
-     *
-     * @var mixed
+     * @var mixed Content to show when there are no rows. Can be an object or string or null. Null shows '&hellip;'
      */
     public mixed $onEmpty = null;
 
     /**
-     * When true (= default) the headers get sortable links.
-     *
-     * @var boolean
+     * @var boolean When true (= default) the headers get sortable links.
      */
     public bool $sortableLinks = true;
 
     /**
-     * When true query only the used columns
-     *
-     * @var boolean
+     * @var boolean When true query only the used columns
      */
     public bool $trackUsage = true;
 

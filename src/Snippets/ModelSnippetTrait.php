@@ -200,5 +200,7 @@ trait ModelSnippetTrait
 
         $dataModel->setFilter($this->getFilter($metaModel));
         $dataModel->setSort($this->getSort($metaModel));
+
+        // dump($dataModel->getFilter(), $dataModel->getSort());
     }
 }
