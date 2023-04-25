@@ -123,6 +123,9 @@ class LinkPaginator extends PaginatorAbstract
         if ($lastLink - $firstLink > 10) {
             $lastLink = $firstLink + 10;
         }
+        if ($lastLink === 0) {
+            $lastLink = 1;
+        }
 
         $numbers = range($firstLink, $lastLink);
 
