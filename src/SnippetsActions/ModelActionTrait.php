@@ -20,6 +20,13 @@ namespace Zalt\SnippetsActions;
 trait ModelActionTrait
 {
     /**
+     * Part of sort set by the user
+     *
+     * @var array
+     */
+    public array $dynamicSort = [];
+
+    /**
      * @var array Optional extra filter
      */
     public array $extraFilter = [];

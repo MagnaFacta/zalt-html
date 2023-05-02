@@ -55,6 +55,16 @@ class BrowseTableAction extends AbstractAction implements ModelActionInterface
     public mixed $onEmpty = null;
 
     /**
+     * @var int Pagenumber starting with offset zero
+     */
+    public int $pageItems = 10;
+
+    /**
+     * @var int Pagenumber starting with offset ONE
+     */
+    public int $pageNumber = 1;
+
+    /**
      * @var boolean When true (= default) the headers get sortable links.
      */
     public bool $sortableLinks = true;

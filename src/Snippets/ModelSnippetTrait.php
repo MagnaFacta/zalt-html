@@ -48,6 +48,13 @@ trait ModelSnippetTrait
     protected $_fixedSort = [];
 
     /**
+     * Part of sort set by the user
+     *
+     * @var array
+     */
+    public array $dynamicSort = [];
+
+    /**
      * Optional extra filter
      *
      * @var array
@@ -141,36 +148,10 @@ trait ModelSnippetTrait
         return $filter;
     }
 
-    public function getRequestSort(MetaModelInterface $metaModel) : array
-    {
-        $sort = [];
-
-        // Loop to add the sort in parameter order
-        foreach ($this->requestInfo->getParams() as $key => $field) {
-            switch ($key) {
-                case $this->sortParamAsc:
-                    $sort[$field] = SORT_ASC;
-                    break;
-
-                case $this->sortParamDesc:
-                    $sort[$field] = SORT_DESC;
-                    break;
-
-                default:
-                    // Intentional fall through
-            }
-            if (count($sort) > 1) {
-                break;
-            }
-        }
-
-        return $sort;
-    }
-
     public function getSort(MetaModelInterface $metaModel) : array
     {
-        // Sorts in request overrule extraSort settings which again overrule fixedSort settings
-        return $this->getRequestSort($metaModel) + $this->extraSort + $this->_fixedSort;
+        // Sorts in dynamicSort overrule extraSort settings which again overrule fixedSort settings
+        return $this->dynamicSort + $this->extraSort + $this->_fixedSort;
     }
 
     /**

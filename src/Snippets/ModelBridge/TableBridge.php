@@ -26,6 +26,11 @@ use Zalt\Ra\MultiWrapper;
 class TableBridge extends TableBridgeAbstract
 {
     /**
+     * @var bool What is the main direction of the sort
+     */
+    protected bool $sortAsc = true;
+
+    /**
      * @var string link class to sort ascending
      */
     protected string $sortAscClass     = 'sortAsc';
