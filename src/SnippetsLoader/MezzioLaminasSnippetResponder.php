@@ -24,6 +24,7 @@ use Zalt\Message\MessengerInterface;
 use Zalt\Message\MezzioSessionMessenger;
 use Zalt\Model\Data\DataReaderInterface;
 use Zalt\Model\Data\DataWriterInterface;
+use Zalt\Model\Data\FullDataInterface;
 use Zalt\Model\MetaModelInterface;
 use Zalt\Model\MetaModellerInterface;
 use Zalt\Ra\Ra;
@@ -53,9 +54,11 @@ class MezzioLaminasSnippetResponder implements SnippetResponderInterface
             $className = 'SnippetsActions\\' . $className;
         }
 
-        // There will probavly be a loader in the future
+        // There will probably be a loader in the future
         $action = new $className();
         if ($action instanceof SnippetActionInterface) {
+            $this->snippetLoader->addConstructorVariable(SnippetActionInterface::class, $action);
+            $this->snippetLoader->addConstructorVariable($className, $action);
             return $action;
         }
 

@@ -28,13 +28,13 @@ class MessageableSnippetAbstract extends TranslatableSnippetAbstract
     use MessageTrait;
     
     public function __construct(SnippetOptions $snippetOptions,
-                                protected RequestInfo $requestInfo,
+                                RequestInfo $requestInfo,
                                 TranslatorInterface $translate,
                                 MessengerInterface $messenger)
     {
         // We're setting trait variables so no constructor promotion
         $this->messenger = $messenger;
 
-        parent::__construct($snippetOptions, $this->requestInfo, $translate);
+        parent::__construct($snippetOptions, $requestInfo, $translate);
     }
 }
