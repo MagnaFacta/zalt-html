@@ -12,7 +12,6 @@
 namespace Zalt\Snippets;
 
 use Psr\Cache\CacheItemPoolInterface;
-use Zalt\Base\RequestInfo;
 use Zalt\Late\Late;
 
 /**
