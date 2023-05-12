@@ -99,6 +99,9 @@ class LinkPaginator extends PaginatorAbstract
         if ($base > $this->maximumItems) {
             return $this->maximumItems;
         }
+        if ($base > $this->itemCount) {
+            return $this->itemCount;
+        }
         return $base;
     }
 
@@ -136,10 +139,14 @@ class LinkPaginator extends PaginatorAbstract
     {
         $output = $this->getPagesHolder();
 
+        $pageCount = max(intval(ceil($this->itemCount / $this->pageItems)), 1);
+        if ($pageCount < $this->pageNumber) {
+            $this->pageNumber = max($pageCount, 1);
+        }
+
         $output->append($this->getPageLink(1, $this->getFirstPageLabel(), true));
         $output->append($this->getPageLink(max(1, $this->pageNumber - 1), $this->getPreviousPageLabel(), true));
 
-        $pageCount = intval(ceil($this->itemCount / $this->pageItems));
         foreach ($this->getPageNumbers($this->pageNumber, $pageCount) as $page => $label) {
             $output->append($this->getPageLink($page, (string) $label, false));
         }
