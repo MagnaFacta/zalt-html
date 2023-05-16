@@ -137,7 +137,7 @@ class DetailTableBridge extends TableBridgeAbstract
      * @param mixed  $label The label. Default is set to model defined label, but a string or ann HtmlIntrface object can be passed here  
      * @param array  $attr Optional extra/special attributes
      * @return void
-     * @throws \Zalt\Model\Exceptions\MetaModelException
+     * @throws \Zalt\Model\Exception\MetaModelException
      */
     public function addItem(string $name, mixed $label = null, array $attr = [])
     {

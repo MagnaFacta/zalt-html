@@ -150,7 +150,7 @@ abstract class TableBridgeAbstract extends \Zalt\Model\Bridge\BridgeAbstract
      * @param string $name The field name or key name
      * @param mixed $label The label to display
      * @return mixed Late unless in single row mode
-     * @throws \Zalt\Model\Exceptions\MetaModelException
+     * @throws \Zalt\Model\Exception\MetaModelException
      */
     public function getHeaderFormatted(string $name, mixed $label): mixed
     {

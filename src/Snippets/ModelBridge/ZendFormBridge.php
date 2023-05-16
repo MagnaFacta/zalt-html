@@ -13,7 +13,7 @@ namespace Zalt\Snippets\ModelBridge;
 
 use Zalt\Model\Data\DataReaderInterface;
 use Zalt\Model\Data\FullDataInterface;
-use Zalt\Model\Exceptions\MetaModelException;
+use Zalt\Model\Exception\MetaModelException;
 use Zalt\Ra\Ra;
 
 /**
