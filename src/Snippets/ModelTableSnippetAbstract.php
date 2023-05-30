@@ -284,27 +284,10 @@ abstract class ModelTableSnippetAbstract extends \Zalt\Snippets\ModelSnippetAbst
         return $output;
     }
 
-    public function getRequestUrl($skipSort = false): array
+    public function getRequestUrl(): array
     {
         $url = [$this->requestInfo->getBasePath()];
 
-        if (! $skipSort) {
-            // Loop to add the sort in parameter order
-            foreach ($this->requestInfo->getParams() as $key => $field) {
-                switch ($key) {
-                    case $this->sortParamAsc:
-                        $url[$this->sortParamAsc] = $field;
-                        break;
-
-                    case $this->sortParamDesc:
-                        $url[$this->sortParamDesc] = $field;
-                        break;
-
-                    default:
-                        // Intentional fall through
-                }
-            }
-        }
         $url[PaginatorInterface::REQUEST_PAGE] = $this->getPageNumber();
         $url[PaginatorInterface::REQUEST_ITEMS] = $this->getPageItems();
 
@@ -368,7 +351,7 @@ abstract class ModelTableSnippetAbstract extends \Zalt\Snippets\ModelSnippetAbst
 
     public function prepareBridge(TableBridge $bridge)
     {
-        $bridge->currentUrl    = $this->getRequestUrl(true);
+        $bridge->currentUrl    = $this->getRequestUrl();
         $bridge->sortAscParam  = $this->sortParamAsc;
         $bridge->sortDescParam = $this->sortParamDesc;
     }
