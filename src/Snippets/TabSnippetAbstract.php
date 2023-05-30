@@ -30,7 +30,7 @@ abstract class TabSnippetAbstract extends \Zalt\Snippets\TranslatableSnippetAbst
      *
      * @var array
      */
-    protected $baseUrl = array();
+    protected array $baseUrl = [];
 
     /**
      * Shortfix to add class attribute
@@ -43,46 +43,50 @@ abstract class TabSnippetAbstract extends \Zalt\Snippets\TranslatableSnippetAbst
      *
      * @var string Id of the current tab
      */
-    protected $currentTab;
+    protected string $currentTab;
 
     /**
      *
      * @var string Id of default tab
      */
-    protected $defaultTab;
+    protected string $defaultTab;
 
     /**
      * Show bar when there is only a single tab
      *
      * @var boolean
      */
-    protected $displaySingleTab = false;
+    protected bool $displaySingleTab = false;
 
     /**
      * Default href parameter values
      *
      * @var array
      */
-    protected $href = array();
+    protected array $href = [];
+
+    protected ?string $linkActiveClass = 'active';
+
+    protected ?string $linkClass = null;
 
     /**
      *
      * @var string Class attribute for active tab
      */
-    protected $tabActiveClass = 'active';
+    protected ?string $tabActiveClass = 'active';
 
     /**
      *
      * @var string Class attribute for all tabs
      */
-    protected $tabClass       = 'tab';
+    protected string $tabClass       = 'tab';
 
     /**
      * Sets the default and current tab and returns the current
      *
      * @return string The current tab
      */
-    public function getCurrentTab()
+    public function getCurrentTab(): string
     {
         $tabs = $this->getTabs();
 
@@ -124,12 +128,26 @@ abstract class TabSnippetAbstract extends \Zalt\Snippets\TranslatableSnippetAbst
 
             foreach ($tabs as $tabId => $content) {
 
-                $li = $tabRow->li(array('class' => $this->tabClass));
+                $li = $tabRow->li(['class' => $this->tabClass]);
 
-                $li->a($this->getParameterKeysFor($tabId) + $this->href, $content);
+                $linkParams = [
+                    ...$this->getParameterKeysFor($tabId),
+                    ...$this->href,
+                ];
+
+                if ($this->linkClass) {
+                    $linkParams['class'] = $this->linkClass;
+                }
+
+                $link = $li->a($linkParams, $content);
 
                 if ($this->currentTab == $tabId) {
-                    $li->appendAttrib('class', $this->tabActiveClass);
+                    if ($this->tabActiveClass) {
+                        $li->appendAttrib('class', $this->tabActiveClass);
+                    }
+                    if ($this->linkActiveClass) {
+                        $link->appendAttrib('class', $this->linkActiveClass);
+                    }
                 }
             }
 
@@ -145,7 +163,7 @@ abstract class TabSnippetAbstract extends \Zalt\Snippets\TranslatableSnippetAbst
      *
      * @return mixed
      */
-    protected function getParameterKey()
+    protected function getParameterKey(): string|int|null
     {
         return null;
     }
@@ -156,15 +174,15 @@ abstract class TabSnippetAbstract extends \Zalt\Snippets\TranslatableSnippetAbst
      * @param string $tabId
      * @return array
      */
-    protected function getParameterKeysFor($tabId)
+    protected function getParameterKeysFor(string $tabId): array
     {
         $paramKey = $this->getParameterKey();
 
         if ($paramKey) {
-            return array($paramKey => $tabId);
+            return [$paramKey => $tabId];
         }
 
-        return array();
+        return [];
     }
 
     /**
@@ -172,5 +190,5 @@ abstract class TabSnippetAbstract extends \Zalt\Snippets\TranslatableSnippetAbst
      *
      * @return array tabId => label
      */
-    abstract protected function getTabs();
+    abstract protected function getTabs(): array;
 }

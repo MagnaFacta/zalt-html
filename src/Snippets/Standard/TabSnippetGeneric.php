@@ -43,7 +43,7 @@ class TabSnippetGeneric extends \Zalt\Snippets\TabSnippetAbstract
      *
      * @return array tabId => label
      */
-    protected function getTabs()
+    protected function getTabs(): array
     {
         return $this->_tabs;
     }
