@@ -11,7 +11,6 @@
 
 namespace Zalt\Snippets;
 
-use Zalt\Html\Marker;
 use Zalt\Html\Paginator\LinkPaginator;
 use Zalt\Html\Paginator\PaginatorInterface;
 use Zalt\Html\TableElement;
@@ -35,6 +34,8 @@ use Zalt\Snippets\ModelBridge\TableBridge;
  */
 abstract class ModelTableSnippetAbstract extends \Zalt\Snippets\ModelSnippetAbstract
 {
+    use ModelTextFilterTrait;
+
     /**
      * One of the BridgeInterface MODE constants
      *
@@ -93,11 +94,6 @@ abstract class ModelTableSnippetAbstract extends \Zalt\Snippets\ModelSnippetAbst
      * @var boolean
      */
     public $sortableLinks = true;
-
-    /**
-     * @var string The parameter name that contains the search text
-     */
-    protected string $textSearchField = 'search';
 
     /**
      * When true query only the used columns
@@ -160,11 +156,6 @@ abstract class ModelTableSnippetAbstract extends \Zalt\Snippets\ModelSnippetAbst
         $table->tfrow()->append($paginator->getHtmlPagelinks());
     }
     
-    public function cleanUpTextFilter(string $searchText) : array
-    {
-        return array_filter(explode(' ', strtolower(preg_replace("[^A-Za-z0-9]", " ", $searchText))));
-    }
-
     /**
      * @param BridgeInterface $bridge
      * @param DataReaderInterface $dataModel
@@ -220,17 +211,8 @@ abstract class ModelTableSnippetAbstract extends \Zalt\Snippets\ModelSnippetAbst
     public function getFilter(MetaModelInterface $metaModel) : array
     {
         $filter = parent::getFilter($metaModel);
-        
-        $searchText = $this->requestInfo->getParam($this->textSearchField);
-        if ($searchText) {
-            // Add generic text search filter and marker
-            $searchFilter = $this->getTextFilter($metaModel, $searchText);
-            if ($searchFilter) {
-                $filter = array_merge($filter, $searchFilter);
-            }
-        }
-        
-        return $filter;
+
+        return $this->processTextFilter($filter, $metaModel, $this->searchFilter);
     }
 
     /**
@@ -292,61 +274,6 @@ abstract class ModelTableSnippetAbstract extends \Zalt\Snippets\ModelSnippetAbst
         $url[PaginatorInterface::REQUEST_ITEMS] = $this->getPageItems();
 
         return $url;
-    }
-
-    public function getTextFilter(MetaModelInterface $metaModel, string $searchText): array
-    {
-        $output = [];
-        $searches = $this->cleanUpTextFilter($searchText);
-        if ($searches) {
-            $fields = $metaModel->getCol('label');
-            foreach ($metaModel->getCol('no_text_search') as $field => $value)  {
-                if ($value) {
-                    unset($fields[$field]);
-                }
-            }
-            
-            $marker = new Marker($searches, 'strong', 'UTF-8');
-            $metaModel->setCol(array_keys($fields), ['markCallback' => [$marker, 'mark']]);
-            
-            $options = $metaModel->getCol('multiOptions');
-
-            foreach ($searches as $search) {
-                $current = [];
-                foreach ($fields as $field => $label) {
-                    if (isset($options[$field])) {
-                        $inValues = [];
-                        foreach ($options[$field] as $value => $label) {
-                            if (str_contains(strtolower($label), $search)) {
-                                $inValues[] = $value;
-                            }
-                        }
-                        if ($inValues) {
-                            $current[$field] = $inValues;
-                        }
-                    } else {
-                        switch ($metaModel->get($field, 'type')) {
-                            case MetaModelInterface::TYPE_DATE:
-                            case MetaModelInterface::TYPE_DATETIME:
-                            case MetaModelInterface::TYPE_TIME:
-                            case MetaModelInterface::TYPE_NUMERIC:
-                                if (intval($search)) {
-                                    $current[$field] = [MetaModelInterface::FILTER_CONTAINS => $search];
-                                }
-                                break;
-                            case MetaModelInterface::TYPE_CHILD_MODEL:
-                                break;
-                            default:
-                                $current[$field] = [MetaModelInterface::FILTER_CONTAINS => $search];
-                        }
-                    }
-                }
-                if ($current) {
-                    $output[] = $current;
-                }
-            }
-        }
-        return $output;
     }
 
     public function prepareBridge(TableBridge $bridge)
