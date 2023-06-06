@@ -87,9 +87,9 @@ trait ModelTextFilterTrait
         return $output;
     }
 
-    public function processTextFilter(array $filter, MetaModelInterface $metaModel, array $searchData): array
+    public function processTextFilter(array $filter, MetaModelInterface $metaModel, array|bool $searchData): array
     {
-        if (isset($searchData[$this->textSearchField])) {
+        if ($searchData && isset($searchData[$this->textSearchField])) {
             // Add generic text search filter and marker
             $searchFilter = $this->getTextFilter($metaModel, $searchData[$this->textSearchField]);
             if ($searchFilter) {
