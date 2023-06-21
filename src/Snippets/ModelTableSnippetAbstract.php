@@ -151,7 +151,8 @@ abstract class ModelTableSnippetAbstract extends \Zalt\Snippets\ModelSnippetAbst
         $paginator = $this->getPaginator();
         $paginator->setCount($count)
             ->setPageItems($items)
-            ->setPageNumber($page);
+            ->setPageNumber($page)
+            ->validatePageNumber();
 
         $table->tfrow()->append($paginator->getHtmlPagelinks());
     }
