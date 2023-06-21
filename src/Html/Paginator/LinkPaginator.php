@@ -75,6 +75,19 @@ class LinkPaginator extends PaginatorAbstract
         return '>>';
     }
 
+    public function getFirstItem(): int
+    {
+        if ($this->itemCount == 0) {
+            return 0;
+        }
+        return (($this->pageNumber - 1) * $this->pageItems) + 1;
+    }
+
+    public function getLastItem(): int
+    {
+        return min($this->pageNumber * $this->pageItems, $this->itemCount);
+    }
+
     /**
      * Decrease the number of items to show on a page. This must never be
      * a value not in our item progression, or strange things will happen.
