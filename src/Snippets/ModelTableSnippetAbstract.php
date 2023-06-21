@@ -103,6 +103,11 @@ abstract class ModelTableSnippetAbstract extends \Zalt\Snippets\ModelSnippetAbst
     public $trackUsage = true;
 
     /**
+     * @var bool When false do not add the data to the Late Stack
+     */
+    protected bool $useAsLateStack = true;
+
+    /**
      * Adds columns from the model to the bridge that creates the browse table.
      *
      * Overrule this function to add different columns to the browse table, without
@@ -278,8 +283,9 @@ abstract class ModelTableSnippetAbstract extends \Zalt\Snippets\ModelSnippetAbst
 
     public function prepareBridge(TableBridge $bridge)
     {
-        $bridge->currentUrl    = $this->getRequestUrl();
-        $bridge->sortAscParam  = $this->sortParamAsc;
-        $bridge->sortDescParam = $this->sortParamDesc;
+        $bridge->currentUrl     = $this->getRequestUrl();
+        $bridge->sortAscParam   = $this->sortParamAsc;
+        $bridge->sortDescParam  = $this->sortParamDesc;
+        $bridge->useAsLateStack = $this->useAsLateStack;
     }
 }
