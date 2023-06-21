@@ -143,14 +143,28 @@ class LinkPaginator extends PaginatorAbstract
         return array_combine($numbers, $numbers);
     }
 
+    /**
+     * Get the number of pages we have. We always have one page, even
+     * if we don't have any items.
+     *
+     * @return int Number of pages with items.
+     */
+    protected function getPageCount(): int
+    {
+        if ($this->itemCount > 0 && $this->pageItems > 0) {
+            $pageCount = intval(ceil($this->itemCount / $this->pageItems));
+        } else {
+            $pageCount = 1;
+        }
+
+        return $pageCount;
+    }
+
     protected function getPages(): HtmlInterface
     {
         $output = $this->getPagesHolder();
 
-        $pageCount = max(intval(ceil($this->itemCount / $this->pageItems)), 1);
-        if ($pageCount < $this->pageNumber) {
-            $this->pageNumber = max($pageCount, 1);
-        }
+        $pageCount = $this->getPageCount();
 
         $output->append($this->getPageLink(1, $this->getFirstPageLabel(), true));
         $output->append($this->getPageLink(max(1, $this->pageNumber - 1), $this->getPreviousPageLabel(), true));
