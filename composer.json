@@ -46,5 +46,10 @@
             "type": "git",
             "url": "https://github.com/MagnaFacta/zalt-util.git"
         }
-    ]
+    ],
+    "scripts": {
+        "test": [
+            "vendor/bin/phpunit test"
+        ]
+    }
 }
