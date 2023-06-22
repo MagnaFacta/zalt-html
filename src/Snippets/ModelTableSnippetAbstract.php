@@ -284,6 +284,7 @@ abstract class ModelTableSnippetAbstract extends \Zalt\Snippets\ModelSnippetAbst
     public function prepareBridge(TableBridge $bridge)
     {
         $bridge->currentUrl     = $this->getRequestUrl();
+        $bridge->lateStackName  = 'bridge_' . get_class($this);
         $bridge->sortAscParam   = $this->sortParamAsc;
         $bridge->sortDescParam  = $this->sortParamDesc;
         $bridge->useAsLateStack = $this->useAsLateStack;
