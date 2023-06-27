@@ -53,4 +53,24 @@ abstract class PaginatorAbstract implements PaginatorInterface
         $this->pageNumber = $pageNumber;
         return $this;
     }
+
+    /**
+     * Ensure that the value of pagenumber is valid, based on the number of
+     * items there are (itemCount) and the number of items that is shown
+     * on a page (pageItems);
+     */
+    public function validatePageNumber(): PaginatorInterface
+    {
+        // Assumes itemCount and pageItems have been set.
+        if ($this->pageItems > 0) {
+            $maxPage = intval(ceil($this->itemCount / $this->pageItems));
+            if ($this->pageNumber > $maxPage) {
+                $this->pageNumber = max($maxPage, 1);
+            }
+        } else {
+            $this->pageNumber = 1;
+        }
+       
+        return $this;
+    }
 }

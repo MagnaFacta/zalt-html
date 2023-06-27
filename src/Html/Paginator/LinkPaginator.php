@@ -22,8 +22,7 @@ class LinkPaginator extends PaginatorAbstract
 {
     use CurrentUrlPaginatorTrait;
 
-    public int $maximumItems = 100000;
-    public int $minimumItems = 5;
+    public array $itemProgression = [5, 10, 20, 30, 50, 100, 200, 500, 1000];
 
     /**
      * @return string|null Null for not output, string for output
@@ -76,33 +75,55 @@ class LinkPaginator extends PaginatorAbstract
         return '>>';
     }
 
-    public function getLessItems(): int
+    public function getFirstItem(): int
     {
-        $base = intval($this->pageItems / 2);
-
-        if ($base < $this->minimumItems) {
-            return $this->minimumItems;
+        if ($this->itemCount == 0) {
+            return 0;
         }
-
-        return $base;
+        return (($this->pageNumber - 1) * $this->pageItems) + 1;
     }
 
-    public function getMoreItems(): int
+    public function getLastItem(): int
     {
-        $current = (string) $this->pageItems;
-        if ('1' === \substr($current, 0, 1)) {
-            $base = intval($this->pageItems * 2.5);
-        } else {
-            $base = intval($this->pageItems * 2);
+        return min($this->pageNumber * $this->pageItems, $this->itemCount);
+    }
+
+    /**
+     * Decrease the number of items to show on a page. This must never be
+     * a value not in our item progression, or strange things will happen.
+     *
+     * @return int Number of items to show.
+     */
+    public function getLessItems(): int
+    {
+        $less = $this->itemProgression[0];
+        foreach (array_reverse($this->itemProgression) as $count) {
+            if ($count < $this->pageItems) {
+                $less = $count;
+                break;
+            }
         }
 
-        if ($base > $this->maximumItems) {
-            return $this->maximumItems;
+        return $less;
+    }
+
+    /**
+     * Increase the number of items to show on a page. This must never be
+     * a value not in our item progression, or strange things will happen.
+     *
+     * @return int Number of items to show.
+     */
+    public function getMoreItems(): int
+    {
+        $more = $this->itemProgression[array_key_last($this->itemProgression)];
+        foreach ($this->itemProgression as $count) {
+            if ($count > $this->pageItems) {
+                $more = $count;
+                break;
+            }
         }
-        if ($base > $this->itemCount) {
-            return $this->itemCount;
-        }
-        return $base;
+
+        return $more;
     }
 
     /**
@@ -135,14 +156,28 @@ class LinkPaginator extends PaginatorAbstract
         return array_combine($numbers, $numbers);
     }
 
+    /**
+     * Get the number of pages we have. We always have one page, even
+     * if we don't have any items.
+     *
+     * @return int Number of pages with items.
+     */
+    protected function getPageCount(): int
+    {
+        if ($this->itemCount > 0 && $this->pageItems > 0) {
+            $pageCount = intval(ceil($this->itemCount / $this->pageItems));
+        } else {
+            $pageCount = 1;
+        }
+
+        return $pageCount;
+    }
+
     protected function getPages(): HtmlInterface
     {
         $output = $this->getPagesHolder();
 
-        $pageCount = max(intval(ceil($this->itemCount / $this->pageItems)), 1);
-        if ($pageCount < $this->pageNumber) {
-            $this->pageNumber = max($pageCount, 1);
-        }
+        $pageCount = $this->getPageCount();
 
         $output->append($this->getPageLink(1, $this->getFirstPageLabel(), true));
         $output->append($this->getPageLink(max(1, $this->pageNumber - 1), $this->getPreviousPageLabel(), true));
