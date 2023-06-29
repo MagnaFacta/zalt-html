@@ -50,7 +50,7 @@ class MezzioLaminasSnippetResponder implements SnippetResponderInterface
     public function getSnippetsAction(string $className): SnippetActionInterface
     {
         // Prepend action if overloading
-        if (! (str_contains($className, '\\SnippetsActions\\') || str_starts_with($className, 'SnippetsActions\\'))) {
+        if (!class_exists($className) && ! (str_contains($className, '\\SnippetsActions\\') || str_starts_with($className, 'SnippetsActions\\'))) {
             $className = 'SnippetsActions\\' . $className;
         }
 
