@@ -11,7 +11,8 @@ declare(strict_types=1);
 
 namespace Zalt\Snippets\ModelBridge;
 
-use Zalt\Model\Data\DataReaderInterface;
+use Zalt\Model\Bridge\Laminas\LaminasValidatorBridge;
+use Zalt\Model\Bridge\ValidatorBridgeInterface;
 use Zalt\Model\Data\FullDataInterface;
 use Zalt\Model\Exception\MetaModelException;
 use Zalt\Ra\Ra;
@@ -106,15 +107,7 @@ class ZendFormBridge extends \Zalt\Model\Bridge\FormBridgeAbstract
      */
     protected function _applyValidators($name, \Zend_Form_Element $element)
     {
-        $validators = $this->metaModel->get($name, 'validators');
-
-        if ($validator = $this->metaModel->get($name, 'validator')) {
-            if ($validators) {
-                array_unshift($validators, $validator);
-            } else {
-                $validators = array($validator);
-            }
-        }
+        $validators = $this->validatorBridge->getValidatorsFor($name);
 
         if ($validators) {
             $element->addValidators($validators);
@@ -175,7 +168,7 @@ class ZendFormBridge extends \Zalt\Model\Bridge\FormBridgeAbstract
     public function addFile($name, $arrayOrKey1 = null, $value1 = null, $key2 = null, $value2 = null)
     {
         $options = func_get_args();
-        $options = \MUtil\Ra::pairs($options, 1);
+        $options = Ra::pairs($options, 1);
 
         $options = $this->_mergeOptions($name, $options,self::DISPLAY_OPTIONS, self::FILE_OPTIONS, self::TEXT_OPTIONS);
 
@@ -185,6 +178,7 @@ class ZendFormBridge extends \Zalt\Model\Bridge\FormBridgeAbstract
         $extension = $this->_moveOption('extension', $options);
 
         $element = new \Zend_Form_Element_File($name, $options);
+        $element->addPrefixPath('Zend_Validate',      'Zend/Validate/',       \Zend_Form_Element::VALIDATE);
 
         if ($filename) {
             $count = 1;
@@ -213,7 +207,7 @@ class ZendFormBridge extends \Zalt\Model\Bridge\FormBridgeAbstract
             $validator->setMessage('Only %extension% files are accepted.', \Laminas\Validator\File\Extension::FALSE_EXTENSION);
         }
 
-        return $this->_addToForm($name, $element);
+        return $this->_addToForm($name, $element, [], false, false);
     }
 
     /**
@@ -241,7 +235,7 @@ class ZendFormBridge extends \Zalt\Model\Bridge\FormBridgeAbstract
      * instance using the default label / non-label distinction.
      *
      * @param string $name Name of element
-     * @param mixed $arrayOrKey1 \MUtil\Ra::pairs() name => value array
+     * @param mixed $arrayOrKey1 Ra::pairs() name => value array
      * @return mixed
      */
     public function addFormTable($name, $arrayOrKey1 = null, $value1 = null, $key2 = null, $value2 = null)
@@ -291,33 +285,27 @@ class ZendFormBridge extends \Zalt\Model\Bridge\FormBridgeAbstract
         $options = Ra::pairs($options, 1);
 
         $options = $this->_mergeOptions($name, $options,self::DISPLAY_OPTIONS, self::PASSWORD_OPTIONS, self::TEXT_OPTIONS);
+        $repeatLabel = $this->_moveOption('repeatLabel', $options);
 
-        $stringlength = $this->_getStringLength($options);
-
-        if ($repeatLabel = $this->_moveOption('repeatLabel', $options)) {
+        if ($repeatLabel) {
             $repeatOptions = $options;
 
             $this->_moveOption('description', $repeatOptions);
 
             $repeatOptions['label'] = $repeatLabel;
             $repeatName = $name . '__repeat';
+
+            $repeatOptions['confirmWith'] = $name;
+            $options['confirmWith'] = $repeatName;
+
+            $this->metaModel->set($name, $options);
+            $this->metaModel->set($repeatName, $repeatOptions);
         }
 
         $element = $this->_addToForm($name, 'password', $options);
 
-        if ($stringlength) {
-            $element->addValidator('StringLength', true, $stringlength);
-        }
-
         if (isset($repeatLabel)) {
-            $repeatElement = $this->_addToForm($repeatName, 'password', $repeatOptions, true, false);
-
-            if ($stringlength) {
-                $repeatElement->addValidator('StringLength', true, $stringlength);
-            }
-
-            $element->addValidator(new \MUtil\Validate\IsConfirmed($repeatName, $repeatLabel));
-            $repeatElement->addValidator(new \MUtil\Validate\IsConfirmed($name, isset($options['label']) ? $options['label'] : null));
+            $repeatElement = $this->_addToForm($repeatName, 'password', $repeatOptions);
         }
 
         return $element;
@@ -389,7 +377,7 @@ class ZendFormBridge extends \Zalt\Model\Bridge\FormBridgeAbstract
      * </code>
      *
      * @param string $name Name of element
-     * @param mixed $arrayOrKey1 \MUtil\Ra::pairs() name => value array
+     * @param mixed $arrayOrKey1 Ra::pairs() name => value array
      * @return mixed
      */
     public function addTab($name, $arrayOrKey1 = null, $value1 = null, $key2 = null, $value2 = null)
@@ -411,7 +399,7 @@ class ZendFormBridge extends \Zalt\Model\Bridge\FormBridgeAbstract
 
     /**
      * @param string $name
-     * @param mixed $arrayOrKey1 \MUtil\Ra::pairs() name => value array
+     * @param mixed $arrayOrKey1 Ra::pairs() name => value array
      * @return \MUtil\Bootstrap\Form\Element\ToggleCheckboxes
      * @throws \Zend_Form_Exception
      */
@@ -443,6 +431,22 @@ class ZendFormBridge extends \Zalt\Model\Bridge\FormBridgeAbstract
         return $element;
     }
 
+    /**
+     *
+     * @param string $elementName
+     * @param mixed $validator
+     * @param boolean $breakChainOnFailure
+     * @param mixed $options
+     * @return mixed
+     */
+    public function addValidator($elementName, $validator, $breakChainOnFailure = false, $options = array())
+    {
+        $element = $this->form->getElement($elementName);
+        $element->addValidator($validator, $breakChainOnFailure, $options);
+
+        return $this;
+    }
+
     public function format($name, $value)
     {
         $element = $this->$name;
@@ -452,22 +456,6 @@ class ZendFormBridge extends \Zalt\Model\Bridge\FormBridgeAbstract
             return $element->render(\Zalt\Html\Html::getRenderer()->getView());
         }
         return null;
-    }
-
-    /**
-     *
-     * @param sting $elementName
-     * @param mixed $validator
-     * @param boolean $breakChainOnFailure
-     * @param mixed $options
-     * @return \Zalt\Model\Bridge\FormBridgeInterface
-     */
-    public function addValidator($elementName, $validator, $breakChainOnFailure = false, $options = array())
-    {
-        $element = $this->form->getElement($elementName);
-        $element->addValidator($validator, $breakChainOnFailure, $options);
-
-        return $this;
     }
 
     /**
@@ -489,6 +477,14 @@ class ZendFormBridge extends \Zalt\Model\Bridge\FormBridgeAbstract
         if (method_exists($this->form, 'getTab')) {
             return $this->form->getTab($name);
         }
+    }
+
+    public function getValidatorBridge(): ValidatorBridgeInterface
+    {
+        if (! isset($this->validatorBridge)) {
+            $this->validatorBridge = $this->dataModel->getBridgeFor(LaminasValidatorBridge::class);
+        }
+        return $this->validatorBridge;
     }
 
     public function setForm(mixed $form): void
