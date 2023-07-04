@@ -49,7 +49,7 @@
     ],
     "scripts": {
         "test": [
-            "vendor/bin/phpunit test"
+            "vendor/bin/phpunit  --configuration test/phpunit.xml test"
         ]
     }
 }
