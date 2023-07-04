@@ -14,6 +14,7 @@ namespace Zalt\Snippets;
 use Zalt\Model\Bridge\FormBridgeInterface;
 use Zalt\Model\Data\DataReaderInterface;
 use Zalt\Ra\Ra;
+use Zalt\Snippets\ModelBridge\ZendFormBridge;
 
 /**
  * Generic wizard snippet.
@@ -65,14 +66,14 @@ abstract class WizardFormSnippetAbstract extends \Zalt\Snippets\ModelFormSnippet
      *
      * @var string
      */
-    protected $cancelButtonId = 'cancel_button';
+    protected string $cancelButtonId = 'cancel_button';
 
     /**
      * The cancel button label (default is translated 'Cancel')
      *
      * @var string
      */
-    protected $cancelLabel = null;
+    protected ?string $cancelLabel = null;
 
     /**
      * Shortfix to add class attribute
@@ -86,7 +87,7 @@ abstract class WizardFormSnippetAbstract extends \Zalt\Snippets\ModelFormSnippet
      *
      * @var int
      */
-    protected $currentStep = 1;
+    protected int $currentStep = 1;
 
     /**
      * The form Id used for the finish button
@@ -95,14 +96,14 @@ abstract class WizardFormSnippetAbstract extends \Zalt\Snippets\ModelFormSnippet
      *
      * @var string
      */
-    protected $finishButtonId = 'finish_button';
+    protected string $finishButtonId = 'finish_button';
 
     /**
      * The finish button label (default is translated 'Finish')
      *
      * @var string
      */
-    protected $finishLabel = null;
+    protected ?string $finishLabel = null;
 
     /**
      * The form Id used for the next button
@@ -111,7 +112,7 @@ abstract class WizardFormSnippetAbstract extends \Zalt\Snippets\ModelFormSnippet
      *
      * @var string
      */
-    protected $nextButtonId = 'next_button';
+    protected string $nextButtonId = 'next_button';
 
     /**
      * Should next be disabled even when there is a next item
@@ -120,21 +121,21 @@ abstract class WizardFormSnippetAbstract extends \Zalt\Snippets\ModelFormSnippet
      *
      * @var string
      */
-    protected $nextDisabled = false;
+    protected bool $nextDisabled = false;
 
     /**
      * The next button label (default is translated 'Next')
      *
      * @var string
      */
-    protected $nextLabel = null;
+    protected ?string $nextLabel = null;
 
     /**
      * The original step, before any clicked button was checked
      *
      * @var int
      */
-    protected $originalStep = 1;
+    protected int $originalStep = 1;
 
     /**
      * The form Id used for the previous button
@@ -143,21 +144,21 @@ abstract class WizardFormSnippetAbstract extends \Zalt\Snippets\ModelFormSnippet
      *
      * @var string
      */
-    protected $previousButtonId = 'previous_button';
+    protected string $previousButtonId = 'previous_button';
 
     /**
      * The previous button label (default is translated 'Previous')
      *
      * @var string
      */
-    protected $previousLabel = null;
+    protected ?string $previousLabel = null;
 
     /**
      * Name of the hidden field storing the current step
      *
      * @var string
      */
-    protected $stepFieldName = 'current_step';
+    protected string $stepFieldName = 'current_step';
 
     /**
      * When set getTopic() uses this function instead of plural on this.
@@ -169,7 +170,6 @@ abstract class WizardFormSnippetAbstract extends \Zalt\Snippets\ModelFormSnippet
     /**
      * Default button creation function.
      *
-     * @param \Zend_Form_Element $button or null
      * @param string $buttonId
      * @param string $label
      * @param string $defaultLabel
@@ -239,7 +239,7 @@ abstract class WizardFormSnippetAbstract extends \Zalt\Snippets\ModelFormSnippet
      */
     protected function addCancelButton()
     {
-        $class = '\\Zalt\\Form\\Element\\FakeSubmit';
+        $class = '\\MUtil\\Form\\Element\\FakeSubmit';
         $this->_addButton($this->_cancelButton, $this->cancelButtonId, $this->cancelLabel, $this->_('Cancel'), $class);
     }
 
@@ -278,7 +278,7 @@ abstract class WizardFormSnippetAbstract extends \Zalt\Snippets\ModelFormSnippet
     protected function addFinishButton()
     {
         $last  = $this->currentStep == $this->getStepCount();
-        $class = $last ? 'Zend_Form_Element_Submit' : '\\Zalt\\Form\\Element\\FakeSubmit';
+        $class = $last ? 'Zend_Form_Element_Submit' : '\\MUtil\\Form\\Element\\FakeSubmit';
 
         $this->_addButton($this->_finishButton, $this->finishButtonId, $this->finishLabel, $this->_('Finish'), $class);
         if ($this->nextDisabled || !$last) {
@@ -323,7 +323,7 @@ abstract class WizardFormSnippetAbstract extends \Zalt\Snippets\ModelFormSnippet
     protected function addNextButton()
     {
         $last  = $this->currentStep == $this->getStepCount();
-        $class = !$last ? 'Zend_Form_Element_Submit' : '\\Zalt\\Form\\Element\\FakeSubmit';
+        $class = !$last ? 'Zend_Form_Element_Submit' : '\\MUtil\\Form\\Element\\FakeSubmit';
 
         $this->_addButton($this->_nextButton, $this->nextButtonId, $this->nextLabel, $this->_("Next >"), $class);
 
@@ -339,7 +339,7 @@ abstract class WizardFormSnippetAbstract extends \Zalt\Snippets\ModelFormSnippet
      */
     protected function addPreviousButton()
     {
-        $class = '\\Zalt\\Form\\Element\\FakeSubmit';
+        $class = '\\MUtil\\Form\\Element\\FakeSubmit';
         $this->_addButton(
                 $this->_previousButton,
                 $this->previousButtonId,
@@ -421,6 +421,11 @@ abstract class WizardFormSnippetAbstract extends \Zalt\Snippets\ModelFormSnippet
         $baseform->setAttrib('class', $this->class);
 
         $bridge = $model->getBridgeFor('form', $baseform);
+        if ($bridge instanceof ZendFormBridge) {
+            $bridge->setForm($baseform);
+        }
+        $this->_form = $baseform;
+
 
         $this->_items = null;
         $this->initItems($model->getMetaModel());
@@ -432,7 +437,7 @@ abstract class WizardFormSnippetAbstract extends \Zalt\Snippets\ModelFormSnippet
 
     public function getFormOutput(): mixed
     {
-        return null;
+        return $this->_forms[$this->currentStep];
     }
     
     /**
@@ -570,7 +575,7 @@ abstract class WizardFormSnippetAbstract extends \Zalt\Snippets\ModelFormSnippet
         // Make sure there is $this->formData
         $this->loadFormData();
         if (isset($this->formData[$this->stepFieldName])) {
-            $this->currentStep = $this->formData[$this->stepFieldName];
+            $this->currentStep = intval($this->formData[$this->stepFieldName]);
         }
         $this->originalStep = $this->currentStep;
 
@@ -629,10 +634,5 @@ abstract class WizardFormSnippetAbstract extends \Zalt\Snippets\ModelFormSnippet
         if (! $this->afterSaveRouteUrl) {
             $this->afterSaveRouteUrl[$this->stepFieldName] = 1;
         }
-    }
-
-    protected function validateForm(array $formData): bool
-    {
-        // Not used
     }
 }
