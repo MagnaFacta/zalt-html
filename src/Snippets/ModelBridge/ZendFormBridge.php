@@ -114,6 +114,20 @@ class ZendFormBridge extends \Zalt\Model\Bridge\FormBridgeAbstract
         }
     }
 
+    protected function _mergeOptions($name, array $options, ...$allowedOptionKeys)
+    {
+        $options = parent::_mergeOptions($name, $options, ...$allowedOptionKeys);
+
+        //If not explicitly set, use the form value for translatorDisabled, since we
+        //create the element outside the form scope and later add it
+        if (! isset($options['disableTranslator'])) {
+            $options['disableTranslator'] = $this->form->translatorIsDisabled();
+        }
+
+        return $options;
+    }
+
+
     /**
      * Adds a displayGroup to the bridge
      *
