@@ -31,6 +31,8 @@ use Zalt\Snippets\ModelBridge\DetailTableBridge;
  */
 abstract class ModelDetailTableSnippetAbstract extends ModelSnippetAbstract
 {
+    protected string $bridgeClass = 'itemTable';
+
     /**
      *
      * @var int The number of columns used in the table bridge.
@@ -135,7 +137,7 @@ abstract class ModelDetailTableSnippetAbstract extends ModelSnippetAbstract
     {
         $metaModel = $dataModel->getMetaModel();
         
-        $bridge = $dataModel->getBridgeFor('itemTable');
+        $bridge = $dataModel->getBridgeFor($this->bridgeClass);
         $bridge->setColumnCount($this->bridgeColumns)
                 ->setMode($this->bridgeMode);
 
