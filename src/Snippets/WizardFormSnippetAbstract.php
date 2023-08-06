@@ -177,12 +177,14 @@ abstract class WizardFormSnippetAbstract extends \Zalt\Snippets\ModelFormSnippet
      */
     protected function _addButton(&$button, &$buttonId, &$label, $defaultLabel, $class = 'Zend_Form_Element_Submit')
     {
+        $form = $this->getCurrentForm();
+
         if ($button && ($button instanceof \Zend_Form_Element)) {
             $buttonId = $button->getName();
 
         } elseif ($buttonId) {
             //If already there, get a reference button
-            $button = $this->_form->getElement($buttonId);
+            $button = $form->getElement($buttonId);
 
             if (! $button) {
                 if (null === $label) {
@@ -199,8 +201,8 @@ abstract class WizardFormSnippetAbstract extends \Zalt\Snippets\ModelFormSnippet
             }
         }
 
-        if (!$this->_form->getElement($buttonId)) {
-            $this->_form->addElement($button);
+        if (!$form->getElement($buttonId)) {
+            $form->addElement($button);
         }
     }
 
@@ -216,12 +218,13 @@ abstract class WizardFormSnippetAbstract extends \Zalt\Snippets\ModelFormSnippet
         $element->raw('&nbsp;');
         $element->setDecorators(array('ViewHelper'));
 
-        $this->_form->addElement($element);
+        $form = $this->getCurrentForm();
+        $form->addElement($element);
 
         $this->addCancelButton();
         $this->addFinishButton();
 
-        $this->_form->addDisplayGroup(array(
+        $form->addDisplayGroup(array(
             $this->_previousButton,
             $this->_nextButton,
             $element,
@@ -229,7 +232,7 @@ abstract class WizardFormSnippetAbstract extends \Zalt\Snippets\ModelFormSnippet
             $this->_finishButton,
             ), 'buttons');
 
-        $group = $this->_form->getDisplayGroup('buttons');
+        $group = $form->getDisplayGroup('buttons');
         $group->removeDecorator('DtDdWrapper');
         $group->removeDecorator('HtmlTag');
     }
@@ -296,11 +299,11 @@ abstract class WizardFormSnippetAbstract extends \Zalt\Snippets\ModelFormSnippet
      *
      * @return void
      */
-    protected function addItemsHidden(\Zalt\Model\Bridge\FormBridgeInterface $bridge, $element1)
+    protected function addItemsHidden(FormBridgeInterface $bridge, $element1)
     {
         $args = func_get_args();
         if (count($args)<2) {
-            throw new \Gems\Exception\Coding('Use at least 2 arguments, first the bridge and then one or more individual items');
+            throw new \InvalidArgumentException('Use at least 2 arguments, first the bridge and then one or more individual items');
         }
 
         $bridge   = array_shift($args);
@@ -401,12 +404,14 @@ abstract class WizardFormSnippetAbstract extends \Zalt\Snippets\ModelFormSnippet
     protected function beforeDisplayFor($step)
     { }
 
-    protected function createForm(array $options = [])
+    public function getCurrentForm(): mixed
     {
-        return new \Gems\Form();
+        if (isset($this->_forms[$this->currentStep])) {
+            return $this->_forms[$this->currentStep];
+        }
+        return reset($this->_forms);
     }
-    
-    
+
     /**
      * Creates from the model a \Zend_Form using createForm and adds elements
      * using addFormElements().
@@ -424,7 +429,7 @@ abstract class WizardFormSnippetAbstract extends \Zalt\Snippets\ModelFormSnippet
         if ($bridge instanceof ZendFormBridge) {
             $bridge->setForm($baseform);
         }
-        $this->_form = $baseform;
+        $this->_forms[$step] = $baseform;
 
 
         $this->_items = null;
@@ -604,7 +609,7 @@ abstract class WizardFormSnippetAbstract extends \Zalt\Snippets\ModelFormSnippet
                          * but performing a getValues() cleans the data array so data in post but
                          * not in the form is removed from the data variable.
                          */
-                        $this->formData = $this->_form->getValues();
+                        $this->formData = $this->getCurrentForm()->getValues();
 
                         if ($this->_finishButton && $this->_finishButton->isChecked()) {
                             // Save

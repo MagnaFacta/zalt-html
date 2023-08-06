@@ -120,7 +120,7 @@ abstract class TabSnippetAbstract extends TranslatableSnippetAbstract
 
         if ($tabs && ($this->displaySingleTab || count($tabs) > 1)) {
             // Set the correct parameters
-            $currentTab = $this->getCurrentTab($tabs);
+            $currentTab = $this->getCurrentTab();
 
             $tabRow = Html::create()->ul();
 

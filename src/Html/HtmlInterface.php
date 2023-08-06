@@ -40,7 +40,7 @@ interface HtmlInterface
     /**
      * Renders the element into a html string
      *
-     * @return string Correctly encoded and escaped html output
+     * @return ?string Correctly encoded and escaped html output or nothing
      */
     public function render();
 }

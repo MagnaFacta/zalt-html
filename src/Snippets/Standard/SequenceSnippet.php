@@ -15,8 +15,12 @@
 
 namespace Zalt\Snippets\Standard;
 
+use Mezzio\Session\SessionInterface;
+use Zalt\Base\RequestInfo;
 use Zalt\Html\Html;
 use Zalt\Ra\Ra;
+use Zalt\SnippetsLoader\SnippetLoader;
+use Zalt\SnippetsLoader\SnippetOptions;
 
 /**
  *
@@ -28,13 +32,6 @@ use Zalt\Ra\Ra;
  */
 class SequenceSnippet extends \Zalt\Snippets\SnippetAbstract
 {
-    /**
-     * Stored in session;
-     *
-     * @var \Zend_Session_Namespace
-     */
-    protected $_session;
-
     /**
      * Html output
      *
@@ -50,16 +47,15 @@ class SequenceSnippet extends \Zalt\Snippets\SnippetAbstract
     protected $resetParam;
 
     /**
+     * @var string
+     */
+    protected string $sessionId;
+
+    /**
      *
      * @var array
      */
     protected $snippetList;
-
-    /**
-     *
-     * @var \Zalt\Snippets\SnippetLoader
-     */
-    protected $snippetLoader;
 
     /**
      * Array of parameters for snippetLoader
@@ -67,6 +63,20 @@ class SequenceSnippet extends \Zalt\Snippets\SnippetAbstract
      * @var array
      */
     protected $snippetParameters;
+
+    public function __construct(
+        SnippetOptions $snippetOptions,
+        RequestInfo $requestInfo,
+        protected SessionInterface $session,
+        protected SnippetLoader $snippetLoader
+        )
+    {
+        parent::__construct($snippetOptions, $requestInfo);
+
+        if ($this->sessionId) {
+            $this->sessionId = get_class($this) . '_list';
+        }
+    }
 
     /**
      * Searches and loads a .php snippet file.
@@ -97,46 +107,6 @@ class SequenceSnippet extends \Zalt\Snippets\SnippetAbstract
     }
 
     /**
-     * Called after the check that all required registry values
-     * have been set correctly has run.
-     *
-     * This function is no needed if the classes are setup correctly
-     *
-     * @return void
-     */
-    public function afterRegistry()
-    {
-        parent::afterRegistry();
-
-        $sessionId = sprintf('%s_%s_%s',
-                __CLASS__,
-                $this->requestInfo->getCurrentController(),
-                $this->requestInfo->getCurrentAction()
-                );
-
-        $this->_session = new \Zend_Session_Namespace($sessionId);
-
-        if ($this->resetParam) {
-
-            $queryParams = $this->requestInfo->getRequestQueryParams();
-            $reset = false;
-
-            if (isset($queryParams[$this->resetParam])) {
-                $reset = (bool) $queryParams[$this->resetParam];
-            }
-        } else  {
-            $reset = false;
-        }
-        if ($reset || (! isset($this->_session->list))) {
-            $this->_session->list = $this->snippetList;
-        }
-
-        if (! $this->snippetLoader) {
-            $this->snippetLoader = Html::getSnippetLoader();
-        }
-    }
-
-    /**
      * Create the snippets content
      *
      * This is a stub function either override getHtmlOutput() or override render()
@@ -161,8 +131,33 @@ class SequenceSnippet extends \Zalt\Snippets\SnippetAbstract
      */
     public function hasHtmlOutput(): bool
     {
-        while ((! $this->_html) && $this->_session->list) {
-            $current  = reset($this->_session->list);
+        $sessionId = sprintf('%s_%s_%s',
+            __CLASS__,
+            $this->requestInfo->getCurrentController(),
+            $this->requestInfo->getCurrentAction()
+        );
+
+        if ($this->resetParam) {
+            $queryParams = $this->requestInfo->getRequestQueryParams();
+            $reset = false;
+
+            if (isset($queryParams[$this->resetParam])) {
+                $reset = (bool) $queryParams[$this->resetParam];
+            }
+        } else  {
+            $reset = false;
+        }
+        if ($reset || (! $this->session->has($this->sessionId))) {
+            $this->session->set($this->sessionId, $this->snippetList);
+        }
+
+        if (! $this->snippetLoader) {
+            $this->snippetLoader = Html::getSnippetLoader();
+        }
+
+        while ((! $this->_html) && $this->session->has($this->sessionId)) {
+            $snippets = $this->session->get($this->sessionId);
+            $current  = reset($snippets);
 
             // This can be an array as a single snippet item can be an array
             $snippets = $this->_getSnippets($current);
@@ -172,7 +167,7 @@ class SequenceSnippet extends \Zalt\Snippets\SnippetAbstract
                         $this->_html[$filename] = $snippet;
 
                     } elseif ($snippet->getRedirectRoute()) {
-                        $this->_session->unsetAll();
+                        $this->session->unset($this->sessionId);
                         $snippet->redirectRoute();
                         return false;
                     }
@@ -183,7 +178,13 @@ class SequenceSnippet extends \Zalt\Snippets\SnippetAbstract
             }
 
             // Remove from list, passed without action
-            array_shift($this->_session->list);
+            array_shift($snippets);
+            if ($snippets) {
+                $this->session->set($this->sessionId, $snippets);
+            } else {
+                $this->session->unset($this->sessionId);
+            }
+
         }
 
         return false;

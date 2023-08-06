@@ -195,8 +195,6 @@ abstract class ModelConfirmDataChangeSnippetAbstract extends \Zalt\Snippets\Mode
 
     /**
      * Set what to do when the form is 'finished'.
-     *
-     * @return \Zalt\Snippets\ModelYesNoDeleteSnippetAbstract
      */
     protected function setAfterDeleteRoute()
     {
@@ -208,8 +206,8 @@ abstract class ModelConfirmDataChangeSnippetAbstract extends \Zalt\Snippets\Mode
                 $this->confirmParameter => null, // make empty
                 );
         }*/
+    }
 
-        }
     /**
      * Set the footer of the browse table.
      *

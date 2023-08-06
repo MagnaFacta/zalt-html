@@ -13,7 +13,11 @@ namespace Zalt\Snippets\Standard;
 
 use Zalt\Late\Late;
 use Zalt\Late\Repeatable;
+use Zalt\Model\Bridge\FormBridgeInterface;
+use Zalt\Model\Data\DataReaderInterface;
+use Zalt\Model\Data\FullDataInterface;
 use Zalt\Model\MetaModelInterface;
+use Zalt\Model\Ra\SessionModel;
 
 /**
  * Generic import wizard.
@@ -27,7 +31,7 @@ use Zalt\Model\MetaModelInterface;
  * @license    New BSD License
  * @since      Class available since \Zalt version 1.3
  */
-class ModelImportSnippet extends \Zalt\Snippets\WizardFormSnippetAbstract
+abstract class ModelImportSnippet extends \Zalt\Snippets\WizardFormSnippetAbstract
 {
     /**
      * Contains the errors generated so far
@@ -89,15 +93,15 @@ class ModelImportSnippet extends \Zalt\Snippets\WizardFormSnippetAbstract
 
     /**
      *
-     * @var \Zalt\Model\Importer
+     * @var
      */
     protected $importer;
 
     /**
      *
-     * @var \Zalt\Model\ModelAbstract
+     * @var SessionModel
      */
-    protected $importModel;
+    protected SessionModel $importModel;
 
     /**
      * Required, an array of one or more translators
@@ -119,14 +123,14 @@ class ModelImportSnippet extends \Zalt\Snippets\WizardFormSnippetAbstract
 
     /**
      *
-     * @var \Zalt\Model\ModelAbstract
+     * @var \Zalt\Model\Data\FullDataInterface
      */
     protected $model;
 
     /**
      * Model to read import
      *
-     * @var \Zalt\Model\ModelAbstract
+     * @var \Zalt\Model\Data\FullDataInterface
      */
     protected $sourceModel;
 
@@ -146,7 +150,7 @@ class ModelImportSnippet extends \Zalt\Snippets\WizardFormSnippetAbstract
      *
      * Required, can be set by passing a model to $this->model
      *
-     * @var \Zalt\Model\ModelAbstract
+     * @var \Zalt\Model\Data\FullDataInterface
      */
     protected $targetModel;
 
@@ -195,32 +199,32 @@ class ModelImportSnippet extends \Zalt\Snippets\WizardFormSnippetAbstract
      * Add the elements from the model to the bridge for the current step
      *
      * @param \Zalt\Model\Bridge\FormBridgeInterface $bridge
-     * @param \Zalt\Model\ModelAbstract $model
+     * @param \Zalt\Model\Data\FullDataInterface $model
      */
-    protected function addStep1(\Zalt\Model\Bridge\FormBridgeInterface $bridge, \Zalt\Model\ModelAbstract $model)
+    protected function addStep1(FormBridgeInterface $bridge, FullDataInterface $model)
     {
-        $this->addItems($bridge, 'trans', 'mode');
+        $this->addItems($bridge, ['trans'], 'mode');
     }
 
     /**
      * Add the elements from the model to the bridge for the current step
      *
      * @param \Zalt\Model\Bridge\FormBridgeInterface $bridge
-     * @param \Zalt\Model\ModelAbstract $model
+     * @param FullDataInterface $model
      */
-    protected function addStep2(\Zalt\Model\Bridge\FormBridgeInterface $bridge, \Zalt\Model\ModelAbstract $model)
+    protected function addStep2(FormBridgeInterface $bridge, FullDataInterface $model)
     {
         $translator = $this->getImportTranslator();
-        if ($translator instanceof \Zalt\Model\ModelTranslatorInterface) {
-            $element = $bridge->getForm()->createElement('html', 'trans_header');
-            $element->span($this->_('Choosen import definition: '));
-            $element->strong($translator->getDescription());
-            $element->setDecorators(array('Tooltip', 'ViewHelper'));
-            $bridge->addElement($element);
-        }
+//        if ($translator instanceof \Zalt\Model\ModelTranslatorInterface) {
+//            $element = $bridge->getForm()->createElement('html', 'trans_header');
+//            $element->span($this->_('Choosen import definition: '));
+//            $element->strong($translator->getDescription());
+//            $element->setDecorators(array('Tooltip', 'ViewHelper'));
+//            $bridge->addElement($element);
+//        }
 
         if ($this->fileMode) {
-            $this->addItems($bridge, 'file');
+            $this->addItems($bridge, ['file']);
 
             $element = $bridge->getForm()->getElement('file');
 
@@ -245,7 +249,7 @@ class ModelImportSnippet extends \Zalt\Snippets\WizardFormSnippetAbstract
                 }
             }
         } else {
-            $this->addItems($bridge, 'content');
+            $this->addItems($bridge, ['content']);
 
             $this->_session->extension = 'txt';
             if (isset($this->formData['content']) && $this->formData['content']) {
@@ -274,9 +278,9 @@ class ModelImportSnippet extends \Zalt\Snippets\WizardFormSnippetAbstract
      * Add the elements from the model to the bridge for the current step
      *
      * @param \Zalt\Model\Bridge\FormBridgeInterface $bridge
-     * @param \Zalt\Model\ModelAbstract $model
+     * @param \Zalt\Model\Data\FullDataInterface $model
      */
-    protected function addStep3(\Zalt\Model\Bridge\FormBridgeInterface $bridge, \Zalt\Model\ModelAbstract $model)
+    protected function addStep3(FormBridgeInterface $bridge, FullDataInterface $model)
     {
         if ($this->loadSourceModel()) {
             $this->displayHeader($bridge, $this->_('Upload successful!'));
@@ -308,9 +312,9 @@ class ModelImportSnippet extends \Zalt\Snippets\WizardFormSnippetAbstract
      * Add the elements from the model to the bridge for the current step
      *
      * @param \Zalt\Model\Bridge\FormBridgeInterface $bridge
-     * @param \Zalt\Model\ModelAbstract $model
+     * @param \Zalt\Model\Data\FullDataInterface $model
      */
-    protected function addStep4(\Zalt\Model\Bridge\FormBridgeInterface $bridge, \Zalt\Model\ModelAbstract $model)
+    protected function addStep4(FormBridgeInterface $bridge, FullDataInterface $model)
     {
         $this->nextDisabled = true;
 
@@ -362,9 +366,9 @@ class ModelImportSnippet extends \Zalt\Snippets\WizardFormSnippetAbstract
      * Add the elements from the model to the bridge for the current step
      *
      * @param \Zalt\Model\Bridge\FormBridgeInterface $bridge
-     * @param \Zalt\Model\ModelAbstract $model
+     * @param \Zalt\Model\Data\FullDataInterface $model
      */
-    protected function addStep5(\Zalt\Model\Bridge\FormBridgeInterface $bridge, \Zalt\Model\ModelAbstract $model)
+    protected function addStep5(FormBridgeInterface $bridge, FullDataInterface $model)
     {
         $this->nextDisabled = true;
 
@@ -413,10 +417,10 @@ class ModelImportSnippet extends \Zalt\Snippets\WizardFormSnippetAbstract
      * Add the elements from the model to the bridge for the current step
      *
      * @param \Zalt\Model\Bridge\FormBridgeInterface $bridge
-     * @param \Zalt\Model\ModelAbstract $model
+     * @param \Zalt\Model\Data\DataReaderInterface $model
      * @param int $step The current step
      */
-    protected function addStepElementsFor(\Zalt\Model\Bridge\FormBridgeInterface $bridge, \Zalt\Model\ModelAbstract $model, $step)
+    protected function addStepElementsFor(FormBridgeInterface $bridge, DataReaderInterface $model, $step)
     {
         $this->displayHeader(
                 $bridge,
@@ -488,15 +492,15 @@ class ModelImportSnippet extends \Zalt\Snippets\WizardFormSnippetAbstract
             $source->applySource($this->importer);
             $this->importer->setRegistrySource($source);
         }
-        if (! $this->targetModel instanceof \Zalt\Model\ModelAbstract) {
-            if ($this->model instanceof \Zalt\Model\ModelAbstract) {
+        if (! $this->targetModel instanceof FullDataInterface) {
+            if ($this->model instanceof FullDataInterface) {
                 $this->targetModel = $this->model;
             }
         }
-        if ($this->targetModel instanceof \Zalt\Model\ModelAbstract) {
+        if ($this->targetModel instanceof FullDataInterface) {
             $this->importer->setTargetModel($this->targetModel);
         }
-        if ($this->sourceModel instanceof \Zalt\Model\ModelAbstract) {
+        if ($this->sourceModel instanceof FullDataInterface) {
             $this->importer->setSourceModel($this->sourceModel);
         }
 
@@ -560,11 +564,11 @@ class ModelImportSnippet extends \Zalt\Snippets\WizardFormSnippetAbstract
     /**
      * Creates the model
      *
-     * @return \Zalt\Model\ModelAbstract
+     * @return \Zalt\Model\Data\DataReaderInterface
      */
-    protected function createModel()
+    protected function createModel(): DataReaderInterface
     {
-        if (! $this->importModel instanceof \Zalt\Model\ModelAbstract) {
+        if (! $this->importModel instanceof FullDataInterface) {
             // $model = new \Zalt\Model\TableModel
             $model = new \Zalt\Model\SessionModel('import_for_' . $this->getCurrentController());
 
@@ -593,7 +597,7 @@ class ModelImportSnippet extends \Zalt\Snippets\WizardFormSnippetAbstract
                     'required',     true);
 
             if ($this->tempDirectory) {
-                \Zalt\File::ensureDir($this->tempDirectory);
+                \Zalt\Base\File::ensureDir($this->tempDirectory);
                 $model->set('file', 'destination',  $this->tempDirectory);
             }
 
@@ -617,7 +621,7 @@ class ModelImportSnippet extends \Zalt\Snippets\WizardFormSnippetAbstract
      * @param \Zalt\Model\Bridge\FormBridgeInterface $bridge
      * @param array Errors to display
      */
-    protected function displayErrors(\Zalt\Model\Bridge\FormBridgeInterface $bridge, $errors = null)
+    protected function displayErrors(FormBridgeInterface $bridge, $errors = null)
     {
         if (null === $errors) {
             $errors = $this->_errors;
@@ -639,7 +643,7 @@ class ModelImportSnippet extends \Zalt\Snippets\WizardFormSnippetAbstract
      * @param mixed $header Header content
      * @param string $tagName
      */
-    protected function displayHeader(\Zalt\Model\Bridge\FormBridgeInterface $bridge, $header, $tagName = 'h2')
+    protected function displayHeader(FormBridgeInterface $bridge, $header, $tagName = 'h2')
     {
         $element = $bridge->getForm()->createElement('html', 'step_header');
         $element->$tagName($header);
@@ -674,7 +678,7 @@ class ModelImportSnippet extends \Zalt\Snippets\WizardFormSnippetAbstract
         if ($this->importer instanceof \Zalt\Model\Importer) {
             $this->importer->setImportTranslator($translator);
         }
-        if ($this->targetModel instanceof \Zalt\Model\ModelAbstract) {
+        if ($this->targetModel instanceof FullDataInterface) {
             $translator->setTargetModel($this->targetModel);
             if ($this->importer instanceof \Zalt\Model\Importer) {
                 $this->importer->setTargetModel($this->targetModel);
@@ -987,7 +991,7 @@ class ModelImportSnippet extends \Zalt\Snippets\WizardFormSnippetAbstract
             $this->_errors[] = $e->getMessage();
         }
 
-        return $this->sourceModel instanceof \Zalt\Model\ModelAbstract;
+        return $this->sourceModel instanceof FullDataInterface;
     }
 
     /**

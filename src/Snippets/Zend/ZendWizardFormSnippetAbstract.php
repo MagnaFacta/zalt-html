@@ -10,9 +10,6 @@ declare(strict_types=1);
 
 namespace Zalt\Snippets\Zend;
 
-use Zalt\Model\Bridge\FormBridgeInterface;
-use Zalt\Model\Data\DataReaderInterface;
-
 /**
  * @package    Zalt
  * @subpackage Snippets\Zend

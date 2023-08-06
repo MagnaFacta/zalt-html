@@ -145,7 +145,7 @@ abstract class SnippetAbstract implements SnippetInterface
      *
      * You should override either getHtmlOutput() or this function to generate output
      *
-     * @return string Html output
+     * @return ?string Correctly encoded and escaped html output or nothing
      */
     public function render()
     {

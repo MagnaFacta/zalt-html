@@ -11,6 +11,9 @@
 
 namespace Zalt\Snippets;
 
+use Zalt\Base\RequestInfo;
+use Zalt\Html\Html;
+
 /**
  *
  *
@@ -20,7 +23,7 @@ namespace Zalt\Snippets;
  * @license    New BSD License
  * @since      Class available since \Zalt version 1.8.2 Sep 7, 2016 5:39:53 PM
  */
-abstract class YesNoDeleteSnippetAbstract extends \Zalt\Snippets\SnippetAbstract
+abstract class YesNoDeleteSnippetAbstract extends \Zalt\Snippets\TranslatableSnippetAbstract
 {
     /**
      * The controller to go to when the user clicks 'No'.
@@ -83,20 +86,14 @@ abstract class YesNoDeleteSnippetAbstract extends \Zalt\Snippets\SnippetAbstract
     protected $deleteQuestion;
 
     /**
-     * @var \Zalt\Request\RequestInfo
-     */
-    protected ?\Zalt\Request\RequestInfo $requestInfo = null;
-
-    /**
-     * Called after the check that all required registry values
-     * have been set correctly has run.
+     * Create the snippets content
      *
-     * @return void
+     * This is a stub function either override getHtmlOutput() or override render()
+     *
+     * @return \Zalt\Html\HtmlInterface Something that can be rendered
      */
-    public function afterRegistry()
+    public function getHtmlOutput()
     {
-        parent::afterRegistry();
-
         if ($this->buttonClass) {
             if (! $this->buttonNoClass) {
                 $this->buttonNoClass = $this->buttonClass;
@@ -105,19 +102,8 @@ abstract class YesNoDeleteSnippetAbstract extends \Zalt\Snippets\SnippetAbstract
                 $this->buttonYesClass = $this->buttonClass;
             }
         }
-    }
 
-    /**
-     * Create the snippets content
-     *
-     * This is a stub function either override getHtmlOutput() or override render()
-     *
-     * @param \Zend_View_Abstract $view Just in case it is needed here
-     * @return \Zalt\Html\HtmlInterface Something that can be rendered
-     */
-    public function getHtmlOutput(\Zend_View_Abstract $view)
-    {
-        $div = \Mutil_Html::create('p');
+        $div = Html::create('p');
 
         $div->append($this->getQuestion());
         $div->append(' ');

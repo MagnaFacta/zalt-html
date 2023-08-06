@@ -153,8 +153,7 @@ abstract class ModelYesNoDeleteSnippetAbstract extends ModelDetailTableSnippetAb
         if (isset($queryParams[$this->confirmParameter])) {
             $this->performAction();
 
-            $redirectRoute = $this->getRedirectRoute();
-            return empty($redirectRoute);
+            return false;
 
         } else {
             return parent::hasHtmlOutput();
@@ -175,8 +174,6 @@ abstract class ModelYesNoDeleteSnippetAbstract extends ModelDetailTableSnippetAb
 
     /**
      * Set what to do when the form is 'finished'.
-     *
-     * @return \Zalt\Snippets\ModelYesNoDeleteSnippetAbstract
      */
     protected function setAfterDeleteRoute()
     {

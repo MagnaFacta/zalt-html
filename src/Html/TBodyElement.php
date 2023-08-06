@@ -97,7 +97,7 @@ class TBodyElement extends HtmlElement implements ColumnInterface
                 return reset($results);
 
             default:
-                return new \Zalt\MultiWrapper($results);
+                return new MultiWrapper($results);
         }
     }
 

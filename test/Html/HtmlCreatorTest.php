@@ -12,7 +12,7 @@
 namespace Zalt\Html;
 
 use PHPUnit\Framework\TestCase;
-use Zalt\ra\MultiWrapper;
+use Zalt\Ra\MultiWrapper;
 use Zalt\Late\Late;
 use Zalt\Late\LateCall;
 
