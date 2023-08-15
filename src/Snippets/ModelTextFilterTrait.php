@@ -55,6 +55,9 @@ trait ModelTextFilterTrait
                     if (isset($options[$field])) {
                         $inValues = [];
                         foreach ($options[$field] as $value => $label) {
+                            if (!is_string($label)) {
+                                continue;
+                            }
                             if (str_contains(strtolower($label), $search)) {
                                 $inValues[] = $value;
                             }
