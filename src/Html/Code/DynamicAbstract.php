@@ -14,7 +14,6 @@ namespace Zalt\Html\Code;
 
 use Zalt\Html\Html;
 use Zalt\Html\HtmlInterface;
-use Zalt\Ra\Ra;
 
 /**
  *
@@ -121,11 +120,12 @@ abstract class DynamicAbstract implements HtmlInterface
      * @param string $name Full name of the field.
      * @return string The value placed.
      */
-    public function getField($name)
+    public function getField($name): ?string
     {
         if (isset($this->_fields[$name])) {
             return $this->_fields[$name];
         }
+        return null;
     }
 
     /**

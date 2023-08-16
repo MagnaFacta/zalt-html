@@ -429,13 +429,11 @@ class Html
      * i.e. this helper function is used for generating url's for internal use.
      *
      * @param array $options Array of parameter values
-     * @param \Zend_Controller_Request_Abstract $request
-     * @param \Zend_Controller_Router_Route $router
      * @return string
      * @deprecated 
      */
-    public static function urlString(array $options, \Zend_Controller_Request_Abstract $request = null, \Zend_Controller_Router_Route $router = null)
+    public static function urlString(array $options)
     {
-        return UrlArrayAttribute::toUrlString($options, $request, $router);
+        return UrlArrayAttribute::toUrlString($options);
     }
 }

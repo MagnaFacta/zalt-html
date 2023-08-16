@@ -1013,7 +1013,7 @@ class HtmlElement implements ElementInterface, Procrastinator
      * Get the first child element.
      *
      * @param boolean $create A default child tag is created if the element does not exist and has a default child tag
-     * @return \Zalt\Html\HtmlElement or another \Zalt\Html\HtmlInterface element
+     * @return ?\Zalt\Html\HtmlElement or another \Zalt\Html\HtmlInterface element
      */
     public function getFirst($create = false)
     {
@@ -1023,6 +1023,7 @@ class HtmlElement implements ElementInterface, Procrastinator
         if ($this->_content) {
             return reset($this->_content);
         }
+        return null;
     }
 
     /**
@@ -1039,7 +1040,7 @@ class HtmlElement implements ElementInterface, Procrastinator
      * Get the last child element.
      *
      * @param boolean $create A default child tag is created if the element does not exist
-     * @return \Zalt\Html\HtmlElement or another \Zalt\Html\HtmlInterface element
+     * @return ?\Zalt\Html\HtmlElement or another \Zalt\Html\HtmlInterface element
      */
     public function getLast($create = false)
     {
@@ -1049,6 +1050,7 @@ class HtmlElement implements ElementInterface, Procrastinator
         if ($this->_content) {
             return end($this->_content);
         }
+        return null;
     }
 
     /**
@@ -1135,6 +1137,7 @@ class HtmlElement implements ElementInterface, Procrastinator
             return $this->_content[$offset];
         }
         error_log(sprintf("Non existing HtmlElement ofhset %s requested for tag %s using url %s.", $offset, $this->tagName, (isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : 'cli')));
+        return null;
     }
 
     /**
@@ -1173,7 +1176,7 @@ class HtmlElement implements ElementInterface, Procrastinator
                 }
 
                 // Set as last child when this is a new item only.
-                if (! isset($offset, $this->_content[$offset])) {
+                if (! isset($this->_content[$offset])) {
                     $this->_lastChild = $value;
                 }
 

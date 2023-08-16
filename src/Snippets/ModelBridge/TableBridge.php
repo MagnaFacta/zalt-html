@@ -200,6 +200,23 @@ class TableBridge extends TableBridgeAbstract
         return Html::create()->a($this->getUrl([$sortParam => $name]), ['class' => $class, 'title' => $this->metaModel->get($name, 'description')], $label);
     }
 
+    /**
+     * @return array Get the output data as a set of rows
+     */
+    public function getRows(): array
+    {
+        $repeater = $this->getRepeater();
+        $output = [];
+        $repeater->__start();
+        while ($row = $repeater->__next()) {
+            $output[] = $row;
+        }
+        // Reset repeater
+        $repeater->__start();
+
+        return $output;
+    }
+
     public function setSortData(DataReaderInterface $model): TableBridgeAbstract
     {
         $sort = $model->getSort();

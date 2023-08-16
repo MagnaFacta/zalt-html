@@ -33,7 +33,7 @@ class ClassArrayAttribute extends ArrayAttribute
         parent::__construct('class', $args);
     }
 
-    public function getKeyValue($key, $value)
+    public function getKeyValue($key, $value): string
     {
         return $value;
     }

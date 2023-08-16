@@ -13,7 +13,7 @@ use ArrayAccess;
 use Countable;
 use IteratorAggregate;
 use Traversable;
-use Zalt\Ra\Ra;
+use Zalt\Late\LateInterface;
 
 /**
  * Parent class for all array based attribute classes.
@@ -297,7 +297,7 @@ class ArrayAttribute extends AttributeAbstract implements ArrayAccess, Countable
      */
     public function setSeparator($separator)
     {
-        $this->_separator = separator;
+        $this->_separator = $separator;
         return $this;
     }
 }
