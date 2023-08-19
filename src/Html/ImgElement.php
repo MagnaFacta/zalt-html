@@ -126,9 +126,9 @@ class ImgElement extends HtmlElement
      * $filenames starting with a '/' or with http or https are skipped.
      *
      * @param string $filename The src attribute as filename
-     * @return string When a directory matches
+     * @return ?string When a directory matches
      */
-    public static function getImageDir($filename)
+    public static function getImageDir($filename): ?string
     {
         if ($filename
             && ('/' != $filename[0])
@@ -146,6 +146,7 @@ class ImgElement extends HtmlElement
                 // \Zalt\EchoOut\EchoOut::r("File not found: $filename. \n\nLooked in: \n" . implode(", \n", self::$_imageDirs));
             }
         }
+        return null;
     }
 
     /**
@@ -245,6 +246,7 @@ class ImgElement extends HtmlElement
         if ($src || $this->renderWithoutSrc) {
             return parent::renderElement();
         }
+        return '';
     }
 
     /**

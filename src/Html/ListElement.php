@@ -61,6 +61,13 @@ class ListElement extends \Zalt\Html\HtmlElement
      */
     public $renderWithoutContent = false;
 
+    public function appendList(array $list)
+    {
+        foreach ($list as $item) {
+            $this->append($item);
+        }
+    }
+
     /**
      * Static helper function for creation, used by @see \Zalt\Html\Creator.
      *

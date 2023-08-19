@@ -45,17 +45,6 @@ class JavascriptArrayAttribute extends ArrayAttribute
     );
 
     /**
-     *
-     * @param string $type
-     * @param mixed $arg_array \Zalt\Ra\Ra::args
-     */
-    public function __construct($type, $arg_array = null)
-    {
-        $args = Ra::args(func_get_args(), 1);
-        parent::__construct($type, 'javascript:', $args);
-    }
-
-    /**
      * Add a cancel bubble command
      *
      * @param boolean $cancelBubble

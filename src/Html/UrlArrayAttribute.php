@@ -83,6 +83,7 @@ class UrlArrayAttribute extends ArrayAttribute
             $urlString = rtrim($urlString, '/');
 
             if ($urlParameters) {
+                $params = [];
                 foreach ($urlParameters as $key => $value) {
                     $params[] = $key . '=' . $value;
                 }

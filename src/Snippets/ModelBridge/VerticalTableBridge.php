@@ -35,8 +35,8 @@ class VerticalTableBridge extends DetailTableBridge
 
     private function _checkAttributesFor($name, array $attr)
     {
-        if (is_string($name) && $this->model->has($name)) {
-            $attr = $attr + $this->model->get($name, 'colspan', 'rowspan', 'tdClass', 'thClass');
+        if (is_string($name) && $this->metaModel->has($name)) {
+            $attr = $attr + $this->metaModel->get($name, 'colspan', 'rowspan', 'tdClass', 'thClass');
         }
 
         $hattr = $attr;
@@ -131,16 +131,16 @@ class VerticalTableBridge extends DetailTableBridge
 
         $this->_checkColumnNewRow();
 
-        if (is_string($name) && $this->model->has($name, 'description') && !isset($hattr['title'])) {
-            $hattr['title'] = $this->model->get($name, 'description');
+        if (is_string($name) && $this->metaModel->has($name, 'description') && !isset($hattr['title'])) {
+            $hattr['title'] = $this->metaModel->get($name, 'description');
         }
         if ($this->labelTh) {
-            $this->table->tdh($this->_checkLabel($label, $name), $hattr);
+            $this->table->tdh($label, $hattr);
         } else {
-            $this->table->td($this->_checkLabel($label, $name), $hattr);
+            $this->table->td($label, $hattr);
         }
 
-        $this->table->td($this->_getLazyName($name), $attr);
+        $this->table->td($this->getLate($name), $attr);
 
         $this->_checkColumnAdded($attr);
 
@@ -163,12 +163,12 @@ class VerticalTableBridge extends DetailTableBridge
         $this->_checkColumnNewRow();
 
         if ($this->labelTh) {
-            $this->table->tdh(Late::iif($condition, $this->_checkLabel($label, $name)), $hattr);
+            $this->table->tdh(Late::iif($condition, $label), $hattr);
         } else {
-            $this->table->td(Late::iif($condition, $this->_checkLabel($label, $name)), $hattr);
+            $this->table->td(Late::iif($condition, $label), $hattr);
         }
 
-        $this->table->td(Late::iif($condition, $this->_getLazyName($name)), $attr);
+        $this->table->td(Late::iif($condition, $this->getLate($name)), $attr);
 
         $this->_checkColumnAdded($attr);
 

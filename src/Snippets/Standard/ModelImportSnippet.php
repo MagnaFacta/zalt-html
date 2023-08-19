@@ -11,11 +11,15 @@
 
 namespace Zalt\Snippets\Standard;
 
+use MUtil\Model\Importer;
+use MUtil\Task\TaskBatch;
+use Zalt\Html\HtmlElement;
 use Zalt\Late\Late;
 use Zalt\Late\Repeatable;
 use Zalt\Model\Bridge\FormBridgeInterface;
 use Zalt\Model\Data\DataReaderInterface;
 use Zalt\Model\Data\FullDataInterface;
+use Zalt\Model\Exception\ModelException;
 use Zalt\Model\MetaModelInterface;
 use Zalt\Model\Ra\SessionModel;
 
@@ -203,7 +207,7 @@ abstract class ModelImportSnippet extends \Zalt\Snippets\WizardFormSnippetAbstra
      */
     protected function addStep1(FormBridgeInterface $bridge, FullDataInterface $model)
     {
-        $this->addItems($bridge, ['trans'], 'mode');
+        $this->addItems($bridge, ['trans', 'mode']);
     }
 
     /**
@@ -241,7 +245,7 @@ abstract class ModelImportSnippet extends \Zalt\Snippets\WizardFormSnippetAbstra
                     $this->_session->extension = pathinfo($element->getFileName(), PATHINFO_EXTENSION);
                     // \Zalt\EchoOut\EchoOut::track($element->getFileName(), $element->getFileSize());
                     if (!$element->receive()) {
-                        throw new \Zalt\Model\ModelException(sprintf(
+                        throw new ModelException(sprintf(
                             $this->_("Error retrieving file '%s'."),
                             $element->getFileName()
                             ));
@@ -326,7 +330,7 @@ abstract class ModelImportSnippet extends \Zalt\Snippets\WizardFormSnippetAbstra
             $batch->autoStart = true;
 
             // \Zalt\Registry\Source::$verbose = true;
-            if ($batch->run($this->getRequestQueryParams())) {
+            if ($batch->run($this->requestInfo->getRequestQueryParams())) {
                 exit;
             }
 
@@ -379,7 +383,7 @@ abstract class ModelImportSnippet extends \Zalt\Snippets\WizardFormSnippetAbstra
             $batch->setFormId($form->getId());
             $batch->autoStart = true;
 
-            if ($batch->run($this->getRequestQueryParams())) {
+            if ($batch->run($this->requestInfo->getRequestQueryParams())) {
                 exit;
             }
 
@@ -455,11 +459,11 @@ abstract class ModelImportSnippet extends \Zalt\Snippets\WizardFormSnippetAbstra
     /**
      * Hook for after save
      *
-     * @param \Zalt\Task\TaskBatch $batch that was just executed
-     * @param \Zalt\Form\Element\Html $element Tetx element for display of messages
+     * @param \MUtil\Task\TaskBatch $batch that was just executed
+     * @param HtmlElement $element Tetx element for display of messages
      * @return string a message about what has changed (and used in the form)
      */
-    public function afterImport(\Zalt\Task\TaskBatch $batch, \Zalt\Form\Element\Html $element)
+    public function afterImport(TaskBatch $batch, HtmlElement $element)
     {
         $imported = $batch->getCounter('imported');
         $changed  = $batch->getCounter('changed');
@@ -483,14 +487,12 @@ abstract class ModelImportSnippet extends \Zalt\Snippets\WizardFormSnippetAbstra
      */
     public function afterRegistry()
     {
-        parent::afterRegistry();
+        if (! $this->importer instanceof Importer) {
+            $this->importer = new Importer();
 
-        if (! $this->importer instanceof \Zalt\Model\Importer) {
-            $this->importer = new \Zalt\Model\Importer();
-
-            $source = new \Zalt\Registry\Source(get_object_vars($this));
-            $source->applySource($this->importer);
-            $this->importer->setRegistrySource($source);
+//            $source = new \Zalt\Registry\Source(get_object_vars($this));
+//            $source->applySource($this->importer);
+//            $this->importer->setRegistrySource($source);
         }
         if (! $this->targetModel instanceof FullDataInterface) {
             if ($this->model instanceof FullDataInterface) {
@@ -795,11 +797,11 @@ abstract class ModelImportSnippet extends \Zalt\Snippets\WizardFormSnippetAbstra
 
                 // $field = $this->_targetModel->get($name, 'type', 'maxlength', 'label', 'required');
                 switch ($this->targetModel->get($name, 'type')) {
-                    case \Zalt\Model::TYPE_NOVALUE:
+                    case MetaModelInterface::TYPE_NOVALUE:
                         unset($results[$name]);
                         continue 2;
 
-                    case \Zalt\Model::TYPE_NUMERIC:
+                    case MetaModelInterface::TYPE_NUMERIC:
                         $maxlength = $this->targetModel->get($name, 'maxlength');
                         if ($maxlength) {
                             $decimals = $this->targetModel->get($name, 'decimals');
@@ -813,15 +815,15 @@ abstract class ModelImportSnippet extends \Zalt\Snippets\WizardFormSnippetAbstra
                         }
                         break;
 
-                    case \Zalt\Model::TYPE_DATE:
+                    case MetaModelInterface::TYPE_DATE:
                         $type = $this->_('Date value using ISO 8601: yyyy-mm-dd');
                         break;
 
-                    case \Zalt\Model::TYPE_DATETIME:
+                    case MetaModelInterface::TYPE_DATETIME:
                         $type = $this->_('Datetime value using ISO 8601: yyyy-mm-ddThh:mm:ss[+-hh:mm]');
                         break;
 
-                    case \Zalt\Model::TYPE_TIME:
+                    case MetaModelInterface::TYPE_TIME:
                         $type = $this->_('Time value using ISO 8601: hh:mm:ss[+-hh:mm]');
                         break;
 

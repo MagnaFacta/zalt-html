@@ -101,9 +101,6 @@ class Creator
         'label'             => [ZendLabelElement::class, 'label'],
         'menu'              => [ListElement::class, 'menu'],
         'ol'                => [ListElement::class, 'ol'],
-        'pagePanel'         => [PagePanel::class, 'pagePanel'],
-        'progress'          => [ProgressPanel::class, 'progress'],
-        'progressPanel'     => [ProgressPanel::class, 'progress'],
         'raw'               => [Raw::class, 'raw'],
         'seq'               => [Sequence::class, 'createSequence'],   // A sequence can contain another sequence, so other function name used
         'sequence'          => [Sequence::class, 'createSequence'],   // A sequence can contain another sequence, so other function name used

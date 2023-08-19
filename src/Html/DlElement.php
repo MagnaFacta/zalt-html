@@ -145,6 +145,14 @@ class DlElement extends HtmlElement
         return $last_factor;
     }
 
+    public function dd(...$arguments)
+    {
+        $elem = Html::createArray(__FUNCTION__, $arguments);
+
+        $this[] = $elem;
+
+        return $elem;
+    }
 
     /**
      * Static helper function for creation, used by @see \Zalt\Html\Creator.
@@ -155,6 +163,15 @@ class DlElement extends HtmlElement
     public static function dl(...$args)
     {
         return new self($args);
+    }
+
+    public function dt(...$arguments)
+    {
+        $elem = Html::createArray(__FUNCTION__, $arguments);
+
+        $this[] = $elem;
+
+        return $elem;
     }
 
     public function dtDd($dt = null, $dd = null)

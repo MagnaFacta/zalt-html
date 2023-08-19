@@ -101,7 +101,7 @@ class Marker
      * Mark the searches in $value
      *
      * @param mixed $value Late, Html, Raw or string
-     * @return HtmlInterface
+     * @return ?HtmlInterface"string
      */
     public function mark($value)
     {
@@ -162,6 +162,7 @@ class Marker
 
             return new Raw($this->_fillTags($valueTemp));
         }
+        return '';
     }
 
     /**

@@ -11,6 +11,8 @@
 
 namespace Zalt\Snippets;
 
+use Zalt\Html\TableElement;
+
 /**
  *
  * @package    Zalt
@@ -44,10 +46,10 @@ abstract class MultiRowModelFormAbstract extends \Zalt\Snippets\ModelFormSnippet
         $model     = $this->getModel();
         $baseform  = $this->createForm();
 
-        $bridge    = $model->getBridgeFor('form', new \Gems\Form\SubForm());
-        $newData   = $this->addFormElements($bridge, $model);
+        $bridge    = $model->getBridgeFor('form', new \Zend_Form_SubForm());
+        $newData   = $this->addFormElements($bridge);
 
-        $this->formTableElement = new \Zalt\Form\Element\Table(
+        $this->formTableElement = new TableElement(
                 $bridge->getForm(),
                 $model->getName(),
                 array('class' => $this->editTableClass)
@@ -113,7 +115,7 @@ abstract class MultiRowModelFormAbstract extends \Zalt\Snippets\ModelFormSnippet
     {
         $this->beforeSave();
 
-        if ($this->csrfId && $this->_csrf) {
+        if ($this->csrfId) { //} && $this->_csrf) {
             unset($this->formData[$this->csrfId]);
         }
 

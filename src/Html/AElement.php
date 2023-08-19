@@ -65,7 +65,7 @@ class AElement extends \Zalt\Html\HtmlElement
 
         parent::__construct('a', $args);
 
-        $this->setOnEmpty($this->href);
+        $this->setOnEmpty($this->__get('href'));
     }
 
     /**

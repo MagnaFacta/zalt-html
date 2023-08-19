@@ -181,7 +181,7 @@ class Renderer
         $stack = null;
 
         // Resolve first as this function as recursion heavy enough as it is.
-        if ($content instanceof LateInterfacee) {
+        if ($content instanceof LateInterface) {
             if (! $stack) {
                 $stack = Late::getStack();
             }
@@ -210,7 +210,7 @@ class Renderer
                 $output = $this->renderArray($content, '', $stack);
 
             } else {
-                 if ($content instanceof __PHP_Incomplete_Class) {
+                 if ($content instanceof \__PHP_Incomplete_Class) {
                     // \Zalt\EchoOut\EchoOut::r($content, __CLASS__ . '->' .  __FUNCTION__);
                     $output = '';
 

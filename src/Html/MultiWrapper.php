@@ -30,7 +30,7 @@ class MultiWrapper extends \Zalt\Ra\MultiWrapper implements \Zalt\Html\HtmlInter
      *
      * @var string
      */
-    protected $_class = __CLASS__;
+    protected string $_class = __CLASS__;
 
     /**
      * Renders the element into a html string
@@ -53,5 +53,6 @@ class MultiWrapper extends \Zalt\Ra\MultiWrapper implements \Zalt\Html\HtmlInter
         if ($results) {
             return implode('', $results);
         }
+        return '';
     }
 }

@@ -318,7 +318,7 @@ class ZendFormBridge extends \Zalt\Model\Bridge\FormBridgeAbstract
 
         $element = $this->_addToForm($name, 'password', $options);
 
-        if (isset($repeatLabel)) {
+        if (isset($repeatLabel, $repeatName, $repeatOptions)) {
             $repeatElement = $this->_addToForm($repeatName, 'password', $repeatOptions);
         }
 
@@ -474,7 +474,7 @@ class ZendFormBridge extends \Zalt\Model\Bridge\FormBridgeAbstract
 
             $this->form->setName($this->metaModel->getName());
         } else {
-            throw new MetaModelException(sprintf("Form parameter must be an instance of \Zend_Form in %s->setForm(). Object of '%s' class given instead."), __CLASS__, get_class($form));
+            throw new MetaModelException(sprintf("Form parameter must be an instance of \Zend_Form in %s->setForm(). Object of '%s' class given instead.", __CLASS__, get_class($form)));
         }
     }
 }

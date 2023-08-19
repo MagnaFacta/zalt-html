@@ -26,8 +26,7 @@ namespace Zalt\Snippets;
  * @license    New BSD License
  * @since      Class available since version 1.4.2
  */
-abstract class EmptySnippetAbstract extends \Zalt\Registry\TargetAbstract
-    implements \Zalt\Snippets\SnippetInterface
+abstract class EmptySnippetAbstract implements \Zalt\Snippets\SnippetInterface
 {
     /**
      * When hasHtmlOutput() is false a snippet code user should check
@@ -44,8 +43,10 @@ abstract class EmptySnippetAbstract extends \Zalt\Registry\TargetAbstract
      *
      * @return mixed Nothing or either an array or a string that is acceptable for Redector->gotoRoute()
      */
-    public function getRedirectRoute()
-    { }
+    public function getRedirectRoute(): ?string
+    {
+        return null;
+    }
 
     /**
      * The place to check if the data set in the snippet is valid
@@ -78,9 +79,10 @@ abstract class EmptySnippetAbstract extends \Zalt\Registry\TargetAbstract
      *
      * The $view is used to correctly encode and escape the output
      *
-     * @param \Zend_View_Abstract $view
      * @return string Correctly encoded and escaped html output
      */
-    public function render(\Zend_View_Abstract $view)
-    { }
+    public function render()
+    {
+        return '';
+    }
 }

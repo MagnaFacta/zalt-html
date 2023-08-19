@@ -26,6 +26,11 @@ use Zalt\Late\Late;
 abstract class FormSnippetAbstract extends MessageableSnippetAbstract
 {
     /**
+     * @var The form of some type
+     */
+    protected $_form;
+
+    /**
      * @var string Nothing or an url string to be used when we have saved successfully
      */
     protected string $afterSaveRouteUrl = '';
@@ -162,9 +167,9 @@ abstract class FormSnippetAbstract extends MessageableSnippetAbstract
      */
     public function beforeDisplay()
     {
-        if ($this->_csrf) {
-            $this->_csrf->initCsrfToken();
-        }
+//        if ($this->_csrf) {
+//            $this->_csrf->initCsrfToken();
+//        }
     }
 
     /**

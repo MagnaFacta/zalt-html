@@ -11,6 +11,7 @@
 
 namespace Zalt\Html\Zend;
 
+use Zalt\Html\HtmlElement;
 use Zalt\Html\ListElement;
 use Zalt\Late\Late;
 use Zalt\Late\RepeatableFormElements;
@@ -56,6 +57,15 @@ class ZendDivFormElement extends \Zalt\Html\HtmlElement implements ZendFormLayou
         parent::__construct('div', array('class' => 'form-group'), $args);
     }
 
+    protected function div(array $attr)
+    {
+        $label = new HtmlElement('div', $attr);
+
+        $this[] = $label;
+
+        return $label;
+    }
+
     /**
      * Static helper function for creation, used by @param mixed $args Optional args processed settings
      *
@@ -74,6 +84,15 @@ class ZendDivFormElement extends \Zalt\Html\HtmlElement implements ZendFormLayou
     public function getFlattenSubs()
     {
         return $this->_flattenSubs;
+    }
+
+    protected function label($mixed, array $attr)
+    {
+        $label = new ZendLabelElement($mixed, $attr);
+
+        $this[] = $label;
+
+        return $label;
     }
 
     public function render()
@@ -112,7 +131,7 @@ class ZendDivFormElement extends \Zalt\Html\HtmlElement implements ZendFormLayou
 
         $inputGroup = null;
 
-        // Place the choosen renderers
+        // Place the chosen renderers
         foreach ($order as $renderer) {
             switch ($renderer) {
                 case 'label':
