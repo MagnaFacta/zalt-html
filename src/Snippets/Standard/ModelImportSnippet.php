@@ -13,15 +13,23 @@ namespace Zalt\Snippets\Standard;
 
 use MUtil\Model\Importer;
 use MUtil\Task\TaskBatch;
+use Symfony\Contracts\Translation\TranslatorInterface;
+use Zalt\Base\RequestInfo;
+use Zalt\File\File;
 use Zalt\Html\HtmlElement;
 use Zalt\Late\Late;
 use Zalt\Late\Repeatable;
+use Zalt\Message\MessengerInterface;
 use Zalt\Model\Bridge\FormBridgeInterface;
 use Zalt\Model\Data\DataReaderInterface;
 use Zalt\Model\Data\FullDataInterface;
 use Zalt\Model\Exception\ModelException;
+use Zalt\Model\Exception\ModelTranslatorException;
 use Zalt\Model\MetaModelInterface;
+use Zalt\Model\MetaModelLoader;
 use Zalt\Model\Ra\SessionModel;
+use Zalt\Model\Translator\ModelTranslatorInterface;
+use Zalt\SnippetsLoader\SnippetOptions;
 
 /**
  * Generic import wizard.
@@ -110,7 +118,7 @@ abstract class ModelImportSnippet extends \Zalt\Snippets\WizardFormSnippetAbstra
     /**
      * Required, an array of one or more translators
      *
-     * @var array of \Zalt\Model\ModelTranslatorInterface objects
+     * @var array of ModelTranslatorInterface objects
      */
     protected $importTranslators;
 
@@ -178,6 +186,17 @@ abstract class ModelImportSnippet extends \Zalt\Snippets\WizardFormSnippetAbstra
      */
     public $view;
 
+    public function __construct(
+        SnippetOptions $snippetOptions,
+        RequestInfo $requestInfo,
+        TranslatorInterface $translate,
+        MessengerInterface $messenger,
+        protected readonly MetaModelLoader $metaModelLoader,
+    )
+    {
+        parent::__construct($snippetOptions, $requestInfo, $translate, $messenger);
+    }
+
     /**
      * Helper function to sort translator table by model order
      *
@@ -219,7 +238,7 @@ abstract class ModelImportSnippet extends \Zalt\Snippets\WizardFormSnippetAbstra
     protected function addStep2(FormBridgeInterface $bridge, FullDataInterface $model)
     {
         $translator = $this->getImportTranslator();
-//        if ($translator instanceof \Zalt\Model\ModelTranslatorInterface) {
+//        if ($translator instanceof ModelTranslatorInterface) {
 //            $element = $bridge->getForm()->createElement('html', 'trans_header');
 //            $element->span($this->_('Choosen import definition: '));
 //            $element->strong($translator->getDescription());
@@ -571,8 +590,7 @@ abstract class ModelImportSnippet extends \Zalt\Snippets\WizardFormSnippetAbstra
     protected function createModel(): DataReaderInterface
     {
         if (! $this->importModel instanceof FullDataInterface) {
-            // $model = new \Zalt\Model\TableModel
-            $model = new \Zalt\Model\SessionModel('import_for_' . $this->getCurrentController());
+            $model = $this->metaModelLoader->createModel(SessionModel::class);
 
             $model->set('trans', 'label', $this->_('Import definition'),
                     'default', $this->defaultImportTranslator,
@@ -599,7 +617,7 @@ abstract class ModelImportSnippet extends \Zalt\Snippets\WizardFormSnippetAbstra
                     'required',     true);
 
             if ($this->tempDirectory) {
-                \Zalt\Base\File::ensureDir($this->tempDirectory);
+                File::ensureDir($this->tempDirectory);
                 $model->set('file', 'destination',  $this->tempDirectory);
             }
 
@@ -656,7 +674,7 @@ abstract class ModelImportSnippet extends \Zalt\Snippets\WizardFormSnippetAbstra
     /**
      * Try to get the current translator
      *
-     * @return \Zalt\Model\ModelTranslatorInterface or false if none is current
+     * @return ModelTranslatorInterface or false if none is current
      */
     protected function getImportTranslator()
     {
@@ -671,18 +689,18 @@ abstract class ModelImportSnippet extends \Zalt\Snippets\WizardFormSnippetAbstra
         }
 
         $translator = $this->importTranslators[$this->formData['trans']];
-        if (! $translator instanceof \Zalt\Model\ModelTranslatorInterface) {
+        if (! $translator instanceof ModelTranslatorInterface) {
             $this->_errors[] = sprintf($this->_('%s is not a valid import definition.'), $this->formData['trans']);
             return false;
         }
 
         // Store/set relevant variables
-        if ($this->importer instanceof \Zalt\Model\Importer) {
+        if ($this->importer instanceof Importer) {
             $this->importer->setImportTranslator($translator);
         }
         if ($this->targetModel instanceof FullDataInterface) {
             $translator->setTargetModel($this->targetModel);
-            if ($this->importer instanceof \Zalt\Model\Importer) {
+            if ($this->importer instanceof Importer) {
                 $this->importer->setTargetModel($this->targetModel);
             }
         }
@@ -710,7 +728,7 @@ abstract class ModelImportSnippet extends \Zalt\Snippets\WizardFormSnippetAbstra
         if (! $this->_translatorDescriptions) {
             $results = array();
             foreach ($this->importTranslators as $key => $translator) {
-                if ($translator instanceof \Zalt\Model\ModelTranslatorInterface) {
+                if ($translator instanceof ModelTranslatorInterface) {
                     $results[$key] = $translator->getDescription();
                 }
             }
@@ -756,7 +774,7 @@ abstract class ModelImportSnippet extends \Zalt\Snippets\WizardFormSnippetAbstra
             }
             $translator = $this->importTranslators[$transKey];
 
-            if ($translator instanceof \Zalt\Model\ModelTranslatorInterface) {
+            if ($translator instanceof ModelTranslatorInterface) {
 
                 $translator->setTargetModel($this->targetModel);
                 $translations = $translator->getFieldsTranslations();
@@ -939,7 +957,7 @@ abstract class ModelImportSnippet extends \Zalt\Snippets\WizardFormSnippetAbstra
     protected function loadFormData(): array
     {
         if ($this->isPost()) {
-            $this->formData = $this->getRequestPostParams() + $this->formData;
+            $this->formData = $this->requestInfo->getRequestPostParams() + $this->formData;
         } else {
             foreach ($this->importModel->getColNames('default') as $name) {
                 if (!(isset($this->formData[$name]) && $this->formData[$name])) {
@@ -955,9 +973,9 @@ abstract class ModelImportSnippet extends \Zalt\Snippets\WizardFormSnippetAbstra
         if (isset($this->formData[$this->stepFieldName]) &&
                 $this->formData[$this->stepFieldName] > 1 &&
                 (!(isset($this->_session->localfile) && $this->_session->localfile))) {
-            $this->_session->localfile = \Zalt\File::createTemporaryIn(
+            $this->_session->localfile = File::createTemporaryIn(
                     $this->tempDirectory,
-                    $this->getCurrentController() . '_'
+                    $this->requestInfo->getCurrentController() . '_'
                     );
         }
 
@@ -966,7 +984,7 @@ abstract class ModelImportSnippet extends \Zalt\Snippets\WizardFormSnippetAbstra
 
         // Set the translator
         $translator = $this->getImportTranslator();
-        if ($translator instanceof \Zalt\Model\ModelTranslatorInterface) {
+        if ($translator instanceof ModelTranslatorInterface) {
             $this->importer->setImportTranslator($translator);
         }
 
@@ -1005,13 +1023,13 @@ abstract class ModelImportSnippet extends \Zalt\Snippets\WizardFormSnippetAbstra
     {
         try {
             // Lookup in importTranslators
-            $queryParams = $this->getRequestQueryParams();
+            $queryParams = $this->requestInfo->getRequestQueryParams();
             $transName = $this->defaultImportTranslator;
             if (isset($queryParams['trans'])) {
                 $transName = $queryParams['trans'];
             }
             if (! isset($this->importTranslators[$transName])) {
-                throw new \Zalt\Model\ModelTranslateException(sprintf(
+                throw new ModelTranslatorException(sprintf(
                         $this->_("Unknown translator '%s'. Should be one of: %s"),
                         $transName,
                         implode($this->_(', '), array_keys($this->importTranslators))
@@ -1050,8 +1068,8 @@ abstract class ModelImportSnippet extends \Zalt\Snippets\WizardFormSnippetAbstra
             $messages[] = null;
             $messages[] = sprintf(
                     "Usage instruction: %s %s file=filename [trans=[%s]] [check=1]",
-                    $this->getCurrentController(),
-                    $this->getCurrentAction(),
+                    $this->requestInfo->getCurrentController(),
+                    $this->requestInfo->getCurrentAction(),
                     implode('|', array_keys($this->importTranslators))
                     );
             $messages[] = sprintf(
@@ -1093,6 +1111,6 @@ abstract class ModelImportSnippet extends \Zalt\Snippets\WizardFormSnippetAbstra
             @unlink($this->_session->localfile);
         }
 
-        parent::setAfterSaveRoute();
+        return parent::setAfterSaveRoute();
     }
 }

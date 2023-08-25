@@ -109,6 +109,11 @@ abstract class FormSnippetAbstract extends MessageableSnippetAbstract
     protected $saveLabel = 'OK';
 
     /**
+     * @var array Strings describing what is edited / saved for 1 item and more than 1 item
+     */
+    protected array $subjects = ['item', 'items'];
+
+    /**
      * Use csrf token on form for protection against Cross Site Request Forgery
      *
      * @var boolean
@@ -244,7 +249,7 @@ abstract class FormSnippetAbstract extends MessageableSnippetAbstract
      */
     public function getTopic($count = 1)
     {
-        return $this->plural('item', 'items', $count);
+        return $this->plural($this->subjects[0], $this->subjects[1], $count);
     }
 
     /**

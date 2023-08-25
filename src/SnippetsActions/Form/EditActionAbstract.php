@@ -69,7 +69,7 @@ class EditActionAbstract extends AbstractAction implements ModelActionInterface,
      *
      * @var boolean
      */
-    protected bool $onlyUsedElements = true;
+    public bool $onlyUsedElements = true;
 
     /**
      * The form Id used for the save button. If empty save button is not added.
@@ -86,7 +86,7 @@ class EditActionAbstract extends AbstractAction implements ModelActionInterface,
     /**
      * @var string[] Array describing what is saved
      */
-    protected array $subjects = ['item', 'items'];
+    public array $subjects = ['item', 'items'];
 
     /**
      * Use csrf token on form for protection against Cross Site Request Forgery

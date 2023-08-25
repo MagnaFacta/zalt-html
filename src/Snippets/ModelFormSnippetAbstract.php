@@ -34,11 +34,6 @@ abstract class ModelFormSnippetAbstract extends FormSnippetAbstract
     protected ?array $_items = null;
 
     /**
-     * @var string[] Array describing what is saved 
-     */
-    protected $subjects = ['item', 'items'];
-    
-    /**
      * Output only those elements actually used by the form.
      *  
      * When false all fields without a label or elementClass are hidden,
@@ -122,17 +117,6 @@ abstract class ModelFormSnippetAbstract extends FormSnippetAbstract
     public function getChangedMessage(int $changed): string
     {
         return sprintf($this->_('%2$u %1$s saved'), $this->getTopic($changed), $changed);
-    }
-
-    /**
-     * Helper function to allow generalized statements about the items in the model to used specific item names.
-     *
-     * @param int $count
-     * @return $string
-     */
-    public function getTopic($count = 1)
-    {
-        return $this->plural($this->subjects[0], $this->subjects[1], $count);
     }
 
     /**

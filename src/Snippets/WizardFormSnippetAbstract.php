@@ -161,13 +161,6 @@ abstract class WizardFormSnippetAbstract extends \Zalt\Snippets\ModelFormSnippet
     protected string $stepFieldName = 'current_step';
 
     /**
-     * When set getTopic() uses this function instead of plural on this.
-     *
-     * @var callable
-     */
-    protected $topicCallable;
-
-    /**
      * Default button creation function.
      *
      * @param string $buttonId
@@ -451,21 +444,6 @@ abstract class WizardFormSnippetAbstract extends \Zalt\Snippets\ModelFormSnippet
      * @return int
      */
     abstract protected function getStepCount();
-
-    /**
-     * Helper function to allow generalized statements about the items in the target model to specific item names.
-     *
-     * @param int $count
-     * @return $string
-     */
-    public function getTopic($count = 1)
-    {
-         if (is_callable($this->topicCallable)) {
-            return call_user_func($this->topicCallable, $count);
-        } else {
-              return $this->plural('item', 'items', $count);
-        }
-    }
 
     /**
      * True when the user clicked the finished button
