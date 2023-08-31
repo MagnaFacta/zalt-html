@@ -116,8 +116,6 @@ abstract class ModelFormSnippetAbstract extends FormSnippetAbstract
      * Remove all non-used elements from a form by setting the elementClasses to None.
      *
      * Checks for dependencies and keys to be included
-     *
-     * @return MetaModelInterface (continuation pattern)
      */
     public function clearElementClasses(MetaModelInterface $metaModel)
     {
@@ -132,7 +130,7 @@ abstract class ModelFormSnippetAbstract extends FormSnippetAbstract
 
         // Hide al dependencies plus the keys
         $elems   = $metaModel->getColNames('elementClass');
-        $depends = $metaModel->getDependentOn($elems) + $this->getKeys();
+        $depends = $metaModel->getDependentOn($elems) + $metaModel->getKeys();
         if ($depends) {
             $metaModel->setDefault($depends, 'elementClass', 'Hidden');
         }
