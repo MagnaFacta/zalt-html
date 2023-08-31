@@ -12,9 +12,11 @@ declare(strict_types=1);
 namespace Zalt\Snippets;
 
 use Zalt\Model\Bridge\FormBridgeInterface;
+use Zalt\Model\Data\DataReaderInterface;
 use Zalt\Model\Data\FullDataInterface;
 use Zalt\Model\Exception\MetaModelException;
 use Zalt\Model\MetaModelInterface;
+use Zalt\Model\MetaModellerInterface;
 
 /**
  *
@@ -109,7 +111,43 @@ abstract class ModelFormSnippetAbstract extends FormSnippetAbstract
             $this->addMessage($this->_('No changes to save!'));
         }
     }
-    
+
+    /**
+     * Remove all non-used elements from a form by setting the elementClasses to None.
+     *
+     * Checks for dependencies and keys to be included
+     *
+     * @return MetaModelInterface (continuation pattern)
+     */
+    public function clearElementClasses(MetaModelInterface $metaModel)
+    {
+        $labels  = $metaModel->getColNames('label');
+        $options = array_intersect($metaModel->getColNames('multiOptions'), $labels);
+
+        // Set element class to text for those with labels without an element class
+        $metaModel->setDefault($options, 'elementClass', 'Select');
+
+        // Set element class to text for those with labels without an element class
+        $metaModel->setDefault($labels, 'elementClass', 'Text');
+
+        // Hide al dependencies plus the keys
+        $elems   = $metaModel->getColNames('elementClass');
+        $depends = $metaModel->getDependentOn($elems) + $this->getKeys();
+        if ($depends) {
+            $metaModel->setDefault($depends, 'elementClass', 'Hidden');
+        }
+
+        // Leave out the rest
+        $metaModel->setDefault('elementClass', 'None');
+
+        // Cascade
+        foreach ($metaModel->getCol('model') as $subModel) {
+            if ($subModel instanceof MetaModellerInterface) {
+                $this->clearElementClasses($subModel->getMetaModel());
+            }
+        }
+    }
+
     /**
      * @param int $changed
      * @return string
@@ -128,7 +166,7 @@ abstract class ModelFormSnippetAbstract extends FormSnippetAbstract
             $this->_items = $metaModel->getItemsOrdered();
 
             if ($this->onlyUsedElements) {
-                $metaModel->clearElementClasses();
+                $this->clearElementClasses($metaModel);
             }
         }
     }
