@@ -4,8 +4,8 @@
     "type": "library",
     "require": {
         "php": ">=8.1.0",
-        "magnafacta/zalt-late": "dev-main",
-        "magnafacta/zalt-loader": "dev-psr-11",
+        "magnafacta/zalt-late": "main-dev",
+        "magnafacta/zalt-loader": "psr-11-dev",
         "magnafacta/zalt-model": "2.x-dev",
         "magnafacta/zalt-util": "dev-main"
     },

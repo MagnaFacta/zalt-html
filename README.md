@@ -1,5 +1,5 @@
 # zalt-html
-Zalt html is a PHP library for easy Html use and creation, with minimal dependencies on external libraries.
+Zalt html is a PHP library for easy Html content use and creation, with minimal dependencies on external libraries.
 
 The library consist of three sub-packages:
 
@@ -55,8 +55,9 @@ Zalt html works fine without Late objects, check the Zalt late library if you ar
 
 ## Snippets
 
-Snippets are objects containing reusable html content with added simple *logic* build in. When generating output, using 
-a list of snippets, the system:
+Snippets are objects containing reusable html content with added simple *logic* build in. You can compore them to e.g. 
+twig templates but then the are completely written in PHP code and they contain flow control - in contrast to most 
+template systems. When generating output, using a list of snippets, the system:
 
 1. Checks for HtmlOutput and if it is there, add the HTML to the output.
 2. Without HTML check for a ``ResponseInterface`` object and return that if it exists.
