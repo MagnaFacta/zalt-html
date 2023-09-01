@@ -2,3 +2,4 @@
 /vendor/
 /test/.phpunit.result.cache
 test/html-coverage
+test/.phpunit.cache
