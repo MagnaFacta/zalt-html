@@ -34,7 +34,7 @@ class SnippetsParameterTest extends TestCase
     protected SimpleServiceManager $sm;
     protected SnippetLoader $sl;
 
-    public function resultOutputProvider()
+    public static function resultOutputProvider()
     {
         return [
             [[], '<div />'],

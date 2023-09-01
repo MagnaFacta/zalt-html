@@ -23,7 +23,7 @@ use Zalt\Late\LateInterface;
  */
 class HtmlRendererTest extends \PHPUnit\Framework\TestCase
 {
-    public function elementRenderProvider()
+    public static function elementRenderProvider()
     {
         return [
             ['a', ['http://nu.nl'], '<a href="http://nu.nl">http://nu.nl</a>'],
@@ -58,7 +58,7 @@ class HtmlRendererTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
-    public function lateRenderProvider()
+    public static function lateRenderProvider()
     {
         return [
             ['call', ['time'], Late::call('time')],
@@ -70,7 +70,7 @@ class HtmlRendererTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
-    public function otherRenderProvider()
+    public static function otherRenderProvider()
     {
         return [
             ['array', ['a', 'b', 'c'], 'abc'],

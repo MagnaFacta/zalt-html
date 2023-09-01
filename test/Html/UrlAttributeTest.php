@@ -49,7 +49,7 @@ class UrlAttributeTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('href', $attr->getAttributeName());
     }    
     
-    public function urlGenerationProvider()
+    public static function urlGenerationProvider()
     {
         return [
             [['http://localhost/', 'dump'], 'http://localhost/dump'],

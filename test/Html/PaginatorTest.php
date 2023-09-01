@@ -39,7 +39,7 @@ class PaginatorTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($moreItems, $paginator->getMoreItems());
     }
 
-    public function paginationItemsProvider()
+    public static function paginationItemsProvider()
     {
         // pageItems, lessItems, moreItems
         return [

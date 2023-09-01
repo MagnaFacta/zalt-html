@@ -11,7 +11,6 @@
 
 namespace Zalt\Html;
 
-use PHPUnit\Framework\TestCase;
 use Zalt\Ra\MultiWrapper;
 use Zalt\Late\Late;
 use Zalt\Late\LateCall;
@@ -23,9 +22,9 @@ use Zalt\Late\LateCall;
  * @license    New BSD License
  * @since      Class available since version 1.0
  */
-class HtmlCreatorTest extends TestCase
+class HtmlCreatorTest extends \PHPUnit\Framework\TestCase
 {
-    public function elementCreationProvider()
+    public static function elementCreationProvider()
     {
         return [
             ['a', AElement::class, ['url']],
@@ -59,7 +58,7 @@ class HtmlCreatorTest extends TestCase
         ]; 
     }
 
-    public function otherCreationProvider()
+    public static function otherCreationProvider()
     {
         return [
             ['array', Sequence::class, ['a', 'b']],

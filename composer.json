@@ -14,7 +14,7 @@
         "laminas/laminas-validator": "^2.20",
         "magnafacta/mutil": "2.x-dev",
         "phpstan/phpstan": "1.*",
-        "phpunit/phpunit": "9.*",
+        "phpunit/phpunit": "10.*",
         "shardj/zf1-future": "^1.21",
         "shardj/zf1-extras-future": "^1.12"
     },
