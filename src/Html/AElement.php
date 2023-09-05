@@ -144,8 +144,8 @@ class AElement extends \Zalt\Html\HtmlElement
      * Return a mailto: link object
      *
      * @param mixed $email
-     * @param mixed $argArray
-     * @return \self
+     * @param mixed $args
+     * @return AElement
      */
     public static function email($email, ...$args)
     {

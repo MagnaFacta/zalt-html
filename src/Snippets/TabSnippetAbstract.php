@@ -156,7 +156,7 @@ abstract class TabSnippetAbstract extends TranslatableSnippetAbstract
      * Return optionally the single parameter key which should left out for the default value,
      * but is added for all other tabs.
      *
-     * @return mixed
+     * @return string|int|null
      */
     protected function getParameterKey(): string|int|null
     {

@@ -26,7 +26,7 @@ use Zalt\Late\Late;
 abstract class FormSnippetAbstract extends MessageableSnippetAbstract
 {
     /**
-     * @var The form of some type
+     * var \Zend_Form The form of some type
      */
     protected $_form;
 
@@ -234,7 +234,7 @@ abstract class FormSnippetAbstract extends MessageableSnippetAbstract
      *
      * When hasHtmlOutput() is true this functions should not be called.
      * 
-     * @return mixed Nothing or an url string
+     * @return string|null Nothing or an url string
      */
     public function getRedirectRoute(): ?string
     {
@@ -245,7 +245,7 @@ abstract class FormSnippetAbstract extends MessageableSnippetAbstract
      * Helper function to allow generalized statements about the items in the model to used specific item names.
      *
      * @param int $count
-     * @return $string
+     * @return string
      */
     public function getTopic($count = 1)
     {

@@ -162,7 +162,7 @@ class ZendElementDecorator extends \Zend_Form_Decorator_Abstract
      * Set the default
      *
      * @param \Zalt\Html\HtmlInterface $htmlElement
-     * @return \Zalt\Html\ZendElementDecorator (continuation pattern)
+     * @return ZendElementDecorator
      */
     public function setHtmlElement(\Zalt\Html\HtmlInterface $htmlElement)
     {
@@ -177,7 +177,7 @@ class ZendElementDecorator extends \Zend_Form_Decorator_Abstract
      * otherwise an UL is created
      *
      * @param mixed $prepend false, true or \Zalt\Html\HtmlElement
-     * @return \Zalt\Html\ZendElementDecorator (continuation pattern)
+     * @return ZendElementDecorator
      */
     public function setPrependErrors($prepend = true)
     {
@@ -192,7 +192,7 @@ class ZendElementDecorator extends \Zend_Form_Decorator_Abstract
      * displayed in a div at the start of the form.
      *
      * @param mixed $prologue E.g. a repeater or a html element
-     * @return \Zalt\Html\ZendElementDecorator
+     * @return ZendElementDecorator
      */
     public function setPrologue($prologue)
     {

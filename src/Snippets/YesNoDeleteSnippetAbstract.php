@@ -81,7 +81,7 @@ abstract class YesNoDeleteSnippetAbstract extends \Zalt\Snippets\TranslatableSni
     /**
      * The question to as the user.
      *
-     * @var sting Optional
+     * @var string Optional
      */
     protected $deleteQuestion;
 
@@ -147,7 +147,7 @@ abstract class YesNoDeleteSnippetAbstract extends \Zalt\Snippets\TranslatableSni
      *
      * @see \Zend_Controller_Action_Helper_Redirector
      *
-     * @return mixed Nothing or either an array or a string that is acceptable for Redector->gotoRoute()
+     * @return string|null Nothing or a string that is acceptable for Redector->gotoRoute()
      */
     public function getRedirectRoute(): ?string
     {

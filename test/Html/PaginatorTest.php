@@ -25,9 +25,9 @@ class PaginatorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @dataProvider paginationItemsProvider
-     * @param int pageItems How many items are we currently showing
-     * @param int lessItems How many items to show when decreasing the page size
-     * @param int moreItems How many items to show when increasing the page size
+     * @param int $pageItems How many items are we currently showing
+     * @param int $lessItems How many items to show when decreasing the page size
+     * @param int $moreItems How many items to show when increasing the page size
      */
     public function testPagination(int $pageItems, int $lessItems, int $moreItems): void
     {

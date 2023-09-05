@@ -144,7 +144,7 @@ abstract class ModelConfirmDataChangeSnippetAbstract extends \Zalt\Snippets\Mode
      *
      * @see \Zend_Controller_Action_Helper_Redirector
      *
-     * @return mixed Nothing or either an array or a string that is acceptable for Redector->gotoRoute()
+     * @return string|null Nothing or a string that is acceptable for Redector->gotoRoute()
      */
     public function getRedirectRoute(): ?string
     {
@@ -214,8 +214,8 @@ abstract class ModelConfirmDataChangeSnippetAbstract extends \Zalt\Snippets\Mode
      * Overrule this function to set the header differently, without
      * having to recode the core table building code.
      *
-     * @param \Zalt\Model\Bridge\VerticalTableBridge $bridge
-     * @param \Zalt\Model\ModelAbstract $dataModel
+     * @param DetailTableBridge $bridge
+     * @param DataReaderInterface $dataModel
      * @return void
      */
     protected function setShowTableFooter(DetailTableBridge $bridge, DataReaderInterface $dataModel)

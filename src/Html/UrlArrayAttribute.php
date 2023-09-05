@@ -57,7 +57,7 @@ class UrlArrayAttribute extends ArrayAttribute
      * This is url is encoded for url usage, but not for use as attribute values,
      * i.e. this helper function is used for generating url's for internal use.
      *
-     * @param array $options Array of parameter values
+     * @param array $url
      * @return string
      */
     public static function toUrlString(array $url): string

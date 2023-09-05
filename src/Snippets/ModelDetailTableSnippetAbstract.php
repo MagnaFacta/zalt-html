@@ -98,7 +98,6 @@ abstract class ModelDetailTableSnippetAbstract extends ModelSnippetAbstract
      *
      * This is a stub function either override getHtmlOutput() or override render()
      *
-     * @param \Zend_View_Abstract $view Just in case it is needed here
      * @return \Zalt\Html\HtmlInterface Something that can be rendered
      */
     public function getHtmlOutput()
