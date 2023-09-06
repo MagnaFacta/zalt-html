@@ -51,7 +51,7 @@ class ZendInputRenderer implements \Zalt\Html\HtmlInterface
      *
      * @param \Zend_Form|\Zend_Form_Element|\Zalt\Late\LateInterface $element
      * @param $mode One of the class MODE_ constants
-     * @param array of string|array|\Zend_Form_Decorator_Interface $decorators Optional An arrya that contains values
+     * @param array $decorators An array of string|array|\Zend_Form_Decorator_Interface Optional An arrya that contains values
      * that are either a string value that identifies an existing decorator or an array that creates an new decorator
      * or a decorator instance.
      */

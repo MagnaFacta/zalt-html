@@ -114,7 +114,7 @@ abstract class ModelTableSnippetAbstract extends \Zalt\Snippets\ModelSnippetAbst
      * having to recode the core table building code.
      *
      * @param TableBridge $bridge
-     * @param DataReaderInterface $model
+     * @param DataReaderInterface $dataModel
      * @return void
      */
     protected function addBrowseTableColumns(TableBridge $bridge, DataReaderInterface $dataModel)

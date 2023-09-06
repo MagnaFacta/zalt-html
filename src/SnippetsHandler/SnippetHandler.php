@@ -42,7 +42,7 @@ class SnippetHandler implements RequestHandlerInterface
     private MetaModellerInterface $_model;
 
     /**
-     * @var string[classname|SnippetActionInterface] 
+     * @var array[string|SnippetActionInterface]
      */
     public static $actions = ['index' => BrowseTableAction::class];
 

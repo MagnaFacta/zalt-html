@@ -30,8 +30,25 @@ use Zalt\Ra\Ra;
  * @copyright  Copyright (c) 2011 Erasmus MC
  * @license    New BSD License
  * @since      Class available since version 1.0
+ * @method     AElement        a(...$arguments)
+ * @method     HtmlElement     br(...$arguments)
+ * @method     ColElement      col(...$arguments)
+ * @method     ColGroupElement colgroup(...$arguments)
+ * @method     HtmlElement     div(...$arguments)
+ * @method     DlElement       dd(...$arguments)
+ * @method     DlElement       dl(...$arguments)
+ * @method     DlElement       dt(...$arguments)
+ * @method     HtmlElement     em(...$arguments)
+ * @method     HtmlElement     li(...$arguments)
+ * @method     Raw             raw(...$arguments)
+ * @method     HtmlElement     small(...$arguments)
+ * @method     HtmlElement     span(...$arguments)
+ * @method     HtmlElement     strong(...$arguments)
+ * @method     TdElement       td(...$arguments)
+ * @method     TdElement       th(...$arguments)
+ * @method     TrElement       tr(...$arguments)
+ * @method     ListElement     ul(...$arguments)
  */
-
 class Creator
 {
     /**

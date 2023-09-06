@@ -124,7 +124,7 @@ class Html
      * Create an element bypassing the standard element creation function stored for certain tags.
      *
      * @param string $tagName Optional tag to create
-     * @param mixed $args Optional Ra::args processed settings
+     * @param array $args Optional Ra::args processed settings
      * @return HtmlElement Always, never another type
      */
     public static function createRaw($tagName, array $args = [])
@@ -379,8 +379,8 @@ class Html
     /**
      *
      * @param string $name Snippet name
-     * @param Ra::pairs $parameter_value_pairs Optional extra snippets
-     * @return \Zalt\Snippets\SnippetInterface
+     * @param mixed $args Optional extra snippets
+     * @return \Zalt\Snippets\SnippetInterface|null
      */
     public static function snippet($name, ...$args): ?SnippetInterface
     {

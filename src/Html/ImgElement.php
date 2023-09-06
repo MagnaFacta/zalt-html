@@ -161,8 +161,6 @@ class ImgElement extends HtmlElement
 
     /**
      * Use this function to set the web root directory if your application uses chdir() anywhere.
-     *
-     * @param string $webRoot The current webroot
      */
     public static function getWebRoot()
     {

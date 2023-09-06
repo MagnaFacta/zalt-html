@@ -53,7 +53,7 @@ abstract class ModelFormSnippetAbstract extends FormSnippetAbstract
      * having to recode the core table building code.
      *
      * @param \Zalt\Model\Bridge\FormBridgeInterface $bridge
-     * @param \Zalt\Model\Data\FullDataInterface $model
+     * @param \Zalt\Model\Data\FullDataInterface $dataModel
      */
     protected function addBridgeElements(FormBridgeInterface $bridge, FullDataInterface $dataModel)
     {

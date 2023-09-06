@@ -63,7 +63,7 @@ class JavascriptArrayAttribute extends ArrayAttribute
     /**
      * Add a cancel bubble command
      *
-     * @param boolean $cancelBubble
+     * @param mixed $question
      * @return \Zalt\Html\JavascriptArrayAttribute (continuation pattern)
      */
     public function addConfirm($question)
@@ -79,7 +79,7 @@ class JavascriptArrayAttribute extends ArrayAttribute
     /**
      * Add single code line
      *
-     * @param mixed $line
+     * @param mixed $line_args
      * @return \Zalt\Html\JavascriptArrayAttribute (continuation pattern)
      */
     public function addLine($line_args)

@@ -108,7 +108,7 @@ class ZendDivFormElement extends \Zalt\Html\HtmlElement implements ZendFormLayou
      * @param mixed $width The style.width content for the labels
      * @param array $order The display order of the elements
      * @param string $errorClass Class name to display all errors in
-     * @return \Zalt\Html\DivElement
+     * @return ZendDivFormElement
      */
     public function setAsFormLayout(\Zend_Form $form, $width = null, $order = array('label', 'element', 'errors', 'description'), $errorClass = 'errors')
     {
@@ -193,7 +193,7 @@ class ZendDivFormElement extends \Zalt\Html\HtmlElement implements ZendFormLayou
     /**
      *
      * @param boolean $flatten Should subforms be flattened as tables
-     * @return \Zalt\Html\ZendDivFormElement
+     * @return ZendDivFormElement
      */
     public function setFlattenSubs($flatten = true)
     {

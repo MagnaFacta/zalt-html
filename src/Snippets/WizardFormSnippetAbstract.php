@@ -71,7 +71,7 @@ abstract class WizardFormSnippetAbstract extends \Zalt\Snippets\ModelFormSnippet
     /**
      * The cancel button label (default is translated 'Cancel')
      *
-     * @var string
+     * @var string|null
      */
     protected ?string $cancelLabel = null;
 
@@ -119,14 +119,14 @@ abstract class WizardFormSnippetAbstract extends \Zalt\Snippets\ModelFormSnippet
      *
      * If empty button is not added
      *
-     * @var string
+     * @var bool
      */
     protected bool $nextDisabled = false;
 
     /**
      * The next button label (default is translated 'Next')
      *
-     * @var string
+     * @var string|null
      */
     protected ?string $nextLabel = null;
 
@@ -149,7 +149,7 @@ abstract class WizardFormSnippetAbstract extends \Zalt\Snippets\ModelFormSnippet
     /**
      * The previous button label (default is translated 'Previous')
      *
-     * @var string
+     * @var string|null
      */
     protected ?string $previousLabel = null;
 

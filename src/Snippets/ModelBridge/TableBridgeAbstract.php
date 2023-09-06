@@ -132,7 +132,7 @@ use Zalt\Ra\Ra;
      * and add a temporary third value of true.
      *
      * @param string $name The real name and not e.g. the key id
-     * @param mixed $value
+     * @param mixed $label
      * @return mixed
      */
     public function formatHeader(string $name, $label)

@@ -152,7 +152,7 @@ abstract class DynamicAbstract implements HtmlInterface
      *
      * @param string $name Full name to replace.
      * @param string $value The value placed.
-     * @return \Zalt\Html_Link_LinkAbstract (continuation pattern)
+     * @return DynamicAbstract
      */
     public function setDefault($name, $value)
     {
