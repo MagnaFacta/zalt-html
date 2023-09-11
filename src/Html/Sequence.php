@@ -29,6 +29,8 @@ use Zalt\Ra\Ra;
  * @copyright  Copyright (c) 2011 Erasmus MC
  * @license    New BSD License
  * @since      Class available since \Zalt version 1.0
+ * @method     HtmlElement     br(...$arguments)
+ * @method     HtmlElement     div(...$arguments)
  */
 class Sequence extends ArrayString implements ElementInterface
 {
