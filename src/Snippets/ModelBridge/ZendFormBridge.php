@@ -11,8 +11,6 @@ declare(strict_types=1);
 
 namespace Zalt\Snippets\ModelBridge;
 
-use Zalt\Model\Bridge\Laminas\LaminasValidatorBridge;
-use Zalt\Model\Bridge\ValidatorBridgeInterface;
 use Zalt\Model\Data\FullDataInterface;
 use Zalt\Model\Exception\MetaModelException;
 use Zalt\Ra\Ra;
@@ -457,14 +455,6 @@ class ZendFormBridge extends \Zalt\Model\Bridge\FormBridgeAbstract
         if (method_exists($this->form, 'getTab')) {
             return $this->form->getTab($name);
         }
-    }
-
-    public function getValidatorBridge(): ValidatorBridgeInterface
-    {
-        if (! isset($this->validatorBridge)) {
-            $this->validatorBridge = $this->dataModel->getBridgeFor(LaminasValidatorBridge::class);
-        }
-        return $this->validatorBridge;
     }
 
     public function setForm(mixed $form): void
