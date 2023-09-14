@@ -76,24 +76,10 @@ class ZendFormBridge extends \Zalt\Model\Bridge\FormBridgeAbstract
      */
     protected function _applyFilters($name, \Zend_Form_Element $element)
     {
-        $filters = $this->metaModel->get($name, 'filters');
-
-        if ($filter = $this->metaModel->get($name, 'filter')) {
-            if ($filters) {
-                array_unshift($filters, $filter);
-            } else {
-                $filters = array($filter);
-            }
-        }
+        $filters = $this->filterBridge->getFiltersFor($name);
 
         if ($filters) {
-            foreach ($filters as $filter) {
-                if (is_array($filter)) {
-                    call_user_func_array(array($element, 'addFilter'), $filter);
-                } else {
-                    $element->addFilter($filter);
-                }
-            }
+            $element->addFilters($filters);
         }
     }
 
