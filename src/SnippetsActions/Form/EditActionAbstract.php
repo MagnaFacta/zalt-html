@@ -44,16 +44,18 @@ class EditActionAbstract extends AbstractAction implements ModelActionInterface,
     public bool $createData = false;
 
     /**
-     * Field id for crsf protection field.
+     * Field name for crsf protection field.
+     *
      * @var string
      */
-    public string $csrfId = 'no_csrf';
+    public string $csrfName = '__csrf';
 
     /**
-     * The timeout for crsf, 300 is default
-     * @var int
+     * The csrf token.
+     *
+     * @var string
      */
-    public int $csrfTimeout = 300;
+    public ?string $csrfToken = null;
 
     /**
      * @var string class attribute for labels
@@ -87,12 +89,6 @@ class EditActionAbstract extends AbstractAction implements ModelActionInterface,
      * @var string[] Array describing what is saved
      */
     public array $subjects = ['item', 'items'];
-
-    /**
-     * Use csrf token on form for protection against Cross Site Request Forgery
-     * @var boolean
-     */
-    public $useCsrf = false;
 
     /**
      * @inheritDoc

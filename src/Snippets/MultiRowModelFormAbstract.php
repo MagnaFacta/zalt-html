@@ -115,9 +115,7 @@ abstract class MultiRowModelFormAbstract extends \Zalt\Snippets\ModelFormSnippet
     {
         $this->beforeSave();
 
-        if ($this->csrfId) { //} && $this->_csrf) {
-            unset($this->formData[$this->csrfId]);
-        }
+        unset($this->formData[$this->csrfName]);
 
         // Perform the save
         $model = $this->getModel();

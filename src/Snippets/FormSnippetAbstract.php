@@ -62,18 +62,18 @@ abstract class FormSnippetAbstract extends MessageableSnippetAbstract
     protected $createData = false;
 
     /**
-     * Field id for crsf protection field.
+     * Field name for crsf protection field.
      *
      * @var string
      */
-    protected $csrfId = 'no_csrf';
+    protected string $csrfName = '__csrf';
 
     /**
-     * The timeout for crsf, 300 is default
+     * The csrf token.
      *
-     * @var int
+     * @var string
      */
-    protected $csrfTimeout = 300;
+    protected ?string $csrfToken = null;
 
     /**
      *
@@ -114,19 +114,13 @@ abstract class FormSnippetAbstract extends MessageableSnippetAbstract
     protected array $subjects = ['item', 'items'];
 
     /**
-     * Use csrf token on form for protection against Cross Site Request Forgery
+     * Simple function adding the actual crsf hidden field
      *
-     * @var boolean
+     * @param string $csrfName
+     * @param string|null $csrfToken
+     * @return void
      */
-    public $useCsrf = false;
-
-    /**
-     * Simple default function for making sure there is a $this->_saveButton.
-     *
-     * As the save button is not part of the model - but of the interface - it
-     * does deserve it's own function.
-     */
-    abstract protected function addCsrf(string $csrfId, int $csrfTimeout);
+    abstract protected function addCsrf(string $csrfName, ?string $csrfToken): void;
 
     /**
      * Add the elements to the form
@@ -171,11 +165,7 @@ abstract class FormSnippetAbstract extends MessageableSnippetAbstract
      * Here we add the table display to the form.
      */
     public function beforeDisplay()
-    {
-//        if ($this->_csrf) {
-//            $this->_csrf->initCsrfToken();
-//        }
-    }
+    { }
 
     /**
      * Perform some actions to the data before it is saved to the database
@@ -348,8 +338,8 @@ abstract class FormSnippetAbstract extends MessageableSnippetAbstract
         $this->addSaveButton($this->saveButtonId, $this->saveLabel, $this->buttonClass);
 
         // Use Csrf when enabled
-        if ($this->useCsrf) {
-            $this->addCsrf($this->csrfId, $this->csrfTimeout);
+        if ($this->csrfName && $this->csrfToken) {
+            $this->addCsrf($this->csrfName, $this->csrfToken);
         }
 
         if ($this->isPost()) {

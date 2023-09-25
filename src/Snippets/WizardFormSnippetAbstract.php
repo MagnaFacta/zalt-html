@@ -239,11 +239,6 @@ abstract class WizardFormSnippetAbstract extends \Zalt\Snippets\ModelFormSnippet
         $this->_addButton($this->_cancelButton, $this->cancelButtonId, $this->cancelLabel, $this->_('Cancel'), $class);
     }
 
-    protected function addCsrf(string $csrfId, int $csrfTimeout)
-    {
-        
-    }
-    
     /**
      * Adds elements from the model to the bridge that creates the form.
      *
@@ -518,15 +513,6 @@ abstract class WizardFormSnippetAbstract extends \Zalt\Snippets\ModelFormSnippet
         $this->_form = $this->_forms[$step];
 
         $this->addButtons();
-
-        // Use Csrf when enabled
-        if ($this->useCsrf) {
-//            if ($this->_csrf) {
-//                $this->_form->addElement($this->_csrf);
-//            } else {
-//                $this->addCsrf();
-//            }
-        }
 
         $this->populateForm();
     }

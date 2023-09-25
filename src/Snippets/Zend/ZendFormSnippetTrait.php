@@ -23,7 +23,7 @@ trait ZendFormSnippetTrait
     /**
      * Optional csrf element
      *
-     * @var \Zend_Form_Element_Hash
+     * @var \Zend_Form_Element_Hidden
      */
     protected $_csrf;
 
@@ -64,24 +64,12 @@ trait ZendFormSnippetTrait
      */
     protected int $layoutFixedWidth = 0;
 
-    /**
-     * Simple default function for making sure there is a $this->_saveButton.
-     *
-     * As the save button is not part of the model - but of the interface - it
-     * does deserve it's own function.
-     *
-     * @param string $csrfId
-     * @param int    $csrfTimeout
-     * @return void
-     */
-    protected function addCsrf(string $csrfId, int $csrfTimeout)
+    protected function addCsrf(string $csrfName, ?string $csrfToken): void
     {
-        if (! $this->_csrf) {
-            $this->_form->addElement('hash', $csrfId, array(
-                'salt' => 'mutil_' . $this->requestInfo->getCurrentController() . '_' . $this->requestInfo->getCurrentAction(),
-                'timeout' => $csrfTimeout,
-            ));
-            $this->_csrf = $this->_form->getElement($this->csrfId);
+        if ((! $this->_csrf) &&$csrfName && $csrfToken) {
+            $this->_csrf = $this->_form->createElement('Hidden', $csrfName);
+            $this->_csrf->setValue($csrfToken);
+            $this->_csrf = $this->_form->addElement($this->_csrf);
         }
     }
 
@@ -159,22 +147,6 @@ trait ZendFormSnippetTrait
     public function isSaveClicked(): bool
     {
         return (! $this->_saveButton) || $this->_saveButton->isChecked();
-    }
-
-    /**
-     * Hook that allows actions when the input is invalid
-     *
-     * When not rerouted, the form will be populated afterwards
-     */
-    protected function onInValid()
-    {
-        parent::onInValid();
-
-        if ($this->_csrf) {
-            if ($this->_csrf->getMessages()) {
-                $this->addMessage($this->_('The form was open for too long or was opened in multiple windows.'));
-            }
-        }
     }
 
     /**
