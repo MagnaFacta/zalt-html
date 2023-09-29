@@ -132,7 +132,7 @@ trait ModelSnippetTrait
 
     public function getRequestFilter(MetaModelInterface $metaModel) : array
     {
-        $filter = $this->requestInfo->getRequestMatchedParams() + $this->requestInfo->getRequestMatchedParams();
+        $filter = $this->requestInfo->getRequestMatchedParams();
 
         // Remove sort parameters
         unset($filter[$this->sortParamAsc], $filter[$this->sortParamDesc]);
