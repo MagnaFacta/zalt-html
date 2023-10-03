@@ -165,7 +165,7 @@ class ZendDivFormElement extends \Zalt\Html\HtmlElement implements ZendFormLayou
                     array('class' => $errorClass, 'style' => array('margin-left' => $width))
                     ));
         }
-        $form->setDecorators([$decorator, 'AutoFocus', 'Form']);
+        $form->setDecorators([$decorator, 'Form']);
 
         return $this;
     }

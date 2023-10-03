@@ -796,7 +796,7 @@ class TableElement extends HtmlElement implements ColumnInterface
         $decorator = new Zend\ZendElementDecorator();
         $decorator->setHtmlElement($this);
         $decorator->setPrologue($formrep); // Renders hidden elements before this element
-        $form->setDecorators(array($decorator, 'AutoFocus', 'Form'));
+        $form->setDecorators(array($decorator, 'Form'));
 
         return $this;
     }
