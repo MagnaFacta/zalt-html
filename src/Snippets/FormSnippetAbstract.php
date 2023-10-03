@@ -262,6 +262,14 @@ abstract class FormSnippetAbstract extends MessageableSnippetAbstract
     }
     
     abstract public function isSaveClicked(): bool;
+
+    protected function loadCsrfData(): array
+    {
+        if ($this->csrfName && $this->csrfToken) {
+            return [$this->csrfName => $this->csrfToken];
+        }
+        return [];
+    }
     
     /**
      * Makes sure there is a form.
@@ -286,11 +294,11 @@ abstract class FormSnippetAbstract extends MessageableSnippetAbstract
     protected function loadFormData(): array
     {
         if ($this->isPost()) {
-            $this->formData = $this->requestInfo->getRequestPostParams();
+            $this->formData = $this->loadCsrfData() + $this->requestInfo->getRequestPostParams();
             return $this->formData;
         }
 
-        $this->formData = $this->getDefaultFormValues() + $this->requestInfo->getRequestPostParams();
+        $this->formData = $this->loadCsrfData() + $this->getDefaultFormValues() + $this->requestInfo->getRequestPostParams();
         return $this->formData;
     }
 

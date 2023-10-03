@@ -12,7 +12,6 @@ declare(strict_types=1);
 namespace Zalt\Snippets;
 
 use Zalt\Model\Bridge\FormBridgeInterface;
-use Zalt\Model\Data\DataReaderInterface;
 use Zalt\Model\Data\FullDataInterface;
 use Zalt\Model\Exception\MetaModelException;
 use Zalt\Model\MetaModelInterface;
@@ -212,6 +211,7 @@ abstract class ModelFormSnippetAbstract extends FormSnippetAbstract
                 }
             }
         }
+        $this->formData = $this->loadCsrfData() + $this->formData;
         
         return $this->formData;
     }
