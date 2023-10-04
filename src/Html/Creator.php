@@ -39,6 +39,7 @@ use Zalt\Ra\Ra;
  * @method     DlElement       dl(...$arguments)
  * @method     DlElement       dt(...$arguments)
  * @method     HtmlElement     em(...$arguments)
+ * @method     IFrame          iframe(...$arguments)
  * @method     HnElement       h1(...$arguments)
  * @method     HnElement       h2(...$arguments)
  * @method     HnElement       h3(...$arguments)
