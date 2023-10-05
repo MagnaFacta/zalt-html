@@ -78,7 +78,6 @@ class Creator
      */
     protected $_initialAttributeFunctions = array(
         'href'    => [HrefArrayAttribute::class, 'hrefAttribute'],
-        'onclick' => [OnClickArrayAttribute::class, 'onclickAttribute'],
         'src'     => [SrcArrayAttribute::class, 'srcAttribute'],
         'style'   => [StyleArrayAttribute::class, 'styleAttribute'],
     );
