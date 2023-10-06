@@ -31,6 +31,8 @@ class EditActionAbstract extends AbstractAction implements ModelActionInterface,
      */
     public string $buttonClass = 'button btn btn-sm btn-primary';
 
+    public ?CacheItemPoolInterface $cache = null;
+
     /**
      * Variable to set tags for cache cleanup after changes
      * @var array

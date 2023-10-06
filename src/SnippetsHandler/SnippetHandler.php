@@ -14,7 +14,7 @@ namespace Zalt\SnippetsHandler;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-use Symfony\Contracts\Translation\TranslatorInterface;
+use Zalt\Base\TranslatorInterface;
 use Zalt\Base\RequestInfo;
 use Zalt\Base\TranslateableTrait;
 use Zalt\Late\Late;
@@ -33,11 +33,6 @@ use Zalt\SnippetsLoader\SnippetResponderInterface;
 class SnippetHandler implements RequestHandlerInterface
 {
     use TranslateableTrait;
-
-    /**
-     * Url parameter to reset searches
-     */
-    const SEARCH_RESET = 'reset';
 
     private MetaModellerInterface $_model;
 

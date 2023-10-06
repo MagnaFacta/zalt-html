@@ -41,11 +41,7 @@ abstract class FormSnippetAbstract extends MessageableSnippetAbstract
      */
     protected $buttonClass = 'button btn btn-sm btn-primary';
 
-    /**
-     *
-     * @var CacheItemPoolInterface
-     */
-    protected $cache;
+    protected ? CacheItemPoolInterface $cache = null;
 
     /**
      * Variable to set tags for cache cleanup after changes
