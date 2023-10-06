@@ -208,7 +208,7 @@ abstract class WizardFormSnippetAbstract extends \Zalt\Snippets\ModelFormSnippet
         $this->addNextButton();
 
         $element = new \MUtil\Form\Element\Html('button_spacer');
-        $element->raw('&nbsp;');
+        $element->__call('raw', '&nbsp;');
         $element->setDecorators(array('ViewHelper'));
 
         $form = $this->getCurrentForm();
@@ -254,8 +254,10 @@ abstract class WizardFormSnippetAbstract extends \Zalt\Snippets\ModelFormSnippet
         //Get all elements in the model if not already done
         $this->initItems($model->getMetaModel());
 
-        // Store the current step
-        $bridge->addHidden($this->stepFieldName);
+        if ($bridge instanceof ZendFormBridge) {
+            // Store the current step
+            $bridge->addHidden($this->stepFieldName);
+        }
 
         $this->addStepElementsFor($bridge, $model, $step);
 
@@ -590,18 +592,5 @@ abstract class WizardFormSnippetAbstract extends \Zalt\Snippets\ModelFormSnippet
         }
 
         return ! $this->getRedirectRoute();
-    }
-
-    /**
-     * Set what to do when the form is 'finished' or 'cancelled'.
-     */
-    protected function setAfterSaveRoute()
-    {
-        parent::setAfterSaveRoute();
-
-        // Hapes when routeActions is same as current action
-        if (! $this->afterSaveRouteUrl) {
-            $this->afterSaveRouteUrl[$this->stepFieldName] = 1;
-        }
     }
 }

@@ -48,7 +48,7 @@ abstract class FormSnippetAbstract extends MessageableSnippetAbstract
      *
      * @var array
      */
-    protected $cacheTags;
+    protected array $cacheTags = [];
 
     /**
      * True when the form should edit a new model item.
@@ -150,7 +150,7 @@ abstract class FormSnippetAbstract extends MessageableSnippetAbstract
         if ($changed) {
             // Clean cache on changes
             if ($this->cacheTags && ($this->cache instanceof CacheItemPoolInterface)) {
-                $this->cache->invalidateTags((array) $this->cacheTags);
+                $this->cache->deleteItems($this->cacheTags);
             }
         }
     }

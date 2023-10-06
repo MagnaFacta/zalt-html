@@ -11,12 +11,14 @@
 
 namespace Zalt\Snippets\Standard;
 
+use Mezzio\Session\SessionInterface;
 use MUtil\Model\Importer;
 use MUtil\Task\TaskBatch;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Zalt\Base\RequestInfo;
 use Zalt\File\File;
 use Zalt\Html\HtmlElement;
+use Zalt\Snippets\ModelBridge\ZendFormBridge;
 use Zalt\Late\Late;
 use Zalt\Late\Repeatable;
 use Zalt\Message\MessengerInterface;
@@ -51,12 +53,6 @@ abstract class ModelImportSnippet extends \Zalt\Snippets\WizardFormSnippetAbstra
      * @var array
      */
     private $_errors = array();
-
-    /**
-     *
-     * @var \Zend_Session_Namespace
-     */
-    protected $_session;
 
     /**
      *
@@ -103,15 +99,11 @@ abstract class ModelImportSnippet extends \Zalt\Snippets\WizardFormSnippetAbstra
      */
     protected $formatBoxClass;
 
-    /**
-     *
-     * @var
-     */
     protected $importer;
 
     /**
      *
-     * @var SessionModel
+     * @var SessionModel $importModel
      */
     protected SessionModel $importModel;
 
@@ -135,9 +127,9 @@ abstract class ModelImportSnippet extends \Zalt\Snippets\WizardFormSnippetAbstra
 
     /**
      *
-     * @var \Zalt\Model\Data\FullDataInterface
+     * @var ?\Zalt\Model\Data\FullDataInterface
      */
-    protected $model;
+    protected ? FullDataInterface $model;
 
     /**
      * Model to read import
@@ -192,6 +184,7 @@ abstract class ModelImportSnippet extends \Zalt\Snippets\WizardFormSnippetAbstra
         TranslatorInterface $translate,
         MessengerInterface $messenger,
         protected readonly MetaModelLoader $metaModelLoader,
+        protected SessionInterface $session,
     )
     {
         parent::__construct($snippetOptions, $requestInfo, $translate, $messenger);
@@ -206,8 +199,10 @@ abstract class ModelImportSnippet extends \Zalt\Snippets\WizardFormSnippetAbstra
      */
     protected function _sortTranslatorTable($a, $b)
     {
-        $ao = $this->targetModel->getOrder($a);
-        $bo = $this->targetModel->getOrder($b);
+        $metaModel = $this->targetModel->getMetaModel();
+
+        $ao = $metaModel->getOrder($a);
+        $bo = $metaModel->getOrder($b);
 
         if ($ao < $bo) {
             return -1;
@@ -254,14 +249,14 @@ abstract class ModelImportSnippet extends \Zalt\Snippets\WizardFormSnippetAbstra
             if ($element instanceof \Zend_Form_Element_File) {
                 // Now add the rename filter, the localfile is known only once after loadFormData() has run
                 $element->addFilter(new \Zend_Filter_File_Rename(array(
-                    'target'    => $this->_session->localfile,
+                    'target'    => $this->session->get('localfile'),
                     'overwrite' => true
                     )));
 
                 // Download the data (no test for post, step 2 is always a post)
                 if ($element->isValid(null) && $element->getFileName()) {
                     // Now the filename is still set to the upload filename.
-                    $this->_session->extension = pathinfo($element->getFileName(), PATHINFO_EXTENSION);
+                    $this->session->set('extension', pathinfo($element->getFileName(), PATHINFO_EXTENSION));
                     // \Zalt\EchoOut\EchoOut::track($element->getFileName(), $element->getFileSize());
                     if (!$element->receive()) {
                         throw new ModelException(sprintf(
@@ -274,12 +269,12 @@ abstract class ModelImportSnippet extends \Zalt\Snippets\WizardFormSnippetAbstra
         } else {
             $this->addItems($bridge, ['content']);
 
-            $this->_session->extension = 'txt';
+            $this->session->set('extension', 'txt');
             if (isset($this->formData['content']) && $this->formData['content']) {
-                file_put_contents($this->_session->localfile, $this->formData['content']);
+                file_put_contents($this->session->get('localfile'), $this->formData['content']);
             } else {
-                if (filesize($this->_session->localfile)) {
-                    $content = file_get_contents($this->_session->localfile);
+                if (filesize($this->session->get('localfile'))) {
+                    $content = file_get_contents($this->session->get('localfile'));
                 } else {
                     $content = '';
                 }
@@ -313,16 +308,18 @@ abstract class ModelImportSnippet extends \Zalt\Snippets\WizardFormSnippetAbstra
 
             $element = $bridge->getForm()->createElement('html', 'importdisplay');
 
-            $repeater = Late::repeat(new \LimitIterator($this->sourceModel->loadIterator(), 0, 20));
+            $repeater = Late::repeat(new \LimitIterator(new \ArrayIterator($this->sourceModel->load()), 0, 20));
             $table    = new \Zalt\Html\TableElement($repeater, array('class' => $this->formatBoxClass));
 
-            foreach ($this->sourceModel->getItemsOrdered() as $name) {
+            foreach ($this->sourceModel->getMetaModel()->getItemsOrdered() as $name) {
                 $table->addColumn($repeater->$name, $name);
             }
 
             // Extra div for CSS settings
             $element->setValue(new \Zalt\Html\HtmlElement('div', $table, array('class' => $this->formatBoxClass)));
-            $bridge->addElement($element);
+            if ($bridge instanceof ZendFormBridge) {
+                $bridge->addElement($element);
+            }
         } else {
             $this->displayHeader($bridge, $this->_('Upload error!'));
             $this->displayErrors($bridge);
@@ -450,28 +447,30 @@ abstract class ModelImportSnippet extends \Zalt\Snippets\WizardFormSnippetAbstra
                 sprintf($this->_('Data import. Step %d of %d.'), $step, $this->getStepCount()),
                 'h1');
 
-        switch ($step) {
-            case 0:
-            case 1:
-                $this->addStep1($bridge, $model);
-                break;
+        if ($model instanceof FullDataInterface) {
+            switch ($step) {
+                case 0:
+                case 1:
+                    $this->addStep1($bridge, $model);
+                    break;
 
-            case 2:
-                $this->addStep2($bridge, $model);
-                break;
+                case 2:
+                    $this->addStep2($bridge, $model);
+                    break;
 
-            case 3:
-                $this->addStep3($bridge, $model);
-                break;
+                case 3:
+                    $this->addStep3($bridge, $model);
+                    break;
 
-            case 4:
-                $this->addStep4($bridge, $model);
-                break;
+                case 4:
+                    $this->addStep4($bridge, $model);
+                    break;
 
-            default:
-                $this->addStep5($bridge, $model);
-                break;
+                default:
+                    $this->addStep5($bridge, $model);
+                    break;
 
+            }
         }
     }
 
@@ -524,7 +523,6 @@ abstract class ModelImportSnippet extends \Zalt\Snippets\WizardFormSnippetAbstra
         if ($this->sourceModel instanceof FullDataInterface) {
             $this->importer->setSourceModel($this->sourceModel);
         }
-
 
         // Cleanup any references to model to avoid confusion
         $this->model = null;
@@ -590,44 +588,56 @@ abstract class ModelImportSnippet extends \Zalt\Snippets\WizardFormSnippetAbstra
     protected function createModel(): DataReaderInterface
     {
         if (! $this->importModel instanceof FullDataInterface) {
+            /**
+             * @var SessionModel $model
+             */
             $model = $this->metaModelLoader->createModel(SessionModel::class);
+            $metaModel = $model->getMetaModel();
 
-            $model->set('trans', 'label', $this->_('Import definition'),
-                    'default', $this->defaultImportTranslator,
-                    'description', $this->_('See import field definitions table'),
-                    'multiOptions', $this->getTranslatorDescriptions(),
-                    'required', true,
-                    'elementClass', 'Radio',
-                    'separator', ' ');
+            $metaModel->set('trans', [
+                'label' => $this->_('Import definition'),
+                'default' => $this->defaultImportTranslator,
+                'description' => $this->_('See import field definitions table'),
+                'multiOptions' => $this->getTranslatorDescriptions(),
+                'required' => true,
+                'elementClass' => 'Radio',
+                'separator' => ' ',
+            ]);
 
-            $model->set('mode', 'label', $this->_('Choose work mode'),
-                    'default', 'file',
-                    'multiOptions', array(
-                        'file'     => $this->_('Upload a file'),
-                        'textarea' => $this->_('Copy and paste into a text field'),
-                    ),
-                    'required', true,
-                    'elementClass', 'Radio',
-                    'separator', ' ');
+            $metaModel->set('mode', [
+                'label' => $this->_('Choose work mode'),
+                'default' => 'file',
+                'multiOptions' => array(
+                    'file'     => $this->_('Upload a file'),
+                    'textarea' => $this->_('Copy and paste into a text field'),
+                ),
+                'required' => true,
+                'elementClass' => 'Radio',
+                'separator' => ' ',
+            ]);
 
-            $model->set('file', 'label', $this->_('Import file'),
-                    'count',        1,
-                    'elementClass', 'File',
-                    'extension',    'csv,txt,xml',
-                    'required',     true);
+            $metaModel->set('file', [
+                'label' => $this->_('Import file'),
+                'count' => 1,
+                'elementClass' => 'File',
+                'extension' => 'csv,txt,xml',
+                'required' => true,
+            ]);
 
             if ($this->tempDirectory) {
                 File::ensureDir($this->tempDirectory);
-                $model->set('file', 'destination',  $this->tempDirectory);
+                $metaModel->set('file', ['destination' =>  $this->tempDirectory]);
             }
 
             // Storage for local copy of the file, kept through process
-            $model->set('import_id');
+            $metaModel->set('import_id');
 
-            $model->set('content', 'label', $this->_('Import text - user header line - separate fields using tabs'),
-                    'description', $this->_('Empty fields remove any existing values. Add a field only when used.'),
-                    'cols', 120,
-                    'elementClass', 'Textarea');
+            $metaModel->set('content', [
+                'label' => $this->_('Import text - user header line - separate fields using tabs'),
+                'description' => $this->_('Empty fields remove any existing values. Add a field only when used.'),
+                'cols' => 120,
+                'elementClass' => 'Textarea',
+            ]);
 
             $this->importModel = $model;
         }
@@ -639,7 +649,7 @@ abstract class ModelImportSnippet extends \Zalt\Snippets\WizardFormSnippetAbstra
      * Display the errors
      *
      * @param \Zalt\Model\Bridge\FormBridgeInterface $bridge
-     * @param array Errors to display
+     * @param mixed $errors Errors to display
      */
     protected function displayErrors(FormBridgeInterface $bridge, $errors = null)
     {
@@ -652,7 +662,9 @@ abstract class ModelImportSnippet extends \Zalt\Snippets\WizardFormSnippetAbstra
 
             $element->ul($errors, array('class' => $this->errorClass));
 
-            $bridge->addElement($element);
+            if ($bridge instanceof ZendFormBridge) {
+                $bridge->addElement($element);
+            }
         }
     }
 
@@ -668,13 +680,15 @@ abstract class ModelImportSnippet extends \Zalt\Snippets\WizardFormSnippetAbstra
         $element = $bridge->getForm()->createElement('html', 'step_header');
         $element->$tagName($header);
 
-        $bridge->addElement($element);
+        if ($bridge instanceof ZendFormBridge) {
+            $bridge->addElement($element);
+        }
     }
 
     /**
      * Try to get the current translator
      *
-     * @return ModelTranslatorInterface or false if none is current
+     * @return ModelTranslatorInterface|bool or false if none is current
      */
     protected function getImportTranslator()
     {
@@ -721,7 +735,7 @@ abstract class ModelImportSnippet extends \Zalt\Snippets\WizardFormSnippetAbstra
     /**
      * Get the descriptions of the translators
      *
-     * @return areay key -> description
+     * @return array key -> description
      */
     protected function getTranslatorDescriptions()
     {
@@ -744,33 +758,36 @@ abstract class ModelImportSnippet extends \Zalt\Snippets\WizardFormSnippetAbstra
     /**
      * Get the descriptions of the translators
      *
-     * @param mixed $for A single translator, an array of translators or all translators if null;
+     * @param mixed $forInput A single translator, an array of translators or all translators if null;
      * @return array key -> description
      */
-    protected function getTranslatorTable($for = null)
+    protected function getTranslatorTable($forInput = null)
     {
         if (! $this->targetModel) {
-            return array();
+            return [];
         }
 
-        if (null === $for) {
+        if (null === $forInput) {
             $for = $this->getTranslatorDescriptions();
-        } elseif (!is_array($for)) {
+        } elseif (is_string($forInput)) {
             $descriptors = $this->getTranslatorDescriptions();
-            if (! isset($descriptors[$for])) {
-                throw new \Zend_Exception("Unknown translator $for passed to " . __CLASS__ . '->' . __FUNCTION__ . '()');
+            if (! isset($descriptors[$forInput])) {
+                throw new \Zend_Exception("Unknown translator $forInput passed to " . __CLASS__ . '->' . __FUNCTION__ . '()');
             }
-            $for = array($for => $descriptors[$for]);
+            $for = [$forInput => $descriptors[$forInput]];
+        } else {
+            return [];
         }
 
         $requiredKey = $this->_('Required');
+        $metaModel   = $this->targetModel->getMetaModel();
         $minimal     = array($requiredKey => ' '); // Array for making sure all fields are there
-        $results     = array_fill_keys($this->targetModel->getItemsOrdered(), array());
+        $results     = array_fill_keys($metaModel->getItemsOrdered(), array());
         $transCount  = count($for);
 
         foreach ($for as $transKey => $transName) {
             if (! isset($this->importTranslators[$transKey])) {
-                throw new \Zend_Exception("Unknown translator $for passed to " . __CLASS__ . '->' . __FUNCTION__ . '()');
+                throw new \Zend_Exception("Unknown translator $transName passed to " . __CLASS__ . '->' . __FUNCTION__ . '()');
             }
             $translator = $this->importTranslators[$transKey];
 
@@ -807,22 +824,22 @@ abstract class ModelImportSnippet extends \Zalt\Snippets\WizardFormSnippetAbstra
                 $requireds = count(array_filter($resultRow[$requiredKey]));
                 $resultRow[$requiredKey] = $requireds ? ($requireds == $transCount ? $this->_('Yes') : $this->_('For bold')) : ' ';
 
-                if ($this->targetModel->has($name, 'label')) {
-                    $label = $this->targetModel->get($name, 'label');
+                if ($metaModel->has($name, 'label')) {
+                    $label = $metaModel->get($name, 'label');
                 } else {
                     $label = $name;
                 }
 
                 // $field = $this->_targetModel->get($name, 'type', 'maxlength', 'label', 'required');
-                switch ($this->targetModel->get($name, 'type')) {
+                switch ($metaModel->get($name, 'type')) {
                     case MetaModelInterface::TYPE_NOVALUE:
                         unset($results[$name]);
                         continue 2;
 
                     case MetaModelInterface::TYPE_NUMERIC:
-                        $maxlength = $this->targetModel->get($name, 'maxlength');
+                        $maxlength = $metaModel->get($name, 'maxlength');
                         if ($maxlength) {
-                            $decimals = $this->targetModel->get($name, 'decimals');
+                            $decimals = $metaModel->get($name, 'decimals');
                             if ($decimals) {
                                 $type = sprintf($this->_('A number of length %d, with a precision of %d digits after the period.'), $maxlength, $decimals);
                             } else {
@@ -846,8 +863,8 @@ abstract class ModelImportSnippet extends \Zalt\Snippets\WizardFormSnippetAbstra
                         break;
 
                     default:
-                        $maxlength = $this->targetModel->get($name, 'maxlength');
-                        $minlength = $this->targetModel->get($name, 'minlength');
+                        $maxlength = $metaModel->get($name, 'maxlength');
+                        $minlength = $metaModel->get($name, 'minlength');
                         if ($maxlength && $minlength) {
                             $type = sprintf($this->plural(
                                     'Text, between %d and %d character',
@@ -869,7 +886,7 @@ abstract class ModelImportSnippet extends \Zalt\Snippets\WizardFormSnippetAbstra
                         break;
 
                 }
-                $options = $this->targetModel->get($name, 'multiOptions');
+                $options = $metaModel->get($name, 'multiOptions');
                 if ($options) {
                     $cutoff      = 6;
                     $i           = 0;
@@ -900,7 +917,7 @@ abstract class ModelImportSnippet extends \Zalt\Snippets\WizardFormSnippetAbstra
                     }
                 }
 
-                $typeDescr = $this->targetModel->get($name, 'import_descr');
+                $typeDescr = $metaModel->get($name, 'import_descr');
                 if ($typeDescr) {
                     $type .= $this->_('; ') . $typeDescr;
                 }
@@ -959,24 +976,23 @@ abstract class ModelImportSnippet extends \Zalt\Snippets\WizardFormSnippetAbstra
         if ($this->isPost()) {
             $this->formData = $this->requestInfo->getRequestPostParams() + $this->formData;
         } else {
-            foreach ($this->importModel->getColNames('default') as $name) {
+            foreach ($this->importModel->getMetaModel()->getColNames('default') as $name) {
                 if (!(isset($this->formData[$name]) && $this->formData[$name])) {
-                    $this->formData[$name] = $this->importModel->get($name, 'default');
+                    $this->formData[$name] = $this->importModel->getMetaModel()->get($name, 'default');
                 }
             }
         }
         if (! (isset($this->formData['import_id']) && $this->formData['import_id'])) {
             $this->formData['import_id'] = mt_rand(10000,99999) . time();
         }
-        $this->_session = new \Zend_Session_Namespace(__CLASS__ . '-' . $this->formData['import_id']);
 
         if (isset($this->formData[$this->stepFieldName]) &&
                 $this->formData[$this->stepFieldName] > 1 &&
-                (!(isset($this->_session->localfile) && $this->_session->localfile))) {
-            $this->_session->localfile = File::createTemporaryIn(
+                (! $this->session->has('localfile'))) {
+            $this->session->set('localfile', File::createTemporaryIn(
                     $this->tempDirectory,
                     $this->requestInfo->getCurrentController() . '_'
-                    );
+                    ));
         }
 
         // Must always exists
@@ -1004,7 +1020,7 @@ abstract class ModelImportSnippet extends \Zalt\Snippets\WizardFormSnippetAbstra
             $this->getImportTranslator();
 
             if (! $this->sourceModel) {
-                $this->importer->setSourceFile($this->_session->localfile, $this->_session->extension);
+                $this->importer->setSourceFile($this->session->get('localfile'), $this->session->get('extension'));
                 $this->sourceModel = $this->importer->getSourceModel();
             }
         } catch (\Exception $e) {
@@ -1099,18 +1115,13 @@ abstract class ModelImportSnippet extends \Zalt\Snippets\WizardFormSnippetAbstra
         return 0;
     }
 
-    /**
-     * Set what to do when the form is 'finished' or 'cancelled'.
-     *
-     * @return \Zalt\Snippets\Standard\ModelImportSnippet
-     */
     protected function setAfterSaveRoute()
     {
-        if (isset($this->_session->localfile) && file_exists($this->_session->localfile)) {
+        if ($this->session->has('localfile') && file_exists($this->session->get('localfile'))) {
             // Now is a good moment to remove the temporary file
-            @unlink($this->_session->localfile);
+            @unlink($this->session->get('localfile'));
         }
 
-        return parent::setAfterSaveRoute();
+        parent::setAfterSaveRoute();
     }
 }

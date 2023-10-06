@@ -32,7 +32,7 @@ class TableSnippetAbstract extends TranslatableSnippetAbstract
      *
      * @var array Nested array
      */
-    protected $data;
+    protected ? array $data = null;
 
     /**
      * @var mixed $content Content that can be rendered when the table body is empty
@@ -90,7 +90,7 @@ class TableSnippetAbstract extends TranslatableSnippetAbstract
         }
 
         $container = Html::create()->div(array('class' => 'table-container'));
-        $container[] = $table;
+        $container->append($table);
 
         return $container;
     }

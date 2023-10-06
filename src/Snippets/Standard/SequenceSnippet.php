@@ -106,13 +106,6 @@ class SequenceSnippet extends \Zalt\Snippets\SnippetAbstract
         return $results;
     }
 
-    /**
-     * Create the snippets content
-     *
-     * This is a stub function either override getHtmlOutput() or override render()
-     *
-     * @return \Zalt\Html\HtmlInterface Something that can be rendered
-     */
     public function getHtmlOutput()
     {
         return $this->_html;
@@ -168,7 +161,7 @@ class SequenceSnippet extends \Zalt\Snippets\SnippetAbstract
 
                     } elseif ($snippet->getRedirectRoute()) {
                         $this->session->unset($this->sessionId);
-                        $snippet->redirectRoute();
+                        $snippet->getRedirectRoute();
                         return false;
                     }
                 }

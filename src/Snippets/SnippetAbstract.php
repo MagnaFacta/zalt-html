@@ -163,6 +163,7 @@ abstract class SnippetAbstract implements SnippetInterface
                 }
             }
         }
+        return null;
     }
 
     public function setSnippetOption(string $id, mixed $value): void

@@ -27,14 +27,14 @@ class ModelConfirmDataChangeSnippet extends ModelConfirmDataChangeSnippetAbstrac
 {
     /**
      *
-     * @var \Zalt\Model\ModelAbstract
+     * @var \Zalt\Model\Data\FullDataInterface
      */
     protected $model;
 
     /**
      * Creates the model
      *
-     * @return \Zalt\Model\ModelAbstract
+     * @return \Zalt\Model\Data\FullDataInterface
      */
     protected function createModel(): FullDataInterface
     {

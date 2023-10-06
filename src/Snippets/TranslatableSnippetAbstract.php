@@ -11,9 +11,9 @@ declare(strict_types=1);
 
 namespace Zalt\Snippets;
 
-use Symfony\Contracts\Translation\TranslatorInterface;
 use Zalt\Base\RequestInfo;
 use Zalt\Base\TranslateableTrait;
+use Zalt\Base\TranslatorInterface;
 use Zalt\SnippetsLoader\SnippetOptions;
 
 /**
