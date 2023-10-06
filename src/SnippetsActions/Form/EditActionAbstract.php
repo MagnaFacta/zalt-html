@@ -11,6 +11,7 @@ declare(strict_types=1);
 
 namespace Zalt\SnippetsActions\Form;
 
+use Psr\Cache\CacheItemPoolInterface;
 use Zalt\SnippetsActions\AbstractAction;
 use Zalt\SnippetsActions\ModelActionInterface;
 use Zalt\SnippetsActions\PostActionInterface;
