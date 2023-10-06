@@ -208,7 +208,7 @@ abstract class WizardFormSnippetAbstract extends \Zalt\Snippets\ModelFormSnippet
         $this->addNextButton();
 
         $element = new \MUtil\Form\Element\Html('button_spacer');
-        $element->__call('raw', '&nbsp;');
+        $element->raw('&nbsp;');
         $element->setDecorators(array('ViewHelper'));
 
         $form = $this->getCurrentForm();
