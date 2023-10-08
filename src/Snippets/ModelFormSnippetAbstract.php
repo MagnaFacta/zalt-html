@@ -175,7 +175,11 @@ abstract class ModelFormSnippetAbstract extends FormSnippetAbstract
     {
         $dataModel = $this->getModel();
         $baseform  = $this->createForm();
-        $bridge    = $dataModel->getBridgeFor('form');
+
+        /**
+         * @var FormBridgeInterface $bridge
+         */
+        $bridge = $dataModel->getBridgeFor('form');
         if ($bridge instanceof FormBridgeInterface) {
             $bridge->setForm($baseform);
         }
@@ -192,6 +196,9 @@ abstract class ModelFormSnippetAbstract extends FormSnippetAbstract
      */
     protected function loadFormData(): array
     {
+        /**
+         * @var FullDataInterface $model
+         */
         $model = $this->getModel();
 
         if ($this->requestInfo->isPost()) {
@@ -224,6 +231,9 @@ abstract class ModelFormSnippetAbstract extends FormSnippetAbstract
     protected function saveData(): int
     {
         // Perform the save
+        /**
+         * @var FullDataInterface $model
+         */
         $model          = $this->getModel();
         $this->formData = $model->save($this->formData, $this->requestInfo->getRequestMatchedParams());
         return $model->getChanged();

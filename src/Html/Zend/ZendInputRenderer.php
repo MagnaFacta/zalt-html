@@ -304,6 +304,7 @@ class ZendInputRenderer implements \Zalt\Html\HtmlInterface
 
             // default: Not needed, checked in constructor
         }
+        return null;
     }
 
     public static function renderComplete($element)

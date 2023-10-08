@@ -12,7 +12,9 @@
 
 namespace Zalt\Snippets;
 
+use Zalt\Html\TdElement;
 use Zalt\Model\Data\DataReaderInterface;
+use Zalt\Model\Data\FullDataInterface;
 use Zalt\Snippets\ModelBridge\DetailTableBridge;
 
 /**
@@ -166,6 +168,9 @@ abstract class ModelYesNoDeleteSnippetAbstract extends ModelDetailTableSnippetAb
      */
     protected function performAction()
     {
+        /**
+         * @var FullDataInterface $model
+         */
         $model = $this->getModel();
         $model->delete();
 
@@ -200,7 +205,7 @@ abstract class ModelYesNoDeleteSnippetAbstract extends ModelDetailTableSnippetAb
             }
         }
 
-        $footer = $bridge->tfrow();
+        $footer = $bridge->getTable()->tfrow();
         $startUrl = $this->requestInfo->getBasePath();
 
         $footer[] = $this->getQuestion();
@@ -212,6 +217,7 @@ abstract class ModelYesNoDeleteSnippetAbstract extends ModelDetailTableSnippetAb
                 );
         if ($this->abortUrl) {
             $footer[] = ' ';
+            // @phpstan-ignore method.notFound
             $footer->a(
                 [$this->abortUrl],
                 $this->_('No'),

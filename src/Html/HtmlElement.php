@@ -939,7 +939,7 @@ class HtmlElement implements ElementInterface, Procrastinator
         }
 
         if ($attrib instanceof AttributeInterface) {
-            $attrib->add($offset, $value);
+            $attrib->add($value);
 
         } elseif (is_array($attrib) || ($attrib instanceof \ArrayAccess)) {
             if (null !== $offset) {

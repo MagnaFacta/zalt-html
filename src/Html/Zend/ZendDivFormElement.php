@@ -141,10 +141,12 @@ class ZendDivFormElement extends \Zalt\Html\HtmlElement implements ZendFormLayou
                 case 'error':  // Old versions deprecatd
                 case 'errors':
                     $prependErrors = false;
+                    // @phpstan-ignore property.notFound
                     $this->append($formrep->errors);
                     break;
 
                 case 'description':
+                    // @phpstan-ignore property.notFound
                     $this->append($formrep->description);
                     break;
 

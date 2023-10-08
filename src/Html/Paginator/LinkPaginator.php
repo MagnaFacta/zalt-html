@@ -10,6 +10,7 @@ declare(strict_types=1);
 
 namespace Zalt\Html\Paginator;
 
+use Zalt\Html\ElementInterface;
 use Zalt\Html\HtmlInterface;
 use Zalt\Html\Sequence;
 
@@ -60,7 +61,7 @@ class LinkPaginator extends PaginatorAbstract
         return $output;
     }
 
-    protected function getItemsHolder(): HtmlInterface
+    protected function getItemsHolder(): ElementInterface
     {
         $output = new Sequence();
         $output->setGlue(' ');
@@ -192,7 +193,7 @@ class LinkPaginator extends PaginatorAbstract
         return $output;
     }
 
-    protected function getPagesHolder(): HtmlInterface
+    protected function getPagesHolder(): ElementInterface
     {
         $output = new Sequence();
         $output->setGlue(' ');

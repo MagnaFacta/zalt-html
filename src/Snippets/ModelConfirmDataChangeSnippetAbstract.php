@@ -14,6 +14,7 @@ namespace Zalt\Snippets;
 
 use Psr\Cache\CacheItemPoolInterface;
 use Zalt\Model\Data\DataReaderInterface;
+use Zalt\Model\Data\FullDataInterface;
 use Zalt\Snippets\ModelBridge\DetailTableBridge;
 
 /**
@@ -182,6 +183,9 @@ abstract class ModelConfirmDataChangeSnippetAbstract extends \Zalt\Snippets\Mode
      */
     protected function performAction()
     {
+        /**
+         * @var FullDataInterface $model
+         */
         $model = $this->getModel();
 
         $model->save($this->saveData + $model->getFilter());
@@ -220,7 +224,7 @@ abstract class ModelConfirmDataChangeSnippetAbstract extends \Zalt\Snippets\Mode
      */
     protected function setShowTableFooter(DetailTableBridge $bridge, DataReaderInterface $dataModel)
     {
-        $footer = $bridge->tfrow();
+        $footer = $bridge->getTable()->tfrow();
 
         $footer[] = $this->getQuestion();
         $footer[] = ' ';

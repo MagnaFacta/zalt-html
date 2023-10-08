@@ -14,6 +14,7 @@ namespace Zalt\Snippets;
 use Zalt\Html\Paginator\LinkPaginator;
 use Zalt\Html\Paginator\PaginatorInterface;
 use Zalt\Html\TableElement;
+use Zalt\Model\Bridge\BridgeAbstract;
 use Zalt\Model\Bridge\BridgeInterface;
 use Zalt\Model\Data\DataReaderInterface;
 use Zalt\Model\MetaModelInterface;
@@ -169,6 +170,9 @@ abstract class ModelTableSnippetAbstract extends \Zalt\Snippets\ModelSnippetAbst
      */
     protected function ensureRepeater(BridgeInterface $bridge, DataReaderInterface $dataModel)
     {
+        /**
+         * @var TableBridge $bridge
+         */
         if (! $bridge->hasRepeater()) {
             if ($this->browse) {
                 $items  = $this->getPageItems();
@@ -178,7 +182,7 @@ abstract class ModelTableSnippetAbstract extends \Zalt\Snippets\ModelSnippetAbst
                 $this->addPaginator($bridge->getTable(), $count, $page, $items);
             } elseif ($this->bridgeMode === BridgeInterface::MODE_LAZY) {
                 $bridge->setRepeater($dataModel->loadRepeatable());
-            } elseif ($this->bridgeMode === BridgeInterface::MODE_SINGLE_ROW) {
+            } elseif (($this->bridgeMode === BridgeInterface::MODE_SINGLE_ROW) && $bridge instanceof BridgeAbstract) {
                 $bridge->setRow($dataModel->loadFirst());
             } else {
                 $bridge->setRepeater($dataModel->load());
@@ -196,22 +200,26 @@ abstract class ModelTableSnippetAbstract extends \Zalt\Snippets\ModelSnippetAbst
      */
     public function getBrowseTable(DataReaderInterface $dataModel)
     {
+        /**
+         * @var TableBridge $bridge
+         */
         $bridge = $dataModel->getBridgeFor('table');
         $this->prepareBridge($bridge);
+        $table = $bridge->getTable();
 
         if ($this->caption) {
-            $bridge->caption($this->caption);
+            $table->caption($this->caption);
         }
         if ($this->onEmpty) {
-            $bridge->setOnEmpty($this->onEmpty);
+            $table->setOnEmpty($this->onEmpty);
         } else {
-            $bridge->getOnEmpty()->raw('&hellip;');
+            $table->getOnEmpty()->raw('&hellip;');
         }
 
         $this->addBrowseTableColumns($bridge, $dataModel);
         $this->ensureRepeater($bridge, $dataModel);
 
-        return $bridge->getTable();
+        return $table;
     }
 
     public function getFilter(MetaModelInterface $metaModel) : array

@@ -36,7 +36,7 @@ class VerticalTableBridge extends DetailTableBridge
     private function _checkAttributesFor($name, array $attr)
     {
         if (is_string($name) && $this->metaModel->has($name)) {
-            $attr = $attr + $this->metaModel->get($name, 'colspan', 'rowspan', 'tdClass', 'thClass');
+            $attr = $attr + $this->metaModel->get($name, ['colspan', 'rowspan', 'tdClass', 'thClass']);
         }
 
         $hattr = $attr;

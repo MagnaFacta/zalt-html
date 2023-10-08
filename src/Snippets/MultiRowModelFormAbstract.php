@@ -12,6 +12,9 @@
 namespace Zalt\Snippets;
 
 use Zalt\Html\TableElement;
+use Zalt\Model\Bridge\FormBridgeAbstract;
+use Zalt\Model\Data\DataWriterInterface;
+use Zalt\Model\Data\FullDataInterface;
 
 /**
  *
@@ -23,10 +26,6 @@ use Zalt\Html\TableElement;
  */
 abstract class MultiRowModelFormAbstract extends \Zalt\Snippets\ModelFormSnippetAbstract
 {
-    /**
-     *
-     * @var \Zalt\Form\Element\Table
-     */
     protected $formTableElement;
 
     /**
@@ -46,6 +45,9 @@ abstract class MultiRowModelFormAbstract extends \Zalt\Snippets\ModelFormSnippet
         $model     = $this->getModel();
         $baseform  = $this->createForm();
 
+        /**
+         * @var FormBridgeAbstract $bridge
+         */
         $bridge    = $model->getBridgeFor('form', new \Zend_Form_SubForm());
         $newData   = $this->addFormElements($bridge);
 
@@ -68,6 +70,9 @@ abstract class MultiRowModelFormAbstract extends \Zalt\Snippets\ModelFormSnippet
      */
     protected function loadFormData(): array
     {
+        /**
+         * @var FullDataInterface $model
+         */
         $model = $this->getModel();
         $mname = $model->getName();
 
@@ -87,13 +92,14 @@ abstract class MultiRowModelFormAbstract extends \Zalt\Snippets\ModelFormSnippet
 
         } else {
             // Assume that if formData is set it is the correct formData
-            if (! $this->formData)  {
+            if (!$this->formData) {
                 if ($this->createData) {
-                    $this->formData[$mname] = $model->loadNew(2);
+                    $this->formData[$mname][] = $model->loadNew();
+                    $this->formData[$mname][] = $model->loadNew();
                 } else {
                     $this->formData[$mname] = $model->load();
 
-                    if (! $this->formData) {
+                    if (!$this->formData) {
                         throw new \Zend_Exception($this->_('Unknown edit data requested'));
                     }
                 }
@@ -118,11 +124,16 @@ abstract class MultiRowModelFormAbstract extends \Zalt\Snippets\ModelFormSnippet
         unset($this->formData[$this->csrfName]);
 
         // Perform the save
+        /**
+         * @var FullDataInterface $model
+         */
         $model = $this->getModel();
         $mname = $model->getName();
 
         // \Zalt\EchoOut\EchoOut::track($this->formData[$mname]);
-        $this->formData[$mname] = $model->saveAll($this->formData[$mname]);
+        foreach ($this->formData[$mname] as $key => $row) {
+            $this->formData[$mname] = $model->save($row);
+        }
 
         $changed = $model->getChanged();
 

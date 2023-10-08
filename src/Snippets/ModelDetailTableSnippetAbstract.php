@@ -86,6 +86,7 @@ abstract class ModelDetailTableSnippetAbstract extends ModelSnippetAbstract
             foreach ($bridge->getTable()->tbody() as $tr) {
                 foreach ($tr as $td) {
                     if ('td' === $td->tagName) {
+                        // @phpstan-ignore property.notFound
                         $td->appendAttrib('class', $bridge->row_class);
                     }
                 }
@@ -135,7 +136,10 @@ abstract class ModelDetailTableSnippetAbstract extends ModelSnippetAbstract
     public function getShowTable(DataReaderInterface $dataModel)
     {
         $metaModel = $dataModel->getMetaModel();
-        
+
+        /**
+         * @var DetailTableBridge $bridge
+         */
         $bridge = $dataModel->getBridgeFor($this->bridgeClass);
         $bridge->setColumnCount($this->bridgeColumns)
                 ->setMode($this->bridgeMode);

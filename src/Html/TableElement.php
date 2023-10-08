@@ -225,9 +225,12 @@ class TableElement extends HtmlElement implements ColumnInterface
 
     private function _pivotBody($name)
     {
+        /**
+         * @var TBodyElement $newBody
+         */
         $newBody = Html::create($name);
 
-        if ($this->_content[$name] instanceof \Zalt\Html\TBodyElement) {
+        if ($this->_content[$name] instanceof TBodyElement) {
             $newBody->_attribs = $this->_content[$name]->_attribs;
             $newBody->defaultRowClass = $this->_content[$name]->getDefaultRowClass();
         }
@@ -533,8 +536,11 @@ class TableElement extends HtmlElement implements ColumnInterface
         if ($repeater_data->hasProperties()) {
             $table->setRepeater($repeater_data);
 
+            // @phpstan-ignore property.notFound
             $table->addColumn($repeater_data->name, 'Name');
+            // @phpstan-ignore property.notFound
             $table->addColumn(Late::call([self::class, 'createVar'], Late::call([Late::class, 'rise'], $repeater_data->value), null, $objects_not_expanded), 'Value');
+            // @phpstan-ignore property.notFound
             $table->addColumn($repeater_data->from_code->if('in code', 'in program'), 'Defined');
             // $table->addColumn(Late::iff($repeater_data->from_code, 'in code', 'in program'), 'Defined');
 
@@ -762,52 +768,12 @@ class TableElement extends HtmlElement implements ColumnInterface
     }
 
     /**
-     * Apply this element to the form as the output decorator.
-     *
-     * @param \Zend_Form $form
-     * @param boolean $add_description When true the description is displayed
-     * @param boolean $include_description When false the description is added in a separate column instead of the element column.
-     * @return \Zalt\Html\TableElement
-     * /
-    public function setAsFormLayout(\Zend_Form $form, $add_description = false, $include_description = false)
-    {
-        // Make a Late repeater for the form elements and set it as the element repeater
-        $formrep = new RepeatableFormElements($form);
-        $formrep->setSplitHidden(true); // These are treated separately
-        $this->setRepeater($formrep);
-
-        // Add the columns
-        $this->addColumn($formrep->label); // For label
-        // $this->tdh()->label('[', $formrep->element, ']');
-
-        $elements[] = $formrep->element;
-        if ($add_description && $include_description) {
-            $elements[] = ' ';
-            $elements[] = $formrep->description;
-        }
-        $elements[] = ' ';
-        $elements[] = $formrep->errors;
-        $this->addColumn($elements); // Element, Error & optional description
-        if ($add_description && (! $include_description)) {
-            $this->addColumn($formrep->description); // Description in separate column
-        }
-
-        // Set this element as the form decorator
-        $decorator = new Zend\ZendElementDecorator();
-        $decorator->setHtmlElement($this);
-        $decorator->setPrologue($formrep); // Renders hidden elements before this element
-        $form->setDecorators(array($decorator, 'Form'));
-
-        return $this;
-    }
-
-    /**
      * Set the default row class of the tbody item (as the table has rows)
      *
      * When a new row is added to the body it is autmatically given the
      * class attribute specified here.
      *
-     * @param string $tag Tagname
+     * @param mixed $class Tagname
      * @return \Zalt\Html\TableElement (continuation pattern)
      */
     public function setDefaultRowClass($class)
@@ -939,6 +905,7 @@ class TableElement extends HtmlElement implements ColumnInterface
      */
     public function tdrow(...$args)
     {
+        // @phpstan-ignore method.notFound
         $cell = $this->tr()->td($args, array('colspan' => $this->toLate()->getColumnCount()));
 
         // Make sure the next item is not added to this row.
@@ -995,10 +962,11 @@ class TableElement extends HtmlElement implements ColumnInterface
      * Returns a 'td' cell in a new row in the footer with a colspan equal to the number of columns in the table.
      *
      * @param mixed $args Optional args processed settings
-     * @return \Zalt\Html\HtmlElement With 'td' tagName
+     * @return \Zalt\Html\TdElement With 'td' tagName
      */
-    public function tfrow(...$args)
+    public function tfrow(...$args): TdElement
     {
+        // @phpstan-ignore method.notFound
         $cell = $this->tfoot()->tr()->td($args, array('colspan' => $this->toLate()->getColumnCount()));
 
         // Make sure the next item is not added to this row.
@@ -1011,9 +979,9 @@ class TableElement extends HtmlElement implements ColumnInterface
      * Returns a 'th' cell in the current row in the header
      *
      * @param mixed $args Optional args processed settings
-     * @return \Zalt\Html\HtmlElement With 'th' tagName
+     * @return \Zalt\Html\TdElement With 'th' tagName
      */
-    public function th(...$args)
+    public function th(...$args): TdElement
     {
         return $this->thead()->th($args);
     }
@@ -1026,7 +994,7 @@ class TableElement extends HtmlElement implements ColumnInterface
      * @param mixed $args Optional args processed settings
      * @return \Zalt\Html\TBodyElement With 'thead' tagName
      */
-    public function thead(...$args)
+    public function thead(...$args):TBodyElement
     {
         $args = Ra::args($args);
 
@@ -1059,6 +1027,7 @@ class TableElement extends HtmlElement implements ColumnInterface
      */
     public function thdrow(...$args)
     {
+        // @phpstan-ignore method.notFound
         return $this->thead()->td($args, array('colspan' => $this->toLate()->getColumnCount()));
     }
 
@@ -1075,6 +1044,7 @@ class TableElement extends HtmlElement implements ColumnInterface
     public function thhrow(...$args)
     {
         // throw is not an allowed function name. Implemented in __call
+        // @phpstan-ignore method.notFound
         $cell = $this->thead()->tr()->th($args, array('colspan' => $this->toLate()->getColumnCount()));
 
         // Make sure the next item is not added to this row.

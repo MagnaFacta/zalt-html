@@ -11,6 +11,7 @@ declare(strict_types=1);
 
 namespace Zalt\Snippets\ModelBridge;
 
+use Laminas\Validator\AbstractValidator;
 use Zalt\Model\Data\FullDataInterface;
 use Zalt\Model\Exception\MetaModelException;
 use Zalt\Ra\Ra;
@@ -131,7 +132,7 @@ class ZendFormBridge extends \Zalt\Model\Bridge\FormBridgeAbstract
      * @param string $name Name of element
      * @param array $elements or \Zalt\Ra\Ra::pairs() name => value array with 'elements' item in it
      * @param mixed $arrayOrKey1 \Zalt\Ra\Ra::pairs() name => value array
-     * @return \Zend_Form_Displaygroup
+     * @return \Zend_Form_DisplayGroup|null
      */
     public function addDisplayGroup($name, $elements, $arrayOrKey1 = null, $value1 = null, $key2 = null, $value2 = null)
     {
@@ -201,6 +202,10 @@ class ZendFormBridge extends \Zalt\Model\Bridge\FormBridgeAbstract
         if ($extension) {
             $element->addValidator('Extension', false, $extension);
             // Now set a custom validation message telling what extensions are allowed
+
+            /**
+             * @var AbstractValidator $validator
+             */
             $validator = $element->getValidator('Extension');
             $validator->setMessage('Only %extension% files are accepted.', \Laminas\Validator\File\Extension::FALSE_EXTENSION);
         }
@@ -251,14 +256,15 @@ class ZendFormBridge extends \Zalt\Model\Bridge\FormBridgeAbstract
             $form = new $formClass();
         }
 
-        $submodel = $this->metaModel->get($name, 'model');
-        if ($submodel instanceof FullDataInterface) {
-            $bridge = new self($submodel);
+        $subModel = $this->metaModel->get($name, 'model');
+        if ($subModel instanceof FullDataInterface) {
+            $bridge = new self($subModel);
             $bridge->setForm($form);
 
-            foreach ($submodel->getItemsOrdered() as $itemName) {
+            $subMetaModel = $subModel->getMetaModel();
+            foreach ($subMetaModel->getItemsOrdered() as $itemName) {
                 if (! $form->getElement($itemName)) {
-                    if ($submodel->has($itemName, 'label') || $submodel->has($itemName, 'elementClass')) {
+                    if ($subMetaModel->has($itemName, 'label') || $subMetaModel->has($itemName, 'elementClass')) {
                         $bridge->add($itemName);
                     } else {
                         $bridge->addHidden($itemName);
@@ -267,6 +273,7 @@ class ZendFormBridge extends \Zalt\Model\Bridge\FormBridgeAbstract
             }
         }
 
+        // @phpstan-ignore method.notFound
         $prefixPaths['decorator'] = $this->form->getPluginLoader('decorator')->getPaths();
         $options['prefixPath'] = $prefixPaths;
 
@@ -337,14 +344,16 @@ class ZendFormBridge extends \Zalt\Model\Bridge\FormBridgeAbstract
             $form = new $formClass();
         }
 
-        $submodel = $this->metaModel->get($name, 'model');
-        if ($submodel instanceof FullDataInterface) {
-            $bridge = new self($submodel);
+        $subModel = $this->metaModel->get($name, 'model');
+        if ($subModel instanceof FullDataInterface) {
+            $bridge = new self($subModel);
             $bridge->setForm($this->form);
 
-            foreach ($submodel->getItemsOrdered() as $itemName) {
+            $subMetaModel = $subModel->getMetaModel();
+
+            foreach ($subMetaModel->getItemsOrdered() as $itemName) {
                 if (! $form->getElement($itemName)) {
-                    if ($submodel->has($itemName, 'label') || $submodel->has($itemName, 'elementClass')) {
+                    if ($subMetaModel->has($itemName, 'label') || $subMetaModel->has($itemName, 'elementClass')) {
                         $bridge->add($itemName);
                     } else {
                         $bridge->addHidden($itemName);

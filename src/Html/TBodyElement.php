@@ -59,7 +59,7 @@ class TBodyElement extends HtmlElement implements ColumnInterface
         $row = parent::_createDefaultTag($value, $offset = null);
 
         if ($this->defaultRowClass && (! isset($row->class))) {
-            $row->class = $this->defaultRowClass;
+            $row->appendAttrib('class',  $this->defaultRowClass);
         }
 
         $row->setDefaultChildTag($this->getDefaultRowChildTag());
@@ -174,11 +174,15 @@ class TBodyElement extends HtmlElement implements ColumnInterface
         if (($content instanceof \Zalt\Html\ElementInterface) &&
             ($content->getTagName() ==  $this->_defaultChildTag)) {
 
+            /**
+             * @var HtmlElement $content
+             */
             $this->_onEmptyContent = $content;
 
             if (isset($this->_onEmptyContent[0])) {
                 $this->_onEmptyLocal = $this->_onEmptyContent[0];
             } else {
+
                 $this->_onEmptyLocal = $this->_onEmptyContent->td();
             }
 
@@ -232,7 +236,6 @@ class TBodyElement extends HtmlElement implements ColumnInterface
         return $this;
     }
 
-
     /**
      * Static helper function for creation, used by @see \Zalt\Html\Creator.
      *
@@ -281,12 +284,15 @@ class TBodyElement extends HtmlElement implements ColumnInterface
             array_unshift($args, array('DefaultChildTag' => $this->getDefaultRowChildTag()));
         }
 
+        /**
+         * @var TrElement $tr
+         */
         $tr = Html::createArray('tr', $args);
 
         $this[] = $tr;
 
         if ((! isset($tr->class)) && ($class = $this->getDefaultRowClass())) {
-            $tr->class = $class;
+            $tr->appendAttrib('class', $class);
         }
 
         return $tr;

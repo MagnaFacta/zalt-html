@@ -208,6 +208,7 @@ abstract class WizardFormSnippetAbstract extends \Zalt\Snippets\ModelFormSnippet
         $this->addNextButton();
 
         $element = new \MUtil\Form\Element\Html('button_spacer');
+        // @phpstan-ignore method.notFound
         $element->raw('&nbsp;');
         $element->setDecorators(array('ViewHelper'));
 
@@ -254,10 +255,8 @@ abstract class WizardFormSnippetAbstract extends \Zalt\Snippets\ModelFormSnippet
         //Get all elements in the model if not already done
         $this->initItems($model->getMetaModel());
 
-        if ($bridge instanceof ZendFormBridge) {
-            // Store the current step
-            $bridge->addHidden($this->stepFieldName);
-        }
+        // Store the current step
+        $bridge->addHidden($this->stepFieldName);
 
         $this->addStepElementsFor($bridge, $model, $step);
 
@@ -415,10 +414,11 @@ abstract class WizardFormSnippetAbstract extends \Zalt\Snippets\ModelFormSnippet
         $baseform = $this->createForm();
         $baseform->setAttrib('class', $this->class);
 
+        /**
+         * @var ZendFormBridge $bridge
+         */
         $bridge = $model->getBridgeFor('form', $baseform);
-        if ($bridge instanceof ZendFormBridge) {
-            $bridge->setForm($baseform);
-        }
+        $bridge->setForm($baseform);
         $this->_forms[$step] = $baseform;
 
 

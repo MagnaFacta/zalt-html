@@ -43,7 +43,7 @@ class DetailTableBridge extends TableBridgeAbstract
     private function _checkAttributesFor(string $name, array $attr): array
     {
         if ($this->metaModel->has($name)) {
-            $attr = $attr + $this->metaModel->get($name, 'colspan', 'rowspan', 'tdClass', 'thClass');
+            $attr = $attr + $this->metaModel->get($name, ['colspan', 'rowspan', 'tdClass', 'thClass']);
             
             if ($this->metaModel->has($name, 'description') && !isset($attr['title'])) {
                 $attr['title'] = $this->metaModel->get($name, 'description');

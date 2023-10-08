@@ -45,4 +45,13 @@ interface PaginatorInterface
      * @return PaginatorInterface (continuation pattern)
      */
     public function setPageNumber(int $pageNumber): PaginatorInterface;
+
+    /**
+     * Ensure that the value of pagenumber is valid, based on the number of
+     * items there are (itemCount) and the number of items that is shown
+     * on a page (pageItems);
+     *
+     * @return PaginatorInterface (continuation pattern)
+     */
+    public function validatePageNumber(): PaginatorInterface;
 }
