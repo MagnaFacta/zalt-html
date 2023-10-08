@@ -11,8 +11,8 @@ declare(strict_types=1);
 
 namespace Zalt\Html\Paginator;
 
-use Symfony\Contracts\Translation\TranslatorInterface;
 use Zalt\Base\TranslateableTrait;
+use Zalt\Base\TranslatorInterface;
 
 /**
  * @package    Zalt

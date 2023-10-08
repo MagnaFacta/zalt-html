@@ -11,8 +11,8 @@ declare(strict_types=1);
 
 namespace Zalt\Snippets\Zend;
 
-use Symfony\Contracts\Translation\TranslatorInterface;
 use Zalt\Base\RequestInfo;
+use Zalt\Base\TranslatorInterface;
 use Zalt\Message\MessengerInterface;
 use Zalt\Model\Data\FullDataInterface;
 use Zalt\Snippets\FullDataGenericModelTrait;
