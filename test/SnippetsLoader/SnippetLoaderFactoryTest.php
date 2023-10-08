@@ -12,10 +12,9 @@ declare(strict_types=1);
 namespace Zalt\SnippetsLoader;
 
 use PHPUnit\Framework\TestCase;
-use Psr\Http\Message\ServerRequestInterface;
-use Symfony\Contracts\Translation\TranslatorInterface;
 use Zalt\Base\RequestInfo;
 use Zalt\Base\RequestInfoFactory;
+use Zalt\Base\TranslatorInterface;
 use Zalt\Html\Html;
 use Zalt\Loader\ProjectOverloader;
 use Zalt\Loader\ProjectOverloaderFactory;
