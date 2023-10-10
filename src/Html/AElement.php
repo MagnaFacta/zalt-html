@@ -69,56 +69,6 @@ class AElement extends \Zalt\Html\HtmlElement
     }
 
     /**
-     * If the target attribute is specified and no onclick attribute is specified the target is removed and
-     * a compatible javascript onclick attribute is created.
-     *
-     * @param array $attribs From this array, each key-value pair is
-     * converted to an attribute name and value.
-     *
-     * @return string The XHTML for the attributes.
-     */
-    protected function _htmlAttribs($attribs)
-    {
-        if (isset($attribs['target']) && (! isset($attribs['onclick']))) {
-            // Assumption that is not tested, but when clicking on a target link, no further bubble is needed.
-            $attribs['onclick'] = "event.cancelBubble = true;";
-        }
-        $xhtml = '';
-        foreach ((array) $attribs as $key => $val) {
-            $key = Html::escape($key);
-
-            if (('on' == substr($key, 0, 2)) || ('constraints' == $key)) {
-                // Don't escape event attributes; _do_ substitute double quotes with singles
-                if (!is_scalar($val)) {
-                    $val = \json_encode($val);
-                }
-                // Escape single quotes inside event attribute values.
-                // This will create html, where the attribute value has
-                // single quotes around it, and escaped single quotes or
-                // non-escaped double quotes inside of it
-                $val = str_replace('\'', '&#39;', $val);
-            } else {
-                if (is_array($val)) {
-                    $val = implode(' ', $val);
-                }
-                $val = Html::escape($val);
-            }
-
-            if ('id' == $key) {
-                $val = $this->_normalizeId($val);
-            }
-
-            if ($val !== null && strpos($val, '"') !== false) {
-                $xhtml .= " $key='$val'";
-            } else {
-                $xhtml .= " $key=\"$val\"";
-            }
-
-        }
-        return $xhtml;
-    }
-
-    /**
      * Static helper function to create an A element.
      *
      * Any extra parameters are added as either content, attributes or handled
@@ -158,10 +108,6 @@ class AElement extends \Zalt\Html\HtmlElement
                 $args['title'] = $email;
             }
             $href = ['mailto:', $email];
-        }
-        if (! isset($args['onclick'])) {
-            // Make sure the mail link only opens a mail window.
-            $args['onclick'] = 'event.cancelBubble=true;';
         }
 
         return new self($href, $email, $args);

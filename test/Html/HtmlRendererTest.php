@@ -42,7 +42,7 @@ class HtmlRendererTest extends \PHPUnit\Framework\TestCase
             ['h6', ['header'], '<h6>header</h6>'],
             ['iflink', [true, ['href' => 'https://go.url', 'link'], ['nolink']], '<a href="https://go.url">link</a>'],
             ['iflink', [false, ['href' => 'https://go.url', 'link'], ['nolink']], '<span>nolink</span>'],
-            ['ifmail', ['me@mo.ma', ' mail'], '<a title="me@mo.ma" onclick="event.cancelBubble=true;" href="mailto:me@mo.ma">me@mo.ma mail</a>'],
+            ['ifmail', ['me@mo.ma', ' mail'], '<a title="me@mo.ma" href="mailto:me@mo.ma">me@mo.ma mail</a>'],
             ['iframe', [['src'=> 'https://go.url']], '<iframe src="https://go.url"></iframe>'],
             ['img', [['src' => 'delete.png']], '<img src="/images/delete.png" width="16" height="16" />'],
             ['img', [['src' => 'blank.png', 'width' => 32, 'height' => 32]], '<img src="/icons/blank.png" width="32" height="32" />'],
