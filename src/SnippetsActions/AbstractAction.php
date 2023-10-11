@@ -113,4 +113,15 @@ abstract class AbstractAction implements SnippetActionInterface
     {
         $this->_action = $action;
     }
+
+    /**
+     * Overwrites the current snippets with new ones
+     *
+     * @param array $snippets
+     * @return void
+     */
+    public function setSnippets(array $snippets): void
+    {
+        $this->_snippets = $snippets;
+    }
 }
