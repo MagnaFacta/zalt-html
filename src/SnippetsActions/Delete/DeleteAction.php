@@ -88,5 +88,10 @@ class DeleteAction extends AbstractAction implements ModelActionInterface, Param
     /**
      * @var ?string Optional question to ask the user.
      */
-    public ?string $deleteQuestion;
+    public ?string $question;
+
+    /**
+     * @var string[] Array describing what is saved
+     */
+    public array $subjects = ['item', 'items'];
 }
