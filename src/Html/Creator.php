@@ -15,6 +15,7 @@ use Zalt\Html\Zend\ZendPFormElement;
 use Zalt\Html\Zend\ZendInputRenderer;
 use Zalt\Html\Zend\ZendLabelElement;
 use Zalt\Late\Late;
+use Zalt\Late\LateCall;
 use Zalt\Lists\FunctionList;
 use Zalt\Lists\LookupList;
 use Zalt\Ra\Ra;
@@ -30,6 +31,7 @@ use Zalt\Ra\Ra;
  * @copyright  Copyright (c) 2011 Erasmus MC
  * @license    New BSD License
  * @since      Class available since version 1.0
+ *
  * @method     AElement        a(...$arguments)
  * @method     HtmlElement     br(...$arguments)
  * @method     ColElement      col(...$arguments)
@@ -39,6 +41,8 @@ use Zalt\Ra\Ra;
  * @method     DlElement       dl(...$arguments)
  * @method     DlElement       dt(...$arguments)
  * @method     HtmlElement     em(...$arguments)
+ * @method     HtmlElement     i(...$arguments)
+ * @method     LateCall        if(...$arguments)
  * @method     IFrame          iframe(...$arguments)
  * @method     HnElement       h1(...$arguments)
  * @method     HnElement       h2(...$arguments)
@@ -51,7 +55,9 @@ use Zalt\Ra\Ra;
  * @method     HtmlElement     pInfo(...$arguments)
  * @method     Raw             raw(...$arguments)
  * @method     HtmlElement     small(...$arguments)
+ * @method     Sequence        spaced(...$arguments)
  * @method     HtmlElement     span(...$arguments)
+ * @method     string          sprintf(...$arguments)
  * @method     HtmlElement     strong(...$arguments)
  * @method     TdElement       td(...$arguments)
  * @method     TdElement       th(...$arguments)

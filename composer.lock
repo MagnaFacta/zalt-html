@@ -2326,12 +2326,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/GemsTracker/MUtil.git",
-                "reference": "f64efc936cec984e10689a783036a4493d6db080"
+                "reference": "a172c351847be2e21a6e6c7ffa9f60dcd049580b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/GemsTracker/MUtil/zipball/f64efc936cec984e10689a783036a4493d6db080",
-                "reference": "f64efc936cec984e10689a783036a4493d6db080",
+                "url": "https://api.github.com/repos/GemsTracker/MUtil/zipball/a172c351847be2e21a6e6c7ffa9f60dcd049580b",
+                "reference": "a172c351847be2e21a6e6c7ffa9f60dcd049580b",
                 "shasum": ""
             },
             "require": {
@@ -2397,7 +2397,7 @@
                 "issues": "https://github.com/GemsTracker/MUtil/issues",
                 "source": "https://github.com/GemsTracker/MUtil/tree/2.x"
             },
-            "time": "2023-10-11T16:41:56+00:00"
+            "time": "2023-10-18T15:32:29+00:00"
         },
         {
             "name": "mezzio/mezzio-session-ext",
