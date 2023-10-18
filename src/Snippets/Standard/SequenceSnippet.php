@@ -19,7 +19,7 @@ use Mezzio\Session\SessionInterface;
 use Zalt\Base\RequestInfo;
 use Zalt\Html\Html;
 use Zalt\Ra\Ra;
-use Zalt\SnippetsLoader\SnippetLoader;
+use Zalt\SnippetsLoader\SnippetLoaderInterface;
 use Zalt\SnippetsLoader\SnippetOptions;
 
 /**
@@ -68,7 +68,7 @@ class SequenceSnippet extends \Zalt\Snippets\SnippetAbstract
         SnippetOptions $snippetOptions,
         RequestInfo $requestInfo,
         protected SessionInterface $session,
-        protected SnippetLoader $snippetLoader
+        protected SnippetLoaderInterface $snippetLoader
         )
     {
         parent::__construct($snippetOptions, $requestInfo);

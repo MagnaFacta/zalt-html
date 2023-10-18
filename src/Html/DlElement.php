@@ -42,7 +42,7 @@ class DlElement extends HtmlElement
     /**
      * Should have content
      *
-     * @var boolean The element is rendered even without content when true.
+     * @var bool The element is rendered even without content when true.
      */
     public $renderWithoutContent = false;
 
@@ -83,7 +83,7 @@ class DlElement extends HtmlElement
 
         if ($dt) {
             if (self::alreadyIsA($dt, $this->_allowedChildTags)) {
-                $this[] = $dt;
+                $this->append($dt);
             } else {
                 $dt = $this->dt($dt);
             }
@@ -91,7 +91,7 @@ class DlElement extends HtmlElement
         }
         if ($dd) {
             if (self::alreadyIsA($dd, $this->_allowedChildTags)) {
-                $this[] = $dd;
+                $this->append($dd);
             } else {
                 $dd = $this->dd($dd);
             }
@@ -149,7 +149,7 @@ class DlElement extends HtmlElement
     {
         $elem = Html::createArray(__FUNCTION__, $arguments);
 
-        $this[] = $elem;
+        $this->append($elem);
 
         return $elem;
     }
@@ -169,7 +169,7 @@ class DlElement extends HtmlElement
     {
         $elem = Html::createArray(__FUNCTION__, $arguments);
 
-        $this[] = $elem;
+        $this->append($elem);
 
         return $elem;
     }

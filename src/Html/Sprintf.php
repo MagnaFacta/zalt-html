@@ -51,7 +51,7 @@ class Sprintf extends \ArrayObject implements ElementInterface
      *
      * @param string $name Function name becomes tagname (unless specified otherwise in \Zalt\Html\Creator)
      * @param array $arguments The content and attributes values
-     * @return \Zalt\Html\HtmlElement With '$name' tagName
+     * @return \Zalt\Html\ElementInterface With '$name' tagName
      */
     public function __call($name, array $arguments)
     {
@@ -84,11 +84,11 @@ class Sprintf extends \ArrayObject implements ElementInterface
     /**
      * Interface required function, not in real use
      *
-     * @return null
+     * @return string
      */
     public function getTagName()
     {
-        return null;
+        return '';
     }
 
     /**

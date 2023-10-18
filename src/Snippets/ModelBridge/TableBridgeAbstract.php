@@ -12,8 +12,8 @@ declare(strict_types=1);
 namespace Zalt\Snippets\ModelBridge;
 
 use Zalt\Html\Html;
-use Zalt\Html\HtmlElement;
 use Zalt\Html\HtmlInterface;
+use Zalt\Html\TableElement;
 use Zalt\Late\Late;
 use Zalt\Model\Bridge\BridgeInterface;
 use Zalt\Model\Data\DataReaderInterface;
@@ -25,7 +25,7 @@ use Zalt\Ra\Ra;
  * @subpackage Snippets\ModelBridge
  * @since      Class available since version 1.0
  */
-    abstract class TableBridgeAbstract extends \Zalt\Model\Bridge\BridgeAbstract
+abstract class TableBridgeAbstract extends \Zalt\Model\Bridge\BridgeAbstract
 {
     /**
      * @var array $name => [displayFunctions]
@@ -61,7 +61,7 @@ use Zalt\Ra\Ra;
         // I have spent two hours trying to find the cause and even tried to reproduce
         // it in basic code. I give up.  -- Matijs 
         $args = array_filter($args);
-        if (isset($args[0]) && $args[0] instanceof HtmlElement) {
+        if (isset($args[0]) && $args[0] instanceof TableElement) {
             $this->table = $args[0];
         } else {
             $this->table = Html::table(...$args);
@@ -107,7 +107,7 @@ use Zalt\Ra\Ra;
             return [Html::create($function), 'append'];
         }
 
-        return $function;
+        return null;
     }
 
     /**

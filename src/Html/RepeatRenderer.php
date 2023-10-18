@@ -105,7 +105,7 @@ class RepeatRenderer implements \Zalt\Html\ElementInterface
         if ($this->_content instanceof \Zalt\Html\ElementInterface) {
             return $this->_content->getTagName();
         }
-        return null;
+        return '';
     }
 
     public function getRepeater()
@@ -163,7 +163,7 @@ class RepeatRenderer implements \Zalt\Html\ElementInterface
             return $renderer->renderAny($this->_emptyContent);
         }
 
-        return null;
+        return '';
     }
 
     public function setContent($content)

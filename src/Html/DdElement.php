@@ -45,7 +45,7 @@ class DdElement extends HtmlElement
      *
      * @see $_repeater
      *
-     * @var boolean The element is rendered even without content when true.
+     * @var bool The element is rendered even without content when true.
      */
     public $renderWithoutContent = false;
 
@@ -53,7 +53,7 @@ class DdElement extends HtmlElement
      * Static helper function for creation, used by @see \Zalt\Html\Creator.
      *
      * @param mixed $args Optional Ra::args processed settings
-     * @return \Zalt\Html\TrElement
+     * @return \Zalt\Html\DdElement
      */
     public static function dd(...$args)
     {

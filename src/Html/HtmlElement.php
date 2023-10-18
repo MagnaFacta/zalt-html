@@ -447,9 +447,9 @@ class HtmlElement implements ElementInterface, Procrastinator
      * @see setRepeatTags()
      * @see RepeatableInterface
      *
-     * @var RepeatableInterface
+     * @var ?RepeatableInterface
      */
-    protected $_repeater;
+    protected ?RepeatableInterface $_repeater = null;
 
     /**
      * When repeatTags is false (the default) only the content is repeated but
@@ -512,7 +512,7 @@ class HtmlElement implements ElementInterface, Procrastinator
      *
      * @see $_repeater
      *
-     * @var boolean The element is rendered even without content when true.
+     * @var bool The element is rendered even without content when true.
      */
     public $renderWithoutContent = true;
 
@@ -534,13 +534,13 @@ class HtmlElement implements ElementInterface, Procrastinator
      *
      * @param string $name Function name becomes tagname (unless specified otherwise in \Zalt\Html\Creator)
      * @param array $arguments The content and attributes values
-     * @return \Zalt\Html\HtmlElement With '$name' tagName
+     * @return \Zalt\Html\ElementInterface With '$name' tagName
      */
     public function __call($name, array $arguments)
     {
         $elem = Html::createArray($name, $arguments);
 
-        $this[] = $elem;
+        $this->append($elem);
 
         return $elem;
     }
@@ -864,7 +864,7 @@ class HtmlElement implements ElementInterface, Procrastinator
      *
      * @param mixed $repeater
      * @param string $name
-     * @return Repeatable
+     * @return RepeatableInterface
      */
     public function addRepeater($repeater, $name = null)
     {
@@ -1004,7 +1004,7 @@ class HtmlElement implements ElementInterface, Procrastinator
         }
 
         // $defaultName is only returned when there actually is a tag.
-        return null;
+        return '';
     }
 
     /**
@@ -1280,7 +1280,7 @@ class HtmlElement implements ElementInterface, Procrastinator
             return $renderer->renderArray($this->_onEmptyContent);
         }
 
-        return null;
+        return '';
     }
 
     /**
@@ -1293,7 +1293,7 @@ class HtmlElement implements ElementInterface, Procrastinator
     protected function renderElement()
     {
         $content     = $this->renderContent();
-        $has_content = (null !== $content);
+        $has_content = ('' !== $content);
 
         if ($has_content || $this->renderWithoutContent || $this->renderClosingTag) {
 
@@ -1316,6 +1316,8 @@ class HtmlElement implements ElementInterface, Procrastinator
 
             return $this->_prependString . $html . $this->_appendString;
         }
+
+        return '';
     }
 
     /**

@@ -240,7 +240,7 @@ class Renderer
      *
      * @param mixed $content Anything HtmlInterface, number, string, array, object with __toString
      *                      or an object that has a defined render function in getClassRenderList().
-     * @return string Output to echo to the user
+     * @return array|string Output to echo to the user
      */
     public function renderArray($content, $glue = '', $stack = null)
     {

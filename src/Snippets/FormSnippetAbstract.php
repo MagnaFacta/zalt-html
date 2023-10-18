@@ -213,7 +213,12 @@ abstract class FormSnippetAbstract extends MessageableSnippetAbstract
     }
 
     abstract public function getFormOutput(): mixed;
-    
+
+    public function getInvalidFormMessage(): mixed
+    {
+        return sprintf($this->_('Input error! Changes to %s not saved!'), $this->getTopic());
+    }
+
     /**
      * When hasHtmlOutput() is false a snippet user should check
      * for a redirectRoute.
@@ -313,7 +318,7 @@ abstract class FormSnippetAbstract extends MessageableSnippetAbstract
      */
     protected function onInValid()
     {
-        $this->addMessage(sprintf($this->_('Input error! Changes to %s not saved!'), $this->getTopic()));
+        $this->addMessage($this->getInvalidFormMessage());
     }
 
     /**

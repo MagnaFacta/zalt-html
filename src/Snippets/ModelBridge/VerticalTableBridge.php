@@ -12,6 +12,7 @@
 namespace Zalt\Snippets\ModelBridge;
 
 use Zalt\Late\Late;
+use Zalt\Late\LateCall;
 
 /**
  *
@@ -143,8 +144,6 @@ class VerticalTableBridge extends DetailTableBridge
         $this->table->td($this->getLate($name), $attr);
 
         $this->_checkColumnAdded($attr);
-
-        return $this;
     }
 
     public function addItemWhen($condition, $name = null, $label = null, array $attr = array())
@@ -212,7 +211,7 @@ class VerticalTableBridge extends DetailTableBridge
      * @param mixed $if
      * @param mixed $item
      * @param mixed $else
-     * @return array
+     * @return LateCall
      */
     public function itemIf($if, $item, $else = null)
     {

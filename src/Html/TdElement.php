@@ -98,7 +98,7 @@ class TdElement extends HtmlElement
 
         if ($this->_onlyWhenChanged) {
             if ($result == $this->_onlyWhenChangedValueStore) {
-                return null;
+                return '';
             }
             $this->_onlyWhenChangedValueStore = $result;
         }

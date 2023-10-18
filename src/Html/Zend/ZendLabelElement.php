@@ -114,7 +114,7 @@ class ZendLabelElement extends \Zalt\Html\HtmlElement
             }
             if ($value instanceof \Zend_Form_Element) {
                 if ($value instanceof \Zend_Form_Element_Hidden) {
-                    return null;
+                    return '';
                 }
 
                 // Only a label when a label decorator exists, but we do not use that decorator
@@ -142,7 +142,7 @@ class ZendLabelElement extends \Zalt\Html\HtmlElement
                     }
                 }
             } elseif ($value instanceof \Zend_Form_DisplayGroup) {
-                return null;
+                return '';
             } else {
                 $this->_currentContent[$key] = $value;
             }

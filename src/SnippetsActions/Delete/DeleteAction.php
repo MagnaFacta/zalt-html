@@ -12,10 +12,11 @@ declare(strict_types=1);
 namespace Zalt\SnippetsActions\Delete;
 
 use Psr\Cache\CacheItemPoolInterface;
-use Zalt\Snippets\ModelYesNoDeleteSnippet;
+use Zalt\Snippets\ModelConfirmSnippet;
 use Zalt\SnippetsActions\AbstractAction;
 use Zalt\SnippetsActions\ModelActionInterface;
 use Zalt\SnippetsActions\ParameterActionInterface;
+use Zalt\SnippetsActions\PostActionInterface;
 
 /**
  *
@@ -23,13 +24,13 @@ use Zalt\SnippetsActions\ParameterActionInterface;
  * @subpackage SnippetsActions\Delete
  * @since      Class available since version 1.0
  */
-class DeleteAction extends AbstractAction implements ModelActionInterface, ParameterActionInterface
+class DeleteAction extends AbstractAction implements ModelActionInterface, ParameterActionInterface, PostActionInterface
 {
     /**
      * @var array Of snippet class names
      */
     protected array $_snippets = [
-        ModelYesNoDeleteSnippet::class,
+        ModelConfirmSnippet::class,
     ];
     
     /**
@@ -57,18 +58,32 @@ class DeleteAction extends AbstractAction implements ModelActionInterface, Param
      */
     public ?string $buttonYesClass = null;
 
-    public CacheItemPoolInterface $cache;
+    public ?CacheItemPoolInterface $cache = null;
 
     /**
-     * @var array Variable to set tags for cache cleanup after changes
-     *
+     * Variable to set tags for cache cleanup after changes
+     * @var array
      */
-    public array $cacheTags;
+    public array $cacheTags = [];
 
     /**
      * @var string The request parameter used to store the confirmation
      */
     public string $confirmParameter = 'confirmed';
+
+    /**
+     * Field name for crsf protection field.
+     *
+     * @var string
+     */
+    public string $csrfName = '__csrf';
+
+    /**
+     * The csrf token.
+     *
+     * @var string
+     */
+    public ?string $csrfToken = null;
 
     /**
      * @var ?string Optional question to ask the user.

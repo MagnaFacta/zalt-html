@@ -63,20 +63,26 @@ class UrlArrayAttribute extends ArrayAttribute
     public static function toUrlString(array $url): string
     {
         $urlString = '';
-        $urlParameters = array();
+        $urlParameters = [];
 
         try {
-            foreach (Html::getRenderer()->renderArray($url, false) as $key => $value) {
-                if (strlen($value)) {
-                    if (is_int($key)) {
-                        $urlString .= $value;
-                    } elseif ($key) {
-                        // Prevent double escaping by using rawurlencode() instead
-                        // of urlencode()
-                        $urlParameters[$key] = rawurlencode($value);
+            $attribs = Html::getRenderer()->renderArray($url, false);
+            if (is_array($attribs)) {
+                foreach ($attribs as $key => $value) {
+                    if (strlen($value)) {
+                        if (is_int($key)) {
+                            $urlString .= $value;
+                        } elseif ($key) {
+                            // Prevent double escaping by using rawurlencode() instead
+                            // of urlencode()
+                            $urlParameters[$key] = rawurlencode($value);
+                        }
                     }
                 }
+            } else {
+                $urlString = $attribs;
             }
+
             if (str_contains($urlString, '//')) {
                 $urlString = preg_replace('!([^:])//!', '\1/', $urlString);
             }

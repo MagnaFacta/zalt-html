@@ -32,19 +32,19 @@ class Html
      *
      * @var Creator
      */
-    private static $_creator;
+    private static ?Creator $_creator;
 
     /**
      *
      * @var Renderer
      */
-    private static $_renderer;
+    private static ?Renderer $_renderer;
 
     /**
      *
-     * @var \Zalt\SnippetsLoader\SnippetLoader
+     * @var \Zalt\SnippetsLoader\SnippetLoaderInterface
      */
-    private static $_snippetLoader;
+    private static ?SnippetLoaderInterface $_snippetLoader;
 
     /**
      * Static variable for debuggging purposes. Toggles the echoing of e.g. of sql
@@ -93,7 +93,7 @@ class Html
      *
      * @param string $tagName Optional tag to create
      * @param mixed $args Optional Ra::args processed settings
-     * @return \Zalt\Html\HtmlElement or Creator
+     * @return HtmlElement|Creator or Creator
      */
     public static function create($tagName = null, ...$args)
     {
@@ -166,7 +166,7 @@ class Html
      */
     public static function getCreator()
     {
-        if (! self::$_creator) {
+        if (! isset(self::$_creator)) {
             self::$_creator = new Creator();
         }
 
@@ -181,7 +181,7 @@ class Html
      */
     public static function getRenderer()
     {
-        if (! self::$_renderer) {
+        if (! isset(self::$_renderer)) {
             self::$_renderer = new Renderer();
         }
 
@@ -191,7 +191,7 @@ class Html
     /**
      * Get the snippet loader for use by self::snippet().
      *
-     * @return SnippetLoader
+     * @return SnippetLoaderInterface
      */
     public static function getSnippetLoader()
     {
@@ -368,9 +368,9 @@ class Html
      * Set the snippet loader for use by self::snippet().
      *
      * @param \Zalt\SnippetsLoader\SnippetLoaderInterface $snippetLoader
-     * @return \Zalt\SnippetsLoader\SnippetLoader
+     * @return \Zalt\SnippetsLoader\SnippetLoaderInterface
      */
-    public static function setSnippetLoader(SnippetLoaderInterface $snippetLoader): SnippetLoader
+    public static function setSnippetLoader(SnippetLoaderInterface $snippetLoader): SnippetLoaderInterface
     {
         self::$_snippetLoader = $snippetLoader;
         return self::$_snippetLoader;

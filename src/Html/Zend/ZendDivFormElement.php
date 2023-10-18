@@ -46,7 +46,7 @@ class ZendDivFormElement extends \Zalt\Html\HtmlElement implements ZendFormLayou
     /**
      * Should have content
      *
-     * @var boolean The element is rendered even without content when true.
+     * @var bool The element is rendered even without content when true.
      */
     public $renderWithoutContent = false;
 
@@ -61,7 +61,7 @@ class ZendDivFormElement extends \Zalt\Html\HtmlElement implements ZendFormLayou
     {
         $label = new HtmlElement('div', $attr);
 
-        $this[] = $label;
+        $this->append($label);
 
         return $label;
     }
@@ -90,7 +90,7 @@ class ZendDivFormElement extends \Zalt\Html\HtmlElement implements ZendFormLayou
     {
         $label = new ZendLabelElement($mixed, $attr);
 
-        $this[] = $label;
+        $this->append($label);
 
         return $label;
     }

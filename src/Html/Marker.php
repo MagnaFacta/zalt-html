@@ -101,7 +101,7 @@ class Marker
      * Mark the searches in $value
      *
      * @param mixed $value Late, Html, Raw or string
-     * @return ?HtmlInterface"string
+     * @return HtmlInterface|string
      */
     public function mark($value)
     {

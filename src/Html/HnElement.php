@@ -29,7 +29,7 @@ class HnElement extends HtmlElement
      * $renderWithoutContent controls this rendering. By default an element tag is output
      * but when false the tag will only be present if there is some content in it.
      *
-     * @var boolean The element is rendered even without content when true.
+     * @var bool The element is rendered even without content when true.
      */
     public $renderWithoutContent = false;
 

@@ -112,7 +112,7 @@ abstract class ModelDetailTableSnippetAbstract extends ModelSnippetAbstract
         $this->applyHtmlAttributes($table);
 
         $container = Html::create()->div(array('class' => 'table-container', 'renderWithoutContent' => false));
-        $container[] = $table;
+        $container->append($table);
         return $container;
     }
 

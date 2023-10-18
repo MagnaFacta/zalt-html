@@ -25,6 +25,7 @@ use Zalt\Snippets\ModelBridge\DetailTableBridge;
  * @copyright  Copyright (c) 2015 Erasmus MC
  * @license    New BSD License
  * @since      Class available since \Zalt version 1.7.2 30-sep-2015 18:49:24
+ * @deprecated Replaced by ModelConfirmSnippetAbstract
  */
 abstract class ModelConfirmDataChangeSnippetAbstract extends \Zalt\Snippets\ModelDetailTableSnippetAbstract
 {
@@ -226,14 +227,14 @@ abstract class ModelConfirmDataChangeSnippetAbstract extends \Zalt\Snippets\Mode
     {
         $footer = $bridge->getTable()->tfrow();
 
-        $footer[] = $this->getQuestion();
-        $footer[] = ' ';
+        $footer->append($this->getQuestion());
+        $footer->append(' ');
         $footer->a(
                 array($this->confirmParameter => 1),
                 $this->_('Yes'),
                 array('class' => $this->buttonYesClass)
                 );
-        $footer[] = ' ';
+        $footer->append(' ');
         $footer->a(
                 array('action' => $this->abortAction),
                 $this->_('No'),

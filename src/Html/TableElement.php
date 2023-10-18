@@ -12,12 +12,10 @@
 
 namespace Zalt\Html;
 
-use Zalt\Html\Zend\ZendFormLayout;
 use Zalt\Late\Alternate;
 use Zalt\Late\Late;
 use Zalt\Late\LateInterface;
 use Zalt\Late\RepeatableByKeyValue;
-use Zalt\Late\RepeatableFormElements;
 use Zalt\Late\RepeatableObjectProperties;
 use Zalt\Ra\MultiWrapper;
 use Zalt\Ra\Ra;
@@ -136,7 +134,7 @@ class TableElement extends HtmlElement implements ColumnInterface
      *
      * When set this is an array containing array(self::THEAD => number_of_header_rows, self::TFOOT => number_of_footer_rows).
      *
-     * @var array False or array containing number of header en footer rows
+     * @var bool|array False or array containing number of header en footer rows
      */
     protected $_pivot = false;
 
@@ -148,26 +146,10 @@ class TableElement extends HtmlElement implements ColumnInterface
     protected $_prependString = "\n";
 
     /**
-     * Extra array with special types for subclasses.
-     *
-     * When an object of one of the key types is used, then use
-     * the class method defined as the value.
-     *
-     * @see $_specialTypesDefault
-     *
-     * @var array Of 'class or interfacename' => 'class method' of null
-     * /
-    protected $_specialTypes = array(
-        'Zend_Form' => 'setAsFormLayout',
-        );
-
-    /**
      * When empty a table element should not be output at rendering time as
      * a stand-alone <table/> tag makes no sense.
      *
-     * @see $_repeater
-     *
-     * @var boolean The element is rendered even without content when true.
+     * @var bool The element is rendered even without content when true.
      */
     public $renderWithoutContent = false;
 

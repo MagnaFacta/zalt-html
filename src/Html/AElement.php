@@ -25,7 +25,7 @@ use Zalt\Ra\Ra;
  * @license    New BSD License
  * @since      Class available since version 1.0
  */
-class AElement extends \Zalt\Html\HtmlElement
+class AElement extends HtmlElement
 {
     /**
      * Most elements must be rendered even when empty, others should - according to the
@@ -42,7 +42,7 @@ class AElement extends \Zalt\Html\HtmlElement
      *
      * @see $_repeater
      *
-     * @var boolean The element is rendered even without content when true.
+     * @var bool The element is rendered even without content when true.
      */
     public $renderWithoutContent = true;
 
