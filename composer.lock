@@ -366,7 +366,7 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/MagnaFacta/zalt-model.git",
-                "reference": "6395902a60a4dad0dbc2ec549b78af2122798c82"
+                "reference": "f2c7b45e7152e392537b6f2b3a45b958d6656657"
             },
             "require": {
                 "magnafacta/zalt-late": "dev-main",
@@ -412,7 +412,7 @@
                 }
             ],
             "description": "Zend Alternative Model",
-            "time": "2023-10-19T06:56:37+00:00"
+            "time": "2023-10-19T17:50:44+00:00"
         },
         {
             "name": "magnafacta/zalt-util",
@@ -1685,12 +1685,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/translation.git",
-                "reference": "f57950a147b373c0e24b94ca5522fd88311adcd9"
+                "reference": "561094480349c916ef13dfd722eb2315f9dad358"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/translation/zipball/f57950a147b373c0e24b94ca5522fd88311adcd9",
-                "reference": "f57950a147b373c0e24b94ca5522fd88311adcd9",
+                "url": "https://api.github.com/repos/symfony/translation/zipball/561094480349c916ef13dfd722eb2315f9dad358",
+                "reference": "561094480349c916ef13dfd722eb2315f9dad358",
                 "shasum": ""
             },
             "require": {
@@ -1772,7 +1772,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-10-18T11:40:39+00:00"
+            "time": "2023-10-18T16:22:54+00:00"
         },
         {
             "name": "symfony/translation-contracts",

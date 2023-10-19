@@ -16,8 +16,8 @@ use Zalt\Message\MessengerInterface;
 use Zalt\Model\Bridge\BridgeInterface;
 use Zalt\Model\Data\DataReaderInterface;
 use Zalt\Model\Data\FullDataInterface;
+use Zalt\Model\Type\ActivatingYesNoType;
 use Zalt\Snippets\ModelBridge\DetailTableBridge;
-use Zalt\SnippetsLoader\SnippetException;
 use Zalt\SnippetsLoader\SnippetOptions;
 
 /**
@@ -27,20 +27,16 @@ use Zalt\SnippetsLoader\SnippetOptions;
  */
 abstract class ModelConfirmSnippetAbstract extends ModelDetailTableSnippetAbstract
 {
-    use ConfirmSnippetTrait { getQuestion as protected getTraitQuestion; getMessage as protected getTraitMessage; }
+    use ConfirmSnippetTrait {
+        ConfirmSnippetTrait::getQuestion as protected getTraitQuestion;
+        ConfirmSnippetTrait::getMessage as protected getTraitMessage;
+    }
 
     protected const MODE_ACTIVATE = 2;
     protected const MODE_DEACTIVATE = 1;
     protected const MODE_DELETE = 0;
 
-
-    const MODEL_ACTIVE_FIELD = 'modelActivationField';
-    const MODEL_ACTIVE_VALUE_ACTIVE = 'modelActiveValueActive';
-    const MODEL_ACTIVE_VALUE_INACTIVE = 'modelActiveValueInactive';
-    
-    protected ?string $actionField = null;
-
-    protected mixed $actionValue = null;
+    protected array $actionValues = [];
 
     protected int $actionMode = self::MODE_DELETE;
 
@@ -66,34 +62,37 @@ abstract class ModelConfirmSnippetAbstract extends ModelDetailTableSnippetAbstra
     public function checkModel(FullDataInterface $dataModel): void
     {
         $metaModel = $dataModel->getMetaModel();
-        
-        $this->actionField = $metaModel->getMeta(self::MODEL_ACTIVE_FIELD);
 
-        if ($this->actionField) {
-            $active   = $metaModel->getMeta(self::MODEL_ACTIVE_VALUE_ACTIVE, 1);
-            $inactive = $metaModel->getMeta(self::MODEL_ACTIVE_VALUE_ACTIVE, 0);
+        // If already set, we assume the programmers knows what he/she is doing
+        if (! $this->actionValues) {
+            // These array should be equal length, otherwise the result may be goofy
+            $activatingValues = $metaModel->getCol(ActivatingYesNoType::$activatingValue);
+            $deactivatingValues = $metaModel->getCol(ActivatingYesNoType::$deactivatingValue);
 
-            $row = $dataModel->loadFirst();
-            if (isset($row[$this->actionField]) ) {
-                if ($active == $row[$this->actionField]) {
+            if ($activatingValues && $deactivatingValues) {
+                // First check for values to activate!
+                $row = $dataModel->loadFirst();
+                foreach ($activatingValues as $name => $value) {
+                    if (isset($row[$name], $deactivatingValues[$name]) && $row[$name] == $value) {
+                        $this->actionValues[$name] = $deactivatingValues[$name];
+                    }
+                }
+                if ($this->actionValues) {
                     $this->actionMode = self::MODE_DEACTIVATE;
-                    $this->actionValue = $inactive;
-
-                } elseif ($inactive == $row[$this->actionField]) {
-                    $this->actionMode = self::MODE_ACTIVATE;
-                    $this->actionValue = $active;
-
                 } else {
-                    throw new SnippetException(sprintf(
-                        $this->_("Unknown activation value %s for field %s. Expected %s or %s."),
-                        $row[$this->actionField],
-                        $this->actionField,
-                        $active,
-                        $inactive
-                    ));
+                    // In nothing then check for values to deactivate!
+                    foreach ($deactivatingValues as $name => $value) {
+                        if (isset($row[$name], $activatingValues[$name]) && $row[$name] == $value) {
+                            $this->actionValues[$name] = $activatingValues[$name];
+                        }
+                    }
+                    if ($this->actionValues) {
+                        $this->actionMode = self::MODE_ACTIVATE;
+                    }
                 }
             }
         }
+        // dump($this->actionValues);
     }
 
 
@@ -208,15 +207,16 @@ abstract class ModelConfirmSnippetAbstract extends ModelDetailTableSnippetAbstra
         /**
          * @var FullDataInterface $model
          */
-        $model = $this->getModel();
+        $model  = $this->getModel();
+        $filter = $model->getFilter();
 
-        if ($this->actionField) {
-            $model->save([$this->actionField => $this->actionValue], $model->getFilter());
+        if ($this->actionValues) {
+            $model->save($this->actionValues + $filter, $filter);
         } else {
             /**
              * @var $model FullDataInterface
              */
-            $model->delete($model->getFilter());
+            $model->delete($filter);
         }
         return true;
     }
