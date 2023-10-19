@@ -42,9 +42,9 @@ class TableSnippetAbstract extends TranslatableSnippetAbstract
     /**
      * REQUIRED, but can be derived from $this->data
      *
-     * @var \Zalt\Late\RepeatableInterface
+     * @var ?\Zalt\Late\RepeatableInterface
      */
-    protected $repeater;
+    protected $repeater = null;
 
     /**
      * Add the columns to the table

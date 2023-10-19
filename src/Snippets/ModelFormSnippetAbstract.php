@@ -202,7 +202,7 @@ abstract class ModelFormSnippetAbstract extends FormSnippetAbstract
         $model = $this->getModel();
 
         if ($this->requestInfo->isPost()) {
-            $this->formData = $model->loadPostData($this->requestInfo->getRequestPostParams() + $this->formData, $this->createData);
+            $this->formData = $model->loadPostData($this->requestInfo->getRequestPostParams() + $this->formData + $this->requestInfo->getRequestMatchedParams(), $this->createData);
 
         } else {
             // Assume that if formData is set it is the correct formData
@@ -218,7 +218,7 @@ abstract class ModelFormSnippetAbstract extends FormSnippetAbstract
                 }
             }
         }
-        $this->formData = $this->loadCsrfData() + $this->formData;
+        $this->formData = $this->loadCsrfData() + $this->formData + $this->requestInfo->getRequestMatchedParams();
         
         return $this->formData;
     }

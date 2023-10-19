@@ -31,9 +31,9 @@ class ZendElementDecorator extends \Zend_Form_Decorator_Abstract
 {
     /**
      *
-     * @var \Zalt\Html\HtmlInterface
+     * @var null|\Zalt\Html\HtmlInterface
      */
-    protected $_html_element;
+    protected $_html_element = null;
 
     /**
      * When existing prepends all error messages before the form elements.
@@ -55,7 +55,7 @@ class ZendElementDecorator extends \Zend_Form_Decorator_Abstract
     /**
      * The element used to display the (visible) form elements.
      *
-     * @return \Zalt\Html\HtmlInterface
+     * @return null|\Zalt\Html\HtmlInterface
      */
     public function getHtmlElement()
     {
@@ -93,8 +93,12 @@ class ZendElementDecorator extends \Zend_Form_Decorator_Abstract
      */
     public function render($content)
     {
-        if ((null === ($element = $this->getElement())) ||
-            (null === ($htmlelement = $this->getHtmlElement()))) {
+        /**
+         * @var \Zend_Form|\Zend_Form_Element|null $element
+         */
+        $element = $this->getElement();
+        $htmlelement = $this->getHtmlElement();
+        if (! ($element && $htmlelement)) {
             return $content;
         }
 

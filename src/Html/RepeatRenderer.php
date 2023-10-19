@@ -58,9 +58,9 @@ class RepeatRenderer implements \Zalt\Html\ElementInterface
     /**
      * The repeater containing a dataset
      *
-     * @var \Zalt\Late\RepeatableInterface
+     * @var null|\Zalt\Late\RepeatableInterface
      */
-    protected $_repeater;
+    protected $_repeater = null;
 
     /**
      *

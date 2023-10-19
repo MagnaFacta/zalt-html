@@ -31,15 +31,15 @@ abstract class WizardFormSnippetAbstract extends \Zalt\Snippets\ModelFormSnippet
 {
     /**
      *
-     * @var \Zend_Form_Element_Submit
+     * @var ?\Zend_Form_Element_Submit
      */
-    protected $_cancelButton;
+    protected $_cancelButton = null;
 
     /**
      *
-     * @var \Zend_Form_Element_Submit
+     * @var ?\Zend_Form_Element_Submit
      */
-    protected $_finishButton;
+    protected $_finishButton = null;
 
     /**
      *
@@ -49,15 +49,15 @@ abstract class WizardFormSnippetAbstract extends \Zalt\Snippets\ModelFormSnippet
 
     /**
      *
-     * @var \Zend_Form_Element_Submit
+     * @var ?\Zend_Form_Element_Submit
      */
-    protected $_nextButton;
+    protected $_nextButton = null;
 
     /**
      *
-     * @var \Zend_Form_Element_Submit
+     * @var ?\Zend_Form_Element_Submit
      */
-    protected $_previousButton;
+    protected $_previousButton = null;
 
     /**
      * The form Id used for the cancel button
@@ -164,7 +164,7 @@ abstract class WizardFormSnippetAbstract extends \Zalt\Snippets\ModelFormSnippet
      * Default button creation function.
      *
      * @param string $buttonId
-     * @param string $label
+     * @param ?string $label
      * @param string $defaultLabel
      * @param string $class
      */
@@ -346,7 +346,7 @@ abstract class WizardFormSnippetAbstract extends \Zalt\Snippets\ModelFormSnippet
         }
     }
 
-    protected function addSaveButton(string $saveButtonId, string $saveLabel, string $buttonClass)
+    protected function addSaveButton(string $saveButtonId, ?string $saveLabel, string $buttonClass)
     {
         // Not used
     }

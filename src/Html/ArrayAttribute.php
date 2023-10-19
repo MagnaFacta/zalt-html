@@ -103,7 +103,7 @@ class ArrayAttribute extends AttributeAbstract implements ArrayAccess, Countable
     /**
      * Set the item in questions (with guard for special types)
      *
-     * @param scalar $key
+     * @param mixed $key
      * @param mixed $value
      * @return ArrayAttribute (continuation pattern)
      */
@@ -251,10 +251,10 @@ class ArrayAttribute extends AttributeAbstract implements ArrayAccess, Countable
     /**
      * Set the value for this item
      *
-     * @param scalar $offset
+     * @param mixed $offset
      * @param mixed $value
      */
-    public function offsetSet(mixed $offset,mixed $value): void
+    public function offsetSet(mixed $offset, mixed $value): void
     {
         if (null === $offset) {
             $this->_values[] = $value;

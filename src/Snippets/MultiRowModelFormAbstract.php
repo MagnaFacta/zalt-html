@@ -99,7 +99,7 @@ abstract class MultiRowModelFormAbstract extends \Zalt\Snippets\ModelFormSnippet
                 } else {
                     $this->formData[$mname] = $model->load();
 
-                    if (!$this->formData) {
+                    if (! $this->formData[$mname]) {
                         throw new \Zend_Exception($this->_('Unknown edit data requested'));
                     }
                 }

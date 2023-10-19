@@ -23,9 +23,9 @@ trait ZendFormSnippetTrait
     /**
      * Optional csrf element
      *
-     * @var \Zend_Form_Element_Hidden
+     * @var null|\Zend_Form_Element_Hidden
      */
-    protected $_csrf;
+    protected $_csrf = null;
 
     /**
      *
@@ -35,9 +35,9 @@ trait ZendFormSnippetTrait
 
     /**
      *
-     * @var \Zend_Form_Element_Submit
+     * @var null|\Zend_Form_Element_Submit
      */
-    protected $_saveButton;
+    protected $_saveButton = null;
 
     /**
      * As it is better for translation utilities to set the labels etc. translated,
@@ -66,14 +66,14 @@ trait ZendFormSnippetTrait
 
     protected function addCsrf(string $csrfName, ?string $csrfToken): void
     {
-        if ((! $this->_csrf) &&$csrfName && $csrfToken) {
+        if ((! $this->_csrf) && $csrfName && $csrfToken) {
             $this->_csrf = $this->_form->createElement('Hidden', $csrfName);
             $this->_csrf->setValue($csrfToken);
             $this->_csrf = $this->_form->addElement($this->_csrf);
         }
     }
 
-    protected function addSaveButton(string $saveButtonId, string $saveLabel, string $buttonClass)
+    protected function addSaveButton(string $saveButtonId, ?string $saveLabel, string $buttonClass)
     {
         if (! $this->_saveButton) {
             //If not already there, add a save button

@@ -116,7 +116,7 @@ class AElement extends HtmlElement
     /**
      * Return a link object when $iff is true
      *
-     * @param \Zalt\Late\LateCall $iff The test
+     * @param mixed $iff The test
      * @param array $aArgs Arguments when the test is true
      * @param array $spanArgs Arguments when the test is false
      * @return mixed

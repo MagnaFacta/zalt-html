@@ -176,10 +176,6 @@ class Sequence extends ArrayString implements ElementInterface
      */
     public function render()
     {
-        $glue = $this->getGlue();
-        if ($glue instanceof HtmlInterface) {
-            $glue = $glue->render();
-        }
-        return Html::getRenderer()->renderArray($this->getIterator(), $glue);
+        return Html::getRenderer()->renderArray($this->getIterator(), $this->getGlue());
     }
 }

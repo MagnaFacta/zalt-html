@@ -75,7 +75,7 @@ abstract class FormSnippetAbstract extends MessageableSnippetAbstract
      *
      * @var array
      */
-    protected $formData = [];
+    protected array $formData = [];
 
     /**
      * @var string The actual redirect route to use
@@ -130,11 +130,11 @@ abstract class FormSnippetAbstract extends MessageableSnippetAbstract
      * does deserve its own function.
      * 
      * @param string $saveButtonId
-     * @param string $saveLabel
+     * @param ?string $saveLabel
      * @param string $buttonClass
      * @return mixed
      */
-    abstract protected function addSaveButton(string $saveButtonId, string $saveLabel, string $buttonClass);
+    abstract protected function addSaveButton(string $saveButtonId, ?string $saveLabel, string $buttonClass);
 
     /**
      * Hook that allows actions when data was saved
@@ -277,9 +277,7 @@ abstract class FormSnippetAbstract extends MessageableSnippetAbstract
      */
     protected function loadForm()
     {
-        $options = array();
-
-        $options['class'] = (isset($options['class']) ? $options['class'] . ' ' : '') . 'form-horizontal';
+        $options['class'] = 'form-horizontal';
         $options['role'] = 'form';
 
         $this->_form = $this->createForm($options);
@@ -295,11 +293,11 @@ abstract class FormSnippetAbstract extends MessageableSnippetAbstract
     protected function loadFormData(): array
     {
         if ($this->isPost()) {
-            $this->formData = $this->loadCsrfData() + $this->requestInfo->getRequestPostParams();
+            $this->formData = $this->loadCsrfData() + $this->requestInfo->getRequestPostParams() + $this->requestInfo->getRequestMatchedParams();
             return $this->formData;
         }
 
-        $this->formData = $this->loadCsrfData() + $this->getDefaultFormValues() + $this->requestInfo->getRequestPostParams();
+        $this->formData = $this->loadCsrfData() + $this->getDefaultFormValues() + $this->requestInfo->getRequestPostParams() + $this->requestInfo->getRequestMatchedParams();
         return $this->formData;
     }
 

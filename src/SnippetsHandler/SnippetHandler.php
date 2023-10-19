@@ -34,8 +34,6 @@ class SnippetHandler implements RequestHandlerInterface
 {
     use TranslateableTrait;
 
-    private MetaModellerInterface $_model;
-
     /**
      * @var array[string|SnippetActionInterface]
      */

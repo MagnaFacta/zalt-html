@@ -366,7 +366,7 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/MagnaFacta/zalt-model.git",
-                "reference": "78c2dd1d5a9bdd89da983450ab2dea842ad82b38"
+                "reference": "6395902a60a4dad0dbc2ec549b78af2122798c82"
             },
             "require": {
                 "magnafacta/zalt-late": "dev-main",
@@ -412,7 +412,7 @@
                 }
             ],
             "description": "Zend Alternative Model",
-            "time": "2023-10-18T12:58:06+00:00"
+            "time": "2023-10-19T06:56:37+00:00"
         },
         {
             "name": "magnafacta/zalt-util",
@@ -2326,12 +2326,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/GemsTracker/MUtil.git",
-                "reference": "a172c351847be2e21a6e6c7ffa9f60dcd049580b"
+                "reference": "0d0c82398c412675da270ecbc22582057f5d7b11"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/GemsTracker/MUtil/zipball/a172c351847be2e21a6e6c7ffa9f60dcd049580b",
-                "reference": "a172c351847be2e21a6e6c7ffa9f60dcd049580b",
+                "url": "https://api.github.com/repos/GemsTracker/MUtil/zipball/0d0c82398c412675da270ecbc22582057f5d7b11",
+                "reference": "0d0c82398c412675da270ecbc22582057f5d7b11",
                 "shasum": ""
             },
             "require": {
@@ -2397,7 +2397,7 @@
                 "issues": "https://github.com/GemsTracker/MUtil/issues",
                 "source": "https://github.com/GemsTracker/MUtil/tree/2.x"
             },
-            "time": "2023-10-18T15:32:29+00:00"
+            "time": "2023-10-19T09:05:56+00:00"
         },
         {
             "name": "mezzio/mezzio-session-ext",

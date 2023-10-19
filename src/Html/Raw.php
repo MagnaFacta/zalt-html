@@ -31,7 +31,7 @@ class Raw implements HtmlInterface
     /**
      * Whatever should be the output
      *
-     * @var string
+     * @var string|LateInterface
      */
     private $_value;
 
@@ -195,7 +195,7 @@ class Raw implements HtmlInterface
     /**
      * Change the content.
      *
-     * @param string $value
+     * @param string|LateInterface $value
      * @return \Zalt\Html\Raw
      */
     public function setValue($value)

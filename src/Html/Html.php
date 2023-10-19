@@ -378,7 +378,7 @@ class Html
 
     /**
      *
-     * @param string $name Snippet name
+     * @param array|string $name Snippet name
      * @param mixed $args Optional extra snippets
      * @return \Zalt\Snippets\SnippetInterface|null
      */

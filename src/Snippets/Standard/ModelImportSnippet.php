@@ -134,9 +134,9 @@ abstract class ModelImportSnippet extends \Zalt\Snippets\WizardFormSnippetAbstra
     /**
      * Model to read import
      *
-     * @var \Zalt\Model\Data\FullDataInterface
+     * @var null|\Zalt\Model\Data\FullDataInterface
      */
-    protected $sourceModel;
+    protected $sourceModel = null;
 
     /**
      * The final directory when the data was successfully imported.
@@ -154,9 +154,9 @@ abstract class ModelImportSnippet extends \Zalt\Snippets\WizardFormSnippetAbstra
      *
      * Required, can be set by passing a model to $this->model
      *
-     * @var \Zalt\Model\Data\FullDataInterface
+     * @var null|\Zalt\Model\Data\FullDataInterface
      */
-    protected $targetModel;
+    protected $targetModel = null;
 
     /**
      * The filepath for temporary files
@@ -822,7 +822,12 @@ abstract class ModelImportSnippet extends \Zalt\Snippets\WizardFormSnippetAbstra
             if (count($resultRow) > 1) {
                 // Always first
                 $requireds = count(array_filter($resultRow[$requiredKey]));
-                $resultRow[$requiredKey] = $requireds ? ($requireds == $transCount ? $this->_('Yes') : $this->_('For bold')) : ' ';
+                if ($requireds) {
+                    // $resultRow[$requiredKey] = ($requireds == $transCount ? $this->_('Yes') : $this->_('For bold'));
+                    $resultRow[$requiredKey] = $this->_('For bold');
+                } else {
+                    $resultRow[$requiredKey] = ' ';
+                }
 
                 if ($metaModel->has($name, 'label')) {
                     $label = $metaModel->get($name, 'label');

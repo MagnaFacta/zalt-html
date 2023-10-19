@@ -49,7 +49,7 @@ class ZendInputRenderer implements \Zalt\Html\HtmlInterface
 
     /**
      *
-     * @param \Zend_Form|\Zend_Form_Element|\Zalt\Late\LateInterface $element
+     * @param array|\Zend_Form|\Zend_Form_Element|\Zalt\Late\LateInterface $element
      * @param $mode One of the class MODE_ constants
      * @param array $decorators An array of string|array|\Zend_Form_Decorator_Interface Optional An arrya that contains values
      * that are either a string value that identifies an existing decorator or an array that creates an new decorator
@@ -101,19 +101,9 @@ class ZendInputRenderer implements \Zalt\Html\HtmlInterface
                 // Use all args
                 $args = func_get_args();
             }
-            if (is_array($args)) {
-                // Treat this as a standard Html Element
-                $this->_element = new \Zalt\Html\HtmlElement('input', $args);
-                $this->_mode = self::MODE_HTML;
-
-                // \Zalt\EchoOut\EchoOut::track($args);
-             } else {
-                throw new \Zalt\Html\HtmlException(sprintf(
-                        self::ARGUMENT_ERROR,
-                        (is_object($element) ? get_class($element) : gettype($element)),
-                        __CLASS__ . ' constructor'
-                        ));
-            }
+            // Treat this as a standard Html Element
+            $this->_element = new \Zalt\Html\HtmlElement('input', $args);
+            $this->_mode = self::MODE_HTML;
         }
     }
 

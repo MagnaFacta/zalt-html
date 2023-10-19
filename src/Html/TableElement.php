@@ -402,7 +402,7 @@ class TableElement extends HtmlElement implements ColumnInterface
      *
      * print_r but then resulting in html tables.
      *
-     * @param array $data An array or an array of arrays
+     * @param mixed $data An array or an array of arrays
      * @param mixed $caption Optional caption
      * @param bool|null $nested Optional, looks at first element of $data when null or not specified
      * @param array $objects_not_expanded Objects whose content should not be displayed. Used for preventing resursion.
@@ -427,6 +427,7 @@ class TableElement extends HtmlElement implements ColumnInterface
         if (null === $nested) {
             $nested = false;
             if (count($data) > 1) {
+                $first = false;
                 foreach ($data as $first) {
                     // Trick to get first element whatever the circumstance
                     break;
@@ -458,6 +459,7 @@ class TableElement extends HtmlElement implements ColumnInterface
         }
 
         if ($nested) {
+            $row = false;
             foreach ($data as $row) {
                 // Trick to get first element whatever the circumstance
                 break;

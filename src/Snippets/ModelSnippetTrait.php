@@ -25,9 +25,9 @@ trait ModelSnippetTrait
     /**
      * The model, use $this->getModel() to fill
      *
-     * @var \Zalt\Model\Data\DataReaderInterface;
+     * @var null|\Zalt\Model\Data\DataReaderInterface;
      */
-    protected $_dataModel;
+    protected $_dataModel = null;
 
     /**
      * Set a fixed model filter.

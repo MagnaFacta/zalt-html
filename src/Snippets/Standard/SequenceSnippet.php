@@ -67,8 +67,8 @@ class SequenceSnippet extends \Zalt\Snippets\SnippetAbstract
     public function __construct(
         SnippetOptions $snippetOptions,
         RequestInfo $requestInfo,
-        protected SessionInterface $session,
-        protected SnippetLoaderInterface $snippetLoader
+        protected readonly SessionInterface $session,
+        protected readonly SnippetLoaderInterface $snippetLoader
         )
     {
         parent::__construct($snippetOptions, $requestInfo);
@@ -81,7 +81,7 @@ class SequenceSnippet extends \Zalt\Snippets\SnippetAbstract
     /**
      * Searches and loads a .php snippet file.
      *
-     * @param string $snippet Snippet name or array of snippets with optionally extra parameters included
+     * @param mixed $snippet Snippet name or array of snippets with optionally extra parameters included
      * @return array Of filename => \Zalt\Snippets\SnippetInterface snippets
      */
     protected function _getSnippets($snippet)
@@ -97,10 +97,8 @@ class SequenceSnippet extends \Zalt\Snippets\SnippetAbstract
 
         $results = array();
 
-        if ($snippets) {
-            foreach ($snippets as $filename) {
-                $results[$filename] = $this->snippetLoader->getSnippet($filename, $extraParams);
-            }
+        foreach ($snippets as $filename) {
+            $results[$filename] = $this->snippetLoader->getSnippet($filename, $extraParams);
         }
 
         return $results;
@@ -142,10 +140,6 @@ class SequenceSnippet extends \Zalt\Snippets\SnippetAbstract
         }
         if ($reset || (! $this->session->has($this->sessionId))) {
             $this->session->set($this->sessionId, $this->snippetList);
-        }
-
-        if (! $this->snippetLoader) {
-            $this->snippetLoader = Html::getSnippetLoader();
         }
 
         while ((! $this->_html) && $this->session->has($this->sessionId)) {

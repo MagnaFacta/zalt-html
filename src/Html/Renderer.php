@@ -64,9 +64,9 @@ class Renderer
     );
 
     /**
-     * @var \Zend_View_Abstract
+     * @var null|\Zend_View_Abstract
      */
-    private $_view;
+    private $_view = null;
 
     /**
      * Create the renderer
@@ -182,9 +182,7 @@ class Renderer
 
         // Resolve first as this function as recursion heavy enough as it is.
         if ($content instanceof LateInterface) {
-            if (! $stack) {
-                $stack = Late::getStack();
-            }
+            $stack = Late::getStack();
             while ($content instanceof LateInterface) {
                 $content = $content->__toValue($stack);
             }

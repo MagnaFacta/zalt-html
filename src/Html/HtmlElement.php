@@ -321,9 +321,9 @@ class HtmlElement implements ElementInterface, Procrastinator
     /**
      * Cache for Late object version of this element.
      *
-     * @var \Zalt\Late\ObjectWrap
+     * @var null|\Zalt\Late\ObjectWrap
      */
-    protected $_late;
+    protected $_late = null;
 
     /**
      * The content to display when there is no other data to display when rendering.
@@ -841,7 +841,7 @@ class HtmlElement implements ElementInterface, Procrastinator
                     $key = $param->getAttributeName();
                     $this->$key = $param;
 
-                } elseif ((null === $key) || is_int($key)) {
+                } elseif (is_int($key)) {
                     $this->offsetSet($key, $param);
 
                 } else {
@@ -996,9 +996,6 @@ class HtmlElement implements ElementInterface, Procrastinator
             }
 
         } else {
-            if ($element instanceof Raw) {
-                $element = $element->getValue();
-            }
             if (is_string($element) && (strlen($element) > 2)) {
                 if ('<' === $element[0]) {
                     if (preg_match('/^<([a-zA-Z]+)[\\s>]*/', $element, $matches)) {
@@ -1183,7 +1180,7 @@ class HtmlElement implements ElementInterface, Procrastinator
      * rules of this object demand this, e.g. by requiring all
      * content to be of a certain element type.
      *
-     * @param scalar $offset
+     * @param scalar|null $offset
      * @param mixed $value
      * @return void
      */
