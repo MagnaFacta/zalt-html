@@ -11,6 +11,7 @@
 
 namespace Zalt\Html;
 
+use Zalt\Late\LateCall;
 use Zalt\Ra\ArrayString;
 use Zalt\Ra\Ra;
 
@@ -29,8 +30,38 @@ use Zalt\Ra\Ra;
  * @copyright  Copyright (c) 2011 Erasmus MC
  * @license    New BSD License
  * @since      Class available since \Zalt version 1.0
+ *
  * @method     HtmlElement     br(...$arguments)
  * @method     HtmlElement     div(...$arguments)
+ * @method     AElement        a(...$arguments)
+ * @method     ColElement      col(...$arguments)
+ * @method     ColGroupElement colgroup(...$arguments)
+ * @method     DlElement       dd(...$arguments)
+ * @method     DlElement       dl(...$arguments)
+ * @method     DlElement       dt(...$arguments)
+ * @method     HtmlElement     em(...$arguments)
+ * @method     HtmlElement     i(...$arguments)
+ * @method     LateCall        if(...$arguments)
+ * @method     IFrame          iframe(...$arguments)
+ * @method     HnElement       h1(...$arguments)
+ * @method     HnElement       h2(...$arguments)
+ * @method     HnElement       h3(...$arguments)
+ * @method     HnElement       h4(...$arguments)
+ * @method     HnElement       h5(...$arguments)
+ * @method     HnElement       h6(...$arguments)
+ * @method     HtmlElement     li(...$arguments)
+ * @method     ListElement     ol(...$arguments)
+ * @method     HtmlElement     pInfo(...$arguments)
+ * @method     Raw             raw(...$arguments)
+ * @method     HtmlElement     small(...$arguments)
+ * @method     Sequence        spaced(...$arguments)
+ * @method     HtmlElement     span(...$arguments)
+ * @method     string          sprintf(...$arguments)
+ * @method     HtmlElement     strong(...$arguments)
+ * @method     TdElement       td(...$arguments)
+ * @method     TdElement       th(...$arguments)
+ * @method     TrElement       tr(...$arguments)
+ * @method     ListElement     ul(...$arguments)
  */
 class Sequence extends ArrayString implements ElementInterface
 {
@@ -143,7 +174,7 @@ class Sequence extends ArrayString implements ElementInterface
      * @param mixed $newval
      * @return void
      */
-    public function offsetSet(mixed $index, mixed $newval): void
+    public function offsetSet(mixed $offset, mixed $newval): void
     {
         if ($index && (! is_numeric($index))) {
             if (method_exists($this, $fname = 'set' . $index)) {
