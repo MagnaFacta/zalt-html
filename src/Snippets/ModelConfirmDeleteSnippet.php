@@ -21,7 +21,7 @@ use Zalt\SnippetsLoader\SnippetOptions;
  * @subpackage Snippets
  * @since      Class available since version 1.0
  */
-class ModelConfirmSnippet extends ModelConfirmSnippetAbstract
+class ModelConfirmDeleteSnippet extends ModelConfirmDeleteSnippetAbstract
 {
     use DataReaderGenericModelTrait;
 

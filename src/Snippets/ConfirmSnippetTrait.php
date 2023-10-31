@@ -48,6 +48,8 @@ trait ConfirmSnippetTrait
      */
     protected string $afterActionUrl = '';
 
+    public string $buttonBlockedClass = 'disabled';
+
     /**
      * Optional class for use on buttons, overruled by $buttonNoClass and $buttonYesClass
      *
@@ -185,7 +187,7 @@ trait ConfirmSnippetTrait
      */
     protected function getQuestion(): string
     {
-        if ($this->question) {
+        if (isset($this->question)) {
             return $this->question;
         } else {
             return $this->_('Do you really want to do this?');

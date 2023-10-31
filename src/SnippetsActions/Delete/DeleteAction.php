@@ -12,7 +12,8 @@ declare(strict_types=1);
 namespace Zalt\SnippetsActions\Delete;
 
 use Psr\Cache\CacheItemPoolInterface;
-use Zalt\Snippets\ModelConfirmSnippet;
+use Zalt\Snippets\DeleteModeEnum;
+use Zalt\Snippets\ModelConfirmDeleteSnippet;
 use Zalt\SnippetsActions\AbstractAction;
 use Zalt\SnippetsActions\ModelActionInterface;
 use Zalt\SnippetsActions\ParameterActionInterface;
@@ -30,9 +31,14 @@ class DeleteAction extends AbstractAction implements ModelActionInterface, Param
      * @var array Of snippet class names
      */
     protected array $_snippets = [
-        ModelConfirmSnippet::class,
+        ModelConfirmDeleteSnippet::class,
     ];
-    
+
+    /**
+     * @var bool When false deletion is not allowed
+     */
+    public bool $allowDeletion = true;
+
     /**
      * @var string Nothing or an url string where to go to on 'cancel'.
      */
@@ -84,6 +90,10 @@ class DeleteAction extends AbstractAction implements ModelActionInterface, Param
      * @var string
      */
     public ?string $csrfToken = null;
+
+    public DeleteModeEnum $deletionMode = DeleteModeEnum::Delete;
+
+    public string $deleteRoute = 'index';
 
     /**
      * @var ?string Optional question to ask the user.

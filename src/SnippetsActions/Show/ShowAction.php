@@ -31,4 +31,9 @@ class ShowAction extends AbstractAction implements ModelActionInterface, Paramet
      * @inheritDoc
      */
     protected array $_snippets = [ModelDetailTableSnippet::class,];
+
+    /**
+     * @var string[] Array describing what is saved
+     */
+    public array $subjects = ['item', 'items'];
 }
