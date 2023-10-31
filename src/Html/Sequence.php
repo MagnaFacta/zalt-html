@@ -174,7 +174,7 @@ class Sequence extends ArrayString implements ElementInterface
      * @param mixed $newval
      * @return void
      */
-    public function offsetSet(mixed $offset, mixed $newval): void
+    public function offsetSet(mixed $index, mixed $newval): void
     {
         if ($index && (! is_numeric($index))) {
             if (method_exists($this, $fname = 'set' . $index)) {
