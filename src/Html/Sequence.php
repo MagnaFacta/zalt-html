@@ -56,7 +56,7 @@ use Zalt\Ra\Ra;
  * @method     HtmlElement     small(...$arguments)
  * @method     Sequence        spaced(...$arguments)
  * @method     HtmlElement     span(...$arguments)
- * @method     string          sprintf(...$arguments)
+ * @method     Sprintf         sprintf(...$arguments)
  * @method     HtmlElement     strong(...$arguments)
  * @method     TdElement       td(...$arguments)
  * @method     TdElement       th(...$arguments)
