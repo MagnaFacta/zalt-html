@@ -14,7 +14,6 @@ use Zalt\Html\HtmlElement;
 use Zalt\Model\Data\FullDataInterface;
 use Zalt\Model\Data\DataReaderInterface;
 use Zalt\Model\Type\ActivatingYesNoType;
-use Zalt\Snippets\ModelBridge\DetailTableBridge;
 
 /**
  * @package    Zalt
