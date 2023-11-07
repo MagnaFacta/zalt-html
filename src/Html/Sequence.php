@@ -51,6 +51,7 @@ use Zalt\Ra\Ra;
  * @method     HnElement       h6(...$arguments)
  * @method     HtmlElement     li(...$arguments)
  * @method     ListElement     ol(...$arguments)
+ * @method     HtmlElement     p(...$arguments)
  * @method     HtmlElement     pInfo(...$arguments)
  * @method     Raw             raw(...$arguments)
  * @method     HtmlElement     small(...$arguments)
