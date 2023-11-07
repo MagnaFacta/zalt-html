@@ -203,6 +203,7 @@ use Zalt\Late\RepeatableInterface;
  * @method     HtmlElement     span(...$arguments)
  * @method     string          sprintf(...$arguments)
  * @method     HtmlElement     strong(...$arguments)
+ * @method     TableElement    table(...$arguments)
  * @method     TdElement       td(...$arguments)
  * @method     TdElement       th(...$arguments)
  * @method     TrElement       tr(...$arguments)

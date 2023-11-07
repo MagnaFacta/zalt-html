@@ -59,6 +59,7 @@ use Zalt\Ra\Ra;
  * @method     HtmlElement     span(...$arguments)
  * @method     Sprintf         sprintf(...$arguments)
  * @method     HtmlElement     strong(...$arguments)
+ * @method     TableElement    table(...$arguments)
  * @method     TdElement       td(...$arguments)
  * @method     TdElement       th(...$arguments)
  * @method     TrElement       tr(...$arguments)
