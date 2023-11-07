@@ -31,12 +31,13 @@ use Zalt\Ra\Ra;
  * @license    New BSD License
  * @since      Class available since \Zalt version 1.0
  *
- * @method     HtmlElement     br(...$arguments)
- * @method     HtmlElement     div(...$arguments)
  * @method     AElement        a(...$arguments)
+ * @method     HtmlElement     b(...$arguments)
+ * @method     HtmlElement     br(...$arguments)
  * @method     ColElement      col(...$arguments)
  * @method     ColGroupElement colgroup(...$arguments)
  * @method     DlElement       dd(...$arguments)
+ * @method     HtmlElement     div(...$arguments)
  * @method     DlElement       dl(...$arguments)
  * @method     DlElement       dt(...$arguments)
  * @method     HtmlElement     em(...$arguments)

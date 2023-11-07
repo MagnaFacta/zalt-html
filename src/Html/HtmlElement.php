@@ -176,11 +176,12 @@ use Zalt\Late\RepeatableInterface;
  * @since      Class available since version 1.0
  *
  * @method     AElement        a(...$arguments)
+ * @method     HtmlElement     b(...$arguments)
  * @method     HtmlElement     br(...$arguments)
  * @method     ColElement      col(...$arguments)
  * @method     ColGroupElement colgroup(...$arguments)
- * @method     HtmlElement     div(...$arguments)
  * @method     DlElement       dd(...$arguments)
+ * @method     HtmlElement     div(...$arguments)
  * @method     DlElement       dl(...$arguments)
  * @method     DlElement       dt(...$arguments)
  * @method     HtmlElement     em(...$arguments)
