@@ -60,9 +60,9 @@ class TableBridge extends TableBridgeAbstract
      */
     protected string $sortKey;
 
-    public function __construct(DataReaderInterface $dataModel, $elementArgs = null)
+    public function __construct(DataReaderInterface $dataModel, ...$args)
     {
-        parent::__construct($dataModel, $elementArgs);
+        parent::__construct($dataModel, ...$args);
         
         $this->setSortData($dataModel);
     }
