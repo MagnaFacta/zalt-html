@@ -297,7 +297,7 @@ abstract class FormSnippetAbstract extends MessageableSnippetAbstract
             return $this->formData;
         }
 
-        $this->formData = $this->loadCsrfData() + $this->getDefaultFormValues() + $this->requestInfo->getRequestPostParams() + $this->requestInfo->getRequestMatchedParams();
+        $this->formData = $this->loadCsrfData() + $this->getDefaultFormValues() + $this->requestInfo->getRequestMatchedParams();
         return $this->formData;
     }
 
