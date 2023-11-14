@@ -75,12 +75,6 @@ abstract class ModelConfirmDeleteSnippetAbstract extends ModelConfirmSnippetAbst
      */
     protected function performAction(): bool
     {
-        /**
-         * @var FullDataInterface $model
-         */
-        $model  = $this->getModel();
-        $filter = $model->getFilter();
-
         switch ($this->deletionMode) {
             case DeleteModeEnum::Activate:
             case DeleteModeEnum::Deactivate:
@@ -88,8 +82,10 @@ abstract class ModelConfirmDeleteSnippetAbstract extends ModelConfirmSnippetAbst
 
             case DeleteModeEnum::Delete:
                 /**
-                 * @var $model FullDataInterface
+                 * @var FullDataInterface $model
                  */
+                $model  = $this->getModel();
+                $filter = $model->getFilter();
                 $model->delete($filter);
                 return true;
 

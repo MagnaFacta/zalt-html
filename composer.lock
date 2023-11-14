@@ -420,7 +420,7 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/MagnaFacta/zalt-util.git",
-                "reference": "d1f8fc3ffb2684f93957f5c8c8b12fdcd7911fd3"
+                "reference": "b052d62bb0c973b7c91a55cee39e6145dc40f745"
             },
             "require": {
                 "guzzlehttp/psr7": "^2.4.5",
@@ -464,7 +464,7 @@
                 }
             ],
             "description": "Alternative Utilities",
-            "time": "2023-10-18T14:31:20+00:00"
+            "time": "2023-11-14T16:41:24+00:00"
         },
         {
             "name": "mezzio/mezzio-flash",
@@ -1859,16 +1859,17 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/var-exporter.git",
-                "reference": "fefc55f1658a7d42f5d0ffcbe79af17e457bf3a7"
+                "reference": "2dfbb0385169ee5ca73be316d2ec9873186698ec"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/var-exporter/zipball/fefc55f1658a7d42f5d0ffcbe79af17e457bf3a7",
-                "reference": "fefc55f1658a7d42f5d0ffcbe79af17e457bf3a7",
+                "url": "https://api.github.com/repos/symfony/var-exporter/zipball/2dfbb0385169ee5ca73be316d2ec9873186698ec",
+                "reference": "2dfbb0385169ee5ca73be316d2ec9873186698ec",
                 "shasum": ""
             },
             "require": {
-                "php": ">=8.1"
+                "php": ">=8.1",
+                "symfony/deprecation-contracts": "^2.5|^3"
             },
             "require-dev": {
                 "symfony/var-dumper": "^5.4|^6.0|^7.0"
@@ -1925,7 +1926,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-10-13T10:12:25+00:00"
+            "time": "2023-11-13T15:10:10+00:00"
         },
         {
             "name": "webmozart/assert",
@@ -2326,12 +2327,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/GemsTracker/MUtil.git",
-                "reference": "10323798105c1b0b322d0693244359bc2d69eb35"
+                "reference": "1424ca90e1d3d43c2378d48f20ea00c0d3425761"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/GemsTracker/MUtil/zipball/10323798105c1b0b322d0693244359bc2d69eb35",
-                "reference": "10323798105c1b0b322d0693244359bc2d69eb35",
+                "url": "https://api.github.com/repos/GemsTracker/MUtil/zipball/1424ca90e1d3d43c2378d48f20ea00c0d3425761",
+                "reference": "1424ca90e1d3d43c2378d48f20ea00c0d3425761",
                 "shasum": ""
             },
             "require": {
@@ -2397,7 +2398,7 @@
                 "issues": "https://github.com/GemsTracker/MUtil/issues",
                 "source": "https://github.com/GemsTracker/MUtil/tree/2.x"
             },
-            "time": "2023-11-01T10:05:35+00:00"
+            "time": "2023-11-14T11:38:21+00:00"
         },
         {
             "name": "mezzio/mezzio-session-ext",
@@ -2713,12 +2714,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "98312a4312d2cb64e75561934045b3731ad62db9"
+                "reference": "d79d70370458b511722165b4d412192b1b0d6bb3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/98312a4312d2cb64e75561934045b3731ad62db9",
-                "reference": "98312a4312d2cb64e75561934045b3731ad62db9",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/d79d70370458b511722165b4d412192b1b0d6bb3",
+                "reference": "d79d70370458b511722165b4d412192b1b0d6bb3",
                 "shasum": ""
             },
             "require": {
@@ -2768,7 +2769,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-11-13T15:30:39+00:00"
+            "time": "2023-11-14T15:56:17+00:00"
         },
         {
             "name": "phpunit/php-code-coverage",
@@ -3103,12 +3104,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "fd653e947b58f40227af93995fbfef0b9ef25b59"
+                "reference": "07e6f85c51c180ed28e0afbf95820e38f28517e1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/fd653e947b58f40227af93995fbfef0b9ef25b59",
-                "reference": "fd653e947b58f40227af93995fbfef0b9ef25b59",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/07e6f85c51c180ed28e0afbf95820e38f28517e1",
+                "reference": "07e6f85c51c180ed28e0afbf95820e38f28517e1",
                 "shasum": ""
             },
             "require": {
@@ -3196,7 +3197,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-11-12T09:29:26+00:00"
+            "time": "2023-11-14T13:45:16+00:00"
         },
         {
             "name": "sebastian/cli-parser",
