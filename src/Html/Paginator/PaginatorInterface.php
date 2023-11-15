@@ -54,4 +54,13 @@ interface PaginatorInterface
      * @return PaginatorInterface (continuation pattern)
      */
     public function validatePageNumber(): PaginatorInterface;
+
+    /**
+     * Setter for the showCount var, can be used to disable showing
+     * the total number of items.
+     *
+     * @param boolean $showCount
+     * @return PaginatorInterface
+     */
+    public function setShowCount(bool $showCount): PaginatorInterface;
 }
