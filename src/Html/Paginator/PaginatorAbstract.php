@@ -34,6 +34,11 @@ abstract class PaginatorAbstract implements PaginatorInterface
      */
     protected int $pageNumber = 1;
 
+    /**
+     * @var bool Whether or not to show the counter and '>>' links.
+     */
+    protected bool $showCount = true;
+
     abstract public function getHtmlPagelinks(): HtmlInterface;
 
     public function setCount(int $itemCount): PaginatorInterface
@@ -51,6 +56,12 @@ abstract class PaginatorAbstract implements PaginatorInterface
     public function setPageNumber(int $pageNumber): PaginatorInterface
     {
         $this->pageNumber = $pageNumber;
+        return $this;
+    }
+
+    public function setShowCount(bool $showCount): PaginatorInterface
+    {
+        $this->showCount = $showCount;
         return $this;
     }
 

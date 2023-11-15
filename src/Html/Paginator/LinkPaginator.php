@@ -188,7 +188,9 @@ class LinkPaginator extends PaginatorAbstract
         }
 
         $output->append($this->getPageLink(min($pageCount, $this->pageNumber + 1), $this->getNextPageLabel(), true));
-        $output->append($this->getPageLink($pageCount, $this->getLastPageLabel(), true));
+        if ($this->showCount) {
+            $output->append($this->getPageLink($pageCount, $this->getLastPageLabel(), true));
+        }
 
         return $output;
     }

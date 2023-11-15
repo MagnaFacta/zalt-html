@@ -38,6 +38,11 @@ abstract class ModelTableSnippetAbstract extends \Zalt\Snippets\ModelSnippetAbst
     use ModelTextFilterTrait;
 
     /**
+     * Assume we have this many items if row counting is disabled.
+     */
+    const NO_COUNT_ITEMS = 1000000;
+
+    /**
      * One of the BridgeInterface MODE constants
      *
      * @var int
@@ -50,6 +55,13 @@ abstract class ModelTableSnippetAbstract extends \Zalt\Snippets\ModelSnippetAbst
      * @var boolean
      */
     public $browse = false;
+
+    /**
+     * Show total number of records in pagination.
+     *
+     * @var boolean
+     */
+    public $showTotal = true;
 
     /**
      * Optional table caption.
@@ -158,7 +170,8 @@ abstract class ModelTableSnippetAbstract extends \Zalt\Snippets\ModelSnippetAbst
         $paginator->setCount($count)
             ->setPageItems($items)
             ->setPageNumber($page)
-            ->validatePageNumber();
+            ->validatePageNumber()
+            ->setShowCount($this->showTotal);
 
         $table->tfrow()->append($paginator->getHtmlPagelinks());
     }
@@ -177,9 +190,13 @@ abstract class ModelTableSnippetAbstract extends \Zalt\Snippets\ModelSnippetAbst
             if ($this->browse) {
                 $items  = $this->getPageItems();
                 $page   = $this->getPageNumber();
-                $bridge->setRepeater($dataModel->loadPageWithCount($count, $page, $items));
-
-                $this->addPaginator($bridge->getTable(), $count, $page, $items);
+                if ($this->showTotal) {
+                    $bridge->setRepeater($dataModel->loadPageWithCount($count, $page, $items));
+                    $this->addPaginator($bridge->getTable(), $count, $page, $items);
+                } else {
+                    $bridge->setRepeater($dataModel->loadPage($page, $items));
+                    $this->addPaginator($bridge->getTable(), self::NO_COUNT_ITEMS, $page, $items);
+                }
             } elseif ($this->bridgeMode === BridgeInterface::MODE_LAZY) {
                 $bridge->setRepeater($dataModel->loadRepeatable());
             } elseif (($this->bridgeMode === BridgeInterface::MODE_SINGLE_ROW) && $bridge instanceof BridgeAbstract) {
