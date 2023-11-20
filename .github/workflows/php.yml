@@ -1,4 +1,4 @@
-name: PHP Composer
+name: Static analysis and Tests
 
 on:
   push:
