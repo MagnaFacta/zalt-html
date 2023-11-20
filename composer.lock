@@ -366,7 +366,7 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/MagnaFacta/zalt-model.git",
-                "reference": "33a7ff31a42f87a3364db5aba048976a92c94e2d"
+                "reference": "427521ec65879716a5bddac4b79616883dc9d764"
             },
             "require": {
                 "magnafacta/zalt-late": "dev-main",
@@ -412,7 +412,7 @@
                 }
             ],
             "description": "Zend Alternative Model",
-            "time": "2023-11-01T13:59:08+00:00"
+            "time": "2023-11-15T15:32:09+00:00"
         },
         {
             "name": "magnafacta/zalt-util",
@@ -472,12 +472,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/mezzio/mezzio-flash.git",
-                "reference": "e0b5cdbde7bdbc8eb30088da9c5672ea34f4997c"
+                "reference": "9ab0f25cddd895474b4b7be80958f3b625adcfe3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mezzio/mezzio-flash/zipball/e0b5cdbde7bdbc8eb30088da9c5672ea34f4997c",
-                "reference": "e0b5cdbde7bdbc8eb30088da9c5672ea34f4997c",
+                "url": "https://api.github.com/repos/mezzio/mezzio-flash/zipball/9ab0f25cddd895474b4b7be80958f3b625adcfe3",
+                "reference": "9ab0f25cddd895474b4b7be80958f3b625adcfe3",
                 "shasum": ""
             },
             "require": {
@@ -535,7 +535,7 @@
                     "type": "community_bridge"
                 }
             ],
-            "time": "2023-11-13T01:05:52+00:00"
+            "time": "2023-11-20T01:24:56+00:00"
         },
         {
             "name": "mezzio/mezzio-helpers",
@@ -543,12 +543,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/mezzio/mezzio-helpers.git",
-                "reference": "84c1bf7be106a382ff6eb1d066ba210bfa03d3c1"
+                "reference": "f60cd3841c59d33bcf9a418b7be94b59091f0578"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mezzio/mezzio-helpers/zipball/84c1bf7be106a382ff6eb1d066ba210bfa03d3c1",
-                "reference": "84c1bf7be106a382ff6eb1d066ba210bfa03d3c1",
+                "url": "https://api.github.com/repos/mezzio/mezzio-helpers/zipball/f60cd3841c59d33bcf9a418b7be94b59091f0578",
+                "reference": "f60cd3841c59d33bcf9a418b7be94b59091f0578",
                 "shasum": ""
             },
             "require": {
@@ -612,7 +612,7 @@
                     "type": "community_bridge"
                 }
             ],
-            "time": "2023-11-13T00:17:44+00:00"
+            "time": "2023-11-20T01:24:03+00:00"
         },
         {
             "name": "mezzio/mezzio-router",
@@ -620,12 +620,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/mezzio/mezzio-router.git",
-                "reference": "e833ff405b245a5fee6117a16239542c8d436b68"
+                "reference": "1f870eb72dcb40fb6e416a5b17555d94b2d4f50b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mezzio/mezzio-router/zipball/e833ff405b245a5fee6117a16239542c8d436b68",
-                "reference": "e833ff405b245a5fee6117a16239542c8d436b68",
+                "url": "https://api.github.com/repos/mezzio/mezzio-router/zipball/1f870eb72dcb40fb6e416a5b17555d94b2d4f50b",
+                "reference": "1f870eb72dcb40fb6e416a5b17555d94b2d4f50b",
                 "shasum": ""
             },
             "require": {
@@ -695,7 +695,7 @@
                     "type": "community_bridge"
                 }
             ],
-            "time": "2023-11-13T00:51:31+00:00"
+            "time": "2023-11-20T00:14:52+00:00"
         },
         {
             "name": "mezzio/mezzio-session",
@@ -703,12 +703,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/mezzio/mezzio-session.git",
-                "reference": "177f523d640b3d78b2a76c3be4e17aa97724c22c"
+                "reference": "6f769b35f810b34a8279fdf42a8f753ce563a251"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mezzio/mezzio-session/zipball/177f523d640b3d78b2a76c3be4e17aa97724c22c",
-                "reference": "177f523d640b3d78b2a76c3be4e17aa97724c22c",
+                "url": "https://api.github.com/repos/mezzio/mezzio-session/zipball/6f769b35f810b34a8279fdf42a8f753ce563a251",
+                "reference": "6f769b35f810b34a8279fdf42a8f753ce563a251",
                 "shasum": ""
             },
             "require": {
@@ -772,7 +772,7 @@
                     "type": "community_bridge"
                 }
             ],
-            "time": "2023-11-13T00:21:15+00:00"
+            "time": "2023-11-20T02:13:57+00:00"
         },
         {
             "name": "mezzio/mezzio-session-cache",
@@ -780,12 +780,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/mezzio/mezzio-session-cache.git",
-                "reference": "c0354de3f3a92d9ab4cef9c56e4c7b9e942725ee"
+                "reference": "9721c3a2b5137509cbb73987b658db5f5fef4ca3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mezzio/mezzio-session-cache/zipball/c0354de3f3a92d9ab4cef9c56e4c7b9e942725ee",
-                "reference": "c0354de3f3a92d9ab4cef9c56e4c7b9e942725ee",
+                "url": "https://api.github.com/repos/mezzio/mezzio-session-cache/zipball/9721c3a2b5137509cbb73987b658db5f5fef4ca3",
+                "reference": "9721c3a2b5137509cbb73987b658db5f5fef4ca3",
                 "shasum": ""
             },
             "require": {
@@ -849,7 +849,7 @@
                     "type": "community_bridge"
                 }
             ],
-            "time": "2023-11-13T01:33:35+00:00"
+            "time": "2023-11-20T00:25:55+00:00"
         },
         {
             "name": "psr/cache",
@@ -1067,12 +1067,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-fig/http-server-handler.git",
-                "reference": "3cf66170cf70b854699046e5f38479ab21bc83f1"
+                "reference": "13403d43196ab3382d0a4ca28be32984282641f9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-fig/http-server-handler/zipball/3cf66170cf70b854699046e5f38479ab21bc83f1",
-                "reference": "3cf66170cf70b854699046e5f38479ab21bc83f1",
+                "url": "https://api.github.com/repos/php-fig/http-server-handler/zipball/13403d43196ab3382d0a4ca28be32984282641f9",
+                "reference": "13403d43196ab3382d0a4ca28be32984282641f9",
                 "shasum": ""
             },
             "require": {
@@ -1116,7 +1116,7 @@
             "support": {
                 "source": "https://github.com/php-fig/http-server-handler"
             },
-            "time": "2023-09-22T11:17:02+00:00"
+            "time": "2023-11-16T18:17:39+00:00"
         },
         {
             "name": "psr/http-server-middleware",
@@ -1426,7 +1426,7 @@
                 "standards"
             ],
             "support": {
-                "source": "https://github.com/symfony/cache-contracts/tree/main"
+                "source": "https://github.com/symfony/cache-contracts/tree/v3.4.0"
             },
             "funding": [
                 {
@@ -1494,7 +1494,7 @@
             "description": "A generic function and convention to trigger deprecation notices",
             "homepage": "https://symfony.com",
             "support": {
-                "source": "https://github.com/symfony/deprecation-contracts/tree/v3.3.0"
+                "source": "https://github.com/symfony/deprecation-contracts/tree/v3.4.0"
             },
             "funding": [
                 {
@@ -1835,7 +1835,7 @@
                 "standards"
             ],
             "support": {
-                "source": "https://github.com/symfony/translation-contracts/tree/main"
+                "source": "https://github.com/symfony/translation-contracts/tree/v3.4.0"
             },
             "funding": [
                 {
@@ -2182,12 +2182,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/laminas/laminas-stdlib.git",
-                "reference": "73ac61057aec7be7e0865a34eb5ef296b0739480"
+                "reference": "f0f15730544dfe32ec26f42424933f4b4e325b9b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laminas/laminas-stdlib/zipball/73ac61057aec7be7e0865a34eb5ef296b0739480",
-                "reference": "73ac61057aec7be7e0865a34eb5ef296b0739480",
+                "url": "https://api.github.com/repos/laminas/laminas-stdlib/zipball/f0f15730544dfe32ec26f42424933f4b4e325b9b",
+                "reference": "f0f15730544dfe32ec26f42424933f4b4e325b9b",
                 "shasum": ""
             },
             "require": {
@@ -2234,20 +2234,20 @@
                     "type": "community_bridge"
                 }
             ],
-            "time": "2023-11-13T01:23:55+00:00"
+            "time": "2023-11-20T00:07:09+00:00"
         },
         {
             "name": "laminas/laminas-validator",
-            "version": "2.43.x-dev",
+            "version": "2.44.x-dev",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laminas/laminas-validator.git",
-                "reference": "4a0f9a36397f765451960f42fa7e007139de9919"
+                "reference": "39be29b3d8920cb5a0f15998471283d228bf2e23"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laminas/laminas-validator/zipball/4a0f9a36397f765451960f42fa7e007139de9919",
-                "reference": "4a0f9a36397f765451960f42fa7e007139de9919",
+                "url": "https://api.github.com/repos/laminas/laminas-validator/zipball/39be29b3d8920cb5a0f15998471283d228bf2e23",
+                "reference": "39be29b3d8920cb5a0f15998471283d228bf2e23",
                 "shasum": ""
             },
             "require": {
@@ -2319,7 +2319,7 @@
                     "type": "community_bridge"
                 }
             ],
-            "time": "2023-11-13T01:24:00+00:00"
+            "time": "2023-11-20T01:23:37+00:00"
         },
         {
             "name": "magnafacta/mutil",
@@ -2327,12 +2327,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/GemsTracker/MUtil.git",
-                "reference": "1424ca90e1d3d43c2378d48f20ea00c0d3425761"
+                "reference": "5105ebb9cf3bc83f3fe26f704847e3fa0cd71a70"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/GemsTracker/MUtil/zipball/1424ca90e1d3d43c2378d48f20ea00c0d3425761",
-                "reference": "1424ca90e1d3d43c2378d48f20ea00c0d3425761",
+                "url": "https://api.github.com/repos/GemsTracker/MUtil/zipball/5105ebb9cf3bc83f3fe26f704847e3fa0cd71a70",
+                "reference": "5105ebb9cf3bc83f3fe26f704847e3fa0cd71a70",
                 "shasum": ""
             },
             "require": {
@@ -2398,7 +2398,7 @@
                 "issues": "https://github.com/GemsTracker/MUtil/issues",
                 "source": "https://github.com/GemsTracker/MUtil/tree/2.x"
             },
-            "time": "2023-11-14T11:38:21+00:00"
+            "time": "2023-11-15T15:32:59+00:00"
         },
         {
             "name": "mezzio/mezzio-session-ext",
@@ -2406,12 +2406,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/mezzio/mezzio-session-ext.git",
-                "reference": "97d69e8a9031c446404849eeea8c6ce2ac695028"
+                "reference": "3a00d0231633e50cfc2b1b56ee1a89dfbda6f699"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mezzio/mezzio-session-ext/zipball/97d69e8a9031c446404849eeea8c6ce2ac695028",
-                "reference": "97d69e8a9031c446404849eeea8c6ce2ac695028",
+                "url": "https://api.github.com/repos/mezzio/mezzio-session-ext/zipball/3a00d0231633e50cfc2b1b56ee1a89dfbda6f699",
+                "reference": "3a00d0231633e50cfc2b1b56ee1a89dfbda6f699",
                 "shasum": ""
             },
             "require": {
@@ -2470,7 +2470,7 @@
                     "type": "community_bridge"
                 }
             ],
-            "time": "2023-11-13T00:32:44+00:00"
+            "time": "2023-11-20T01:23:04+00:00"
         },
         {
             "name": "myclabs/deep-copy",
@@ -2714,12 +2714,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "d79d70370458b511722165b4d412192b1b0d6bb3"
+                "reference": "a88c5e555241ecaef6d87c8917bc1a5cdfee55a0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/d79d70370458b511722165b4d412192b1b0d6bb3",
-                "reference": "d79d70370458b511722165b4d412192b1b0d6bb3",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/a88c5e555241ecaef6d87c8917bc1a5cdfee55a0",
+                "reference": "a88c5e555241ecaef6d87c8917bc1a5cdfee55a0",
                 "shasum": ""
             },
             "require": {
@@ -2769,7 +2769,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-11-14T15:56:17+00:00"
+            "time": "2023-11-20T09:06:18+00:00"
         },
         {
             "name": "phpunit/php-code-coverage",
@@ -2777,12 +2777,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/php-code-coverage.git",
-                "reference": "14ceade798881f984408ec950146e2d071706356"
+                "reference": "84838eed9ded511f61dc3e8b5944a52d9017b297"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/14ceade798881f984408ec950146e2d071706356",
-                "reference": "14ceade798881f984408ec950146e2d071706356",
+                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/84838eed9ded511f61dc3e8b5944a52d9017b297",
+                "reference": "84838eed9ded511f61dc3e8b5944a52d9017b297",
                 "shasum": ""
             },
             "require": {
@@ -2840,7 +2840,7 @@
             "support": {
                 "issues": "https://github.com/sebastianbergmann/php-code-coverage/issues",
                 "security": "https://github.com/sebastianbergmann/php-code-coverage/security/policy",
-                "source": "https://github.com/sebastianbergmann/php-code-coverage/tree/main"
+                "source": "https://github.com/sebastianbergmann/php-code-coverage/tree/10.1.8"
             },
             "funding": [
                 {
@@ -2848,7 +2848,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2023-11-09T06:48:40+00:00"
+            "time": "2023-11-15T13:31:15+00:00"
         },
         {
             "name": "phpunit/php-file-iterator",
@@ -3104,12 +3104,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "07e6f85c51c180ed28e0afbf95820e38f28517e1"
+                "reference": "817da7edf8d850b4243e48d03daa5b3658b63392"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/07e6f85c51c180ed28e0afbf95820e38f28517e1",
-                "reference": "07e6f85c51c180ed28e0afbf95820e38f28517e1",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/817da7edf8d850b4243e48d03daa5b3658b63392",
+                "reference": "817da7edf8d850b4243e48d03daa5b3658b63392",
                 "shasum": ""
             },
             "require": {
@@ -3197,7 +3197,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-11-14T13:45:16+00:00"
+            "time": "2023-11-17T16:18:48+00:00"
         },
         {
             "name": "sebastian/cli-parser",
@@ -4479,16 +4479,16 @@
         },
         {
             "name": "theseer/tokenizer",
-            "version": "1.2.1",
+            "version": "1.2.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/theseer/tokenizer.git",
-                "reference": "34a41e998c2183e22995f158c581e7b5e755ab9e"
+                "reference": "b2ad5003ca10d4ee50a12da31de12a5774ba6b96"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/theseer/tokenizer/zipball/34a41e998c2183e22995f158c581e7b5e755ab9e",
-                "reference": "34a41e998c2183e22995f158c581e7b5e755ab9e",
+                "url": "https://api.github.com/repos/theseer/tokenizer/zipball/b2ad5003ca10d4ee50a12da31de12a5774ba6b96",
+                "reference": "b2ad5003ca10d4ee50a12da31de12a5774ba6b96",
                 "shasum": ""
             },
             "require": {
@@ -4517,7 +4517,7 @@
             "description": "A small library for converting tokenized PHP source code into XML and potentially other formats",
             "support": {
                 "issues": "https://github.com/theseer/tokenizer/issues",
-                "source": "https://github.com/theseer/tokenizer/tree/1.2.1"
+                "source": "https://github.com/theseer/tokenizer/tree/1.2.2"
             },
             "funding": [
                 {
@@ -4525,7 +4525,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2021-07-28T10:34:58+00:00"
+            "time": "2023-11-20T00:12:19+00:00"
         }
     ],
     "aliases": [],
@@ -4543,5 +4543,5 @@
         "php": ">=8.1.0"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.3.0"
+    "plugin-api-version": "2.2.0"
 }
