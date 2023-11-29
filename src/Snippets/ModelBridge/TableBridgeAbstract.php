@@ -104,7 +104,11 @@ abstract class TableBridgeAbstract extends \Zalt\Model\Bridge\BridgeAbstract
 
         // Assume it is a html tag when a string
         if (is_string($function)) {
-            return [Html::create($function), 'append'];
+            return function ($value) use ($function) {
+                $clone = Html::create($function);
+                $clone->append($value);
+                return $clone;
+            };
         }
 
         return null;

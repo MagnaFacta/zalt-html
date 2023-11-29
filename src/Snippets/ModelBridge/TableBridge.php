@@ -13,6 +13,7 @@ namespace Zalt\Snippets\ModelBridge;
 
 use Zalt\Html\AElement;
 use Zalt\Html\Html;
+use Zalt\Late\Late;
 use Zalt\Model\Bridge\BridgeAbstract;
 use Zalt\Model\Data\DataReaderInterface;
 use Zalt\Ra\MultiWrapper;
@@ -169,7 +170,7 @@ class TableBridge extends TableBridgeAbstract
     {
         $name = $this->_checkName($name);
         if (! $label) {
-            $label = $this->metaModel->get($name, $label);
+            $label = $this->metaModel->get($name, 'label');
         }
         return $this->add($name, $this->createSortLink($name, $label), $tdClass, $thClass);
     }
@@ -182,7 +183,7 @@ class TableBridge extends TableBridgeAbstract
      * @param mixed $label
      * @return \Zalt\Html\AElement|string
      */
-    public function createSortLink(string $name, $label = null): AElement|string
+    public function createSortLink(string $name, $label = null): mixed
     {
         $name = $this->_checkName($name);
         
