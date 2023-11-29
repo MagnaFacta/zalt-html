@@ -66,7 +66,15 @@ class TableBridge extends TableBridgeAbstract
         
         $this->setSortData($dataModel);
     }
-    
+
+    /**
+     * @param $name
+     * @param $label
+     * @param mixed $tdClass
+     * @param mixed $thClass
+     * @return false|mixed|MultiWrapper
+     * @throws \Zalt\Model\Exception\MetaModelException
+     */
     public function add($name, $label = null, mixed $tdClass = '', mixed $thClass = '')
     {
         if (is_string($name)) {
@@ -125,7 +133,11 @@ class TableBridge extends TableBridgeAbstract
             if (is_string($name)) {
                 $name = $this->_checkName($name);
 
-                $headers[] = $this->getHeaderFormatted($name, $this->metaModel->get($name, 'label'));
+                $header = $this->getHeaderFormatted($name, $this->metaModel->get($name, 'label'));
+                if (! $this->metaModel->get($name, 'noSort')) {
+                    $header = $this->createSortLink($name, $header);
+                }
+                $headers[] = $header;
                 $content[] = $this->$name;
 
             } elseif (is_array($name)) {
