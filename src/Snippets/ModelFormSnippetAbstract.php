@@ -173,6 +173,9 @@ abstract class ModelFormSnippetAbstract extends FormSnippetAbstract
      */
     protected function loadForm()
     {
+        /**
+         * @var FullDataInterface $dataModel
+         */
         $dataModel = $this->getModel();
         $baseform  = $this->createForm();
 

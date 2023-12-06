@@ -149,9 +149,9 @@ class RepeatRenderer implements \Zalt\Html\ElementInterface
         if ($this->hasRepeater() && $this->_content) {
             $data = $this->getRepeater();
             if ($data->__start()) {
-                $html = array();
+                $html = [];
                 while ($data->__next()) {
-                    $html[] = $renderer->renderArray($this->_content);
+                    $html[] = (string) $renderer->renderArray($this->_content);
                 }
 
                 if ($html) {

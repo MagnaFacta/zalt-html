@@ -191,7 +191,7 @@ class ZendFormBridge extends \Zalt\Model\Bridge\FormBridgeAbstract
                 (false === strpos($name, '.'))) {
                 $filename .= '.' . $extension;
             }
-            $element->addFilter(new \Zend_Filter_File_Rename(array('target' => $filename, 'overwrite' => true)));
+            $element->addFilter(\Zend_Filter_File_Rename::class, ['target' => $filename, 'overwrite' => true]);
         }
         if ($count) {
             $element->addValidator('Count', false, $count);

@@ -12,6 +12,7 @@ declare(strict_types=1);
 namespace Zalt\SnippetsHandler;
 
 use Zalt\Model\MetaModellerInterface;
+use Zalt\SnippetsActions\ApplyActionInterface;
 use Zalt\SnippetsActions\SnippetActionInterface;
 
 /**
@@ -23,6 +24,8 @@ use Zalt\SnippetsActions\SnippetActionInterface;
  */
 trait ConstructorModelHandlerTrait
 {
+    private static string $_actionMeta = '_actionMeta';
+
     /**
      * @var \Zalt\Model\MetaModellerInterface Load in Constructor!
      */
@@ -35,11 +38,13 @@ trait ConstructorModelHandlerTrait
      */
     protected function getModel(SnippetActionInterface $action): MetaModellerInterface
     {
-//        static $applyAction = false; 
-//        if ($applyAction && ($this->model instanceof SomeInterface)) {
-//            $applyAction = true;
-//            $this->model->applyAction($action);
-//        }
+        $actionClass = get_class($action);
+        $metaModel   = $this->model->getMetaModel();
+
+        if ((! $metaModel->isMeta(self::$_actionMeta, $actionClass)) && ($this->model instanceof ApplyActionInterface)) {
+            $this->model->applyAction($action);
+            $metaModel->setMeta(self::$_actionMeta, $actionClass);
+        }
         return $this->model;
     }
     

@@ -13,6 +13,7 @@ namespace Zalt\Snippets\Standard;
 
 use Mezzio\Session\SessionInterface;
 use MUtil\Model\Importer;
+use MUtil\Model\ModelAbstract;
 use MUtil\Task\TaskBatch;
 use Zalt\Base\RequestInfo;
 use Zalt\Base\TranslatorInterface;
@@ -248,13 +249,13 @@ abstract class ModelImportSnippet extends \Zalt\Snippets\WizardFormSnippetAbstra
 
             if ($element instanceof \Zend_Form_Element_File) {
                 // Now add the rename filter, the localfile is known only once after loadFormData() has run
-                $element->addFilter(new \Zend_Filter_File_Rename(array(
+                $element->addFilter(\Zend_Filter_File_Rename::class, [
                     'target'    => $this->session->get('localfile'),
-                    'overwrite' => true
-                    )));
+                    'overwrite' => true,
+                    ]);
 
                 // Download the data (no test for post, step 2 is always a post)
-                if ($element->isValid(null) && $element->getFileName()) {
+                if ($element->isValid('') && $element->getFileName()) {
                     // Now the filename is still set to the upload filename.
                     $this->session->set('extension', pathinfo($element->getFileName(), PATHINFO_EXTENSION));
                     // \Zalt\EchoOut\EchoOut::track($element->getFileName(), $element->getFileSize());
@@ -518,9 +519,11 @@ abstract class ModelImportSnippet extends \Zalt\Snippets\WizardFormSnippetAbstra
             }
         }
         if ($this->targetModel instanceof FullDataInterface) {
+            // @phpstan-ignore-next-line
             $this->importer->setTargetModel($this->targetModel);
         }
         if ($this->sourceModel instanceof FullDataInterface) {
+            // @phpstan-ignore-next-line
             $this->importer->setSourceModel($this->sourceModel);
         }
 
@@ -710,11 +713,14 @@ abstract class ModelImportSnippet extends \Zalt\Snippets\WizardFormSnippetAbstra
 
         // Store/set relevant variables
         if ($this->importer instanceof Importer) {
+            // @phpstan-ignore-next-line
             $this->importer->setImportTranslator($translator);
         }
         if ($this->targetModel instanceof FullDataInterface) {
+            // @phpstan-ignore-next-line
             $translator->setTargetModel($this->targetModel);
             if ($this->importer instanceof Importer) {
+                // @phpstan-ignore-next-line
                 $this->importer->setTargetModel($this->targetModel);
             }
         }
@@ -807,7 +813,7 @@ abstract class ModelImportSnippet extends \Zalt\Snippets\WizardFormSnippetAbstra
                         // Add required row
                         $results[$target][$requiredKey][$transName] = $required;
 
-                        if (trim($required)) {
+                        if ($required) {
                             $results[$target][$transName] = new \Zalt\Html\HtmlElement('strong', $source);
                         } else {
                             $results[$target][$transName] = $source;
