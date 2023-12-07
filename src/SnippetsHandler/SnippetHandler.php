@@ -35,7 +35,7 @@ class SnippetHandler implements RequestHandlerInterface
     use TranslateableTrait;
 
     /**
-     * @var array[string|SnippetActionInterface]
+     * @var array<string, string|SnippetActionInterface>
      */
     public static $actions = ['index' => BrowseTableAction::class];
 

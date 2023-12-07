@@ -366,7 +366,7 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/MagnaFacta/zalt-model.git",
-                "reference": "f94a74fd54b5fa702242e0a9357f6f64efcab27d"
+                "reference": "f2fee444a94389da925a3bdf463ddad54e9bbeb1"
             },
             "require": {
                 "magnafacta/zalt-late": "dev-main",
@@ -412,7 +412,7 @@
                 }
             ],
             "description": "Zend Alternative Model",
-            "time": "2023-11-28T13:03:46+00:00"
+            "time": "2023-12-07T15:01:26+00:00"
         },
         {
             "name": "magnafacta/zalt-util",
@@ -2242,12 +2242,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/laminas/laminas-validator.git",
-                "reference": "5ad3d12a1a28417abeb4419c670572d4071f34b0"
+                "reference": "abedb4d556e54dd3d10534729383e635145d8c25"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laminas/laminas-validator/zipball/5ad3d12a1a28417abeb4419c670572d4071f34b0",
-                "reference": "5ad3d12a1a28417abeb4419c670572d4071f34b0",
+                "url": "https://api.github.com/repos/laminas/laminas-validator/zipball/abedb4d556e54dd3d10534729383e635145d8c25",
+                "reference": "abedb4d556e54dd3d10534729383e635145d8c25",
                 "shasum": ""
             },
             "require": {
@@ -2319,7 +2319,7 @@
                     "type": "community_bridge"
                 }
             ],
-            "time": "2023-12-06T11:22:19+00:00"
+            "time": "2023-12-06T11:45:45+00:00"
         },
         {
             "name": "magnafacta/mutil",
@@ -2714,12 +2714,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "7ba262134858bc47dbbf840f6ea17268d1be4821"
+                "reference": "cf28d8a1dc424d933de03ab395d31f4fbe83b4b6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/7ba262134858bc47dbbf840f6ea17268d1be4821",
-                "reference": "7ba262134858bc47dbbf840f6ea17268d1be4821",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/cf28d8a1dc424d933de03ab395d31f4fbe83b4b6",
+                "reference": "cf28d8a1dc424d933de03ab395d31f4fbe83b4b6",
                 "shasum": ""
             },
             "require": {
@@ -2769,7 +2769,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-12-05T12:44:18+00:00"
+            "time": "2023-12-07T09:26:53+00:00"
         },
         {
             "name": "phpunit/php-code-coverage",
@@ -3104,12 +3104,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "5aedff46afba98dddecaa12349ec044d9103d4fe"
+                "reference": "af7fc81d5ab91ea5b7d1ce39338d573c5d569c3a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/5aedff46afba98dddecaa12349ec044d9103d4fe",
-                "reference": "5aedff46afba98dddecaa12349ec044d9103d4fe",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/af7fc81d5ab91ea5b7d1ce39338d573c5d569c3a",
+                "reference": "af7fc81d5ab91ea5b7d1ce39338d573c5d569c3a",
                 "shasum": ""
             },
             "require": {
@@ -3181,7 +3181,7 @@
             "support": {
                 "issues": "https://github.com/sebastianbergmann/phpunit/issues",
                 "security": "https://github.com/sebastianbergmann/phpunit/security/policy",
-                "source": "https://github.com/sebastianbergmann/phpunit/tree/10.5.2"
+                "source": "https://github.com/sebastianbergmann/phpunit/tree/10.5"
             },
             "funding": [
                 {
@@ -3197,7 +3197,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-12-05T14:54:33+00:00"
+            "time": "2023-12-07T14:35:55+00:00"
         },
         {
             "name": "sebastian/cli-parser",
