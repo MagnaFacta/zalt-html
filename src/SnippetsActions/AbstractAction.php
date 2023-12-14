@@ -77,7 +77,7 @@ abstract class AbstractAction implements SnippetActionInterface
      */
     public function getSnippetOptions(): SnippetOptions
     {
-        $output = array_filter(get_object_vars($this), [$this, 'filterOptionNames'], ARRAY_FILTER_USE_KEY);;
+        $output = array_filter(get_object_vars($this), [$this, 'filterOptionNames'], ARRAY_FILTER_USE_KEY);
         return new SnippetOptions($output);
 //        $output = [];
 //        $reflection = new \ReflectionObject($this); 
