@@ -75,7 +75,7 @@ trait ZendFormSnippetTrait
 
     protected function addSaveButton(string $saveButtonId, ?string $saveLabel, string $buttonClass)
     {
-        if (! $this->_saveButton) {
+        if ($saveButtonId && (! $this->_saveButton)) {
             //If not already there, add a save button
             $this->_saveButton = $this->_form->getElement($saveButtonId);
 
