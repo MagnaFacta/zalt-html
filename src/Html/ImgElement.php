@@ -11,6 +11,7 @@
 
 namespace Zalt\Html;
 
+use Zalt\Base\BaseDir;
 use Zalt\Late\Late;
 use Zalt\Ra\Ra;
 
@@ -91,7 +92,7 @@ class ImgElement extends HtmlElement
                     }
                 }
 
-                $attribs['src'] = Html::getRenderer()->getBaseUrlString() . $dir . $filename;
+                $attribs['src'] = BaseDir::getBaseDir() . $dir . $filename;
             }
             // \Zalt\EchoOut\EchoOut::r($attribs['src']);
         }

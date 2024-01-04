@@ -11,7 +11,6 @@
 
 namespace Zalt\Html;
 
-use Zalt\Base\BaseUrl;
 use Zalt\Html\Zend\ZendInputRenderer;
 use Zalt\Late\Late;
 use Zalt\Late\LateInterface;
@@ -35,8 +34,6 @@ use Zalt\Lists\ClassList;
  */
 class Renderer
 {
-    protected BaseUrl $_baseUrl;
-    
     /**
      *
      * @var ClassList
@@ -77,7 +74,6 @@ class Renderer
     public function __construct($classRenderFunctions = null, $append = true)
     {
         $this->setClassRenderList($classRenderFunctions, $append);
-        $this->_baseUrl = new BaseUrl();
     }
 
     /**
@@ -125,16 +121,6 @@ class Renderer
             // \Zalt\EchoOut\EchoOut::r('Did not render ' . get_class($content) . ' object.');
         }
         return null;
-    }
-
-    public function getBaseUrl(): BaseUrl
-    {
-        return $this->_baseUrl;
-    }
-
-    public function getBaseUrlString(): string
-    {
-        return $this->_baseUrl->getBaseUrl();
     }
 
     /**
@@ -296,16 +282,6 @@ class Renderer
         }
         // \Zalt\EchoOut\EchoOut::timeFunctionStop(__FUNCTION__);
         return implode($glue, $output);
-    }
-
-    public function setBaseUrl(string|BaseUrl $baseUrl): void
-    {
-        if ($baseUrl instanceof BaseUrl) {
-            // Set the existing object here, so that all classes that reference this object will reference the correct one
-            $this->_baseUrl->setBaseUrl($baseUrl->getBaseUrl());
-        } else {
-            $this->_baseUrl->setBaseUrl($baseUrl);
-        }
     }
 
     /**
