@@ -36,7 +36,7 @@ abstract class ModelConfirmDeleteSnippetAbstract extends ModelConfirmSnippetAbst
 
         if (ActivatingYesNoType::hasActivation($metaModel)) {
             if (ActivatingYesNoType::isActive($metaModel, $dataModel->loadFirst())) {
-                $this->actionValues = ActivatingYesNoType::getDectivatingValues($metaModel);
+                $this->actionValues = ActivatingYesNoType::getDeactivatingValues($metaModel);
                 return DeleteModeEnum::Deactivate;
             }
             $this->actionValues = ActivatingYesNoType::getActivatingValues($metaModel);
