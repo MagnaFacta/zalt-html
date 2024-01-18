@@ -30,6 +30,14 @@ class LinkPaginator extends PaginatorAbstract
      */
     public function getFirstPageLabel(): ?string
     {
+        return null;
+    }
+
+    /**
+     * @return string|null Null for not output, string for output
+     */
+    public function getFirstPageSymbol(): ?string
+    {
         return '<<';
     }
 
@@ -47,7 +55,7 @@ class LinkPaginator extends PaginatorAbstract
             $this->getItemLink($this->getLessItems(), '-'),
             $this->pageItems,
             $this->getItemLink($this->getMoreItems(), '+'),
-            ];
+        ];
     }
 
     protected function getItemsList(): HtmlInterface
@@ -72,6 +80,14 @@ class LinkPaginator extends PaginatorAbstract
      * @return string|null Null for not output, string for output
      */
     public function getLastPageLabel(): ?string
+    {
+        return null;
+    }
+
+    /**
+     * @return string|null Null for not output, string for output
+     */
+    public function getLastPageSymbol(): ?string
     {
         return '>>';
     }
@@ -132,6 +148,14 @@ class LinkPaginator extends PaginatorAbstract
      */
     public function getNextPageLabel(): ?string
     {
+        return null;
+    }
+
+    /**
+     * @return string|null Null for not output, string for output
+     */
+    public function getNextPageSymbol(): ?string
+    {
         return '>';
     }
 
@@ -180,16 +204,16 @@ class LinkPaginator extends PaginatorAbstract
 
         $pageCount = $this->getPageCount();
 
-        $output->append($this->getPageLink(1, $this->getFirstPageLabel(), true));
-        $output->append($this->getPageLink(max(1, $this->pageNumber - 1), $this->getPreviousPageLabel(), true));
+        $output->append($this->getPageLink(1, $this->getFirstPageSymbol(), $this->getFirstPageLabel(), true));
+        $output->append($this->getPageLink(max(1, $this->pageNumber - 1), $this->getPreviousPageSymbol(), $this->getPreviousPageLabel(),true));
 
         foreach ($this->getPageNumbers($this->pageNumber, $pageCount) as $page => $label) {
-            $output->append($this->getPageLink($page, (string) $label, false));
+            $output->append($this->getPageLink($page, (string) $label, null, false));
         }
 
-        $output->append($this->getPageLink(min($pageCount, $this->pageNumber + 1), $this->getNextPageLabel(), true));
+        $output->append($this->getPageLink(min($pageCount, $this->pageNumber + 1), $this->getNextPageSymbol(), $this->getNextPageLabel(), true));
         if ($this->showCount) {
-            $output->append($this->getPageLink($pageCount, $this->getLastPageLabel(), true));
+            $output->append($this->getPageLink($pageCount, $this->getLastPageSymbol(), $this->getLastPageLabel(), true));
         }
 
         return $output;
@@ -206,6 +230,14 @@ class LinkPaginator extends PaginatorAbstract
      * @return string|null Null for not output, string for output
      */
     public function getPreviousPageLabel(): ?string
+    {
+        return null;
+    }
+
+    /**
+     * @return string|null Null for not output, string for output
+     */
+    public function getPreviousPageSymbol(): ?string
     {
         return '<';
     }

@@ -36,6 +36,8 @@ trait CurrentUrlPaginatorTrait
 
     protected string $pageLinkClass = '';
 
+    protected string $pageLinkLabelSeparator = '';
+
     protected function getItemLink(int $itemCount, mixed $label): HtmlElement
     {
         if ($itemCount == $this->pageItems) {
@@ -48,9 +50,9 @@ trait CurrentUrlPaginatorTrait
         );
     }
 
-    protected function getPageLink(int $pageNumber, ?string $label, bool $isSpecialLink): ?HtmlElement
+    protected function getPageLink(int $pageNumber, ?string $symbol, ?string $label, bool $isSpecialLink): ?HtmlElement
     {
-        if (null === $label) {
+        if (null === $label && null === $symbol) {
             return null;
         }
 
@@ -59,13 +61,23 @@ trait CurrentUrlPaginatorTrait
             if (! $isSpecialLink) {
                 $class .= ' ' . $this->currentPageClass;
             }
-            return Html::create()->span($label, ['class' => $class]);
+            $container = Html::create()->span($symbol, ['class' => $class]);
+            if ($label) {
+                $container->append(Html::create('span', $label, ['class' => 'label']));
+            }
+            return $container;
         }
-        return Html::create()->a(
+
+        $link = Html::create()->a(
             $this->getUrl([PaginatorInterface::REQUEST_PAGE => $pageNumber, PaginatorInterface::REQUEST_ITEMS => $this->pageItems]),
-            $label,
-            ['class' => $this->pageLinkClass]
+            $symbol,
+            ['class' => $this->pageLinkClass, 'title' => $label]
         );
+        if ($label) {
+            $link->append($this->pageLinkLabelSeparator);
+            $link->append(Html::create('span', $label, ['class' => 'label']));
+        }
+        return $link;
     }
 
     protected function getUrl(array $params = [])
