@@ -92,6 +92,11 @@ abstract class ModelTableSnippetAbstract extends \Zalt\Snippets\ModelSnippetAbst
     protected int $pageItems = 10;
 
     /**
+     * @var int Maximum number of items to show on a page.
+     */
+    protected int $maxPageItems = 1000;
+
+    /**
      * @var int Pagenumber starting with offset ONE
      */
     protected int $pageNumber = 1;
@@ -269,7 +274,7 @@ abstract class ModelTableSnippetAbstract extends \Zalt\Snippets\ModelSnippetAbst
     {
         $items = $this->requestInfo->getParam(PaginatorInterface::REQUEST_ITEMS);
         if ($items) {
-            $this->pageItems = $items;
+            $this->pageItems = min($items, $this->maxPageItems);
         }
         return $this->pageItems;
     }
