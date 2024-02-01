@@ -149,8 +149,8 @@ abstract class FormSnippetAbstract extends MessageableSnippetAbstract
         
         if ($changed) {
             // Clean cache on changes
-            if ($this->cacheTags && ($this->cache instanceof CacheItemPoolInterface)) {
-                $this->cache->deleteItems($this->cacheTags);
+            if ($this->cacheTags && ($this->cache instanceof \Symfony\Contracts\Cache\TagAwareCacheInterface)) {
+                $this->cache->invalidateTags($this->cacheTags);
             }
         }
     }

@@ -240,8 +240,8 @@ trait ConfirmSnippetTrait
         // @phpstan-ignore property.notFound
         if ($this->requestInfo->getParam($this->confirmParameter)) {
             if ($this->performAction()) {
-                if ($this->cache && $this->cacheTags) {
-                    $this->cache->deleteItems($this->cacheTags);
+                if ($this->cacheTags && ($this->cache instanceof \Symfony\Contracts\Cache\TagAwareCacheInterface)) {
+                    $this->cache->invalidateTags($this->cacheTags);
                 }
 
                 $msg = $this->getMessage();
