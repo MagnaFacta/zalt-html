@@ -281,6 +281,12 @@ abstract class ModelTableSnippetAbstract extends \Zalt\Snippets\ModelSnippetAbst
 
     public function getPageNumber(): int
     {
+        // If this was a POST request, we assume the search parameters changed,
+        // so we show the first page of results.
+        if ($this->requestInfo->isPost()) {
+            $this->pageNumber = 1;
+            return $this->pageNumber;
+        }
         $page = $this->requestInfo->getParam(PaginatorInterface::REQUEST_PAGE);
         if ($page) {
             $this->pageNumber = $page;
