@@ -421,7 +421,6 @@ abstract class WizardFormSnippetAbstract extends \Zalt\Snippets\ModelFormSnippet
         $bridge->setForm($baseform);
         $this->_forms[$step] = $baseform;
 
-
         $this->_items = null;
         $this->initItems($model->getMetaModel());
 

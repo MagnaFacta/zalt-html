@@ -103,8 +103,6 @@ trait ZendFormSnippetTrait
      */
     public function beforeDisplay()
     {
-        parent::beforeDisplay();
-
         if ($this->layoutAutoWidthFactor || $this->layoutFixedWidth) {
             $div = new \Zalt\Html\Zend\ZendDivFormElement();
 

@@ -11,8 +11,10 @@
 
 namespace Zalt\Html\Zend;
 
+use Zalt\Html\AttributeInterface;
 use Zalt\Html\HtmlElement;
 use Zalt\Html\ListElement;
+use Zalt\Html\StyleArrayAttribute;
 use Zalt\Late\Late;
 use Zalt\Late\RepeatableFormElements;
 use Zalt\Ra\Ra;
@@ -59,11 +61,11 @@ class ZendDivFormElement extends \Zalt\Html\HtmlElement implements ZendFormLayou
 
     protected function div(array $attr)
     {
-        $label = new HtmlElement('div', $attr);
+        $div = new HtmlElement('div', $attr);
 
-        $this->append($label);
+        $this->append($div);
 
-        return $label;
+        return $div;
     }
 
     /**
@@ -86,9 +88,9 @@ class ZendDivFormElement extends \Zalt\Html\HtmlElement implements ZendFormLayou
         return $this->_flattenSubs;
     }
 
-    protected function label($mixed, array $attr)
+    protected function label(mixed $element, array $attr)
     {
-        $label = new ZendLabelElement($mixed, $attr);
+        $label = ZendLabelElement::label($element, $attr);
 
         $this->append($label);
 
@@ -124,9 +126,9 @@ class ZendDivFormElement extends \Zalt\Html\HtmlElement implements ZendFormLayou
         $this->setRepeater($formrep);
 
         if (null === $width) {
-            $attr = array();
+            $attr = [];
         } else {
-            $attr['style'] = array('display' => 'inline-block', 'width' => $width);
+            $attr['style'] = new StyleArrayAttribute(['display' => 'inline-block', 'width' => $width]);
         }
 
         $inputGroup = null;
