@@ -17,6 +17,7 @@ use Zalt\Html\AElement;
 use Zalt\Html\Form\FormElement;
 use Zalt\Html\Html;
 use Zalt\Html\HtmlElement;
+use Zalt\Message\MessageStatus;
 use Zalt\Message\MessageTrait;
 
 /**
@@ -239,7 +240,21 @@ trait ConfirmSnippetTrait
 
         // @phpstan-ignore property.notFound
         if ($this->requestInfo->getParam($this->confirmParameter)) {
-            if ($this->performAction()) {
+            $performed = false;
+            try {
+                $performed = $this->performAction();
+            } catch (\Exception $e) {
+                // Poor man's solution to catch foreign key violations.
+                // Report the constraint and foreign key to give an indication
+                // which object is referencing.
+                if (!preg_match('/(Integrity constraint violation|foreign key constraint fails).*CONSTRAINT (\S+) FOREIGN KEY (\S+)/', $e->getMessage(), $m)) {
+                    throw($e);
+                }
+                $msg = sprintf($this->_('Could not delete, object is referenced by another object. Constraint: %s, foreign key: %s'), trim($m[2], '`()'), trim($m[3], '`()'));
+                // @phpstan-ignore-next-line
+                $this->messenger->addMessages([$msg], MessageStatus::Warning);
+            }
+            if ($performed) {
                 if ($this->cacheTags && ($this->cache instanceof \Symfony\Contracts\Cache\TagAwareCacheInterface)) {
                     $this->cache->invalidateTags($this->cacheTags);
                 }
