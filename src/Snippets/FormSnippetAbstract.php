@@ -114,9 +114,10 @@ abstract class FormSnippetAbstract extends MessageableSnippetAbstract
      *
      * @param string $csrfName
      * @param string|null $csrfToken
+     * @param mixed $form
      * @return void
      */
-    abstract protected function addCsrf(string $csrfName, ?string $csrfToken): void;
+    abstract protected function addCsrf(string $csrfName, ?string $csrfToken, mixed $form): void;
 
     /**
      * Add the elements to the form
@@ -346,7 +347,7 @@ abstract class FormSnippetAbstract extends MessageableSnippetAbstract
 
         // Use Csrf when enabled
         if ($this->csrfName && $this->csrfToken) {
-            $this->addCsrf($this->csrfName, $this->csrfToken);
+            $this->addCsrf($this->csrfName, $this->csrfToken, $this->_form);
         }
 
         if ($this->isPost()) {

@@ -19,14 +19,6 @@ namespace Zalt\Snippets\Zend;
  */
 trait ZendFormSnippetTrait
 {
-
-    /**
-     * Optional csrf element
-     *
-     * @var null|\Zend_Form_Element_Hidden
-     */
-    protected $_csrf = null;
-
     /**
      *
      * @var \Zend_Form
@@ -64,12 +56,20 @@ trait ZendFormSnippetTrait
      */
     protected int $layoutFixedWidth = 0;
 
-    protected function addCsrf(string $csrfName, ?string $csrfToken): void
+    /**
+     * Simple function adding the actual crsf hidden field
+     *
+     * @param string $csrfName
+     * @param string|null $csrfToken
+     * @param mixed $form
+     * @return void
+     */
+    protected function addCsrf(string $csrfName, ?string $csrfToken, mixed $form): void
     {
-        if ((! $this->_csrf) && $csrfName && $csrfToken) {
-            $this->_csrf = $this->_form->createElement('Hidden', $csrfName);
-            $this->_csrf->setValue($csrfToken);
-            $this->_csrf = $this->_form->addElement($this->_csrf);
+        if (($form instanceOf \Zend_Form) && $csrfName && $csrfToken && (! $form->getElement($csrfName))) {
+            $csrf = $form->createElement('Hidden', $csrfName);
+            $csrf->setValue($csrfToken);
+            $csrf = $form->addElement($csrf);
         }
     }
 

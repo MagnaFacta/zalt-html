@@ -424,6 +424,7 @@ abstract class WizardFormSnippetAbstract extends \Zalt\Snippets\ModelFormSnippet
         $this->_items = null;
         $this->initItems($model->getMetaModel());
 
+        $this->addCsrf($this->csrfName, $this->csrfToken, $this->_forms[$step]);
         $this->addFormElementsFor($bridge, $model, $step);
 
         return $baseform;
