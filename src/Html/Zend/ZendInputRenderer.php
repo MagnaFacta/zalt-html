@@ -12,6 +12,7 @@
 namespace Zalt\Html\Zend;
 
 use Zalt\Html\Html;
+use Zalt\Html\Zend\ZendLabelElement;
 use Zalt\Html\One;
 use Zalt\Late\Late;
 use Zalt\Late\LateInterface;
@@ -225,7 +226,7 @@ class ZendInputRenderer implements \Zalt\Html\HtmlInterface
     public static function inputLabel($arg_array = array())
     {
         $args = func_get_args();
-        return new \Zalt\Html\Zend\ZendLabelElement('label', $args);
+        return new ZendLabelElement($args);
     }
 
 

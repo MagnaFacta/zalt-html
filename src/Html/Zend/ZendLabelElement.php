@@ -46,6 +46,11 @@ class ZendLabelElement extends \Zalt\Html\HtmlElement
 
     protected $_onEmptyContent;
 
+    public function __construct(...$args)
+    {
+        parent::__construct('label', $args);
+    }
+
     public function getOptionalClass()
     {
         return $this->optionalClass;
@@ -76,10 +81,9 @@ class ZendLabelElement extends \Zalt\Html\HtmlElement
         return $this->requiredPrefix;
     }
 
-    public static function label($arg_array = array())
+    public static function label(...$args)
     {
-        $args = func_get_args();
-        return new self(__FUNCTION__, $args);
+        return new self(...$args);
     }
 
     protected function renderContent()
