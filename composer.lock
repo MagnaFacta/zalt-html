@@ -366,7 +366,7 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/MagnaFacta/zalt-model.git",
-                "reference": "c0e600690842d5eed20b28e8bfe0454ad00963cd"
+                "reference": "c76437128f943e5ebcc01965bc306964148b7adb"
             },
             "require": {
                 "magnafacta/zalt-late": "dev-main",
@@ -412,7 +412,7 @@
                 }
             ],
             "description": "Zend Alternative Model",
-            "time": "2024-02-06T10:57:00+00:00"
+            "time": "2024-02-14T09:13:59+00:00"
         },
         {
             "name": "magnafacta/zalt-util",
@@ -420,7 +420,7 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/MagnaFacta/zalt-util.git",
-                "reference": "e327b161c2a0295a50a7291ea533378913eeb033"
+                "reference": "26f25de729a62e35ca00ba9dcb04b6e69c7fb4d8"
             },
             "require": {
                 "guzzlehttp/psr7": "^2.4.5",
@@ -464,7 +464,7 @@
                 }
             ],
             "description": "Alternative Utilities",
-            "time": "2024-02-07T15:53:04+00:00"
+            "time": "2024-02-14T09:11:13+00:00"
         },
         {
             "name": "mezzio/mezzio-flash",
@@ -2714,12 +2714,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "5cd4b6a6c0a0a3d1efdc04600376a389d0a50422"
+                "reference": "eb661e6512bebe185a235fb990b45b4506d9f1fa"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/5cd4b6a6c0a0a3d1efdc04600376a389d0a50422",
-                "reference": "5cd4b6a6c0a0a3d1efdc04600376a389d0a50422",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/eb661e6512bebe185a235fb990b45b4506d9f1fa",
+                "reference": "eb661e6512bebe185a235fb990b45b4506d9f1fa",
                 "shasum": ""
             },
             "require": {
@@ -2769,7 +2769,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-02-12T19:32:31+00:00"
+            "time": "2024-02-15T10:13:04+00:00"
         },
         {
             "name": "phpunit/php-code-coverage",
@@ -3100,12 +3100,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "49429bf6e3aa23b5e7521feeb92c31197efce444"
+                "reference": "828c5ab97f96e1045250b57f935d70aa7277da07"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/49429bf6e3aa23b5e7521feeb92c31197efce444",
-                "reference": "49429bf6e3aa23b5e7521feeb92c31197efce444",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/828c5ab97f96e1045250b57f935d70aa7277da07",
+                "reference": "828c5ab97f96e1045250b57f935d70aa7277da07",
                 "shasum": ""
             },
             "require": {
@@ -3193,7 +3193,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-02-08T16:46:03+00:00"
+            "time": "2024-02-14T07:01:37+00:00"
         },
         {
             "name": "sebastian/cli-parser",
