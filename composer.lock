@@ -2714,12 +2714,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "eb661e6512bebe185a235fb990b45b4506d9f1fa"
+                "reference": "6f5d1a40a779d02a9e165f8ce2969dc91387304f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/eb661e6512bebe185a235fb990b45b4506d9f1fa",
-                "reference": "eb661e6512bebe185a235fb990b45b4506d9f1fa",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/6f5d1a40a779d02a9e165f8ce2969dc91387304f",
+                "reference": "6f5d1a40a779d02a9e165f8ce2969dc91387304f",
                 "shasum": ""
             },
             "require": {
@@ -2769,7 +2769,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-02-15T10:13:04+00:00"
+            "time": "2024-02-15T14:22:18+00:00"
         },
         {
             "name": "phpunit/php-code-coverage",

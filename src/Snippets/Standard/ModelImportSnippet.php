@@ -57,9 +57,9 @@ abstract class ModelImportSnippet extends \Zalt\Snippets\WizardFormSnippetAbstra
 
     /**
      *
-     * @var array
+     * @var array|bool
      */
-    protected $_translatorDescriptions;
+    protected $_translatorDescriptions = false;
 
     /**
      * Array key of the default import translator
