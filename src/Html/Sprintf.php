@@ -12,6 +12,8 @@
 
 namespace Zalt\Html;
 
+use Zalt\Html\Zend\ZendLabelElement;
+use Zalt\Late\LateCall;
 use Zalt\Ra\Ra;
 
 /**
@@ -22,6 +24,46 @@ use Zalt\Ra\Ra;
  * @copyright  Copyright (c) 2011 Erasmus MC
  * @license    New BSD License
  * @since      Class available since \Zalt version 1.0
+ *
+ * @method     AElement               a(...$arguments)
+ * @method     Sequence               array(...$arguments)
+ * @method     HtmlElement            br(...$arguments)
+ * @method     ColElement             col(...$arguments)
+ * @method     ColGroupElement        colgroup(...$arguments)
+ * @method     HtmlElement            div(...$arguments)
+ * @method     DlElement              dd(...$arguments)
+ * @method     DlElement              dl(...$arguments)
+ * @method     DlElement              dt(...$arguments)
+ * @method     HtmlElement            em(...$arguments)
+ * @method     HtmlElement            i(...$arguments)
+ * @method     LateCall               if(...$arguments)
+ * @method     IFrame                 iframe(...$arguments)
+ * @method     HnElement              h1(...$arguments)
+ * @method     HnElement              h2(...$arguments)
+ * @method     HnElement              h3(...$arguments)
+ * @method     HnElement              h4(...$arguments)
+ * @method     HnElement              h5(...$arguments)
+ * @method     HnElement              h6(...$arguments)
+ * @method     ImgElement             img(...$arguments)
+ * @method     ImgElement             image(...$arguments)
+ * @method     ZendLabelElement       label(...$arguments)
+ * @method     HtmlElement            li(...$arguments)
+ * @method     ListElement            ol(...$arguments)
+ * @method     HtmlElement            p(...$arguments)
+ * @method     HtmlElement            pInfo(...$arguments)
+ * @method     Raw                    raw(...$arguments)
+ * @method     Sequence               seq(...$arguments)
+ * @method     Sequence               sequence(...$arguments)
+ * @method     HtmlElement            small(...$arguments)
+ * @method     SnippetInterface|null  snippet(...$arguments)
+ * @method     Sequence               spaced(...$arguments)
+ * @method     HtmlElement            span(...$arguments)
+ * @method     Sprintf                sprintf(...$arguments)
+ * @method     HtmlElement            strong(...$arguments)
+ * @method     TdElement              td(...$arguments)
+ * @method     TdElement              th(...$arguments)
+ * @method     TrElement              tr(...$arguments)
+ * @method     ListElement            ul(...$arguments)
  */
 class Sprintf extends \ArrayObject implements ElementInterface
 {
