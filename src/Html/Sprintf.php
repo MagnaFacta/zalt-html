@@ -60,8 +60,12 @@ use Zalt\Ra\Ra;
  * @method     HtmlElement            span(...$arguments)
  * @method     Sprintf                sprintf(...$arguments)
  * @method     HtmlElement            strong(...$arguments)
+ * @method     TableElement           table(...$arguments)
+ * @method     TBodyElement           tbody(...$arguments)
  * @method     TdElement              td(...$arguments)
+ * @method     TBodyElement           tfoot(...$arguments)
  * @method     TdElement              th(...$arguments)
+ * @method     TBodyElement           thead(...$arguments)
  * @method     TrElement              tr(...$arguments)
  * @method     ListElement            ul(...$arguments)
  */

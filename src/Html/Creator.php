@@ -67,9 +67,12 @@ use Zalt\Ra\Ra;
  * @method     HtmlElement            span(...$arguments)
  * @method     Sprintf                sprintf(...$arguments)
  * @method     HtmlElement            strong(...$arguments)
+ * @method     TableElement           table(...$arguments)
+ * @method     TBodyElement           tbody(...$arguments)
  * @method     TdElement              td(...$arguments)
+ * @method     TBodyElement           tfoot(...$arguments)
  * @method     TdElement              th(...$arguments)
- * @method     TrElement              tr(...$arguments)
+ * @method     TBodyElement           thead(...$arguments)
  * @method     ListElement            ul(...$arguments)
  */
 class Creator
