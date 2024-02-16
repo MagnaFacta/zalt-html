@@ -2324,12 +2324,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/GemsTracker/MUtil.git",
-                "reference": "7be04afa398c1c6096445090cd745cc33120a853"
+                "reference": "c1aaad1bf959a0d233aec216a3450b1817e54a05"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/GemsTracker/MUtil/zipball/7be04afa398c1c6096445090cd745cc33120a853",
-                "reference": "7be04afa398c1c6096445090cd745cc33120a853",
+                "url": "https://api.github.com/repos/GemsTracker/MUtil/zipball/c1aaad1bf959a0d233aec216a3450b1817e54a05",
+                "reference": "c1aaad1bf959a0d233aec216a3450b1817e54a05",
                 "shasum": ""
             },
             "require": {
@@ -2395,7 +2395,7 @@
                 "issues": "https://github.com/GemsTracker/MUtil/issues",
                 "source": "https://github.com/GemsTracker/MUtil/tree/2.x"
             },
-            "time": "2024-01-04T18:33:09+00:00"
+            "time": "2024-02-16T14:34:18+00:00"
         },
         {
             "name": "mezzio/mezzio-session-ext",
@@ -2714,12 +2714,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "6f5d1a40a779d02a9e165f8ce2969dc91387304f"
+                "reference": "6077d42201d50e50834fd1fef36ff0707a330f66"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/6f5d1a40a779d02a9e165f8ce2969dc91387304f",
-                "reference": "6f5d1a40a779d02a9e165f8ce2969dc91387304f",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/6077d42201d50e50834fd1fef36ff0707a330f66",
+                "reference": "6077d42201d50e50834fd1fef36ff0707a330f66",
                 "shasum": ""
             },
             "require": {
@@ -2769,7 +2769,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-02-15T14:22:18+00:00"
+            "time": "2024-02-16T14:22:27+00:00"
         },
         {
             "name": "phpunit/php-code-coverage",

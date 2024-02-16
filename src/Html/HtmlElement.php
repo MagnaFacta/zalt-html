@@ -732,7 +732,11 @@ class HtmlElement implements ElementInterface, Procrastinator
                 if (is_array($val)) {
                     $val = implode(' ', $val);
                 }
-                $val = Html::escape($val);
+                if (null == $val) {
+                    $val = '';
+                } else {
+                    $val = Html::escape($val);
+                }
             }
 
             if ('id' == $key) {
