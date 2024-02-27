@@ -239,7 +239,8 @@ trait ConfirmSnippetTrait
         $this->prepareHtml();
 
         // @phpstan-ignore property.notFound
-        if ($this->requestInfo->getParam($this->confirmParameter)) {
+        $postParams = $this->requestInfo->getRequestPostParams();
+        if (isset($postParams[$this->confirmParameter])) {
             $performed = false;
             try {
                 $performed = $this->performAction();
