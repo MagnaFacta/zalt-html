@@ -19,4 +19,16 @@ namespace Zalt\SnippetsActions;
  * @since      Class available since version 1.0
  */
 interface ModelActionInterface
-{ }
+{
+    /**
+     * @param array $filter Extra filter statements to add
+     * @return void
+     */
+    public function addToFilter(array $filter): void;
+
+    /**
+     * @param array $sort Extra sort statements to add
+     * @return void
+     */
+    public function addToSort(array $sort): void;
+}

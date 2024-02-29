@@ -56,7 +56,7 @@ trait ModelActionTrait
      * @param array $filter Extra filter statements to add
      * @return void
      */
-    public function addToFilter(array $filter)
+    public function addToFilter(array $filter): void
     {
         $this->extraFilter = array_merge($this->extraFilter, $filter);
     }
@@ -65,7 +65,7 @@ trait ModelActionTrait
      * @param array $sort Extra sort statements to add
      * @return void
      */
-    public function addToSort(array $sort)
+    public function addToSort(array $sort): void
     {
         $this->extraSort = array_merge($this->extraSort, $sort);
     }

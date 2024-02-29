@@ -16,6 +16,7 @@ use Zalt\Snippets\DeleteModeEnum;
 use Zalt\Snippets\ModelConfirmDeleteSnippet;
 use Zalt\SnippetsActions\AbstractAction;
 use Zalt\SnippetsActions\ModelActionInterface;
+use Zalt\SnippetsActions\ModelActionTrait;
 use Zalt\SnippetsActions\ParameterActionInterface;
 use Zalt\SnippetsActions\PostActionInterface;
 
@@ -27,6 +28,8 @@ use Zalt\SnippetsActions\PostActionInterface;
  */
 class DeleteAction extends AbstractAction implements ModelActionInterface, ParameterActionInterface, PostActionInterface
 {
+    use ModelActionTrait;
+
     /**
      * @var array Of snippet class names
      */
