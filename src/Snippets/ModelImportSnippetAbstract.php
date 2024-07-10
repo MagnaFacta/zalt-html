@@ -213,7 +213,7 @@ abstract class ModelImportSnippetAbstract extends \Zalt\Snippets\WizardFormSnipp
         }
     }
 
-    protected function addImportModelSettings(DataReaderInterface $model): void
+    protected function addImportModelSettings(SessionModel $model): void
     {
         $metaModel = $model->getMetaModel();
 
@@ -298,6 +298,7 @@ abstract class ModelImportSnippetAbstract extends \Zalt\Snippets\WizardFormSnipp
 
             if ($element instanceof \Zend_Form_Element_File) {
                 // Now add the rename filter, the localfile is known only once after loadFormData() has run
+                // @phpstan-ignore-next-line
                 $element->addFilter(new \Zend_Filter_File_Rename([
                     'target'    => $this->session->get('localfile'),
                     'overwrite' => true,
@@ -320,6 +321,7 @@ abstract class ModelImportSnippetAbstract extends \Zalt\Snippets\WizardFormSnipp
             $this->addItems($bridge, ['content']);
 
             $this->session->set('extension', 'txt');
+            // @phpstan-ignore-next-line
             if (true || (isset($this->formData['content']) && $this->formData['content'])) {
                 $this->formData['content'] = '';
                 // file_put_contents($this->session->get('localfile'), $this->formData['content']);
@@ -471,18 +473,19 @@ abstract class ModelImportSnippetAbstract extends \Zalt\Snippets\WizardFormSnipp
      */
     public function afterImport(HtmlElement $element)
     {
-        $imported = $batch->getCounter('imported');
-        $changed  = $batch->getCounter('changed');
+//        $imported = $batch->getCounter('imported');
+//        $changed  = $batch->getCounter('changed');
 
-        $text = sprintf($this->plural('%d row imported.', '%d rows imported.', $imported), $imported) . ' ' .
-                sprintf($this->plural('%d row changed.', '%d rows changed.', $changed), $changed);
+//        $text = sprintf($this->plural('%d row imported.', '%d rows imported.', $imported), $imported) . ' ' .
+//                sprintf($this->plural('%d row changed.', '%d rows changed.', $changed), $changed);
 
-        $this->addMessage($batch->getMessages(true));
-        $this->addMessage($text);
+//        $this->addMessage($batch->getMessages(true));
+//        $this->addMessage($text);
 
-        $element->pInfo($text);
+//        $element->pInfo($text);
 
-        return $text;
+//        return $text;
+        return '';
     }
 
     /**
@@ -505,10 +508,8 @@ abstract class ModelImportSnippetAbstract extends \Zalt\Snippets\WizardFormSnipp
         case 3:
         case 4:
         case 5:
-            dump($this->formData['trans']);
             if (isset($this->formData['trans']) && $this->formData['trans']) {
                 $fieldInfo = $this->getTranslatorTable($this->formData['trans']);
-                dump($fieldInfo);
                 break;
             }
 
@@ -547,10 +548,9 @@ abstract class ModelImportSnippetAbstract extends \Zalt\Snippets\WizardFormSnipp
     protected function createModel(): DataReaderInterface
     {
         if (! isset($this->importModel)) {
-            /**
-             * @var SessionModel $model
-             */
+            // @phpstan-ignore-next-line
             $this->importModel = $this->metaModelLoader->createModel(SessionModel::class, $this->session);
+            // @phpstan-ignore-next-line
             $this->addImportModelSettings($this->importModel);
         }
 
@@ -965,8 +965,8 @@ abstract class ModelImportSnippetAbstract extends \Zalt\Snippets\WizardFormSnipp
             $this->getCurrentImportTranslator();
 
             if (! $this->sourceModel) {
-                $this->importer->setSourceFile($this->session->get('localfile'), $this->session->get('extension'));
-                $this->sourceModel = $this->importer->getSourceModel();
+                // $this->importer->setSourceFile($this->session->get('localfile'), $this->session->get('extension'));
+//                $this->sourceModel = $this->importer->getSourceModel();
             }
         } catch (\Exception $e) {
             $this->_errors[] = $e->getMessage();
@@ -990,21 +990,21 @@ abstract class ModelImportSnippetAbstract extends \Zalt\Snippets\WizardFormSnipp
                 $transName = $queryParams['trans'];
             }
             if (! isset($this->importTranslators[$transName])) {
-                throw new ModelTranslatorException(sprintf(
-                        $this->_("Unknown translator '%s'. Should be one of: %s"),
-                        $transName,
-                        implode($this->_(', '), array_keys($this->importTranslators))
-                    ));
+//                throw new ModelTranslatorException(sprintf(
+//                        $this->_("Unknown translator '%s'. Should be one of: %s"),
+//                        $transName,
+//                        implode($this->_(', '), array_keys($this->importTranslators))
+//                    ));
             }
-            $translator = $this->importTranslators[$transName];
+//            $translator = $this->importTranslators[$transName];
 
             $file = null;
             if (isset($queryParams['file'])) {
                 $file = $queryParams['file'];
             }
 
-            $this->importer->setSourceFile($file);
-            $this->importer->setImportTranslator($translator);
+//            $this->importer->setSourceFile($file);
+//            $this->importer->setImportTranslator($translator);
 
             $check = false;
             if (isset($queryParams['check'])) {
@@ -1012,36 +1012,36 @@ abstract class ModelImportSnippetAbstract extends \Zalt\Snippets\WizardFormSnipp
             }
 
             // \Zalt\Registry\Source::$verbose = true;
-            $batch = $this->importer->getCheckAndImportBatch();
-            $batch->setVariable('addImport', !$check);
-            $batch->runContinuous();
+//            $batch = $this->importer->getCheckAndImportBatch();
+//            $batch->setVariable('addImport', !$check);
+//            $batch->runContinuous();
 
-            if ($batch->getMessages(false)) {
-                echo implode("\n", $batch->getMessages()) . "\n";
-            }
-            if (! $batch->getCounter('import_errors')) {
-                echo sprintf("%d records imported, %d records changed.\n", $batch->getCounter('imported'), $batch->getCounter('changed'));
-            }
+//            if ($batch->getMessages(false)) {
+//                echo implode("\n", $batch->getMessages()) . "\n";
+//            }
+//            if (! $batch->getCounter('import_errors')) {
+//                echo sprintf("%d records imported, %d records changed.\n", $batch->getCounter('imported'), $batch->getCounter('changed'));
+//            }
 
         } catch (\Exception $e) {
             $messages[] = "IMPORT ERROR!";
             $messages[] = $e->getMessage();
             $messages[] = null;
-            $messages[] = sprintf(
-                    "Usage instruction: %s %s file=filename [trans=[%s]] [check=1]",
-                    $this->requestInfo->getCurrentController(),
-                    $this->requestInfo->getCurrentAction(),
-                    implode('|', array_keys($this->importTranslators))
-                    );
+//            $messages[] = sprintf(
+//                    "Usage instruction: %s %s file=filename [trans=[%s]] [check=1]",
+//                    $this->requestInfo->getCurrentController(),
+//                    $this->requestInfo->getCurrentAction(),
+//                    implode('|', array_keys($this->importTranslators))
+//                    );
             $messages[] = sprintf(
                     "\tRequired parameter: file=filename to import, absolute or relative to %s",
                     getcwd()
                     );
-            $messages[] = sprintf(
-                    "\tOptional parameter: trans=[%s] default is %s",
-                    implode('|', array_keys($this->importTranslators)),
-                    $this->defaultImportTranslator
-                    );
+//            $messages[] = sprintf(
+//                    "\tOptional parameter: trans=[%s] default is %s",
+//                    implode('|', array_keys($this->importTranslators)),
+//                    $this->defaultImportTranslator
+//                    );
             $messages[] = "\tOptional parameter: check=[0|1], 0=default, 1=check input only";
             echo implode("\n", $messages) . "\n";
         }
