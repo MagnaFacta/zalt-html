@@ -321,9 +321,8 @@ abstract class ModelImportSnippetAbstract extends \Zalt\Snippets\WizardFormSnipp
             $this->addItems($bridge, ['content']);
 
             $this->session->set('extension', 'txt');
-            // @phpstan-ignore-next-line
-            if (true || (isset($this->formData['content']) && $this->formData['content'])) {
-                $this->formData['content'] = '';
+            if (isset($this->formData['content']) && $this->formData['content']) {
+//                $this->formData['content'] = '';
                 // file_put_contents($this->session->get('localfile'), $this->formData['content']);
             } else {
                 if (file_exists($this->session->get('localfile'))) {
@@ -945,6 +944,11 @@ abstract class ModelImportSnippetAbstract extends \Zalt\Snippets\WizardFormSnipp
 
         // Set the translator
         $translator = $this->getCurrentImportTranslator();
+        if ($translator && ! (isset($this->formData['content']) && $this->fileMode)) {
+            $fields = $translator->getFieldsTranslations();
+            $this->formData['content'] = implode("\t", array_keys($fields)) . "\n" .
+                str_repeat("\t", count($fields)) . "\n" ;
+        }
 //        if ($translator instanceof ModelTranslatorInterface) {
 //            $this->importer->setImportTranslator($translator);
 //        }
