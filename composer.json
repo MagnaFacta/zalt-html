@@ -16,7 +16,8 @@
         "phpstan/phpstan": "1.*",
         "phpunit/phpunit": "10.*",
         "shardj/zf1-future": "^1.21",
-        "shardj/zf1-extras-future": "^1.12"
+        "shardj/zf1-extras-future": "^1.12",
+        "magnafacta/mutil": "^2.0.0"
     },
     "authors": [
         {
@@ -53,6 +54,11 @@
             "url": "https://github.com/MagnaFacta/zalt-util.git"
         }
     ],
+    "extra": {
+        "branch-alias": {
+            "dev-main": "1.0.x-dev"
+        }
+    },
     "scripts": {
         "test": [
             "@putenv XDEBUG_MODE=coverage",
