@@ -4,10 +4,10 @@
     "type": "library",
     "require": {
         "php": ">=8.1.0",
-        "magnafacta/zalt-late": "main-dev",
-        "magnafacta/zalt-loader": "dev-psr-11",
-        "magnafacta/zalt-model": "2.x-dev",
-        "magnafacta/zalt-util": "dev-main"
+        "magnafacta/zalt-late": "main-dev || ^1.0.0",
+        "magnafacta/zalt-loader": "dev-psr-11 || ^1.0.0",
+        "magnafacta/zalt-model": "2.x-dev || ^1.0.0",
+        "magnafacta/zalt-util": "dev-main || ^1.0.0"
     },
     "require-dev": {
         "laminas/laminas-diactoros": "^2.11",
