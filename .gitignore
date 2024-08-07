@@ -1,5 +1,4 @@
 /.idea/
-/composer.lock
 /vendor/
 /test/.phpunit.result.cache
 test/html-coverage
