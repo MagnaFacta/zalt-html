@@ -6,7 +6,7 @@
         "php": ">=8.1.0",
         "magnafacta/zalt-late": "^1.0.0",
         "magnafacta/zalt-loader": "^1.0.0",
-        "magnafacta/zalt-model": "^1.0.0|^2.0.1|2-x.dev",
+        "magnafacta/zalt-model": "^1.0.0|^2.0.1|2.x-dev",
         "magnafacta/zalt-util": "^1.0.0"
     },
     "require-dev": {
