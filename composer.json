@@ -13,12 +13,12 @@
     "require-dev": {
         "laminas/laminas-diactoros": "^2.11",
         "laminas/laminas-validator": "^2.20",
+        "magnafacta/mutil": "^2.0.0",
         "mezzio/mezzio-session-ext": "^1.12",
         "phpstan/phpstan": "1.*",
-        "phpunit/phpunit": "10.*",
+        "phpunit/phpunit": "^10.5",
         "shardj/zf1-future": "^1.21",
-        "shardj/zf1-extras-future": "^1.12",
-        "magnafacta/mutil": "^2.0.0"
+        "shardj/zf1-extras-future": "^1.12"
     },
     "authors": [
         {
