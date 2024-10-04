@@ -11,6 +11,7 @@ declare(strict_types=1);
 
 namespace Zalt\Snippets;
 
+use phpDocumentor\Reflection\Types\Boolean;
 use Psr\Cache\CacheItemPoolInterface;
 use Zalt\Base\TranslateableTrait;
 use Zalt\Html\AElement;
@@ -208,8 +209,7 @@ trait ConfirmSnippetTrait
 
     public function getYesButton(): HtmlElement
     {
-        // Csrf exists => we use a form
-        if ($this->csrfName && $this->csrfToken) {
+        if ($this->useForm()) {
             $form = new FormElement([
                 'action' => $this->getCurrentUrl(),
                 'class'  => $this->formClass,
@@ -238,8 +238,12 @@ trait ConfirmSnippetTrait
     {
         $this->prepareHtml();
 
-        // @phpstan-ignore property.notFound
-        $postParams = $this->requestInfo->getRequestPostParams();
+        if ($this->useForm()) {
+            $postParams = $this->requestInfo->getRequestPostParams();
+        } else {
+            $postParams = $this->requestInfo->getRequestQueryParams();
+        }
+            // @xphpstan-ignore property.notFound
         if (isset($postParams[$this->confirmParameter])) {
             $performed = false;
             try {
@@ -292,5 +296,11 @@ trait ConfirmSnippetTrait
             }
         }
 
+    }
+
+    public function useForm(): bool
+    {
+        // Csrf exists => we use a form
+        return $this->csrfName && $this->csrfToken;
     }
 }
