@@ -2,7 +2,7 @@
 
 /**
  *
- * @package    MUtil
+ * @package    Zalt
  * @subpackage Model_Bridge
  * @author     Matijs de Jong <mjong@magnafacta.nl>
  * @copyright  Copyright (c) 2011 Erasmus MC
@@ -16,7 +16,7 @@ use Zalt\Late\LateCall;
 
 /**
  *
- * @package    MUtil
+ * @package    Zalt
  * @subpackage Model_Bridge
  * @copyright  Copyright (c) 2011 Erasmus MC
  * @license    New BSD License
