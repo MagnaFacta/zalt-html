@@ -651,12 +651,20 @@ abstract class ModelImportSnippetAbstract extends \Zalt\Snippets\WizardFormSnipp
      */
     protected function displayHeader(FormBridgeInterface $bridge, $header, $tagName = 'h2')
     {
-        $element = $bridge->getForm()->createElement('Html', 'step_header');
+        $form = $bridge->getForm();
+        if ($form instanceof \Zend_Form) {
+            $element = $form->getElement('step_header');
+        } else {
+            $element = null;
+        }
+        if (! $element) {
+            $element = $form->createElement('Html', 'step_header');
+            if ($bridge instanceof ZendFormBridge) {
+                $bridge->addElement($element);
+            }
+        }
         $element->$tagName($header);
 
-        if ($bridge instanceof ZendFormBridge) {
-            $bridge->addElement($element);
-        }
     }
 
     /**
