@@ -459,11 +459,12 @@ abstract class ModelImportSnippetAbstract extends \Zalt\Snippets\WizardFormSnipp
                     $result[] = $this->targetModel->save($row);
                 }
                 // file_put_contents('data/logs/echo.txt', __CLASS__ . '->' . __FUNCTION__ . '(' . __LINE__ . '): ' .  print_r($result, true) . "\n", FILE_APPEND);
-                $this->displayErrors($bridge, $this->_('%d item(s) saved.'));
+                $msg = $this->getItemsSavedMessage(count($result));
+                $this->displayErrors($bridge, $msg);
 
                 $html = $this->getHtmlSequence();
                 $html->h4($this->_('Import succesfull'));
-                $html->pInfo($this->getItemsSavedMessage(count($result)));
+                $html->pInfo($msg);
             }
 
             // Extra div for CSS settings
