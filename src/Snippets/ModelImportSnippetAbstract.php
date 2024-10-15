@@ -327,7 +327,6 @@ abstract class ModelImportSnippetAbstract extends \Zalt\Snippets\WizardFormSnipp
             $this->session->set('extension', 'txt');
 
             if (isset($this->formData['content']) && $this->formData['content']) {
-                // dump($_POST, $this->formData['content']);
                 file_put_contents($this->getTempFileName(), $this->formData['content']);
             } else {
                 if (file_exists($this->getTempFileName())) {
@@ -358,8 +357,8 @@ abstract class ModelImportSnippetAbstract extends \Zalt\Snippets\WizardFormSnipp
     protected function addStep3(FormBridgeInterface $bridge, FullDataInterface $model)
     {
         if ($this->loadSourceModel()) {
-            $this->displayHeader($bridge, $this->_('Upload successful!'));
-            $this->displayErrors($bridge, $this->_('Check the input visually.'));
+            $this->displayHeader($bridge, $this->_('Check the input visually'));
+            $this->displayErrors($bridge, $this->_('Upload successful!'));
 
             // \Zalt\EchoOut\EchoOut::track($this->sourceModel->load());
 
@@ -395,8 +394,6 @@ abstract class ModelImportSnippetAbstract extends \Zalt\Snippets\WizardFormSnipp
     protected function addStep4(FormBridgeInterface $bridge, FullDataInterface $model)
     {
         if ($this->loadSourceModel()) {
-            $this->displayHeader($bridge, $this->_('Checking results....'));
-
             // \Zalt\EchoOut\EchoOut::track($this->sourceModel->load());
 
             $element = $bridge->getForm()->createElement('html', 'importdisplay');
@@ -406,10 +403,11 @@ abstract class ModelImportSnippetAbstract extends \Zalt\Snippets\WizardFormSnipp
 
             $output = $translator->translateImport($input);
             if ($translator->hasErrors()) {
+                $this->displayHeader($bridge, $this->_('Errors in the input data'));
                 $this->displayErrors($bridge, $translator->getErrors());
                 $this->nextDisabled = true;
             } else {
-                $this->displayErrors($bridge, $this->_('Check the result output.'));
+                $this->displayHeader($bridge, $this->_('The data is importable'));
             }
 
             // dump($output);
@@ -438,7 +436,7 @@ abstract class ModelImportSnippetAbstract extends \Zalt\Snippets\WizardFormSnipp
     protected function addStep5(FormBridgeInterface $bridge, FullDataInterface $model)
     {
         if ($this->loadSourceModel()) {
-            $this->displayHeader($bridge, $this->_('Checking results....'));
+            $this->displayHeader($bridge, $this->_('Import finished'));
 
             $element = $bridge->getForm()->createElement('html', 'importdisplay');
 
@@ -1029,11 +1027,6 @@ abstract class ModelImportSnippetAbstract extends \Zalt\Snippets\WizardFormSnipp
 
         // Set the translator
         $translator = $this->getCurrentImportTranslator();
-        if ($translator && ! (isset($this->formData['content']) || $this->fileMode)) {
-            $fields = $translator->getFieldsTranslations();
-            $this->formData['content'] = implode("\t", array_keys($fields)) . "\n" .
-                str_repeat("\t", count($fields)) . "\n" ;
-        }
         if ($translator instanceof ModelTranslatorInterface) {
             $this->importProcessor->setImportTranslator($translator);
         }
