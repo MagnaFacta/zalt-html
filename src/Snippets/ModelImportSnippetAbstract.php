@@ -158,9 +158,9 @@ abstract class ModelImportSnippetAbstract extends \Zalt\Snippets\WizardFormSnipp
     protected $targetModel = null;
 
     /**
-     * @var string[] Names of possible getImportTranslator() calls
+     * @var string[] ClasName => Names of possible getImportTranslator() calls
      */
-    protected $translatorNames = ['straight'];
+    protected array $translatorNames = [StraightTranslator::class => 'Straight'];
 
     /**
      * The filepath for temporary files
@@ -695,9 +695,18 @@ abstract class ModelImportSnippetAbstract extends \Zalt\Snippets\WizardFormSnipp
      */
     protected function getImportTranslator(string $name = ''): ModelTranslatorInterface
     {
-        $translator = $this->metaModelLoader->createTranslator(StraightTranslator::class);
+        if ($name) {
+            $class = array_search($name, $this->translatorNames);
+        } else {
+            $class = array_key_first($this->translatorNames);
+        }
+        if ($class) {
+            $translator = $this->metaModelLoader->createTranslator($class);
+        } else {
+            $translator = $this->metaModelLoader->createTranslator(StraightTranslator::class);
+        }
         $translator->setTargetModel($this->targetModel);
-        $translator->setDescription('Straight');
+        $translator->setDescription($name);
 
         return $translator;
     }
