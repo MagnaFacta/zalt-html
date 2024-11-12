@@ -36,7 +36,7 @@ abstract class ModelFormSnippetAbstract extends FormSnippetAbstract
 
     /**
      * Output only those elements actually used by the form.
-     *  
+     *
      * When false all fields without a label or elementClass are hidden,
      * when true those are left out, unless they happened to be a key field or
      * needed for a dependency.
@@ -78,7 +78,7 @@ abstract class ModelFormSnippetAbstract extends FormSnippetAbstract
     protected function addItems(FormBridgeInterface $bridge, array $elements)
     {
         $metaModel = $this->getModel()->getMetaModel();
-        
+
         //Remove the elements from the _items variable
         $this->_items = array_diff($this->_items, $elements);
 
@@ -130,6 +130,9 @@ abstract class ModelFormSnippetAbstract extends FormSnippetAbstract
         // Hide al dependencies plus the keys
         $elems   = $metaModel->getColNames('elementClass');
         $depends = $metaModel->getDependentOn($elems) + $metaModel->getKeys();
+
+        $metaModel->setDefault(array_keys($this->extraFilter), 'elementClass', 'None');
+
         if ($depends) {
             $metaModel->setDefault($depends, 'elementClass', 'Hidden');
         }
@@ -191,7 +194,7 @@ abstract class ModelFormSnippetAbstract extends FormSnippetAbstract
 
         return $bridge->getForm();
     }
-    
+
     /**
      * Hook that loads the form data from $_POST or the model
      *
@@ -205,7 +208,10 @@ abstract class ModelFormSnippetAbstract extends FormSnippetAbstract
         $model = $this->getModel();
 
         if ($this->requestInfo->isPost()) {
-            $this->formData = $model->loadPostData($this->requestInfo->getRequestPostParams() + $this->formData + $this->requestInfo->getRequestMatchedParams(), $this->createData);
+            $metaModel = $model->getMetaModel();
+            $matchedNonOverwrittenParams = array_diff_key($this->requestInfo->getRequestMatchedParams(), $metaModel->getCol('label'), $metaModel->getCol('hidden'));
+
+            $this->formData = $model->loadPostData($matchedNonOverwrittenParams, $this->requestInfo->getRequestPostParams() + $this->formData + $this->requestInfo->getRequestMatchedParams(), $this->createData);
 
         } else {
             // Assume that if formData is set it is the correct formData
@@ -222,10 +228,10 @@ abstract class ModelFormSnippetAbstract extends FormSnippetAbstract
             }
         }
         $this->formData = $this->loadCsrfData() + $this->formData + $this->requestInfo->getRequestMatchedParams();
-        
+
         return $this->formData;
     }
-    
+
     /**
      * Hook containing the actual save code.
      *
