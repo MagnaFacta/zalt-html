@@ -172,7 +172,7 @@ abstract class ModelDetailTableSnippetAbstract extends ModelSnippetAbstract
 
     protected function onEmptySingleRow(DetailTableBridge $bridge, DataReaderInterface $dataModel): void
     {
-        $bridge->tfrow($this->onEmpty);
+        $bridge->getTable()->tfrow($this->onEmpty);
     }
 
     /**
