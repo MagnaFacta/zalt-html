@@ -149,7 +149,11 @@ abstract class ModelDetailTableSnippetAbstract extends ModelSnippetAbstract
         }
         if (BridgeInterface::MODE_SINGLE_ROW == $this->bridgeMode) {
             // Trigger the dependencies
-            $bridge->getRow();
+            $row = $bridge->getRow();
+            if (empty($row)) {
+                $this->onEmptySingleRow($bridge, $dataModel);
+                return $bridge->getTable();
+            }
         }
 
         $this->setShowTableHeader($bridge, $dataModel);
@@ -164,6 +168,11 @@ abstract class ModelDetailTableSnippetAbstract extends ModelSnippetAbstract
         }
 
         return $bridge->getTable();
+    }
+
+    protected function onEmptySingleRow(DetailTableBridge $bridge, DataReaderInterface $dataModel): void
+    {
+        $bridge->tfrow($this->onEmpty);
     }
 
     /**
