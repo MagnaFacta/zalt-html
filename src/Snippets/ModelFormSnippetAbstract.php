@@ -209,9 +209,11 @@ abstract class ModelFormSnippetAbstract extends FormSnippetAbstract
 
         if ($this->requestInfo->isPost()) {
             $metaModel = $model->getMetaModel();
-            $matchedNonOverwrittenParams = array_diff_key($this->requestInfo->getRequestMatchedParams(), $metaModel->getCol('label'), $metaModel->getCol('hidden'));
 
-            $this->formData = $model->loadPostData($matchedNonOverwrittenParams, $this->requestInfo->getRequestPostParams() + $this->formData + $this->requestInfo->getRequestMatchedParams(), $this->createData);
+
+            $matchedNonOverwrittenParams = array_diff_key($this->requestInfo->getRequestMatchedParams(), $metaModel->getCol('label'), $metaModel->getItemsFor(['elementClass' => 'hidden']));
+
+            $this->formData = $model->loadPostData($matchedNonOverwrittenParams + $this->requestInfo->getRequestPostParams() + $this->formData + $this->requestInfo->getRequestMatchedParams(), $this->createData);
 
         } else {
             // Assume that if formData is set it is the correct formData
