@@ -11,6 +11,8 @@ declare(strict_types=1);
 
 namespace Zalt\Snippets\ModelBridge;
 
+use Zalt\Html\HtmlInterface;
+
 /**
  *
  * @package    Zalt
@@ -47,6 +49,9 @@ class DetailTableBridge extends TableBridgeAbstract
             
             if ($this->metaModel->has($name, 'description') && !isset($attr['title'])) {
                 $attr['title'] = $this->metaModel->get($name, 'description');
+                if ($attr['title'] instanceof HtmlInterface) {
+                    $attr['title'] = strip_tags($attr['title']->render());
+                }
             }
         }
 

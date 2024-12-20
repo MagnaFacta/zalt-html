@@ -13,6 +13,7 @@ namespace Zalt\Snippets\ModelBridge;
 
 use Zalt\Html\AElement;
 use Zalt\Html\Html;
+use Zalt\Html\HtmlInterface;
 use Zalt\Late\Late;
 use Zalt\Model\Bridge\BridgeAbstract;
 use Zalt\Model\Data\DataReaderInterface;
@@ -210,7 +211,11 @@ class TableBridge extends TableBridgeAbstract
             }
         }
 
-        return Html::create()->a($this->getUrl([$sortParam => $name]), ['class' => $class, 'title' => $this->metaModel->get($name, 'description')], $label);
+        $title = $this->metaModel->get($name, 'description');
+        if ($title instanceof HtmlInterface) {
+            $title = strip_tags($title->render());
+        }
+        return Html::create()->a($this->getUrl([$sortParam => $name]), ['class' => $class, 'title' => $title], $label);
     }
 
     /**
