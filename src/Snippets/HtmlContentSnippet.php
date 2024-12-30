@@ -11,6 +11,8 @@ declare(strict_types=1);
 
 namespace Zalt\Snippets;
 
+use Zalt\Html\HtmlInterface;
+
 /**
  *
  * @package    Zalt
@@ -20,9 +22,9 @@ namespace Zalt\Snippets;
 class HtmlContentSnippet extends SnippetAbstract
 {
     /**
-     * @var \Zalt\Html\HtmlInterface
+     * @var string|\Zalt\Html\HtmlInterface
      */
-    protected $htmlContent;
+    protected string|HtmlInterface $htmlContent = '';
 
     public function getHtmlOutput()
     {
