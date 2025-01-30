@@ -50,6 +50,7 @@ use Zalt\Ra\Ra;
  * @method     HnElement       h4(...$arguments)
  * @method     HnElement       h5(...$arguments)
  * @method     HnElement       h6(...$arguments)
+ * @method     HtmlElement     hr(...$arguments)
  * @method     HtmlElement     li(...$arguments)
  * @method     ListElement     ol(...$arguments)
  * @method     HtmlElement     p(...$arguments)

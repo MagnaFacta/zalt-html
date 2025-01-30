@@ -195,6 +195,7 @@ use Zalt\Late\RepeatableInterface;
  * @method     HnElement              h4(...$arguments)
  * @method     HnElement              h5(...$arguments)
  * @method     HnElement              h6(...$arguments)
+ * @method     HtmlElement            hr(...$arguments)
  * @method     ImgElement             img(...$arguments)
  * @method     ImgElement             image(...$arguments)
  * @method     ZendLabelElement       label(...$arguments)
