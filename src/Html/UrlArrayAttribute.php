@@ -66,6 +66,15 @@ class UrlArrayAttribute extends ArrayAttribute
         $urlParameters = [];
 
         try {
+            if (isset($url[0]) && (1 == count($url))) {
+                $parts = explode('?', $url[0]);
+                if (isset($parts[1])) {
+                    parse_str($parts[1], $params);
+                    unset($parts[1]);
+                    $parts = array_merge($parts, $params);
+                }
+                $url = $parts;
+            }
             $attribs = Html::getRenderer()->renderArray($url, false);
             if (is_array($attribs)) {
                 foreach ($attribs as $key => $value) {

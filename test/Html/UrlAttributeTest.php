@@ -68,7 +68,9 @@ class UrlAttributeTest extends \PHPUnit\Framework\TestCase
             [['/also/', '', '/ignore/', null, 'all', '/empty/', 'stringparts/', false, '/except/', 0], '/also/ignore/all/empty/stringparts/except/0'],
             [['/and', '' => 'don\'t', 'ignore' => 'any', 'empty' => 'keys'], '/and?ignore=any&empty=keys'],
             [[1 => '/but/', 0 => 'dont', 'ignore' => 'any', 'zero' => 'keys'], '/but/dont?ignore=any&zero=keys'],
-            [[1 => '/but/', 0 => 'use?ampersand=when', 'already' => 'qustionmark', 'was' => 'used'], '/but/use?ampersand=when&already=qustionmark&was=used'],
+            [[1 => '/but/', 0 => 'use?ampersand=when', 'already' => 'questionmark', 'was' => 'used'], '/but/use?ampersand=when&already=questionmark&was=used'],
+            [['/but/when?query=is&a=single&string=with&an=ampersand'], '/but/when?query=is&a=single&string=with&an=ampersand'],
+            [['/but/wrong/url?when=later', 'params=are&not=array'], '/but/wrong/url?when=laterparams=are&amp;not=array'],
             ];
     }
 }
