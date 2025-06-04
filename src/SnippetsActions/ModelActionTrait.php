@@ -11,6 +11,8 @@ declare(strict_types=1);
 
 namespace Zalt\SnippetsActions;
 
+use Zalt\Model\MetaModellerInterface;
+
 /**
  *
  * @package    Zalt
@@ -36,6 +38,8 @@ trait ModelActionTrait
      * @var array
      */
     public array $extraSort = [];
+
+    public MetaModellerInterface $model;
 
     /**
      * @var array|bool The default is false, to signal that no data was passed. Any other value means the value is used.
