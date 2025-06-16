@@ -29,7 +29,7 @@ trait ModelTextFilterTrait
 
     public function cleanUpTextFilter(string $searchText) : array
     {
-        return array_filter(explode(' ', strtolower(preg_replace("[^A-Za-z0-9]", " ", $searchText))));
+        return array_filter(explode(' ', preg_replace("/[^a-z0-9]/", " ", strtolower($searchText))));
     }
 
     public function getTextFilter(MetaModelInterface $metaModel, string $searchText): array
