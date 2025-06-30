@@ -163,6 +163,19 @@ trait ZendFormSnippetTrait
     protected function validateForm(array $formData): bool
     {
         // Note we use an \Zalt\Form
-        return $this->_form->isValid($formData, $this->disableValidatorTranslation);
+        $output = $this->_form->isValid($formData, $this->disableValidatorTranslation);
+
+        // Make sure error messages by hidden elements are displayed
+        foreach ($this->_form->getElements() as $name => $element) {
+            if ($element instanceof \Zend_Form_Element_Hidden) {
+                if (isset($formData[$name]) && ! $element->isValid($formData[$name], $formData)) {
+                    foreach ($element->getMessages() as $message) {
+                        $this->addMessage($name . ': ' . $message);
+                    }
+                }
+            }
+        }
+
+        return $output;
     }
 }
