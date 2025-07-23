@@ -72,6 +72,10 @@ abstract class TabSnippetAbstract extends TranslatableSnippetAbstract
      */
     protected ?string $tabActiveClass = 'active';
 
+    protected ?string $tabDisabledClass = 'disabled';
+
+    protected array $tabsDisabled = [];
+
     /**
      *
      * @var string Class attribute for all tabs
@@ -128,9 +132,12 @@ abstract class TabSnippetAbstract extends TranslatableSnippetAbstract
 
                 $li = $tabRow->li(['class' => $this->tabClass]);
 
-                $href = $this->getHref($tabId);
-
-                $link = $li->a($href, $content);
+                if (isset($this->tabsDisabled[$tabId]) && $this->tabsDisabled[$tabId]) {
+                    $link = $li->a('#', $content, ['class' => $this->tabDisabledClass]);
+                } else {
+                    $href = $this->getHref($tabId);
+                    $link = $li->a($href, $content);
+                }
 
                 if ($this->linkClass) {
                     $link->appendAttrib('class', $this->linkClass);
