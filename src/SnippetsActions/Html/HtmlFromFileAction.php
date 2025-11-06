@@ -28,4 +28,6 @@ class HtmlFromFileAction extends AbstractAction
         ];
 
     public string $contentFile = '';
+
+    public string $tagName = '';
 }
