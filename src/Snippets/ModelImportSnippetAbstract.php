@@ -912,8 +912,8 @@ abstract class ModelImportSnippetAbstract extends \Zalt\Snippets\WizardFormSnipp
                                     $maxlength), $minlength, $maxlength);
                         } elseif ($maxlength) {
                             $type = sprintf($this->plural(
-                                    'Text, %d character',
-                                    'Text, %d characters',
+                                    'Text, max %d character',
+                                    'Text, max %d characters',
                                     $maxlength), $maxlength);
                         } elseif ($minlength) {
                             $type = sprintf($this->plural(
