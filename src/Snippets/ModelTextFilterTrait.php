@@ -14,6 +14,7 @@ namespace Zalt\Snippets;
 use Zalt\Base\RequestInfo;
 use Zalt\Html\Marker;
 use Zalt\Model\MetaModelInterface;
+use Zalt\Model\Sql\SqlRunnerInterface;
 
 /**
  * @package    Zalt
@@ -48,10 +49,14 @@ trait ModelTextFilterTrait
             $metaModel->setCol(array_keys($fields), ['markCallback' => [$marker, 'mark']]);
 
             $options = $metaModel->getCol('multiOptions');
+            $excludeFields = $metaModel->getCol(SqlRunnerInterface::NO_SQL);
 
             foreach ($searches as $search) {
                 $current = [];
                 foreach ($fields as $field => $label) {
+                    if (isset($excludeFields[$field])) {
+                        continue;
+                    }
                     if (isset($options[$field])) {
                         $inValues = [];
                         foreach ($options[$field] as $value => $label) {
@@ -103,3 +108,4 @@ trait ModelTextFilterTrait
         return $filter;
     }
 }
+
