@@ -179,6 +179,7 @@ use Zalt\Late\RepeatableInterface;
  * @method     AElement               a(...$arguments)
  * @method     Sequence               array(...$arguments)
  * @method     HtmlElement            br(...$arguments)
+ * @method     HtmlElement            button(...$arguments)
  * @method     ColElement             col(...$arguments)
  * @method     ColGroupElement        colgroup(...$arguments)
  * @method     HtmlElement            div(...$arguments)

@@ -284,7 +284,7 @@ abstract class WizardFormSnippetAbstract extends \Zalt\Snippets\ModelFormSnippet
      * Add items in hidden form to the bridge, and remove them from the items array
      *
      * @param \Zalt\Model\Bridge\FormBridgeInterface $bridge
-     * @param mixed $element1
+     * @param string|array $element1
      *
      * @return void
      */
@@ -297,7 +297,7 @@ abstract class WizardFormSnippetAbstract extends \Zalt\Snippets\ModelFormSnippet
 
         $bridge   = array_shift($args);
         $elements = Ra::flatten($args);
-        $form     = $bridge->getForm();
+        //$form     = $bridge->getForm();
 
         //Remove the elements from the _items variable
         $this->_items = array_diff($this->_items, $elements);
