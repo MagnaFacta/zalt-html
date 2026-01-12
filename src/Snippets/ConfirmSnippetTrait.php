@@ -11,7 +11,6 @@ declare(strict_types=1);
 
 namespace Zalt\Snippets;
 
-use phpDocumentor\Reflection\Types\Boolean;
 use Psr\Cache\CacheItemPoolInterface;
 use Zalt\Base\TranslateableTrait;
 use Zalt\Html\AElement;
@@ -215,6 +214,7 @@ trait ConfirmSnippetTrait
                 'class'  => $this->formClass,
                 ]);
             $form->addHidden($this->csrfName, $this->csrfToken);
+            $this->insertExtraElements($form);
             $form->addElement($this->confirmParameter, 'submit', $this->getYesButtonLabel(), [
                 'class' => $this->buttonYesClass,
             ]);
@@ -233,6 +233,9 @@ trait ConfirmSnippetTrait
     {
         return $this->_("Yes");
     }
+
+    public function insertExtraElements(FormElement $form): void
+    { }
 
     public function isActionConfirmed(): bool
     {

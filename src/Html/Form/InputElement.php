@@ -19,6 +19,8 @@ use Zalt\Html\HtmlInterface;
  */
 class InputElement extends \Zalt\Html\HtmlElement implements InputInterface
 {
+    protected bool $appendLabel = false;
+
     /**
      * @var null|string|HtmlInterface
      */
@@ -69,24 +71,42 @@ class InputElement extends \Zalt\Html\HtmlElement implements InputInterface
 
     public function render()
     {
-        if (! isset($this->_attribs['id'])) {
-            $this->_attribs['id'] = $this->getId();
+        if ($this->label instanceof HtmlInterface) {
+            $label = $this->label->render();
+        } else {
+            $label = (string) $this->label;
         }
-        unset($this->_attribs['label']);
 
-        $output = parent::render();
-
-        $this->_attribs['label'] = $this->label;
+        if ($this->appendLabel) {
+            $output = parent::render() . ' ' . $label;
+        } else {
+            $output = $label . ' ' . parent::render();
+        }
 
         return $output;
+    }
+
+    public function setappendLabel(bool $appendLabel)
+    {
+        $this->appendLabel = $appendLabel;
     }
 
     public function setAttrib($name, $value)
     {
         if ('label' == $name) {
-            $this->label = $value;
+            $this->setLabel($value);
+            return $this;
+        }
+        if ('appendLabel' == $name) {
+            $this->setappendLabel((bool) $value);
+            return $this;
         }
         return parent::setAttrib($name, $value);
+    }
+
+    public function setLabel(null|string|HtmlInterface $label): void
+    {
+        $this->label = $label;
     }
 
     /**
