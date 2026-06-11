@@ -33,7 +33,7 @@ class StyleArrayAttribute extends ArrayAttribute
         return $key . ': ' . $value . ';';
     }
 
-    public static function styleAttribute(array $styles = null)
+    public static function styleAttribute(?array $styles = null)
     {
         return new self($styles);
     }

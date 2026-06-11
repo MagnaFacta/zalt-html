@@ -32,7 +32,7 @@ class SrcArrayAttribute extends UrlArrayAttribute
         parent::__construct('src', $args);
     }
 
-    public static function srcAttribute(array $commands = null)
+    public static function srcAttribute(?array $commands = null)
     {
         return new self($commands);
     }

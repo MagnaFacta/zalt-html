@@ -11,7 +11,7 @@
         "psr/container": "^1.1|^2.0"
     },
     "require-dev": {
-        "laminas/laminas-diactoros": "^2.11",
+        "laminas/laminas-diactoros": "^2.11|^3.8",
         "laminas/laminas-validator": "^2.20",
         "magnafacta/mutil": "^2.0.1",
         "mezzio/mezzio-session-ext": "^1.12",

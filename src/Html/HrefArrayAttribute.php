@@ -31,7 +31,7 @@ class HrefArrayAttribute extends UrlArrayAttribute
         parent::__construct('href', $args);
     }
 
-    public static function hrefAttribute(array $commands = null)
+    public static function hrefAttribute(?array $commands = null)
     {
         return new self($commands);
     }
