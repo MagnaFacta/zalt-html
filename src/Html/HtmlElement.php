@@ -1224,7 +1224,7 @@ class HtmlElement implements ElementInterface, Procrastinator
                 }
 
                 // Set as last child when this is a new item only.
-                if (! isset($this->_content[$offset])) {
+                if (! ($offset && isset($this->_content[$offset]))) {
                     $this->_lastChild = $value;
                 }
 
