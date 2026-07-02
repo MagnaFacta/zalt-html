@@ -37,12 +37,11 @@ abstract class ModelSnippetAbstract extends TranslatableSnippetAbstract
      * When invalid data should result in an error, you can throw it
      * here but you can also perform the check in the
      * checkRegistryRequestsAnswers() function from the
-     * {@see \Zalt\Registry\TargetInterface}.
      *
      * @return boolean
      */
     public function hasHtmlOutput(): bool
     {
-        return (boolean) $this->getModel();
+        return (bool) $this->getModel();
     }
 }
